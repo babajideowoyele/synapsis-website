@@ -1,0 +1,231 @@
+{
+  "@context": {
+    "@vocab": "https://schema.org/",
+    "dc": "http://purl.org/dc/elements/1.1/",
+    "dcterms": "http://purl.org/dc/terms/",
+    "synapsis": "https://synapsis.nl/schema/",
+    "dans": "https://dans.knaw.nl/schema/"
+  },
+  "@type": "synapsis:MaskedAudiovisualDataset",
+  "@id": "https://example.org/datasets/{dataset-id}",
+
+  "name": "[Dataset Title]",
+  "description": "[Brief description of the dataset and research context]",
+
+  "dc:creator": {
+    "@type": "Person",
+    "name": "[Researcher Name]",
+    "affiliation": {
+      "@type": "Organization",
+      "name": "[Institution Name]"
+    },
+    "email": "[researcher@institution.nl]"
+  },
+
+  "dc:contributor": [
+    {
+      "@type": "Person",
+      "name": "[Contributor Name]",
+      "role": "[Role in project]"
+    }
+  ],
+
+  "dcterms:created": "YYYY-MM-DD",
+  "dcterms:modified": "YYYY-MM-DD",
+
+  "dc:subject": [
+    "[Subject keyword 1]",
+    "[Subject keyword 2]",
+    "[Subject keyword 3]"
+  ],
+
+  "dc:language": "en",
+
+  "dc:rights": "CC-BY-4.0",
+  "dcterms:license": "https://creativecommons.org/licenses/by/4.0/",
+
+  "dc:publisher": {
+    "@type": "Organization",
+    "name": "DANS",
+    "url": "https://dans.knaw.nl"
+  },
+
+  "synapsis:sourceData": {
+    "@type": "synapsis:OriginalRecording",
+    "synapsis:recordingDate": "YYYY-MM-DD",
+    "synapsis:recordingLocation": "[Location description - not exact address]",
+    "synapsis:recordingContext": "[Interview | Classroom | Laboratory | Field | Other]",
+    "synapsis:participantCount": 0,
+    "synapsis:duration": "PT0H0M0S",
+    "synapsis:originalFormat": {
+      "video": {
+        "codec": "[H.264 | H.265 | ProRes | Other]",
+        "resolution": "[1920x1080 | 3840x2160 | Other]",
+        "frameRate": 30,
+        "container": "[MP4 | MOV | AVI | MKV]"
+      },
+      "audio": {
+        "codec": "[AAC | PCM | MP3 | Other]",
+        "sampleRate": 48000,
+        "channels": 2,
+        "bitDepth": 16
+      }
+    }
+  },
+
+  "synapsis:maskingProcess": {
+    "@type": "synapsis:DeIdentificationProcess",
+    "synapsis:processedDate": "YYYY-MM-DD",
+    "synapsis:platform": "SYNAPSIS",
+    "synapsis:platformVersion": "1.0.0",
+
+    "synapsis:faceMasking": {
+      "@type": "synapsis:FaceMaskingConfiguration",
+      "synapsis:method": "[blur | pixelate | face_swap | deep_privacy | none]",
+      "synapsis:intensity": "[low | medium | high]",
+      "synapsis:detectionModel": "[RetinaFace | MTCNN | MediaPipe | Other]",
+      "synapsis:facesDetected": 0,
+      "synapsis:facesProcessed": 0,
+      "synapsis:preservesExpression": true,
+      "synapsis:preservesGaze": false
+    },
+
+    "synapsis:voiceMasking": {
+      "@type": "synapsis:VoiceMaskingConfiguration",
+      "synapsis:method": "[pitch_shift | formant | vocoder | remove | none]",
+      "synapsis:pitchShiftSemitones": 0,
+      "synapsis:preservesProsody": true,
+      "synapsis:preservesContent": true
+    },
+
+    "synapsis:bodyMasking": {
+      "@type": "synapsis:BodyMaskingConfiguration",
+      "synapsis:method": "[silhouette | skeleton_only | blur | none]",
+      "synapsis:applied": false
+    },
+
+    "synapsis:otherMasking": [
+      {
+        "synapsis:target": "[text | license_plate | background | other]",
+        "synapsis:method": "[blur | remove | replace]",
+        "synapsis:applied": false
+      }
+    ]
+  },
+
+  "synapsis:poseExtraction": {
+    "@type": "synapsis:PoseExtractionConfiguration",
+    "synapsis:extracted": true,
+    "synapsis:model": "[MediaPipe | OpenPose | YOLO-Pose | MMPose]",
+    "synapsis:modelVersion": "1.0.0",
+    "synapsis:keypointSchema": "[COCO | MPII | OpenPose | MediaPipe]",
+    "synapsis:keypointCount": 33,
+    "synapsis:includesHands": true,
+    "synapsis:includesFace": false,
+    "synapsis:coordinateSystem": "[normalized | pixel]",
+    "synapsis:confidenceThreshold": 0.5,
+    "synapsis:outputFormat": "[JSON | CSV | NPY]"
+  },
+
+  "synapsis:outputData": {
+    "@type": "synapsis:MaskedOutput",
+    "synapsis:files": [
+      {
+        "@type": "synapsis:VideoFile",
+        "name": "[filename]_masked.mp4",
+        "encodingFormat": "video/mp4",
+        "contentSize": "[size in bytes]",
+        "duration": "PT0H0M0S",
+        "sha256": "[hash]"
+      },
+      {
+        "@type": "synapsis:PoseDataFile",
+        "name": "[filename]_pose.json",
+        "encodingFormat": "application/json",
+        "contentSize": "[size in bytes]",
+        "sha256": "[hash]"
+      },
+      {
+        "@type": "synapsis:MetadataFile",
+        "name": "[filename]_metadata.json",
+        "encodingFormat": "application/ld+json",
+        "contentSize": "[size in bytes]",
+        "sha256": "[hash]"
+      }
+    ]
+  },
+
+  "synapsis:qualityMetrics": {
+    "@type": "synapsis:QualityAssessment",
+    "synapsis:assessmentDate": "YYYY-MM-DD",
+    "synapsis:assessedBy": "[Researcher name or 'automated']",
+    "synapsis:faceDetectionRate": 0.0,
+    "synapsis:maskingCoverage": 0.0,
+    "synapsis:temporalConsistency": 0.0,
+    "synapsis:poseAccuracy": 0.0,
+    "synapsis:visualQuality": "[excellent | good | acceptable | poor]",
+    "synapsis:notes": "[Any quality observations]"
+  },
+
+  "synapsis:consent": {
+    "@type": "synapsis:ConsentRecord",
+    "synapsis:consentObtained": true,
+    "synapsis:consentDate": "YYYY-MM-DD",
+    "synapsis:consentType": "[written | verbal | electronic]",
+    "synapsis:consentScope": {
+      "videoRecording": true,
+      "audioRecording": true,
+      "poseExtraction": true,
+      "archiving": true,
+      "sharing": true,
+      "publication": true
+    },
+    "synapsis:ethicsApproval": {
+      "committee": "[Ethics committee name]",
+      "referenceNumber": "[Approval number]",
+      "approvalDate": "YYYY-MM-DD"
+    }
+  },
+
+  "synapsis:access": {
+    "@type": "synapsis:AccessConfiguration",
+    "synapsis:accessLevel": "[open | restricted | controlled | embargoed]",
+    "synapsis:embargoEndDate": "YYYY-MM-DD",
+    "synapsis:accessConditions": "[Description of access requirements]",
+    "synapsis:dataUseAgreementRequired": true
+  },
+
+  "synapsis:provenance": {
+    "@type": "synapsis:ProvenanceRecord",
+    "synapsis:workflowId": "[unique workflow identifier]",
+    "synapsis:processingLog": "[URL to processing log if available]",
+    "synapsis:reproducible": true,
+    "synapsis:configurationHash": "[hash of processing configuration]"
+  },
+
+  "dans:datasetVersion": "1.0",
+  "dans:persistent_identifier": {
+    "@type": "PropertyValue",
+    "propertyID": "DOI",
+    "value": "10.xxxx/xxxxx"
+  },
+
+  "synapsis:relatedResources": [
+    {
+      "@type": "CreativeWork",
+      "name": "[Related publication or dataset]",
+      "url": "[URL]",
+      "dcterms:relation": "[cites | isPartOf | hasPart | references]"
+    }
+  ],
+
+  "synapsis:funding": {
+    "@type": "Grant",
+    "name": "[Grant name]",
+    "funder": {
+      "@type": "Organization",
+      "name": "[Funding organization, e.g., NWO]"
+    },
+    "identifier": "[Grant number]"
+  }
+}

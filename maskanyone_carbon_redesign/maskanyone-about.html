@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MaskAnyone - About</title>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --carbon-bg: #ffffff;
+      --carbon-bg-hover: #f4f4f4;
+      --carbon-border: #e0e0e0;
+      --carbon-text: #161616;
+      --carbon-text-secondary: #393939;
+      --carbon-focus: #0f62fe;
+      --carbon-success: #198038;
+      --carbon-warning: #f1c21b;
+    }
+
+    body {
+      font-family: 'IBM Plex Sans', sans-serif;
+      background: var(--carbon-bg);
+      color: var(--carbon-text);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    *:focus-visible {
+      outline: 2px solid var(--carbon-focus);
+      outline-offset: 2px;
+    }
+
+    .skip-link {
+      position: absolute;
+      top: -40px;
+      left: 0;
+      background: var(--carbon-text);
+      color: white;
+      padding: 8px 16px;
+      z-index: 100;
+    }
+    .skip-link:focus { top: 0; }
+
+    /* Layout */
+    .app-frame { min-height: 100vh; display: flex; flex-direction: column; }
+    .accent-bar { height: 3px; background: var(--carbon-text); }
+
+    .app-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 24px;
+      border-bottom: 1px solid var(--carbon-border);
+    }
+    .app-logo {
+      font-size: 18px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: var(--carbon-text);
+    }
+
+    .main-content {
+      flex: 1;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 48px 24px;
+      width: 100%;
+    }
+
+    /* Header */
+    .page-header {
+      margin-bottom: 48px;
+    }
+    .page-label {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 12px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--carbon-text-secondary);
+      margin-bottom: 8px;
+    }
+    .page-title {
+      font-size: 32px;
+      font-weight: 300;
+      margin-bottom: 12px;
+    }
+    .page-title strong { font-weight: 600; }
+    .page-desc {
+      font-size: 16px;
+      color: var(--carbon-text-secondary);
+      max-width: 600px;
+    }
+
+    /* Sections */
+    .about-section {
+      margin-bottom: 48px;
+    }
+    .section-title {
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .section-title i {
+      width: 40px;
+      height: 40px;
+      background: var(--carbon-text);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+    }
+    .section-text {
+      font-size: 15px;
+      color: var(--carbon-text-secondary);
+      line-height: 1.7;
+      margin-bottom: 16px;
+    }
+    .section-text a {
+      color: var(--carbon-text);
+      font-weight: 500;
+    }
+
+    /* Feature Grid */
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      margin-top: 24px;
+    }
+    .feature-card {
+      padding: 24px;
+      border: 1px solid var(--carbon-border);
+      transition: all 0.15s;
+    }
+    .feature-card:hover {
+      border-color: var(--carbon-text);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+    .feature-icon {
+      width: 48px;
+      height: 48px;
+      background: var(--carbon-bg-hover);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      margin-bottom: 16px;
+    }
+    .feature-title {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    .feature-text {
+      font-size: 14px;
+      color: var(--carbon-text-secondary);
+      line-height: 1.5;
+    }
+
+    /* Resource List */
+    .resource-list {
+      list-style: none;
+      margin-top: 16px;
+    }
+    .resource-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      padding: 20px;
+      border: 1px solid var(--carbon-border);
+      margin-bottom: 12px;
+      transition: all 0.15s;
+    }
+    .resource-item:hover {
+      border-color: var(--carbon-text);
+      background: var(--carbon-bg-hover);
+    }
+    .resource-icon {
+      width: 48px;
+      height: 48px;
+      background: var(--carbon-bg-hover);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+    .resource-item:hover .resource-icon {
+      background: var(--carbon-text);
+      color: #fff;
+    }
+    .resource-content {
+      flex: 1;
+    }
+    .resource-title {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .resource-title a {
+      color: var(--carbon-text);
+      text-decoration: none;
+    }
+    .resource-title a:hover {
+      text-decoration: underline;
+    }
+    .resource-text {
+      font-size: 14px;
+      color: var(--carbon-text-secondary);
+      line-height: 1.5;
+    }
+    .resource-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      color: var(--carbon-text);
+      font-weight: 500;
+      margin-top: 8px;
+      text-decoration: none;
+    }
+    .resource-link:hover {
+      text-decoration: underline;
+    }
+
+    /* Archive Box */
+    .archive-box {
+      background: var(--carbon-bg-hover);
+      border-left: 4px solid var(--carbon-success);
+      padding: 24px;
+      margin-top: 24px;
+    }
+    .archive-title {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .archive-title i {
+      color: var(--carbon-success);
+    }
+    .archive-text {
+      font-size: 14px;
+      color: var(--carbon-text-secondary);
+      line-height: 1.6;
+      margin-bottom: 16px;
+    }
+    .archive-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .archive-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 16px;
+      background: #fff;
+      border: 1px solid var(--carbon-border);
+      font-size: 14px;
+      color: var(--carbon-text);
+      text-decoration: none;
+      font-weight: 500;
+      transition: all 0.15s;
+    }
+    .archive-link:hover {
+      border-color: var(--carbon-text);
+      background: var(--carbon-bg-hover);
+    }
+
+    /* Partners */
+    .partner-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 24px;
+      margin-top: 24px;
+      align-items: center;
+    }
+    .partner-logo {
+      height: 48px;
+      opacity: 0.7;
+      filter: grayscale(100%);
+      transition: all 0.15s;
+    }
+    .partner-logo:hover {
+      opacity: 1;
+      filter: grayscale(0%);
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 48px;
+      padding: 12px 24px;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s;
+      border: none;
+      text-decoration: none;
+    }
+    .btn-primary { background: var(--carbon-text); color: #fff; }
+    .btn-primary:hover { background: #393939; }
+    .btn-ghost { background: transparent; color: var(--carbon-text); }
+    .btn-ghost:hover { background: var(--carbon-bg-hover); }
+
+    /* Footer */
+    .footer-nav {
+      padding: 24px;
+      border-top: 1px solid var(--carbon-border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #fff;
+    }
+    .footer-links {
+      display: flex;
+      gap: 24px;
+    }
+    .footer-link {
+      font-size: 14px;
+      color: var(--carbon-text-secondary);
+      text-decoration: none;
+    }
+    .footer-link:hover {
+      color: var(--carbon-text);
+      text-decoration: underline;
+    }
+
+    /* Version badge */
+    .version-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      background: var(--carbon-bg-hover);
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 12px;
+      color: var(--carbon-text-secondary);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to main content</a>
+
+  <div class="app-frame">
+    <div class="accent-bar"></div>
+
+    <header class="app-header">
+      <a href="maskanyone-improved-upload.html" class="app-logo">
+        <i class="fas fa-mask" aria-hidden="true"></i>
+        <span>MASKANYONE</span>
+      </a>
+
+      <div style="display: flex; align-items: center; gap: 16px;">
+        <span class="version-badge">v1.0.0-synapsis</span>
+        <a href="maskanyone-improved-upload.html" class="btn btn-ghost">
+          <i class="fas fa-arrow-left" aria-hidden="true"></i>
+          Back to App
+        </a>
+      </div>
+    </header>
+
+    <main id="main" class="main-content">
+      <div class="page-header">
+        <p class="page-label">About</p>
+        <h1 class="page-title">About <strong>MaskAnyone</strong></h1>
+        <p class="page-desc">
+          Privacy-preserving video anonymization for research. Part of the SYNAPSIS project,
+          funded by NWO (Dutch Research Council).
+        </p>
+      </div>
+
+      <!-- What is MaskAnyone -->
+      <section class="about-section" aria-labelledby="what-title">
+        <h2 id="what-title" class="section-title">
+          <i class="fas fa-mask" aria-hidden="true"></i>
+          What is MaskAnyone?
+        </h2>
+        <p class="section-text">
+          MaskAnyone is an open-source tool for anonymizing people in video recordings while
+          preserving research-relevant features like gestures, body language, and spatial
+          relationships. It's designed specifically for Social Sciences and Humanities (SSH)
+          researchers who need to share audiovisual data while protecting participant privacy.
+        </p>
+
+        <div class="feature-grid">
+          <div class="feature-card">
+            <div class="feature-icon">
+              <i class="fas fa-users" aria-hidden="true"></i>
+            </div>
+            <h3 class="feature-title">Multi-Person Tracking</h3>
+            <p class="feature-text">
+              Automatically detect and track multiple people throughout your video with consistent IDs.
+            </p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon">
+              <i class="fas fa-shield-alt" aria-hidden="true"></i>
+            </div>
+            <h3 class="feature-title">Consent-Aware</h3>
+            <p class="feature-text">
+              Set different consent levels per person. Full consent, partial consent, or full anonymization.
+            </p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon">
+              <i class="fas fa-sliders-h" aria-hidden="true"></i>
+            </div>
+            <h3 class="feature-title">Flexible Methods</h3>
+            <p class="feature-text">
+              Choose from blur, pixelation, solid masks, or skeleton overlays based on your research needs.
+            </p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon">
+              <i class="fas fa-layer-group" aria-hidden="true"></i>
+            </div>
+            <h3 class="feature-title">Batch Processing</h3>
+            <p class="feature-text">
+              Process entire research corpora with consistent settings across all recordings.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- MaskBench -->
+      <section class="about-section" aria-labelledby="maskbench-title">
+        <h2 id="maskbench-title" class="section-title">
+          <i class="fas fa-chart-bar" aria-hidden="true"></i>
+          Quality Evaluation with MaskBench
+        </h2>
+        <p class="section-text">
+          How do you know if your anonymization preserves what matters for your research?
+          <strong>MaskBench</strong> is a companion tool that helps you evaluate anonymization quality
+          across multiple dimensions.
+        </p>
+
+        <ul class="resource-list">
+          <li class="resource-item">
+            <div class="resource-icon">
+              <i class="fas fa-eye-slash" aria-hidden="true"></i>
+            </div>
+            <div class="resource-content">
+              <h3 class="resource-title">Re-identification Risk</h3>
+              <p class="resource-text">
+                Measure how well faces are protected against re-identification using state-of-the-art
+                face recognition models.
+              </p>
+            </div>
+          </li>
+          <li class="resource-item">
+            <div class="resource-icon">
+              <i class="fas fa-hand-paper" aria-hidden="true"></i>
+            </div>
+            <div class="resource-content">
+              <h3 class="resource-title">Gesture Preservation</h3>
+              <p class="resource-text">
+                Verify that hand movements and body gestures remain analyzable after anonymization.
+              </p>
+            </div>
+          </li>
+          <li class="resource-item">
+            <div class="resource-icon">
+              <i class="fas fa-smile" aria-hidden="true"></i>
+            </div>
+            <div class="resource-content">
+              <h3 class="resource-title">Emotion Detectability</h3>
+              <p class="resource-text">
+                Test whether emotional expressions can still be detected or are appropriately obscured.
+              </p>
+            </div>
+          </li>
+        </ul>
+
+        <a href="https://github.com/Anonimize/MaskBench" target="_blank" rel="noopener" class="btn btn-primary" style="margin-top: 16px;">
+          <i class="fab fa-github" aria-hidden="true"></i>
+          View MaskBench on GitHub
+        </a>
+      </section>
+
+      <!-- Data Archiving -->
+      <section class="about-section" aria-labelledby="archive-title">
+        <h2 id="archive-title" class="section-title">
+          <i class="fas fa-archive" aria-hidden="true"></i>
+          Archiving Your Research Data
+        </h2>
+        <p class="section-text">
+          After anonymizing your videos, consider archiving them for long-term preservation,
+          reproducibility, and potential reuse by other researchers. Proper archiving also helps
+          you meet funder requirements and institutional data management policies.
+        </p>
+
+        <div class="archive-box">
+          <h3 class="archive-title">
+            <i class="fas fa-lightbulb" aria-hidden="true"></i>
+            Best Practices for Archiving Anonymized Video
+          </h3>
+          <p class="archive-text">
+            Before depositing data, check with your institution's research data management team
+            about approved repositories and workflows. Ensure your data management plan (DMP)
+            and ethics approval cover data sharing. MaskAnyone can generate processing reports
+            to document your anonymization methods for transparency.
+          </p>
+          <div class="archive-links">
+            <a href="https://dans.knaw.nl" target="_blank" rel="noopener" class="archive-link">
+              <i class="fas fa-database" aria-hidden="true"></i>
+              DANS (Netherlands)
+            </a>
+            <a href="https://zenodo.org" target="_blank" rel="noopener" class="archive-link">
+              <i class="fas fa-globe" aria-hidden="true"></i>
+              Zenodo (CERN)
+            </a>
+            <a href="https://dataverse.org" target="_blank" rel="noopener" class="archive-link">
+              <i class="fas fa-university" aria-hidden="true"></i>
+              Dataverse
+            </a>
+            <a href="https://ukdataservice.ac.uk" target="_blank" rel="noopener" class="archive-link">
+              <i class="fas fa-database" aria-hidden="true"></i>
+              UK Data Service
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <!-- SYNAPSIS Project -->
+      <section class="about-section" aria-labelledby="synapsis-title">
+        <h2 id="synapsis-title" class="section-title">
+          <i class="fas fa-project-diagram" aria-hidden="true"></i>
+          The SYNAPSIS Project
+        </h2>
+        <p class="section-text">
+          MaskAnyone is part of <strong>SYNAPSIS</strong> (SYstem for privacy-aware aNAlysis of
+          audioviSual research data Including multi-modal tranScriptions), an NWO-funded project
+          to develop privacy-preserving infrastructure for audiovisual research data in the
+          Social Sciences and Humanities.
+        </p>
+        <p class="section-text">
+          The project brings together expertise from:
+        </p>
+        <ul style="margin: 16px 0 16px 24px; color: var(--carbon-text-secondary);">
+          <li>Privacy-preserving machine learning</li>
+          <li>Human-centered AI design</li>
+          <li>Research data management</li>
+          <li>SSH research methodology</li>
+        </ul>
+        <a href="https://synapsis-project.nl" target="_blank" rel="noopener" class="btn btn-primary">
+          <i class="fas fa-external-link-alt" aria-hidden="true"></i>
+          Visit SYNAPSIS Project Website
+        </a>
+      </section>
+
+      <!-- Open Source -->
+      <section class="about-section" aria-labelledby="opensource-title">
+        <h2 id="opensource-title" class="section-title">
+          <i class="fab fa-github" aria-hidden="true"></i>
+          Open Source
+        </h2>
+        <p class="section-text">
+          MaskAnyone is open source software. You can inspect the code, contribute improvements,
+          or deploy your own instance. We welcome contributions from the research community.
+        </p>
+        <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 16px;">
+          <a href="https://github.com/MaskAnyone/MaskAnyone" target="_blank" rel="noopener" class="btn btn-primary">
+            <i class="fab fa-github" aria-hidden="true"></i>
+            View on GitHub
+          </a>
+          <a href="https://github.com/MaskAnyone/MaskAnyone/issues" target="_blank" rel="noopener" class="btn btn-ghost" style="border: 1px solid var(--carbon-text);">
+            <i class="fas fa-bug" aria-hidden="true"></i>
+            Report an Issue
+          </a>
+        </div>
+      </section>
+
+      <!-- Help & Support -->
+      <section class="about-section" aria-labelledby="support-title">
+        <h2 id="support-title" class="section-title">
+          <i class="fas fa-life-ring" aria-hidden="true"></i>
+          Help & Support
+        </h2>
+        <ul class="resource-list">
+          <li class="resource-item">
+            <div class="resource-icon">
+              <i class="fas fa-keyboard" aria-hidden="true"></i>
+            </div>
+            <div class="resource-content">
+              <h3 class="resource-title">
+                <a href="maskanyone-keyboard-shortcuts.html">Keyboard Shortcuts</a>
+              </h3>
+              <p class="resource-text">
+                Learn keyboard shortcuts to work faster. Press <kbd style="background: var(--carbon-bg-hover); border: 1px solid var(--carbon-border); padding: 2px 6px; font-family: monospace; font-size: 12px;">?</kbd> anywhere in the app.
+              </p>
+            </div>
+          </li>
+          <li class="resource-item">
+            <div class="resource-icon">
+              <i class="fas fa-book" aria-hidden="true"></i>
+            </div>
+            <div class="resource-content">
+              <h3 class="resource-title">
+                <a href="https://synapsis-project.nl/docs" target="_blank" rel="noopener">Documentation</a>
+              </h3>
+              <p class="resource-text">
+                Detailed guides, tutorials, and API documentation.
+              </p>
+            </div>
+          </li>
+          <li class="resource-item">
+            <div class="resource-icon">
+              <i class="fas fa-envelope" aria-hidden="true"></i>
+            </div>
+            <div class="resource-content">
+              <h3 class="resource-title">Contact Support</h3>
+              <p class="resource-text">
+                Email <a href="mailto:support@synapsis-project.nl">support@synapsis-project.nl</a>
+                or contact your institution's research support team.
+              </p>
+            </div>
+          </li>
+        </ul>
+      </section>
+    </main>
+
+    <footer class="footer-nav">
+      <div class="footer-links">
+        <a href="maskanyone-keyboard-shortcuts.html" class="footer-link">Keyboard Shortcuts</a>
+        <a href="https://synapsis-project.nl/privacy" target="_blank" rel="noopener" class="footer-link">Privacy Policy</a>
+        <a href="https://github.com/MaskAnyone/MaskAnyone/blob/main/LICENSE" target="_blank" rel="noopener" class="footer-link">License (Apache 2.0)</a>
+      </div>
+      <div style="font-size: 13px; color: var(--carbon-text-secondary);">
+        &copy; 2024-2026 SYNAPSIS Project. Funded by NWO.
+      </div>
+    </footer>
+  </div>
+</body>
+</html>

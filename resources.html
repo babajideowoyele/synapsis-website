@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SYNAPSIS Resources</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'sans': ['IBM Plex Sans', 'sans-serif'],
+                        'mono': ['IBM Plex Mono', 'monospace'],
+                    },
+                    colors: {
+                        'carbon': {
+                            'bg': '#ffffff',
+                            'bg-hover': '#f4f4f4',
+                            'border': '#e0e0e0',
+                            'text': '#161616',
+                            'text-secondary': '#525252',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'IBM Plex Sans', sans-serif;
+            background-color: #ffffff;
+            color: #161616;
+        }
+        .accent-bar {
+            height: 3px;
+            background: #161616;
+        }
+        .card {
+            border: 1px solid #e0e0e0;
+            transition: all 0.15s ease;
+        }
+        .card:hover {
+            border-color: #161616;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.1);
+        }
+        .btn-primary {
+            background: #161616;
+            color: #ffffff;
+            transition: all 0.15s ease;
+        }
+        .btn-primary:hover {
+            background: #393939;
+        }
+        .btn-secondary {
+            background: #ffffff;
+            color: #161616;
+            border: 1px solid #161616;
+            transition: all 0.15s ease;
+        }
+        .btn-secondary:hover {
+            background: #f4f4f4;
+        }
+        .nav-link {
+            position: relative;
+            padding-bottom: 4px;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #161616;
+            transition: width 0.2s ease;
+        }
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        .resource-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            font-size: 11px;
+            font-family: 'IBM Plex Mono', monospace;
+            text-transform: uppercase;
+            background: #f4f4f4;
+            border: 1px solid #e0e0e0;
+        }
+        .resource-badge-doc { background: #dbeafe; border-color: #93c5fd; }
+        .resource-badge-code { background: #d1fae5; border-color: #6ee7b7; }
+        .resource-badge-video { background: #fce7f3; border-color: #f9a8d4; }
+        .resource-badge-template { background: #fef3c7; border-color: #fcd34d; }
+    </style>
+</head>
+<body class="min-h-screen">
+    <!-- Header -->
+    <header class="border-b border-carbon-border sticky top-0 z-50 bg-white">
+        <div class="accent-bar"></div>
+        <nav class="container mx-auto px-6 py-4">
+            <div class="flex justify-between items-center">
+                <a href="index.html" class="text-xl font-semibold tracking-tight">
+                    SYNAPSIS
+                </a>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="index.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Home</a>
+                    <a href="platform.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Platform</a>
+                    <a href="training.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Training</a>
+                    <a href="resources.html" class="text-sm font-medium border-b-2 border-carbon-text pb-1">Resources</a>
+                    <a href="network.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Network</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Hero -->
+        <section class="py-20 px-6">
+            <div class="container mx-auto max-w-5xl">
+                <div class="mb-4">
+                    <span class="text-xs font-mono uppercase tracking-widest text-carbon-text-secondary">Resources</span>
+                </div>
+                <h1 class="text-5xl font-semibold leading-tight mb-6">
+                    Documentation & Resources
+                </h1>
+                <p class="text-xl text-carbon-text-secondary max-w-2xl mb-10 leading-relaxed">
+                    Comprehensive guides, templates, and tools to support your privacy-aware audiovisual data workflows.
+                </p>
+                <div class="flex flex-wrap gap-4">
+                    <a href="#documentation" class="btn-primary px-6 py-3 font-medium">
+                        View Documentation <i class="fas fa-arrow-right ml-2"></i>
+                    </a>
+                    <a href="https://github.com/MaskAnyone/MaskAnyone" class="btn-secondary px-6 py-3 font-medium">
+                        <i class="fab fa-github mr-2"></i> GitHub
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quick Links -->
+        <section class="py-12 px-6 bg-carbon-bg-hover border-y border-carbon-border">
+            <div class="container mx-auto max-w-5xl">
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <a href="#documentation" class="border border-carbon-border bg-white p-4 text-center hover:border-carbon-text transition-colors">
+                        <i class="fas fa-book text-2xl mb-2"></i>
+                        <div class="font-medium text-sm">Documentation</div>
+                    </a>
+                    <a href="#templates" class="border border-carbon-border bg-white p-4 text-center hover:border-carbon-text transition-colors">
+                        <i class="fas fa-file-alt text-2xl mb-2"></i>
+                        <div class="font-medium text-sm">Templates</div>
+                    </a>
+                    <a href="#publications" class="border border-carbon-border bg-white p-4 text-center hover:border-carbon-text transition-colors">
+                        <i class="fas fa-newspaper text-2xl mb-2"></i>
+                        <div class="font-medium text-sm">Publications</div>
+                    </a>
+                    <a href="#faq" class="border border-carbon-border bg-white p-4 text-center hover:border-carbon-text transition-colors">
+                        <i class="fas fa-question-circle text-2xl mb-2"></i>
+                        <div class="font-medium text-sm">FAQ</div>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Documentation -->
+        <section id="documentation" class="py-20 px-6">
+            <div class="container mx-auto max-w-5xl">
+                <div class="mb-12">
+                    <span class="text-xs font-mono uppercase tracking-widest text-carbon-text-secondary">Guides</span>
+                    <h2 class="text-3xl font-semibold mt-4">Documentation</h2>
+                </div>
+                <div class="grid md:grid-cols-3 gap-6">
+                    <!-- Getting Started -->
+                    <div class="card bg-white p-6">
+                        <span class="resource-badge resource-badge-doc mb-4 inline-block">Guide</span>
+                        <h3 class="font-semibold mb-2">Getting Started</h3>
+                        <p class="text-sm text-carbon-text-secondary mb-4">Quick-start guide for new users. Platform registration, first upload, and basic masking workflow.</p>
+                        <div class="flex items-center gap-4 text-xs text-carbon-text-secondary mb-4">
+                            <span><i class="fas fa-clock mr-1"></i> 15 min read</span>
+                            <span><i class="fas fa-signal mr-1"></i> Beginner</span>
+                        </div>
+                        <a href="#" class="btn-secondary px-4 py-2 text-sm inline-block">Read Guide</a>
+                    </div>
+
+                    <!-- Face Masking -->
+                    <div class="card bg-white p-6">
+                        <span class="resource-badge resource-badge-doc mb-4 inline-block">Guide</span>
+                        <h3 class="font-semibold mb-2">Face Masking Methods</h3>
+                        <p class="text-sm text-carbon-text-secondary mb-4">Detailed comparison of face de-identification techniques: blur, pixelation, face swap, and neural methods.</p>
+                        <div class="flex items-center gap-4 text-xs text-carbon-text-secondary mb-4">
+                            <span><i class="fas fa-clock mr-1"></i> 25 min read</span>
+                            <span><i class="fas fa-signal mr-1"></i> Intermediate</span>
+                        </div>
+                        <a href="#" class="btn-secondary px-4 py-2 text-sm inline-block">Read Guide</a>
+                    </div>
+
+                    <!-- Voice Anonymization -->
+                    <div class="card bg-white p-6">
+                        <span class="resource-badge resource-badge-doc mb-4 inline-block">Guide</span>
+                        <h3 class="font-semibold mb-2">Voice Anonymization</h3>
+                        <p class="text-sm text-carbon-text-secondary mb-4">Audio de-identification methods preserving prosodic features while protecting speaker identity.</p>
+                        <div class="flex items-center gap-4 text-xs text-carbon-text-secondary mb-4">
+                            <span><i class="fas fa-clock mr-1"></i> 20 min read</span>
+                            <span><i class="fas fa-signal mr-1"></i> Intermediate</span>
+                        </div>
+                        <a href="#" class="btn-secondary px-4 py-2 text-sm inline-block">Read Guide</a>
+                    </div>
+
+                    <!-- Pose Extraction -->
+                    <div class="card bg-white p-6">
+                        <span class="resource-badge resource-badge-doc mb-4 inline-block">Guide</span>
+                        <h3 class="font-semibold mb-2">Pose Data Extraction</h3>
+                        <p class="text-sm text-carbon-text-secondary mb-4">Extract skeletal pose data and kinematic features from masked videos for behavioral analysis.</p>
+                        <div class="flex items-center gap-4 text-xs text-carbon-text-secondary mb-4">
+                            <span><i class="fas fa-clock mr-1"></i> 30 min read</span>
+                            <span><i class="fas fa-signal mr-1"></i> Advanced</span>
+                        </div>
+                        <a href="#" class="btn-secondary px-4 py-2 text-sm inline-block">Read Guide</a>
+                    </div>
+
+                    <!-- FAIR Archiving -->
+                    <div class="card bg-white p-6">
+                        <span class="resource-badge resource-badge-doc mb-4 inline-block">Guide</span>
+                        <h3 class="font-semibold mb-2">FAIR Data Archiving</h3>
+                        <p class="text-sm text-carbon-text-secondary mb-4">Archive masked data following FAIR principles with DANS integration and metadata standards.</p>
+                        <div class="flex items-center gap-4 text-xs text-carbon-text-secondary mb-4">
+                            <span><i class="fas fa-clock mr-1"></i> 20 min read</span>
+                            <span><i class="fas fa-signal mr-1"></i> Intermediate</span>
+                        </div>
+                        <a href="#" class="btn-secondary px-4 py-2 text-sm inline-block">Read Guide</a>
+                    </div>
+
+                    <!-- API Reference -->
+                    <div class="card bg-white p-6">
+                        <span class="resource-badge resource-badge-code mb-4 inline-block">API</span>
+                        <h3 class="font-semibold mb-2">API Reference</h3>
+                        <p class="text-sm text-carbon-text-secondary mb-4">Complete API documentation for programmatic access to masking capabilities.</p>
+                        <div class="flex items-center gap-4 text-xs text-carbon-text-secondary mb-4">
+                            <span><i class="fas fa-code mr-1"></i> REST API</span>
+                            <span><i class="fas fa-signal mr-1"></i> Advanced</span>
+                        </div>
+                        <a href="#" class="btn-secondary px-4 py-2 text-sm inline-block">View API Docs</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Templates -->
+        <section id="templates" class="py-20 px-6 bg-carbon-bg-hover border-y border-carbon-border">
+            <div class="container mx-auto max-w-5xl">
+                <div class="mb-12">
+                    <span class="text-xs font-mono uppercase tracking-widest text-carbon-text-secondary">Downloads</span>
+                    <h2 class="text-3xl font-semibold mt-4">Templates & Forms</h2>
+                </div>
+                <div class="grid md:grid-cols-2 gap-6">
+                    <!-- Consent Forms -->
+                    <div class="border border-carbon-border bg-white p-6">
+                        <div class="flex items-start gap-4">
+                            <div class="w-12 h-12 border border-carbon-border flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-file-signature text-xl"></i>
+                            </div>
+                            <div class="flex-1">
+                                <span class="resource-badge resource-badge-template mb-2 inline-block">Template</span>
+                                <h3 class="font-semibold mb-2">Informed Consent Templates</h3>
+                                <p class="text-sm text-carbon-text-secondary mb-4">GDPR-compliant consent forms for audiovisual data collection and de-identification. Multiple language versions.</p>
+                                <div class="flex flex-wrap gap-2 mb-4">
+                                    <span class="text-xs px-2 py-1 bg-carbon-bg-hover">Dutch</span>
+                                    <span class="text-xs px-2 py-1 bg-carbon-bg-hover">English</span>
+                                    <span class="text-xs px-2 py-1 bg-carbon-bg-hover">Markdown</span>
+                                </div>
+                                <div class="flex gap-2">
+                                    <a href="downloads/templates/informed-consent-EN.md" class="btn-primary px-3 py-2 text-xs inline-block" download><i class="fas fa-download mr-1"></i>EN</a>
+                                    <a href="downloads/templates/informed-consent-NL.md" class="btn-secondary px-3 py-2 text-xs inline-block" download><i class="fas fa-download mr-1"></i>NL</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Data Management Plan -->
+                    <div class="border border-carbon-border bg-white p-6">
+                        <div class="flex items-start gap-4">
+                            <div class="w-12 h-12 border border-carbon-border flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-clipboard-list text-xl"></i>
+                            </div>
+                            <div class="flex-1">
+                                <span class="resource-badge resource-badge-template mb-2 inline-block">Template</span>
+                                <h3 class="font-semibold mb-2">Data Management Plan Template</h3>
+                                <p class="text-sm text-carbon-text-secondary mb-4">DMP template for audiovisual research data including masking procedures, storage, and archiving plans.</p>
+                                <div class="flex flex-wrap gap-2 mb-4">
+                                    <span class="text-xs px-2 py-1 bg-carbon-bg-hover">FAIR</span>
+                                    <span class="text-xs px-2 py-1 bg-carbon-bg-hover">NWO Format</span>
+                                    <span class="text-xs px-2 py-1 bg-carbon-bg-hover">Markdown</span>
+                                </div>
+                                <a href="downloads/templates/data-management-plan.md" class="btn-primary px-4 py-2 text-sm inline-block" download><i class="fas fa-download mr-2"></i>Download</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Metadata Schema -->
+                    <div class="border border-carbon-border bg-white p-6">
+                        <div class="flex items-start gap-4">
+                            <div class="w-12 h-12 border border-carbon-border flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-tags text-xl"></i>
+                            </div>
+                            <div class="flex-1">
+                                <span class="resource-badge resource-badge-template mb-2 inline-block">Schema</span>
+                                <h3 class="font-semibold mb-2">Metadata Schema</h3>
+                                <p class="text-sm text-carbon-text-secondary mb-4">Standard metadata schema for masked audiovisual data including masking parameters and provenance information.</p>
+                                <div class="flex flex-wrap gap-2 mb-4">
+                                    <span class="text-xs px-2 py-1 bg-carbon-bg-hover">JSON-LD</span>
+                                    <span class="text-xs px-2 py-1 bg-carbon-bg-hover">Dublin Core</span>
+                                    <span class="text-xs px-2 py-1 bg-carbon-bg-hover">DANS</span>
+                                </div>
+                                <a href="downloads/templates/metadata-schema.json" class="btn-primary px-4 py-2 text-sm inline-block" download><i class="fas fa-download mr-2"></i>Download</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Reporting Template -->
+                    <div class="border border-carbon-border bg-white p-6">
+                        <div class="flex items-start gap-4">
+                            <div class="w-12 h-12 border border-carbon-border flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-chart-bar text-xl"></i>
+                            </div>
+                            <div class="flex-1">
+                                <span class="resource-badge resource-badge-template mb-2 inline-block">Template</span>
+                                <h3 class="font-semibold mb-2">Masking Report Template</h3>
+                                <p class="text-sm text-carbon-text-secondary mb-4">Document masking procedures, quality metrics, and compliance information for publications and ethics boards.</p>
+                                <div class="flex flex-wrap gap-2 mb-4">
+                                    <span class="text-xs px-2 py-1 bg-carbon-bg-hover">Markdown</span>
+                                </div>
+                                <a href="downloads/templates/masking-report.md" class="btn-primary px-4 py-2 text-sm inline-block" download><i class="fas fa-download mr-2"></i>Download</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Code & Tools -->
+        <section class="py-20 px-6">
+            <div class="container mx-auto max-w-5xl">
+                <div class="mb-12">
+                    <span class="text-xs font-mono uppercase tracking-widest text-carbon-text-secondary">Tools</span>
+                    <h2 class="text-3xl font-semibold mt-4">Code & Tools</h2>
+                </div>
+                <div class="grid md:grid-cols-3 gap-6">
+                    <div class="card bg-white p-6">
+                        <span class="resource-badge resource-badge-code mb-4 inline-block">Repository</span>
+                        <h3 class="font-semibold mb-2">MaskAnyone</h3>
+                        <p class="text-sm text-carbon-text-secondary mb-4">Main platform repository with face masking, voice anonymization, and web interface components.</p>
+                        <div class="flex items-center gap-2 mb-4">
+                            <i class="fab fa-python text-blue-600"></i>
+                            <i class="fab fa-react text-blue-400"></i>
+                            <i class="fab fa-docker text-blue-500"></i>
+                        </div>
+                        <a href="https://github.com/MaskAnyone/MaskAnyone" class="btn-secondary px-4 py-2 text-sm inline-block">
+                            <i class="fab fa-github mr-2"></i>View on GitHub
+                        </a>
+                    </div>
+                    <div class="card bg-white p-6">
+                        <span class="resource-badge resource-badge-code mb-4 inline-block">Repository</span>
+                        <h3 class="font-semibold mb-2">MaskBench</h3>
+                        <p class="text-sm text-carbon-text-secondary mb-4">Benchmarking framework for evaluating pose estimation accuracy under masking conditions.</p>
+                        <div class="flex items-center gap-2 mb-4">
+                            <i class="fab fa-python text-blue-600"></i>
+                            <i class="fab fa-docker text-blue-500"></i>
+                        </div>
+                        <a href="https://github.com/maskbench/maskbench" class="btn-secondary px-4 py-2 text-sm inline-block">
+                            <i class="fab fa-github mr-2"></i>View on GitHub
+                        </a>
+                    </div>
+                    <div class="card bg-white p-6">
+                        <span class="resource-badge resource-badge-code mb-4 inline-block">Tool</span>
+                        <h3 class="font-semibold mb-2">Docker Images</h3>
+                        <p class="text-sm text-carbon-text-secondary mb-4">Pre-built Docker containers for local deployment and development environments.</p>
+                        <div class="flex items-center gap-2 mb-4">
+                            <i class="fab fa-docker text-blue-500"></i>
+                        </div>
+                        <a href="#" class="btn-secondary px-4 py-2 text-sm inline-block">
+                            <i class="fas fa-download mr-2"></i>Docker Hub
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Publications -->
+        <section id="publications" class="py-20 px-6 bg-carbon-bg-hover border-y border-carbon-border">
+            <div class="container mx-auto max-w-5xl">
+                <div class="mb-12">
+                    <span class="text-xs font-mono uppercase tracking-widest text-carbon-text-secondary">Research</span>
+                    <h2 class="text-3xl font-semibold mt-4">Publications</h2>
+                </div>
+                <div class="space-y-6">
+                    <div class="border border-carbon-border bg-white p-6">
+                        <div class="flex items-start gap-4">
+                            <div class="w-10 h-10 bg-carbon-text text-white flex items-center justify-center flex-shrink-0 font-mono text-sm">
+                                2026
+                            </div>
+                            <div>
+                                <h3 class="font-semibold mb-1">MaskAnyone: A Tutorial for Privacy-Aware Audiovisual Data De-identification</h3>
+                                <p class="text-sm text-carbon-text-secondary mb-2">Owoyele, B., Pouw, W., & Dingemanse, M.</p>
+                                <p class="text-xs text-carbon-text-secondary mb-4">Behavior Research Methods (Submitted)</p>
+                                <div class="flex gap-2">
+                                    <a href="#" class="text-xs btn-secondary px-3 py-1">Preprint</a>
+                                    <a href="#" class="text-xs btn-secondary px-3 py-1">Code</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="border border-carbon-border bg-white p-6">
+                        <div class="flex items-start gap-4">
+                            <div class="w-10 h-10 bg-carbon-text text-white flex items-center justify-center flex-shrink-0 font-mono text-sm">
+                                2026
+                            </div>
+                            <div>
+                                <h3 class="font-semibold mb-1">MaskBench: Benchmarking Pose Estimation Under Privacy-Preserving Masking Conditions</h3>
+                                <p class="text-sm text-carbon-text-secondary mb-2">Owoyele, B., Pouw, W., et al.</p>
+                                <p class="text-xs text-carbon-text-secondary mb-4">Behavior Research Methods (Submitted)</p>
+                                <div class="flex gap-2">
+                                    <a href="#" class="text-xs btn-secondary px-3 py-1">Preprint</a>
+                                    <a href="#" class="text-xs btn-secondary px-3 py-1">Code</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="border border-carbon-border bg-white p-6">
+                        <div class="flex items-start gap-4">
+                            <div class="w-10 h-10 bg-carbon-bg-hover text-carbon-text flex items-center justify-center flex-shrink-0 font-mono text-sm">
+                                TBD
+                            </div>
+                            <div>
+                                <h3 class="font-semibold mb-1">SYNAPSIS Policy Paper: Privacy-Aware Audiovisual Data Sharing for SSH</h3>
+                                <p class="text-sm text-carbon-text-secondary mb-2">SYNAPSIS Consortium</p>
+                                <p class="text-xs text-carbon-text-secondary mb-4">In preparation</p>
+                                <span class="text-xs bg-carbon-bg-hover px-3 py-1">Coming 2027</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ -->
+        <section id="faq" class="py-20 px-6">
+            <div class="container mx-auto max-w-5xl">
+                <div class="mb-12">
+                    <span class="text-xs font-mono uppercase tracking-widest text-carbon-text-secondary">Help</span>
+                    <h2 class="text-3xl font-semibold mt-4">Frequently Asked Questions</h2>
+                </div>
+                <div class="space-y-4">
+                    <details class="border border-carbon-border bg-white">
+                        <summary class="p-6 cursor-pointer font-medium flex items-center justify-between">
+                            <span>What video formats are supported?</span>
+                            <i class="fas fa-chevron-down transition-transform"></i>
+                        </summary>
+                        <div class="px-6 pb-6 text-sm text-carbon-text-secondary">
+                            SYNAPSIS supports common video formats including MP4, AVI, MOV, and MKV. Maximum file size is 10GB per video. For batch processing, you can upload multiple files simultaneously.
+                        </div>
+                    </details>
+                    <details class="border border-carbon-border bg-white">
+                        <summary class="p-6 cursor-pointer font-medium flex items-center justify-between">
+                            <span>How long does processing take?</span>
+                            <i class="fas fa-chevron-down transition-transform"></i>
+                        </summary>
+                        <div class="px-6 pb-6 text-sm text-carbon-text-secondary">
+                            Processing time varies by video length and masking method. For standard face masking, expect approximately 5 minutes per minute of video. Advanced methods like face swapping may take longer. You'll receive an email notification when processing completes.
+                        </div>
+                    </details>
+                    <details class="border border-carbon-border bg-white">
+                        <summary class="p-6 cursor-pointer font-medium flex items-center justify-between">
+                            <span>Is my data secure during processing?</span>
+                            <i class="fas fa-chevron-down transition-transform"></i>
+                        </summary>
+                        <div class="px-6 pb-6 text-sm text-carbon-text-secondary">
+                            Yes. All data is encrypted in transit and at rest. Processing occurs on SURF infrastructure within the Netherlands. Original files are automatically deleted after processing unless you opt to retain them. The platform is GDPR compliant.
+                        </div>
+                    </details>
+                    <details class="border border-carbon-border bg-white">
+                        <summary class="p-6 cursor-pointer font-medium flex items-center justify-between">
+                            <span>Can I use SYNAPSIS for commercial purposes?</span>
+                            <i class="fas fa-chevron-down transition-transform"></i>
+                        </summary>
+                        <div class="px-6 pb-6 text-sm text-carbon-text-secondary">
+                            SYNAPSIS is designed for academic research. Commercial use requires a separate license agreement. Contact the project team to discuss commercial applications.
+                        </div>
+                    </details>
+                    <details class="border border-carbon-border bg-white">
+                        <summary class="p-6 cursor-pointer font-medium flex items-center justify-between">
+                            <span>How do I cite SYNAPSIS in my research?</span>
+                            <i class="fas fa-chevron-down transition-transform"></i>
+                        </summary>
+                        <div class="px-6 pb-6 text-sm text-carbon-text-secondary">
+                            <p class="mb-2">Please cite the SYNAPSIS platform and relevant publications:</p>
+                            <div class="bg-carbon-bg-hover p-4 font-mono text-xs">
+                                Owoyele, B., Pouw, W., & Dingemanse, M. (2026). SYNAPSIS: A Platform for Privacy-Aware Audiovisual Data Management. [Software]. https://synapsis.nl
+                            </div>
+                        </div>
+                    </details>
+                    <details class="border border-carbon-border bg-white">
+                        <summary class="p-6 cursor-pointer font-medium flex items-center justify-between">
+                            <span>What if I need help with a specific use case?</span>
+                            <i class="fas fa-chevron-down transition-transform"></i>
+                        </summary>
+                        <div class="px-6 pb-6 text-sm text-carbon-text-secondary">
+                            Contact your local data steward or reach out to the SYNAPSIS team directly. We offer consultations for complex use cases and can arrange custom workflows for institutional pilots.
+                        </div>
+                    </details>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Support -->
+        <section class="py-20 px-6 bg-carbon-bg-hover border-y border-carbon-border">
+            <div class="container mx-auto max-w-5xl text-center">
+                <h2 class="text-3xl font-semibold mb-4">Need More Help?</h2>
+                <p class="text-carbon-text-secondary mb-8 max-w-xl mx-auto">Can't find what you're looking for? Our team is here to help with technical questions, use case consultations, and institutional partnerships.</p>
+                <div class="flex flex-wrap justify-center gap-4">
+                    <a href="mailto:babajide.owoyele@ru.nl" class="btn-primary px-6 py-3 font-medium">
+                        <i class="fas fa-envelope mr-2"></i> Contact Support
+                    </a>
+                    <a href="https://github.com/MaskAnyone/MaskAnyone/issues" class="btn-secondary px-6 py-3 font-medium">
+                        <i class="fab fa-github mr-2"></i> Report Issue
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-carbon-border py-12 px-6">
+        <div class="container mx-auto max-w-5xl">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-8">
+                <div>
+                    <div class="font-semibold text-lg mb-2">SYNAPSIS</div>
+                    <div class="text-sm text-carbon-text-secondary">
+                        Funded by NWO TDCC-SSH
+                    </div>
+                </div>
+                <div class="flex gap-8">
+                    <a href="index.html" class="text-sm text-carbon-text-secondary hover:text-carbon-text">Home</a>
+                    <a href="platform.html" class="text-sm text-carbon-text-secondary hover:text-carbon-text">Platform</a>
+                    <a href="training.html" class="text-sm text-carbon-text-secondary hover:text-carbon-text">Training</a>
+                    <a href="https://github.com/MaskAnyone/MaskAnyone" class="text-sm text-carbon-text-secondary hover:text-carbon-text">GitHub</a>
+                </div>
+            </div>
+            <div class="mt-8 pt-8 border-t border-carbon-border text-sm text-carbon-text-secondary">
+                © 2026 SYNAPSIS Project. Radboud University.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                if (this.getAttribute('href') !== '#') {
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

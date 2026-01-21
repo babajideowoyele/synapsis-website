@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MaskAnyone - Keyboard Shortcuts Guide</title>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --carbon-bg: #ffffff;
+      --carbon-bg-hover: #f4f4f4;
+      --carbon-border: #e0e0e0;
+      --carbon-text: #161616;
+      --carbon-text-secondary: #393939;
+      --carbon-focus: #0f62fe;
+      --carbon-success: #198038;
+      --carbon-warning: #f1c21b;
+    }
+
+    body {
+      font-family: 'IBM Plex Sans', sans-serif;
+      background: var(--carbon-bg);
+      color: var(--carbon-text);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    *:focus-visible {
+      outline: 2px solid var(--carbon-focus);
+      outline-offset: 2px;
+    }
+
+    .skip-link {
+      position: absolute;
+      top: -40px;
+      left: 0;
+      background: var(--carbon-text);
+      color: white;
+      padding: 8px 16px;
+      z-index: 100;
+    }
+    .skip-link:focus { top: 0; }
+
+    /* Layout */
+    .app-frame { min-height: 100vh; display: flex; flex-direction: column; }
+    .accent-bar { height: 3px; background: var(--carbon-text); }
+
+    .app-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 24px;
+      border-bottom: 1px solid var(--carbon-border);
+    }
+    .app-logo {
+      font-size: 18px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .main-content {
+      flex: 1;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 48px 24px;
+      width: 100%;
+    }
+
+    /* Header */
+    .page-header {
+      margin-bottom: 48px;
+    }
+    .page-label {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 12px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--carbon-text-secondary);
+      margin-bottom: 8px;
+    }
+    .page-title {
+      font-size: 32px;
+      font-weight: 300;
+      margin-bottom: 12px;
+    }
+    .page-title strong { font-weight: 600; }
+    .page-desc {
+      font-size: 16px;
+      color: var(--carbon-text-secondary);
+      max-width: 600px;
+    }
+
+    /* Keyboard Key Styling */
+    kbd {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 28px;
+      height: 28px;
+      padding: 0 8px;
+      background: var(--carbon-bg-hover);
+      border: 1px solid var(--carbon-border);
+      border-bottom-width: 2px;
+      border-radius: 4px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--carbon-text);
+    }
+    .key-combo {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .key-plus {
+      font-size: 12px;
+      color: var(--carbon-text-secondary);
+    }
+
+    /* Shortcut Sections */
+    .shortcut-section {
+      margin-bottom: 40px;
+    }
+    .section-title {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 16px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--carbon-border);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .section-title i {
+      width: 32px;
+      height: 32px;
+      background: var(--carbon-text);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+    }
+
+    /* Shortcut List */
+    .shortcut-list {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .shortcut-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 16px;
+      background: var(--carbon-bg);
+      border: 1px solid transparent;
+      transition: all 0.15s;
+    }
+    .shortcut-item:hover {
+      background: var(--carbon-bg-hover);
+      border-color: var(--carbon-border);
+    }
+    .shortcut-desc {
+      font-size: 14px;
+      color: var(--carbon-text);
+    }
+    .shortcut-keys {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .shortcut-alt {
+      font-size: 12px;
+      color: var(--carbon-text-secondary);
+    }
+
+    /* Tips Box */
+    .tips-box {
+      background: var(--carbon-bg-hover);
+      border-left: 3px solid var(--carbon-text);
+      padding: 20px 24px;
+      margin-top: 40px;
+    }
+    .tips-title {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .tips-list {
+      list-style: none;
+    }
+    .tips-list li {
+      font-size: 14px;
+      color: var(--carbon-text-secondary);
+      padding: 6px 0;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+    .tips-list li i {
+      color: var(--carbon-success);
+      margin-top: 3px;
+    }
+
+    /* Quick Reference Toggle */
+    .quick-ref-toggle {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      width: 56px;
+      height: 56px;
+      background: var(--carbon-text);
+      color: #fff;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      transition: all 0.15s;
+    }
+    .quick-ref-toggle:hover {
+      background: #393939;
+      transform: translateY(-2px);
+    }
+
+    /* Modal */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s;
+      z-index: 1000;
+    }
+    .modal-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .modal {
+      background: #fff;
+      width: 90%;
+      max-width: 600px;
+      max-height: 80vh;
+      overflow-y: auto;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+    }
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 24px;
+      border-bottom: 1px solid var(--carbon-border);
+    }
+    .modal-title {
+      font-size: 18px;
+      font-weight: 600;
+    }
+    .modal-close {
+      width: 40px;
+      height: 40px;
+      background: transparent;
+      border: none;
+      font-size: 18px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-close:hover {
+      background: var(--carbon-bg-hover);
+    }
+    .modal-body {
+      padding: 24px;
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 48px;
+      padding: 12px 24px;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s;
+      border: none;
+      text-decoration: none;
+    }
+    .btn-ghost { background: transparent; color: var(--carbon-text); }
+    .btn-ghost:hover { background: var(--carbon-bg-hover); }
+
+    /* Footer */
+    .footer-nav {
+      padding: 24px;
+      border-top: 1px solid var(--carbon-border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #fff;
+    }
+
+    /* Platform Toggle */
+    .platform-toggle {
+      display: flex;
+      gap: 0;
+      margin-bottom: 24px;
+    }
+    .platform-btn {
+      padding: 8px 16px;
+      background: var(--carbon-bg-hover);
+      border: 1px solid var(--carbon-border);
+      font-family: inherit;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .platform-btn:first-child {
+      border-right: none;
+    }
+    .platform-btn.active {
+      background: var(--carbon-text);
+      color: #fff;
+      border-color: var(--carbon-text);
+    }
+    .platform-btn:hover:not(.active) {
+      background: var(--carbon-border);
+    }
+
+    /* Hide platform-specific shortcuts */
+    .win-only { display: flex; }
+    .mac-only { display: none; }
+    body.mac .win-only { display: none; }
+    body.mac .mac-only { display: flex; }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to main content</a>
+
+  <div class="app-frame">
+    <div class="accent-bar"></div>
+
+    <header class="app-header">
+      <div class="app-logo">
+        <i class="fas fa-mask" aria-hidden="true"></i>
+        <span>MASKANYONE</span>
+      </div>
+
+      <a href="maskanyone-improved-upload.html" class="btn btn-ghost">
+        <i class="fas fa-arrow-left" aria-hidden="true"></i>
+        Back to App
+      </a>
+    </header>
+
+    <main id="main" class="main-content">
+      <div class="page-header">
+        <p class="page-label">Help & Accessibility</p>
+        <h1 class="page-title">Keyboard <strong>Shortcuts</strong></h1>
+        <p class="page-desc">
+          Use these keyboard shortcuts to work faster and navigate MaskAnyone without a mouse. Press <kbd>?</kbd> anywhere in the app to open this reference.
+        </p>
+      </div>
+
+      <!-- Platform Toggle -->
+      <div class="platform-toggle" role="tablist" aria-label="Select operating system">
+        <button class="platform-btn active" role="tab" aria-selected="true" onclick="setPlatform('win')">
+          <i class="fab fa-windows" aria-hidden="true"></i> Windows
+        </button>
+        <button class="platform-btn" role="tab" aria-selected="false" onclick="setPlatform('mac')">
+          <i class="fab fa-apple" aria-hidden="true"></i> macOS
+        </button>
+      </div>
+
+      <!-- General Navigation -->
+      <section class="shortcut-section" aria-labelledby="nav-title">
+        <h2 id="nav-title" class="section-title">
+          <i class="fas fa-compass" aria-hidden="true"></i>
+          General Navigation
+        </h2>
+        <div class="shortcut-list">
+          <div class="shortcut-item">
+            <span class="shortcut-desc">Show keyboard shortcuts help</span>
+            <div class="shortcut-keys">
+              <kbd>?</kbd>
+            </div>
+          </div>
+          <div class="shortcut-item">
+            <span class="shortcut-desc">Go to Upload page</span>
+            <div class="shortcut-keys">
+              <kbd>G</kbd> then <kbd>U</kbd>
+            </div>
+          </div>
+          <div class="shortcut-item">
+            <span class="shortcut-desc">Go to Review page</span>
+            <div class="shortcut-keys">
+              <kbd>G</kbd> then <kbd>R</kbd>
+            </div>
+          </div>
+          <div class="shortcut-item">
+            <span class="shortcut-desc">Go to Export page</span>
+            <div class="shortcut-keys">
+              <kbd>G</kbd> then <kbd>E</kbd>
+            </div>
+          </div>
+          <div class="shortcut-item">
+            <span class="shortcut-desc">Go to Projects list</span>
+            <div class="shortcut-keys">
+              <kbd>G</kbd> then <kbd>P</kbd>
+            </div>
+          </div>
+          <div class="shortcut-item win-only">
+            <span class="shortcut-desc">Open search</span>
+            <div class="shortcut-keys">
+              <span class="key-combo"><kbd>Ctrl</kbd><span class="key-plus">+</span><kbd>K</kbd></span>
+            </div>
+          </div>
+          <div class="shortcut-item mac-only">
+            <span class="shortcut-desc">Open search</span>
+            <div class="shortcut-keys">
+              <span class="key-combo"><kbd>⌘</kbd><span class="key-plus">+</span><kbd>K</kbd></span>
+            </div>
+          </div>
+          <div class="shortcut-item">
+            <span class="shortcut-desc">Close modal / Cancel action</span>
+            <div class="shortcut-keys">
+              <kbd>Esc</kbd>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Video Playback -->
+      <section class="shortcut-section" aria-labelledby="video-title">
+        <h2 id="video-title" class="section-title">
+          <i class="fas fa-play-circle" aria-hidden="true"></i>
+          Video Playback
+        </h2>
+        <div class="shortcut-list">
+          <div class="shortcut-item">
+            <span class="shortcut-desc">Play / Pause video</span>
+            <div class="shortcut-keys">
+              <kbd>Space</kbd>
+              <span class="shortcut-alt">or</span>
+              <kbd>K</kbd>
+            </div>
+          </div>
+          <div class="shortcut-item">
+            <span class="shortcut-desc">Skip forward 5 seconds</span>
+            <div class="shortcut-keys">
+              <kbd>→</kbd>
+              <span class="shortcut-alt">or</span>
+              <kbd>L</kbd>
+            </div>
+          </div>
+          <div class="shortcut-item">
+            <span class="shortcut-desc">Skip backward 5 seconds</span>
+            <div class="shortcut-keys">
+              <kbd>←</kbd>
+              <span class="shortcut-alt">or</span>
+              <kbd>J</kbd>
+            </div>
+          </div>
+          <div class="shortcut-item">
+            <span class="shortcut-desc">Skip forward 10 seconds</span>
+            <div class="shortcut-keys">
+              <span class="key-combo"><kbd>Shift</kbd><span class="key-plus">+</span><kbd>→</kbd></span>
+            </div>
+          </div>
+          <div class="shortcut-item">
+            <span class="shortcut-desc">Skip backward 10 seconds</span>
+            <div class="shortcut-keys">
+              <span class="key-combo"><kbd>Shift</kbd><span class="key-plus">+</span><kbd>←</kbd></span>
+            </div>
+          </div>
+          <div class="shortcut-item">
+            <span class="shortcut-desc">Next frame</span>
+            <div class="shortcut-keys">
+              <kbd>.</kbd>
+            </div>
+          </div>
+          <div class="shortcut-item">
+            <span class="shortcut-desc">Previous frame</span>
+            <div class="shortcut-keys">
+              <kbd>,</kbd>
+            </div>
+          </div>
+          <div class="shortcut-item">
+            <span class="shortcut-desc">Go to start of video</span>
+            <div class="shortcut-keys">
+              <kbd>Home</kbd>
+              <span class="shortcut-alt">or</span>
+              <kbd>0</kbd>
+            </div>
+          </div>
+          <div class="shortcut-item">
+            <span class="shortcut-desc">Go to end of video</span>
+            <div class="shortcut-keys">
+              <kbd>End</kbd>
+            </div>
+          </div>
+          <div class="shortcut-item">
+            <span class="shortcut-desc">Increase playback speed</span>
+            <div class="shortcut-keys">
+              <kbd>></kbd>
+            </div>
+          </div>
+          <div class="shortcut-item">
+            <span class="shortcut-desc">Decrease playback speed</span>
+            <div class="shortcut-keys">
+              <kbd><</kbd>
+            </div>
+          </div>
+          <div class="shortcut-item">
+            <span class="shortcut-desc">Toggle fullscreen</span>
+            <div class="shortcut-keys">
+              <kbd>F</kbd>
+            </div>
+          </div>
+          <div class="shortcut-item">
+            <span class="shortcut-desc">Toggle mute</span>
+            <div class="shortcut-keys">
+              <kbd>M</kbd>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Person Selection -->
+      <section class="shortcut-section" aria-labelledby="person-title">
+        <h2 id="person-title" class="section-title">
+          <i class="fas fa-users" aria-hidden="true"></i>
+          Person Selection & Consent
+        </h2>
+        <div class="shortcut-list">
+          <div class="shortcut-item">
+            <span class="shortcut-desc">Select next person</span>
+            <div class="shortcut-keys">
+              <kbd>Tab</kbd>
+              <span class="shortcut-alt">or</span>
+              <kbd>↓</kbd>
+            </div>
+          </div>
+          <div class="shortcut-item">
+            <span class="shortcut-desc">Select previous person</span>
+            <div class="shortcut-keys">
+              <span class="key-combo"><kbd>Shift</kbd><span class="key-plus">+</span><kbd>Tab</kbd></span>
+              <span class="shortcut-alt">or</span>
+              <kbd>↑</kbd>
+            </div>
+          </div>
+          <div class="shortcut-item">
+            <span class="shortcut-desc">Select person by number</span>
+            <div class="shortcut-keys">
+              <kbd>1</kbd> - <kbd>9</kbd>
+            </div>
+          </div>
+          <div class="shortcut-item">
+            <span class="shortcut-desc">Set consent: Full</span>
+            <div class="shortcut-keys">
+              <kbd>C</kbd> then <kbd>F</kbd>
+            </div>
+          </div>
+          <div class="shortcut-item">
+            <span class="shortcut-desc">Set consent: Partial</span>
+            <div class="shortcut-keys">
+              <kbd>C</kbd> then <kbd>P</kbd>
+            </div>
+          </div>
+          <div class="shortcut-item">
+            <span class="shortcut-desc">Set consent: None</span>
+            <div class="shortcut-keys">
+              <kbd>C</kbd> then <kbd>N</kbd>
+            </div>
+          </div>
+          <div class="shortcut-item">
+            <span class="shortcut-desc">Toggle person visibility</span>
+            <div class="shortcut-keys">
+              <kbd>V</kbd>
+            </div>
+          </div>
+          <div class="shortcut-item win-only">
+            <span class="shortcut-desc">Select all persons</span>
+            <div class="shortcut-keys">
+              <span class="key-combo"><kbd>Ctrl</kbd><span class="key-plus">+</span><kbd>A</kbd></span>
+            </div>
+          </div>
+          <div class="shortcut-item mac-only">
+            <span class="shortcut-desc">Select all persons</span>
+            <div class="shortcut-keys">
+              <span class="key-combo"><kbd>⌘</kbd><span class="key-plus">+</span><kbd>A</kbd></span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Masking Controls -->
+      <section class="shortcut-section" aria-labelledby="mask-title">
+        <h2 id="mask-title" class="section-title">
+          <i class="fas fa-mask" aria-hidden="true"></i>
+          Masking Controls
+        </h2>
+        <div class="shortcut-list">
+          <div class="shortcut-item">
+            <span class="shortcut-desc">Toggle mask preview</span>
+            <div class="shortcut-keys">
+              <kbd>P</kbd>
+            </div>
+          </div>
+          <div class="shortcut-item">
+            <span class="shortcut-desc">Switch mask method: Blur</span>
+            <div class="shortcut-keys">
+              <kbd>B</kbd>
+            </div>
+          </div>
+          <div class="shortcut-item">
+            <span class="shortcut-desc">Switch mask method: Solid</span>
+            <div class="shortcut-keys">
+              <kbd>S</kbd>
+            </div>
+          </div>
+          <div class="shortcut-item">
+            <span class="shortcut-desc">Switch mask method: Pixelate</span>
+            <div class="shortcut-keys">
+              <kbd>X</kbd>
+            </div>
+          </div>
+          <div class="shortcut-item">
+            <span class="shortcut-desc">Switch mask method: Skeleton</span>
+            <div class="shortcut-keys">
+              <kbd>K</kbd>
+            </div>
+          </div>
+          <div class="shortcut-item">
+            <span class="shortcut-desc">Increase mask intensity</span>
+            <div class="shortcut-keys">
+              <kbd>+</kbd>
+              <span class="shortcut-alt">or</span>
+              <kbd>=</kbd>
+            </div>
+          </div>
+          <div class="shortcut-item">
+            <span class="shortcut-desc">Decrease mask intensity</span>
+            <div class="shortcut-keys">
+              <kbd>-</kbd>
+            </div>
+          </div>
+          <div class="shortcut-item">
+            <span class="shortcut-desc">Toggle face only / full body</span>
+            <div class="shortcut-keys">
+              <kbd>T</kbd>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- File Operations -->
+      <section class="shortcut-section" aria-labelledby="file-title">
+        <h2 id="file-title" class="section-title">
+          <i class="fas fa-file-video" aria-hidden="true"></i>
+          File Operations
+        </h2>
+        <div class="shortcut-list">
+          <div class="shortcut-item win-only">
+            <span class="shortcut-desc">Upload new video</span>
+            <div class="shortcut-keys">
+              <span class="key-combo"><kbd>Ctrl</kbd><span class="key-plus">+</span><kbd>O</kbd></span>
+            </div>
+          </div>
+          <div class="shortcut-item mac-only">
+            <span class="shortcut-desc">Upload new video</span>
+            <div class="shortcut-keys">
+              <span class="key-combo"><kbd>⌘</kbd><span class="key-plus">+</span><kbd>O</kbd></span>
+            </div>
+          </div>
+          <div class="shortcut-item win-only">
+            <span class="shortcut-desc">Save project</span>
+            <div class="shortcut-keys">
+              <span class="key-combo"><kbd>Ctrl</kbd><span class="key-plus">+</span><kbd>S</kbd></span>
+            </div>
+          </div>
+          <div class="shortcut-item mac-only">
+            <span class="shortcut-desc">Save project</span>
+            <div class="shortcut-keys">
+              <span class="key-combo"><kbd>⌘</kbd><span class="key-plus">+</span><kbd>S</kbd></span>
+            </div>
+          </div>
+          <div class="shortcut-item win-only">
+            <span class="shortcut-desc">Export masked video</span>
+            <div class="shortcut-keys">
+              <span class="key-combo"><kbd>Ctrl</kbd><span class="key-plus">+</span><kbd>E</kbd></span>
+            </div>
+          </div>
+          <div class="shortcut-item mac-only">
+            <span class="shortcut-desc">Export masked video</span>
+            <div class="shortcut-keys">
+              <span class="key-combo"><kbd>⌘</kbd><span class="key-plus">+</span><kbd>E</kbd></span>
+            </div>
+          </div>
+          <div class="shortcut-item win-only">
+            <span class="shortcut-desc">Undo last action</span>
+            <div class="shortcut-keys">
+              <span class="key-combo"><kbd>Ctrl</kbd><span class="key-plus">+</span><kbd>Z</kbd></span>
+            </div>
+          </div>
+          <div class="shortcut-item mac-only">
+            <span class="shortcut-desc">Undo last action</span>
+            <div class="shortcut-keys">
+              <span class="key-combo"><kbd>⌘</kbd><span class="key-plus">+</span><kbd>Z</kbd></span>
+            </div>
+          </div>
+          <div class="shortcut-item win-only">
+            <span class="shortcut-desc">Redo last action</span>
+            <div class="shortcut-keys">
+              <span class="key-combo"><kbd>Ctrl</kbd><span class="key-plus">+</span><kbd>Shift</kbd><span class="key-plus">+</span><kbd>Z</kbd></span>
+            </div>
+          </div>
+          <div class="shortcut-item mac-only">
+            <span class="shortcut-desc">Redo last action</span>
+            <div class="shortcut-keys">
+              <span class="key-combo"><kbd>⌘</kbd><span class="key-plus">+</span><kbd>Shift</kbd><span class="key-plus">+</span><kbd>Z</kbd></span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Accessibility -->
+      <section class="shortcut-section" aria-labelledby="a11y-title">
+        <h2 id="a11y-title" class="section-title">
+          <i class="fas fa-universal-access" aria-hidden="true"></i>
+          Accessibility
+        </h2>
+        <div class="shortcut-list">
+          <div class="shortcut-item">
+            <span class="shortcut-desc">Skip to main content</span>
+            <div class="shortcut-keys">
+              <kbd>Tab</kbd> (first focus)
+            </div>
+          </div>
+          <div class="shortcut-item">
+            <span class="shortcut-desc">Navigate form fields</span>
+            <div class="shortcut-keys">
+              <kbd>Tab</kbd> / <span class="key-combo"><kbd>Shift</kbd><span class="key-plus">+</span><kbd>Tab</kbd></span>
+            </div>
+          </div>
+          <div class="shortcut-item">
+            <span class="shortcut-desc">Activate button / link</span>
+            <div class="shortcut-keys">
+              <kbd>Enter</kbd>
+              <span class="shortcut-alt">or</span>
+              <kbd>Space</kbd>
+            </div>
+          </div>
+          <div class="shortcut-item">
+            <span class="shortcut-desc">Navigate options in a group</span>
+            <div class="shortcut-keys">
+              <kbd>↑</kbd> <kbd>↓</kbd> <kbd>←</kbd> <kbd>→</kbd>
+            </div>
+          </div>
+          <div class="shortcut-item">
+            <span class="shortcut-desc">Toggle high contrast mode</span>
+            <div class="shortcut-keys">
+              <kbd>H</kbd>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Tips -->
+      <aside class="tips-box" aria-labelledby="tips-heading">
+        <h3 id="tips-heading" class="tips-title">
+          <i class="fas fa-lightbulb" aria-hidden="true"></i>
+          Tips for efficient workflows
+        </h3>
+        <ul class="tips-list">
+          <li>
+            <i class="fas fa-check" aria-hidden="true"></i>
+            <span>Use <kbd>1</kbd>-<kbd>9</kbd> to quickly select persons by number, then <kbd>C</kbd>+<kbd>F/P/N</kbd> to set consent</span>
+          </li>
+          <li>
+            <i class="fas fa-check" aria-hidden="true"></i>
+            <span>Press <kbd>P</kbd> to toggle preview while adjusting mask settings to see changes in real-time</span>
+          </li>
+          <li>
+            <i class="fas fa-check" aria-hidden="true"></i>
+            <span>Use <kbd>J</kbd>/<kbd>K</kbd>/<kbd>L</kbd> for video navigation (like YouTube) - familiar for most users</span>
+          </li>
+          <li>
+            <i class="fas fa-check" aria-hidden="true"></i>
+            <span>Frame-by-frame navigation (<kbd>,</kbd> and <kbd>.</kbd>) helps verify masking at transition points</span>
+          </li>
+        </ul>
+      </aside>
+
+      <!-- Print-friendly note -->
+      <p style="margin-top: 24px; font-size: 14px; color: var(--carbon-text-secondary);">
+        <i class="fas fa-print" aria-hidden="true"></i>
+        This page is print-friendly. Use your browser's print function to create a reference card.
+      </p>
+    </main>
+
+    <footer class="footer-nav">
+      <a href="maskanyone-improved-upload.html" class="btn btn-ghost">
+        <i class="fas fa-arrow-left" aria-hidden="true"></i>
+        Back to Upload
+      </a>
+      <div>
+        <span style="font-size: 14px; color: var(--carbon-text-secondary);">
+          Press <kbd>?</kbd> anywhere to open quick reference
+        </span>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Quick Reference Button -->
+  <button class="quick-ref-toggle" aria-label="Show keyboard shortcuts" onclick="toggleModal()">
+    <i class="fas fa-keyboard"></i>
+  </button>
+
+  <!-- Quick Reference Modal -->
+  <div class="modal-overlay" id="quickRefModal" onclick="if(event.target===this)toggleModal()">
+    <div class="modal" role="dialog" aria-labelledby="modal-title" aria-modal="true">
+      <div class="modal-header">
+        <h2 id="modal-title" class="modal-title">Quick Reference</h2>
+        <button class="modal-close" onclick="toggleModal()" aria-label="Close">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="shortcut-list">
+          <div class="shortcut-item">
+            <span class="shortcut-desc">Play / Pause</span>
+            <kbd>Space</kbd>
+          </div>
+          <div class="shortcut-item">
+            <span class="shortcut-desc">Next / Previous person</span>
+            <kbd>↑</kbd> <kbd>↓</kbd>
+          </div>
+          <div class="shortcut-item">
+            <span class="shortcut-desc">Set consent</span>
+            <kbd>C</kbd> + <kbd>F</kbd>/<kbd>P</kbd>/<kbd>N</kbd>
+          </div>
+          <div class="shortcut-item">
+            <span class="shortcut-desc">Toggle preview</span>
+            <kbd>P</kbd>
+          </div>
+          <div class="shortcut-item">
+            <span class="shortcut-desc">Frame forward/back</span>
+            <kbd>.</kbd> <kbd>,</kbd>
+          </div>
+          <div class="shortcut-item">
+            <span class="shortcut-desc">Full shortcuts list</span>
+            <kbd>?</kbd>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Detect platform
+    if (navigator.platform.toLowerCase().includes('mac')) {
+      document.body.classList.add('mac');
+      document.querySelector('.platform-btn:last-child').classList.add('active');
+      document.querySelector('.platform-btn:first-child').classList.remove('active');
+    }
+
+    function setPlatform(platform) {
+      document.body.classList.toggle('mac', platform === 'mac');
+      document.querySelectorAll('.platform-btn').forEach((btn, i) => {
+        btn.classList.toggle('active', (platform === 'mac' && i === 1) || (platform === 'win' && i === 0));
+        btn.setAttribute('aria-selected', btn.classList.contains('active'));
+      });
+    }
+
+    function toggleModal() {
+      const modal = document.getElementById('quickRefModal');
+      modal.classList.toggle('active');
+      if (modal.classList.contains('active')) {
+        modal.querySelector('.modal-close').focus();
+      }
+    }
+
+    // Global keyboard listener
+    document.addEventListener('keydown', (e) => {
+      // ? to show shortcuts
+      if (e.key === '?' && !e.ctrlKey && !e.metaKey) {
+        e.preventDefault();
+        toggleModal();
+      }
+      // Escape to close modal
+      if (e.key === 'Escape') {
+        const modal = document.getElementById('quickRefModal');
+        if (modal.classList.contains('active')) {
+          toggleModal();
+        }
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SYNAPSIS Platform - MaskAnyone Toolkit</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'sans': ['IBM Plex Sans', 'sans-serif'],
+                        'mono': ['IBM Plex Mono', 'monospace'],
+                    },
+                    colors: {
+                        'carbon': {
+                            'bg': '#ffffff',
+                            'bg-hover': '#f4f4f4',
+                            'border': '#e0e0e0',
+                            'text': '#161616',
+                            'text-secondary': '#525252',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'IBM Plex Sans', sans-serif;
+            background-color: #ffffff;
+            color: #161616;
+        }
+        .accent-bar {
+            height: 3px;
+            background: #161616;
+        }
+        .card {
+            border: 1px solid #e0e0e0;
+            transition: all 0.15s ease;
+        }
+        .card:hover {
+            border-color: #161616;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.1);
+        }
+        .btn-primary {
+            background: #161616;
+            color: #ffffff;
+            transition: all 0.15s ease;
+        }
+        .btn-primary:hover {
+            background: #393939;
+        }
+        .btn-secondary {
+            background: #ffffff;
+            color: #161616;
+            border: 1px solid #161616;
+            transition: all 0.15s ease;
+        }
+        .btn-secondary:hover {
+            background: #f4f4f4;
+        }
+        .nav-link {
+            position: relative;
+            padding-bottom: 4px;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #161616;
+            transition: width 0.2s ease;
+        }
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        .code-block {
+            background: #161616;
+            color: #f4f4f4;
+            font-family: 'IBM Plex Mono', monospace;
+        }
+        .workflow-step {
+            position: relative;
+            padding-left: 60px;
+        }
+        .workflow-step::before {
+            content: attr(data-step);
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 40px;
+            height: 40px;
+            background: #161616;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-family: 'IBM Plex Mono', monospace;
+        }
+        .workflow-step::after {
+            content: '';
+            position: absolute;
+            left: 19px;
+            top: 50px;
+            width: 2px;
+            height: calc(100% - 40px);
+            background: #e0e0e0;
+        }
+        .workflow-step:last-child::after {
+            display: none;
+        }
+        .tab-btn {
+            border-bottom: 2px solid transparent;
+            transition: all 0.15s ease;
+        }
+        .tab-btn.active {
+            border-bottom-color: #161616;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <!-- Header -->
+    <header class="border-b border-carbon-border sticky top-0 z-50 bg-white">
+        <div class="accent-bar"></div>
+        <nav class="container mx-auto px-6 py-4">
+            <div class="flex justify-between items-center">
+                <a href="index.html" class="text-xl font-semibold tracking-tight">
+                    SYNAPSIS
+                </a>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="index.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Home</a>
+                    <a href="platform.html" class="text-sm font-medium border-b-2 border-carbon-text pb-1">Platform</a>
+                    <a href="training.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Training</a>
+                    <a href="resources.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Resources</a>
+                    <a href="network.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Network</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Hero -->
+        <section class="py-20 px-6">
+            <div class="container mx-auto max-w-5xl">
+                <div class="mb-4">
+                    <span class="text-xs font-mono uppercase tracking-widest text-carbon-text-secondary">Platform</span>
+                </div>
+                <h1 class="text-5xl font-semibold leading-tight mb-6">
+                    MaskAnyone Toolkit
+                </h1>
+                <p class="text-xl text-carbon-text-secondary max-w-2xl mb-10 leading-relaxed">
+                    Privacy-aware audiovisual data management infrastructure. De-identify video and audio while preserving research-relevant features.
+                </p>
+                <div class="flex flex-wrap gap-4">
+                    <a href="#get-started" class="btn-primary px-6 py-3 font-medium">
+                        Get Started <i class="fas fa-arrow-right ml-2"></i>
+                    </a>
+                    <a href="https://github.com/MaskAnyone/MaskAnyone" class="btn-secondary px-6 py-3 font-medium">
+                        <i class="fab fa-github mr-2"></i> View on GitHub
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Capabilities -->
+        <section class="py-20 px-6 bg-carbon-bg-hover border-y border-carbon-border">
+            <div class="container mx-auto max-w-5xl">
+                <div class="mb-12">
+                    <span class="text-xs font-mono uppercase tracking-widest text-carbon-text-secondary">Capabilities</span>
+                    <h2 class="text-3xl font-semibold mt-4">Platform Features</h2>
+                </div>
+                <div class="grid md:grid-cols-3 gap-6">
+                    <div class="card bg-white p-6">
+                        <div class="w-12 h-12 border border-carbon-border flex items-center justify-center mb-4">
+                            <i class="fas fa-user-shield text-xl"></i>
+                        </div>
+                        <h3 class="font-semibold mb-2">Face De-identification</h3>
+                        <p class="text-sm text-carbon-text-secondary mb-4">Multiple masking methods including face swapping, blurring, and pixelation while preserving facial expressions.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="text-xs font-mono px-2 py-1 bg-carbon-bg-hover">Face Swap</span>
+                            <span class="text-xs font-mono px-2 py-1 bg-carbon-bg-hover">Blur</span>
+                            <span class="text-xs font-mono px-2 py-1 bg-carbon-bg-hover">Pixelate</span>
+                        </div>
+                    </div>
+                    <div class="card bg-white p-6">
+                        <div class="w-12 h-12 border border-carbon-border flex items-center justify-center mb-4">
+                            <i class="fas fa-microphone-slash text-xl"></i>
+                        </div>
+                        <h3 class="font-semibold mb-2">Voice Anonymization</h3>
+                        <p class="text-sm text-carbon-text-secondary mb-4">Protect speaker identity through pitch shifting and formant modification while maintaining prosodic patterns.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="text-xs font-mono px-2 py-1 bg-carbon-bg-hover">Pitch Shift</span>
+                            <span class="text-xs font-mono px-2 py-1 bg-carbon-bg-hover">Formant</span>
+                        </div>
+                    </div>
+                    <div class="card bg-white p-6">
+                        <div class="w-12 h-12 border border-carbon-border flex items-center justify-center mb-4">
+                            <i class="fas fa-running text-xl"></i>
+                        </div>
+                        <h3 class="font-semibold mb-2">Body Movement Tracking</h3>
+                        <p class="text-sm text-carbon-text-secondary mb-4">Extract skeletal pose data and gesture information for behavioral analysis research.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="text-xs font-mono px-2 py-1 bg-carbon-bg-hover">Pose</span>
+                            <span class="text-xs font-mono px-2 py-1 bg-carbon-bg-hover">Gesture</span>
+                            <span class="text-xs font-mono px-2 py-1 bg-carbon-bg-hover">Kinematics</span>
+                        </div>
+                    </div>
+                    <div class="card bg-white p-6">
+                        <div class="w-12 h-12 border border-carbon-border flex items-center justify-center mb-4">
+                            <i class="fas fa-cloud text-xl"></i>
+                        </div>
+                        <h3 class="font-semibold mb-2">Cloud Infrastructure</h3>
+                        <p class="text-sm text-carbon-text-secondary mb-4">Secure cloud-based processing via SURF infrastructure with encrypted storage and GDPR compliance.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="text-xs font-mono px-2 py-1 bg-carbon-bg-hover">SURF</span>
+                            <span class="text-xs font-mono px-2 py-1 bg-carbon-bg-hover">Encrypted</span>
+                        </div>
+                    </div>
+                    <div class="card bg-white p-6">
+                        <div class="w-12 h-12 border border-carbon-border flex items-center justify-center mb-4">
+                            <i class="fas fa-archive text-xl"></i>
+                        </div>
+                        <h3 class="font-semibold mb-2">FAIR Data Archiving</h3>
+                        <p class="text-sm text-carbon-text-secondary mb-4">Integration with DANS for long-term archiving following FAIR principles.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="text-xs font-mono px-2 py-1 bg-carbon-bg-hover">DANS</span>
+                            <span class="text-xs font-mono px-2 py-1 bg-carbon-bg-hover">DOI</span>
+                        </div>
+                    </div>
+                    <div class="card bg-white p-6">
+                        <div class="w-12 h-12 border border-carbon-border flex items-center justify-center mb-4">
+                            <i class="fas fa-mouse-pointer text-xl"></i>
+                        </div>
+                        <h3 class="font-semibold mb-2">User-Friendly Interface</h3>
+                        <p class="text-sm text-carbon-text-secondary mb-4">Point-and-click web interface requiring no programming knowledge.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="text-xs font-mono px-2 py-1 bg-carbon-bg-hover">Web UI</span>
+                            <span class="text-xs font-mono px-2 py-1 bg-carbon-bg-hover">Presets</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Workflow -->
+        <section class="py-20 px-6">
+            <div class="container mx-auto max-w-5xl">
+                <div class="mb-12">
+                    <span class="text-xs font-mono uppercase tracking-widest text-carbon-text-secondary">Process</span>
+                    <h2 class="text-3xl font-semibold mt-4">Research Workflow</h2>
+                </div>
+                <div class="grid md:grid-cols-2 gap-12">
+                    <div class="space-y-8">
+                        <div class="workflow-step" data-step="1">
+                            <h3 class="font-semibold mb-2">Upload Data</h3>
+                            <p class="text-sm text-carbon-text-secondary">Securely upload audiovisual research data via encrypted connection. Supports multiple video formats and batch processing.</p>
+                        </div>
+                        <div class="workflow-step" data-step="2">
+                            <h3 class="font-semibold mb-2">Configure Masking</h3>
+                            <p class="text-sm text-carbon-text-secondary">Choose from predefined presets or create custom configurations. Preview masking effects before processing.</p>
+                        </div>
+                        <div class="workflow-step" data-step="3">
+                            <h3 class="font-semibold mb-2">Process & Extract</h3>
+                            <p class="text-sm text-carbon-text-secondary">Automated detection and masking. Simultaneous extraction of pose data, gestures, and behavioral features.</p>
+                        </div>
+                        <div class="workflow-step" data-step="4">
+                            <h3 class="font-semibold mb-2">Quality Check</h3>
+                            <p class="text-sm text-carbon-text-secondary">Review processed videos and extracted data. Verify privacy protection while ensuring research utility.</p>
+                        </div>
+                        <div class="workflow-step" data-step="5">
+                            <h3 class="font-semibold mb-2">Archive & Share</h3>
+                            <p class="text-sm text-carbon-text-secondary">Export to DANS for long-term archiving or share via secure links. Generate metadata and DOIs.</p>
+                        </div>
+                    </div>
+                    <div class="border border-carbon-border p-8 bg-white">
+                        <h3 class="font-semibold mb-6">Key Benefits</h3>
+                        <div class="space-y-6">
+                            <div class="flex gap-4">
+                                <div class="w-10 h-10 border border-carbon-border flex items-center justify-center flex-shrink-0">
+                                    <i class="fas fa-lock"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-medium mb-1">Privacy Protection</h4>
+                                    <p class="text-sm text-carbon-text-secondary">GDPR-compliant de-identification enabling open science practices.</p>
+                                </div>
+                            </div>
+                            <div class="flex gap-4">
+                                <div class="w-10 h-10 border border-carbon-border flex items-center justify-center flex-shrink-0">
+                                    <i class="fas fa-recycle"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-medium mb-1">Data Reusability</h4>
+                                    <p class="text-sm text-carbon-text-secondary">Enriched data with behavioral annotations increases value for secondary analysis.</p>
+                                </div>
+                            </div>
+                            <div class="flex gap-4">
+                                <div class="w-10 h-10 border border-carbon-border flex items-center justify-center flex-shrink-0">
+                                    <i class="fas fa-users"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-medium mb-1">Accessible to All</h4>
+                                    <p class="text-sm text-carbon-text-secondary">No programming skills required. Point-and-click interface.</p>
+                                </div>
+                            </div>
+                            <div class="flex gap-4">
+                                <div class="w-10 h-10 border border-carbon-border flex items-center justify-center flex-shrink-0">
+                                    <i class="fas fa-check-double"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-medium mb-1">Reproducible Research</h4>
+                                    <p class="text-sm text-carbon-text-secondary">Documented workflows and version control ensure transparency.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Technical Architecture -->
+        <section class="py-20 px-6 bg-carbon-bg-hover border-y border-carbon-border">
+            <div class="container mx-auto max-w-5xl">
+                <div class="mb-12">
+                    <span class="text-xs font-mono uppercase tracking-widest text-carbon-text-secondary">Architecture</span>
+                    <h2 class="text-3xl font-semibold mt-4">Technical Stack</h2>
+                </div>
+
+                <!-- Tabs -->
+                <div class="border-b border-carbon-border mb-8">
+                    <div class="flex gap-8">
+                        <button class="tab-btn active py-3 text-sm font-medium" data-tab="overview">Overview</button>
+                        <button class="tab-btn py-3 text-sm font-medium text-carbon-text-secondary" data-tab="masking">Masking Methods</button>
+                        <button class="tab-btn py-3 text-sm font-medium text-carbon-text-secondary" data-tab="infrastructure">Infrastructure</button>
+                        <button class="tab-btn py-3 text-sm font-medium text-carbon-text-secondary" data-tab="api">API</button>
+                    </div>
+                </div>
+
+                <!-- Tab Content -->
+                <div class="tab-content active" id="overview">
+                    <div class="border border-carbon-border bg-white p-8">
+                        <h3 class="font-semibold mb-6">System Architecture</h3>
+                        <p class="text-carbon-text-secondary mb-8">SYNAPSIS is built on a modular, cloud-native architecture separating the user interface, processing engine, and storage layers.</p>
+                        <div class="grid md:grid-cols-3 gap-6">
+                            <div class="text-center p-6 bg-carbon-bg-hover">
+                                <i class="fas fa-desktop text-3xl mb-4"></i>
+                                <h4 class="font-medium mb-2">Frontend</h4>
+                                <p class="text-sm text-carbon-text-secondary">React-based web interface with real-time preview</p>
+                            </div>
+                            <div class="text-center p-6 bg-carbon-bg-hover">
+                                <i class="fas fa-cogs text-3xl mb-4"></i>
+                                <h4 class="font-medium mb-2">Processing</h4>
+                                <p class="text-sm text-carbon-text-secondary">Python/PyTorch backend with GPU acceleration</p>
+                            </div>
+                            <div class="text-center p-6 bg-carbon-bg-hover">
+                                <i class="fas fa-database text-3xl mb-4"></i>
+                                <h4 class="font-medium mb-2">Storage</h4>
+                                <p class="text-sm text-carbon-text-secondary">SURF SANE secure storage with DANS archiving</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-content" id="masking">
+                    <div class="border border-carbon-border bg-white p-8">
+                        <h3 class="font-semibold mb-6">Masking Techniques</h3>
+                        <div class="space-y-6">
+                            <div>
+                                <h4 class="font-medium mb-4">Face Masking Methods</h4>
+                                <div class="grid md:grid-cols-2 gap-4">
+                                    <div class="border border-carbon-border p-4">
+                                        <h5 class="font-medium mb-2">Face Swap (SimSwap)</h5>
+                                        <p class="text-sm text-carbon-text-secondary mb-2">Replace face with synthetic identity while preserving expressions</p>
+                                        <div class="flex gap-2">
+                                            <span class="text-xs font-mono px-2 py-1 bg-carbon-bg-hover">High Privacy</span>
+                                            <span class="text-xs font-mono px-2 py-1 bg-carbon-bg-hover">Preserves Expression</span>
+                                        </div>
+                                    </div>
+                                    <div class="border border-carbon-border p-4">
+                                        <h5 class="font-medium mb-2">Gaussian Blur</h5>
+                                        <p class="text-sm text-carbon-text-secondary mb-2">Traditional blurring with adjustable intensity</p>
+                                        <div class="flex gap-2">
+                                            <span class="text-xs font-mono px-2 py-1 bg-carbon-bg-hover">Fast</span>
+                                            <span class="text-xs font-mono px-2 py-1 bg-carbon-bg-hover">Standard</span>
+                                        </div>
+                                    </div>
+                                    <div class="border border-carbon-border p-4">
+                                        <h5 class="font-medium mb-2">Pixelation</h5>
+                                        <p class="text-sm text-carbon-text-secondary mb-2">Reduce resolution in facial region</p>
+                                        <div class="flex gap-2">
+                                            <span class="text-xs font-mono px-2 py-1 bg-carbon-bg-hover">Simple</span>
+                                            <span class="text-xs font-mono px-2 py-1 bg-carbon-bg-hover">Effective</span>
+                                        </div>
+                                    </div>
+                                    <div class="border border-carbon-border p-4">
+                                        <h5 class="font-medium mb-2">DeepPrivacy2</h5>
+                                        <p class="text-sm text-carbon-text-secondary mb-2">GAN-based realistic face synthesis</p>
+                                        <div class="flex gap-2">
+                                            <span class="text-xs font-mono px-2 py-1 bg-carbon-bg-hover">Realistic</span>
+                                            <span class="text-xs font-mono px-2 py-1 bg-carbon-bg-hover">State-of-art</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <h4 class="font-medium mb-4">Audio Masking Methods</h4>
+                                <div class="grid md:grid-cols-2 gap-4">
+                                    <div class="border border-carbon-border p-4">
+                                        <h5 class="font-medium mb-2">Pitch Shifting</h5>
+                                        <p class="text-sm text-carbon-text-secondary">Modify voice pitch while maintaining prosody</p>
+                                    </div>
+                                    <div class="border border-carbon-border p-4">
+                                        <h5 class="font-medium mb-2">Formant Modification</h5>
+                                        <p class="text-sm text-carbon-text-secondary">Change vocal tract characteristics</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-content" id="infrastructure">
+                    <div class="border border-carbon-border bg-white p-8">
+                        <h3 class="font-semibold mb-6">Infrastructure & Security</h3>
+                        <div class="grid md:grid-cols-2 gap-8 mb-8">
+                            <div>
+                                <h4 class="font-medium mb-4">Security & Compliance</h4>
+                                <div class="space-y-3">
+                                    <div class="flex items-center gap-3">
+                                        <i class="fas fa-check text-green-600"></i>
+                                        <span class="text-sm">GDPR Compliant</span>
+                                    </div>
+                                    <div class="flex items-center gap-3">
+                                        <i class="fas fa-check text-green-600"></i>
+                                        <span class="text-sm">End-to-End Encryption</span>
+                                    </div>
+                                    <div class="flex items-center gap-3">
+                                        <i class="fas fa-check text-green-600"></i>
+                                        <span class="text-sm">Role-based Access Control</span>
+                                    </div>
+                                    <div class="flex items-center gap-3">
+                                        <i class="fas fa-check text-green-600"></i>
+                                        <span class="text-sm">SURF Infrastructure</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <h4 class="font-medium mb-4">Performance</h4>
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div class="text-center p-4 bg-carbon-bg-hover">
+                                        <div class="text-2xl font-mono font-semibold">~5min</div>
+                                        <div class="text-xs text-carbon-text-secondary">per minute of video</div>
+                                    </div>
+                                    <div class="text-center p-4 bg-carbon-bg-hover">
+                                        <div class="text-2xl font-mono font-semibold">GPU</div>
+                                        <div class="text-xs text-carbon-text-secondary">accelerated</div>
+                                    </div>
+                                    <div class="text-center p-4 bg-carbon-bg-hover">
+                                        <div class="text-2xl font-mono font-semibold">Batch</div>
+                                        <div class="text-xs text-carbon-text-secondary">processing</div>
+                                    </div>
+                                    <div class="text-center p-4 bg-carbon-bg-hover">
+                                        <div class="text-2xl font-mono font-semibold">4K</div>
+                                        <div class="text-xs text-carbon-text-secondary">max resolution</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <h4 class="font-medium mb-4">Integration Partners</h4>
+                        <div class="grid md:grid-cols-3 gap-4">
+                            <div class="border border-carbon-border p-4 text-center">
+                                <i class="fas fa-cloud text-2xl mb-2"></i>
+                                <h5 class="font-medium">SURF SANE</h5>
+                                <p class="text-xs text-carbon-text-secondary">Cloud computing</p>
+                            </div>
+                            <div class="border border-carbon-border p-4 text-center">
+                                <i class="fas fa-archive text-2xl mb-2"></i>
+                                <h5 class="font-medium">DANS</h5>
+                                <p class="text-xs text-carbon-text-secondary">Data archiving</p>
+                            </div>
+                            <div class="border border-carbon-border p-4 text-center">
+                                <i class="fas fa-database text-2xl mb-2"></i>
+                                <h5 class="font-medium">CLARIAH</h5>
+                                <p class="text-xs text-carbon-text-secondary">Integration</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-content" id="api">
+                    <div class="border border-carbon-border bg-white p-8">
+                        <h3 class="font-semibold mb-6">API & Integration</h3>
+                        <p class="text-carbon-text-secondary mb-6">For advanced users, SYNAPSIS provides a REST API for programmatic access to masking capabilities.</p>
+                        <div class="code-block p-6 rounded mb-6">
+                            <pre><span class="text-gray-500"># Example Python API usage</span>
+<span class="text-blue-400">import</span> synapsis
+
+<span class="text-gray-500"># Initialize client</span>
+client = synapsis.Client(api_key=<span class="text-green-400">"your_api_key"</span>)
+
+<span class="text-gray-500"># Upload and process video</span>
+video = client.upload(<span class="text-green-400">"path/to/video.mp4"</span>)
+result = video.mask(
+    face_method=<span class="text-green-400">"face_swap"</span>,
+    audio_method=<span class="text-green-400">"pitch_shift"</span>,
+    extract_pose=<span class="text-blue-400">True</span>
+)
+
+<span class="text-gray-500"># Download results</span>
+result.download_video(<span class="text-green-400">"masked_output.mp4"</span>)
+result.download_pose_data(<span class="text-green-400">"pose_data.json"</span>)</pre>
+                        </div>
+                        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4">
+                            <div class="flex items-start gap-3">
+                                <i class="fas fa-exclamation-triangle text-yellow-600"></i>
+                                <div>
+                                    <h4 class="font-medium mb-1">API Access Requirements</h4>
+                                    <p class="text-sm text-carbon-text-secondary">API access requires institutional affiliation and completed training. Apply through your data steward.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Get Started -->
+        <section id="get-started" class="py-20 px-6">
+            <div class="container mx-auto max-w-5xl">
+                <div class="mb-12">
+                    <span class="text-xs font-mono uppercase tracking-widest text-carbon-text-secondary">Start</span>
+                    <h2 class="text-3xl font-semibold mt-4">Get Started with SYNAPSIS</h2>
+                </div>
+                <div class="grid md:grid-cols-3 gap-6 mb-12">
+                    <div class="border border-carbon-border p-8 text-center">
+                        <div class="text-3xl font-mono font-semibold mb-4">1</div>
+                        <h3 class="font-semibold mb-3">Register</h3>
+                        <p class="text-sm text-carbon-text-secondary mb-6">Create an account using your institutional email address.</p>
+                        <a href="#" class="btn-primary px-6 py-2 text-sm inline-block">Sign Up</a>
+                    </div>
+                    <div class="border border-carbon-border p-8 text-center">
+                        <div class="text-3xl font-mono font-semibold mb-4">2</div>
+                        <h3 class="font-semibold mb-3">Get Trained</h3>
+                        <p class="text-sm text-carbon-text-secondary mb-6">Complete the Masking School introduction course.</p>
+                        <a href="training.html" class="btn-secondary px-6 py-2 text-sm inline-block">View Courses</a>
+                    </div>
+                    <div class="border border-carbon-border p-8 text-center">
+                        <div class="text-3xl font-mono font-semibold mb-4">3</div>
+                        <h3 class="font-semibold mb-3">Start Masking</h3>
+                        <p class="text-sm text-carbon-text-secondary mb-6">Access the platform and begin processing your data.</p>
+                        <a href="#" class="btn-primary px-6 py-2 text-sm inline-block">Launch</a>
+                    </div>
+                </div>
+
+                <!-- System Requirements -->
+                <div class="border border-carbon-border bg-white p-8">
+                    <h3 class="font-semibold mb-6">System Requirements</h3>
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <div>
+                            <h4 class="font-medium mb-4">Web Interface</h4>
+                            <ul class="space-y-2 text-sm text-carbon-text-secondary">
+                                <li class="flex items-center gap-2"><i class="fas fa-check text-green-600"></i> Modern web browser</li>
+                                <li class="flex items-center gap-2"><i class="fas fa-check text-green-600"></i> Stable internet connection</li>
+                                <li class="flex items-center gap-2"><i class="fas fa-check text-green-600"></i> Institutional network access</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-medium mb-4">Local Installation (Optional)</h4>
+                            <ul class="space-y-2 text-sm text-carbon-text-secondary">
+                                <li class="flex items-center gap-2"><i class="fas fa-check text-green-600"></i> Python 3.8+</li>
+                                <li class="flex items-center gap-2"><i class="fas fa-check text-green-600"></i> CUDA-capable GPU (recommended)</li>
+                                <li class="flex items-center gap-2"><i class="fas fa-check text-green-600"></i> 16GB RAM minimum</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-carbon-border py-12 px-6">
+        <div class="container mx-auto max-w-5xl">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-8">
+                <div>
+                    <div class="font-semibold text-lg mb-2">SYNAPSIS</div>
+                    <div class="text-sm text-carbon-text-secondary">
+                        Funded by NWO TDCC-SSH
+                    </div>
+                </div>
+                <div class="flex gap-8">
+                    <a href="index.html" class="text-sm text-carbon-text-secondary hover:text-carbon-text">Home</a>
+                    <a href="training.html" class="text-sm text-carbon-text-secondary hover:text-carbon-text">Training</a>
+                    <a href="resources.html" class="text-sm text-carbon-text-secondary hover:text-carbon-text">Resources</a>
+                    <a href="https://github.com/MaskAnyone/MaskAnyone" class="text-sm text-carbon-text-secondary hover:text-carbon-text">GitHub</a>
+                </div>
+            </div>
+            <div class="mt-8 pt-8 border-t border-carbon-border text-sm text-carbon-text-secondary">
+                © 2026 SYNAPSIS Project. Radboud University.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Tab functionality
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const tab = btn.dataset.tab;
+
+                document.querySelectorAll('.tab-btn').forEach(b => {
+                    b.classList.remove('active');
+                    b.classList.add('text-carbon-text-secondary');
+                });
+                btn.classList.add('active');
+                btn.classList.remove('text-carbon-text-secondary');
+
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                document.getElementById(tab).classList.add('active');
+            });
+        });
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                if (this.getAttribute('href') !== '#') {
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

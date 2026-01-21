@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SYNAPSIS Community Survey</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'sans': ['IBM Plex Sans', 'sans-serif'],
+                        'mono': ['IBM Plex Mono', 'monospace'],
+                    },
+                    colors: {
+                        'carbon': {
+                            'bg': '#ffffff',
+                            'bg-hover': '#f4f4f4',
+                            'border': '#e0e0e0',
+                            'text': '#161616',
+                            'text-secondary': '#525252',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'IBM Plex Sans', sans-serif;
+            background-color: #ffffff;
+            color: #161616;
+        }
+        .accent-bar {
+            height: 3px;
+            background: #161616;
+        }
+        .card {
+            border: 1px solid #e0e0e0;
+            transition: all 0.15s ease;
+        }
+        .card:hover {
+            border-color: #161616;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.1);
+        }
+        .btn-primary {
+            background: #161616;
+            color: #ffffff;
+            transition: all 0.15s ease;
+        }
+        .btn-primary:hover {
+            background: #393939;
+        }
+        .btn-secondary {
+            background: #ffffff;
+            color: #161616;
+            border: 1px solid #161616;
+            transition: all 0.15s ease;
+        }
+        .btn-secondary:hover {
+            background: #f4f4f4;
+        }
+        .nav-link {
+            position: relative;
+            padding-bottom: 4px;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #161616;
+            transition: width 0.2s ease;
+        }
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        .section-card {
+            position: relative;
+            padding-left: 60px;
+        }
+        .section-number {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 40px;
+            height: 40px;
+            background: #161616;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'IBM Plex Mono', monospace;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <!-- Header -->
+    <header class="border-b border-carbon-border sticky top-0 z-50 bg-white">
+        <div class="accent-bar"></div>
+        <nav class="container mx-auto px-6 py-4">
+            <div class="flex justify-between items-center">
+                <a href="index.html" class="text-xl font-semibold tracking-tight">
+                    SYNAPSIS
+                </a>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="index.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Home</a>
+                    <a href="platform.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Platform</a>
+                    <a href="training.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Training</a>
+                    <a href="resources.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Resources</a>
+                    <a href="network.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Network</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Hero -->
+        <section class="py-20 px-6">
+            <div class="container mx-auto max-w-5xl">
+                <div class="mb-4">
+                    <span class="text-xs font-mono uppercase tracking-widest text-carbon-text-secondary">Community Survey</span>
+                </div>
+                <h1 class="text-5xl font-semibold leading-tight mb-6">
+                    Help Shape SYNAPSIS
+                </h1>
+                <p class="text-xl text-carbon-text-secondary max-w-2xl mb-10 leading-relaxed">
+                    Your insights will directly inform the design of a privacy-aware platform for managing, masking, and archiving audiovisual research data in SSH.
+                </p>
+                <div class="flex flex-wrap gap-4">
+                    <a href="survey/synapsis-survey.html" class="btn-primary px-6 py-3 font-medium">
+                        Start Survey <i class="fas fa-arrow-right ml-2"></i>
+                    </a>
+                    <a href="#about" class="btn-secondary px-6 py-3 font-medium">
+                        Learn More
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quick Stats -->
+        <section class="py-12 px-6 bg-carbon-bg-hover border-y border-carbon-border">
+            <div class="container mx-auto max-w-5xl">
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                    <div class="text-center">
+                        <div class="text-3xl font-mono font-semibold">15-20</div>
+                        <div class="text-sm text-carbon-text-secondary">Minutes</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-3xl font-mono font-semibold">10</div>
+                        <div class="text-sm text-carbon-text-secondary">Sections</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-3xl font-mono font-semibold">~50</div>
+                        <div class="text-sm text-carbon-text-secondary">Questions</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-3xl font-mono font-semibold">Free</div>
+                        <div class="text-sm text-carbon-text-secondary">Anonymous</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Survey -->
+        <section id="about" class="py-20 px-6">
+            <div class="container mx-auto max-w-5xl">
+                <div class="grid md:grid-cols-2 gap-16">
+                    <div>
+                        <span class="text-xs font-mono uppercase tracking-widest text-carbon-text-secondary">Purpose</span>
+                        <h2 class="text-3xl font-semibold mt-4 mb-6">Why This Survey?</h2>
+                        <p class="text-carbon-text-secondary leading-relaxed mb-4">
+                            SYNAPSIS is developing tools and training for privacy-aware audiovisual data management. We need input from researchers, data stewards, and technical staff to ensure the platform meets real needs.
+                        </p>
+                        <p class="text-carbon-text-secondary leading-relaxed mb-6">
+                            Your responses will help us prioritize features, design effective training programs, and understand the challenges you face with audiovisual research data.
+                        </p>
+                        <div class="border-l-4 border-carbon-text pl-4">
+                            <p class="text-sm text-carbon-text-secondary italic">
+                                "This survey is part of WP2 community engagement and will inform platform development through 2026-2027."
+                            </p>
+                        </div>
+                    </div>
+                    <div>
+                        <span class="text-xs font-mono uppercase tracking-widest text-carbon-text-secondary">Who Should Participate</span>
+                        <h2 class="text-3xl font-semibold mt-4 mb-6">Target Audience</h2>
+                        <div class="space-y-4">
+                            <div class="flex items-start gap-4">
+                                <div class="w-10 h-10 border border-carbon-border flex items-center justify-center flex-shrink-0">
+                                    <i class="fas fa-user-graduate"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-medium">SSH Researchers</h3>
+                                    <p class="text-sm text-carbon-text-secondary">Working with video/audio data in social sciences or humanities</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-4">
+                                <div class="w-10 h-10 border border-carbon-border flex items-center justify-center flex-shrink-0">
+                                    <i class="fas fa-database"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-medium">Data Stewards</h3>
+                                    <p class="text-sm text-carbon-text-secondary">Supporting researchers with data management and GDPR compliance</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-4">
+                                <div class="w-10 h-10 border border-carbon-border flex items-center justify-center flex-shrink-0">
+                                    <i class="fas fa-code"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-medium">Technical Staff</h3>
+                                    <p class="text-sm text-carbon-text-secondary">RSEs, IT support, and infrastructure providers</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-4">
+                                <div class="w-10 h-10 border border-carbon-border flex items-center justify-center flex-shrink-0">
+                                    <i class="fas fa-balance-scale"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-medium">Ethics Officers</h3>
+                                    <p class="text-sm text-carbon-text-secondary">IRB members and privacy officers</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Survey Sections -->
+        <section class="py-20 px-6 bg-carbon-bg-hover border-y border-carbon-border">
+            <div class="container mx-auto max-w-5xl">
+                <div class="mb-12">
+                    <span class="text-xs font-mono uppercase tracking-widest text-carbon-text-secondary">Contents</span>
+                    <h2 class="text-3xl font-semibold mt-4">Survey Sections</h2>
+                </div>
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="section-card border border-carbon-border bg-white p-6">
+                        <div class="section-number">1</div>
+                        <h3 class="font-semibold mb-2">Respondent Background</h3>
+                        <p class="text-sm text-carbon-text-secondary">Your role, discipline, and experience with audiovisual data</p>
+                    </div>
+                    <div class="section-card border border-carbon-border bg-white p-6">
+                        <div class="section-number">2</div>
+                        <h3 class="font-semibold mb-2">Current Practices & Challenges</h3>
+                        <p class="text-sm text-carbon-text-secondary">Tools you use and barriers you face</p>
+                    </div>
+                    <div class="section-card border border-carbon-border bg-white p-6">
+                        <div class="section-number">3</div>
+                        <h3 class="font-semibold mb-2">Privacy & Ethics</h3>
+                        <p class="text-sm text-carbon-text-secondary">GDPR compliance, consent, and ethical considerations</p>
+                    </div>
+                    <div class="section-card border border-carbon-border bg-white p-6">
+                        <div class="section-number">4</div>
+                        <h3 class="font-semibold mb-2">Masking Requirements</h3>
+                        <p class="text-sm text-carbon-text-secondary">Face, voice, and body de-identification needs</p>
+                    </div>
+                    <div class="section-card border border-carbon-border bg-white p-6">
+                        <div class="section-number">5</div>
+                        <h3 class="font-semibold mb-2">Data Sharing & Archiving</h3>
+                        <p class="text-sm text-carbon-text-secondary">Reuse, FAIR principles, and long-term preservation</p>
+                    </div>
+                    <div class="section-card border border-carbon-border bg-white p-6">
+                        <div class="section-number">6</div>
+                        <h3 class="font-semibold mb-2">Platform Features</h3>
+                        <p class="text-sm text-carbon-text-secondary">Desired functionality and user interface preferences</p>
+                    </div>
+                    <div class="section-card border border-carbon-border bg-white p-6">
+                        <div class="section-number">7</div>
+                        <h3 class="font-semibold mb-2">Training Needs</h3>
+                        <p class="text-sm text-carbon-text-secondary">Skill gaps and preferred learning formats</p>
+                    </div>
+                    <div class="section-card border border-carbon-border bg-white p-6">
+                        <div class="section-number">8</div>
+                        <h3 class="font-semibold mb-2">Infrastructure</h3>
+                        <p class="text-sm text-carbon-text-secondary">Cloud vs local, storage, and computing needs</p>
+                    </div>
+                    <div class="section-card border border-carbon-border bg-white p-6">
+                        <div class="section-number">9</div>
+                        <h3 class="font-semibold mb-2">Community Engagement</h3>
+                        <p class="text-sm text-carbon-text-secondary">Interest in workshops, events, and collaboration</p>
+                    </div>
+                    <div class="section-card border border-carbon-border bg-white p-6">
+                        <div class="section-number">10</div>
+                        <h3 class="font-semibold mb-2">Additional Input</h3>
+                        <p class="text-sm text-carbon-text-secondary">Open feedback and follow-up interest</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Privacy Notice -->
+        <section class="py-20 px-6">
+            <div class="container mx-auto max-w-3xl">
+                <div class="border border-carbon-border p-8">
+                    <div class="flex items-start gap-4 mb-6">
+                        <div class="w-12 h-12 bg-carbon-text text-white flex items-center justify-center flex-shrink-0">
+                            <i class="fas fa-shield-alt text-xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold mb-2">Privacy & Data Use</h3>
+                            <p class="text-carbon-text-secondary">Your responses are anonymous and will be used solely for SYNAPSIS platform development.</p>
+                        </div>
+                    </div>
+                    <div class="space-y-3 text-sm text-carbon-text-secondary">
+                        <div class="flex items-start gap-2">
+                            <i class="fas fa-check text-green-600 mt-1"></i>
+                            <span>No personally identifiable information is collected unless you choose to provide contact details</span>
+                        </div>
+                        <div class="flex items-start gap-2">
+                            <i class="fas fa-check text-green-600 mt-1"></i>
+                            <span>Aggregated results may be published in project reports and academic papers</span>
+                        </div>
+                        <div class="flex items-start gap-2">
+                            <i class="fas fa-check text-green-600 mt-1"></i>
+                            <span>Data is stored securely and processed in accordance with GDPR</span>
+                        </div>
+                        <div class="flex items-start gap-2">
+                            <i class="fas fa-check text-green-600 mt-1"></i>
+                            <span>You can skip any question or exit at any time</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA -->
+        <section class="py-20 px-6 bg-carbon-text text-white">
+            <div class="container mx-auto max-w-5xl text-center">
+                <h2 class="text-3xl font-semibold mb-4">Ready to Contribute?</h2>
+                <p class="text-gray-400 mb-8 max-w-xl mx-auto">Your input helps build better tools for the entire SSH research community. The survey takes approximately 15-20 minutes.</p>
+                <a href="survey/synapsis-survey.html" class="bg-white text-carbon-text px-8 py-4 font-medium text-lg hover:bg-gray-100 transition-colors inline-block">
+                    Begin Survey <i class="fas fa-arrow-right ml-2"></i>
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-carbon-border py-12 px-6">
+        <div class="container mx-auto max-w-5xl">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-8">
+                <div>
+                    <div class="font-semibold text-lg mb-2">SYNAPSIS</div>
+                    <div class="text-sm text-carbon-text-secondary">
+                        Funded by NWO TDCC-SSH
+                    </div>
+                </div>
+                <div class="flex gap-8">
+                    <a href="index.html" class="text-sm text-carbon-text-secondary hover:text-carbon-text">Home</a>
+                    <a href="platform.html" class="text-sm text-carbon-text-secondary hover:text-carbon-text">Platform</a>
+                    <a href="training.html" class="text-sm text-carbon-text-secondary hover:text-carbon-text">Training</a>
+                    <a href="resources.html" class="text-sm text-carbon-text-secondary hover:text-carbon-text">Resources</a>
+                </div>
+            </div>
+            <div class="mt-8 pt-8 border-t border-carbon-border text-sm text-carbon-text-secondary">
+                © 2026 SYNAPSIS Project. Radboud University.
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

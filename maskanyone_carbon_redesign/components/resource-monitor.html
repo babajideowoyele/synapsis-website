@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MaskAnyone - Resource Monitor Component</title>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --carbon-bg: #ffffff;
+      --carbon-bg-hover: #f4f4f4;
+      --carbon-border: #e0e0e0;
+      --carbon-text: #161616;
+      --carbon-text-secondary: #393939;
+      --carbon-focus: #0f62fe;
+      --carbon-success: #198038;
+      --carbon-warning: #f1c21b;
+      --carbon-error: #da1e28;
+    }
+
+    body {
+      font-family: 'IBM Plex Sans', sans-serif;
+      background: #f4f4f4;
+      padding: 40px;
+      min-height: 100vh;
+    }
+
+    h1 {
+      font-size: 24px;
+      font-weight: 300;
+      margin-bottom: 8px;
+    }
+    h1 strong { font-weight: 600; }
+    .subtitle {
+      color: var(--carbon-text-secondary);
+      margin-bottom: 32px;
+    }
+
+    .demo-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 24px;
+    }
+
+    /* ========================================
+       RESOURCE MONITOR - COLLAPSED (Status Bar)
+       Non-invasive indicator in header/footer
+       ======================================== */
+    .resource-status-bar {
+      display: inline-flex;
+      align-items: center;
+      gap: 16px;
+      padding: 8px 16px;
+      background: var(--carbon-bg);
+      border: 1px solid var(--carbon-border);
+      font-size: 12px;
+    }
+
+    .resource-indicator {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--carbon-text-secondary);
+    }
+    .resource-indicator i {
+      font-size: 14px;
+    }
+    .resource-indicator .value {
+      font-family: 'IBM Plex Mono', monospace;
+      font-weight: 500;
+      color: var(--carbon-text);
+    }
+
+    /* Status dot */
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--carbon-success);
+    }
+    .status-dot.warning { background: var(--carbon-warning); }
+    .status-dot.critical { background: var(--carbon-error); animation: pulse 1.5s infinite; }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+
+    /* Expandable trigger */
+    .resource-expand-btn {
+      background: none;
+      border: none;
+      padding: 4px;
+      cursor: pointer;
+      color: var(--carbon-text-secondary);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 12px;
+    }
+    .resource-expand-btn:hover {
+      color: var(--carbon-text);
+    }
+
+    /* ========================================
+       RESOURCE MONITOR - EXPANDED PANEL
+       Shows when user clicks "Details"
+       ======================================== */
+    .resource-panel {
+      background: var(--carbon-bg);
+      border: 1px solid var(--carbon-border);
+      width: 320px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+    }
+
+    .resource-panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--carbon-border);
+    }
+    .resource-panel-title {
+      font-size: 14px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .resource-panel-close {
+      background: none;
+      border: none;
+      padding: 4px;
+      cursor: pointer;
+      color: var(--carbon-text-secondary);
+    }
+    .resource-panel-close:hover {
+      color: var(--carbon-text);
+    }
+
+    .resource-panel-body {
+      padding: 16px;
+    }
+
+    /* Resource Item */
+    .resource-item {
+      margin-bottom: 16px;
+    }
+    .resource-item:last-child {
+      margin-bottom: 0;
+    }
+    .resource-label {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 6px;
+    }
+    .resource-name {
+      font-size: 12px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .resource-name i {
+      color: var(--carbon-text-secondary);
+      width: 16px;
+    }
+    .resource-value {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    /* Progress Bar */
+    .resource-bar {
+      height: 4px;
+      background: var(--carbon-border);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    .resource-bar-fill {
+      height: 100%;
+      background: var(--carbon-success);
+      transition: width 0.3s ease;
+    }
+    .resource-bar-fill.warning { background: var(--carbon-warning); }
+    .resource-bar-fill.critical { background: var(--carbon-error); }
+
+    /* GPU specific */
+    .gpu-info {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      background: var(--carbon-bg-hover);
+      margin-top: 8px;
+      font-size: 11px;
+    }
+    .gpu-info i {
+      color: var(--carbon-success);
+    }
+    .gpu-info.unavailable i {
+      color: var(--carbon-text-secondary);
+    }
+    .gpu-name {
+      font-weight: 500;
+    }
+    .gpu-memory {
+      color: var(--carbon-text-secondary);
+      margin-left: auto;
+      font-family: 'IBM Plex Mono', monospace;
+    }
+
+    /* Recommendations */
+    .resource-recommendations {
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid var(--carbon-border);
+    }
+    .recommendation {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      padding: 8px 0;
+      font-size: 12px;
+      color: var(--carbon-text-secondary);
+    }
+    .recommendation i {
+      margin-top: 2px;
+      flex-shrink: 0;
+    }
+    .recommendation.warning i { color: var(--carbon-warning); }
+    .recommendation.info i { color: var(--carbon-focus); }
+    .recommendation.success i { color: var(--carbon-success); }
+
+    /* ========================================
+       RESOURCE MONITOR - FLOATING WIDGET
+       Optional always-visible mini indicator
+       ======================================== */
+    .resource-widget {
+      position: fixed;
+      bottom: 24px;
+      left: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      z-index: 100;
+    }
+
+    .resource-mini {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      background: var(--carbon-bg);
+      border: 1px solid var(--carbon-border);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      font-size: 11px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .resource-mini:hover {
+      border-color: var(--carbon-text);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+    .resource-mini i {
+      font-size: 14px;
+      color: var(--carbon-text-secondary);
+    }
+    .resource-mini-bar {
+      width: 60px;
+      height: 4px;
+      background: var(--carbon-border);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    .resource-mini-bar-fill {
+      height: 100%;
+      background: var(--carbon-success);
+    }
+    .resource-mini-value {
+      font-family: 'IBM Plex Mono', monospace;
+      font-weight: 500;
+      min-width: 36px;
+    }
+
+    /* ========================================
+       PROCESSING ESTIMATION
+       Show estimated time based on resources
+       ======================================== */
+    .processing-estimate {
+      background: var(--carbon-bg);
+      border: 1px solid var(--carbon-border);
+      padding: 16px;
+    }
+    .estimate-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+    .estimate-title {
+      font-size: 14px;
+      font-weight: 600;
+    }
+    .estimate-mode {
+      font-size: 11px;
+      padding: 4px 8px;
+      background: var(--carbon-bg-hover);
+      font-weight: 500;
+    }
+    .estimate-mode.gpu { background: rgba(25, 128, 56, 0.1); color: var(--carbon-success); }
+
+    .estimate-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    .estimate-item {
+      text-align: center;
+      padding: 12px;
+      background: var(--carbon-bg-hover);
+    }
+    .estimate-value {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .estimate-label {
+      font-size: 11px;
+      color: var(--carbon-text-secondary);
+    }
+
+    .estimate-note {
+      font-size: 12px;
+      color: var(--carbon-text-secondary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .estimate-note i {
+      color: var(--carbon-focus);
+    }
+
+    /* ========================================
+       SYSTEM REQUIREMENTS CHECK
+       Pre-flight check before processing
+       ======================================== */
+    .requirements-check {
+      background: var(--carbon-bg);
+      border: 1px solid var(--carbon-border);
+      padding: 16px;
+    }
+    .requirements-title {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .requirement-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--carbon-border);
+    }
+    .requirement-item:last-child {
+      border-bottom: none;
+    }
+    .requirement-icon {
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+    }
+    .requirement-icon.pass { color: var(--carbon-success); }
+    .requirement-icon.warn { color: var(--carbon-warning); }
+    .requirement-icon.fail { color: var(--carbon-error); }
+
+    .requirement-info {
+      flex: 1;
+    }
+    .requirement-name {
+      font-size: 13px;
+      font-weight: 500;
+    }
+    .requirement-detail {
+      font-size: 11px;
+      color: var(--carbon-text-secondary);
+      font-family: 'IBM Plex Mono', monospace;
+    }
+
+    .requirement-status {
+      font-size: 11px;
+      padding: 4px 8px;
+      font-weight: 500;
+    }
+    .requirement-status.ok { background: rgba(25, 128, 56, 0.1); color: var(--carbon-success); }
+    .requirement-status.limited { background: rgba(241, 194, 27, 0.2); color: #735f00; }
+    .requirement-status.unavailable { background: rgba(218, 30, 40, 0.1); color: var(--carbon-error); }
+  </style>
+</head>
+<body>
+  <h1>Resource <strong>Monitor Components</strong></h1>
+  <p class="subtitle">Non-invasive system resource indicators for MaskAnyone UI</p>
+
+  <div class="demo-grid">
+    <!-- Status Bar (Header/Footer integration) -->
+    <div>
+      <h3 style="margin-bottom: 12px; font-size: 14px; font-weight: 600;">Status Bar (for header/footer)</h3>
+      <div class="resource-status-bar">
+        <div class="resource-indicator">
+          <span class="status-dot"></span>
+          <span>Ready</span>
+        </div>
+        <div class="resource-indicator">
+          <i class="fas fa-microchip" aria-hidden="true"></i>
+          <span class="value">45%</span>
+        </div>
+        <div class="resource-indicator">
+          <i class="fas fa-memory" aria-hidden="true"></i>
+          <span class="value">8.2 GB</span>
+        </div>
+        <div class="resource-indicator">
+          <i class="fas fa-gpu-card" aria-hidden="true"></i>
+          <span class="value">RTX 3060</span>
+        </div>
+        <button class="resource-expand-btn">
+          <i class="fas fa-chevron-down" aria-hidden="true"></i>
+          Details
+        </button>
+      </div>
+
+      <div style="margin-top: 16px;">
+        <p style="font-size: 12px; color: var(--carbon-text-secondary); margin-bottom: 8px;">Warning state:</p>
+        <div class="resource-status-bar">
+          <div class="resource-indicator">
+            <span class="status-dot warning"></span>
+            <span>High Load</span>
+          </div>
+          <div class="resource-indicator">
+            <i class="fas fa-microchip" aria-hidden="true"></i>
+            <span class="value">89%</span>
+          </div>
+          <div class="resource-indicator">
+            <i class="fas fa-memory" aria-hidden="true"></i>
+            <span class="value">14.1 GB</span>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top: 16px;">
+        <p style="font-size: 12px; color: var(--carbon-text-secondary); margin-bottom: 8px;">Critical state:</p>
+        <div class="resource-status-bar">
+          <div class="resource-indicator">
+            <span class="status-dot critical"></span>
+            <span>Low Resources</span>
+          </div>
+          <div class="resource-indicator">
+            <i class="fas fa-microchip" aria-hidden="true"></i>
+            <span class="value">98%</span>
+          </div>
+          <div class="resource-indicator">
+            <i class="fas fa-memory" aria-hidden="true"></i>
+            <span class="value">15.6 GB</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Expanded Panel -->
+    <div>
+      <h3 style="margin-bottom: 12px; font-size: 14px; font-weight: 600;">Expanded Panel</h3>
+      <div class="resource-panel">
+        <div class="resource-panel-header">
+          <span class="resource-panel-title">
+            <i class="fas fa-chart-line" aria-hidden="true"></i>
+            System Resources
+          </span>
+          <button class="resource-panel-close" aria-label="Close">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <div class="resource-panel-body">
+          <div class="resource-item">
+            <div class="resource-label">
+              <span class="resource-name">
+                <i class="fas fa-microchip" aria-hidden="true"></i>
+                CPU
+              </span>
+              <span class="resource-value">45% (6 cores)</span>
+            </div>
+            <div class="resource-bar">
+              <div class="resource-bar-fill" style="width: 45%;"></div>
+            </div>
+          </div>
+
+          <div class="resource-item">
+            <div class="resource-label">
+              <span class="resource-name">
+                <i class="fas fa-memory" aria-hidden="true"></i>
+                Memory
+              </span>
+              <span class="resource-value">8.2 / 16 GB</span>
+            </div>
+            <div class="resource-bar">
+              <div class="resource-bar-fill" style="width: 51%;"></div>
+            </div>
+          </div>
+
+          <div class="resource-item">
+            <div class="resource-label">
+              <span class="resource-name">
+                <i class="fas fa-hdd" aria-hidden="true"></i>
+                Disk Space
+              </span>
+              <span class="resource-value">124 GB free</span>
+            </div>
+            <div class="resource-bar">
+              <div class="resource-bar-fill" style="width: 35%;"></div>
+            </div>
+          </div>
+
+          <div class="resource-item">
+            <div class="resource-label">
+              <span class="resource-name">
+                <i class="fab fa-nvidia" aria-hidden="true"></i>
+                GPU
+              </span>
+              <span class="resource-value">32%</span>
+            </div>
+            <div class="resource-bar">
+              <div class="resource-bar-fill" style="width: 32%;"></div>
+            </div>
+            <div class="gpu-info">
+              <i class="fas fa-check-circle" aria-hidden="true"></i>
+              <span class="gpu-name">NVIDIA RTX 3060</span>
+              <span class="gpu-memory">6.2 / 12 GB</span>
+            </div>
+          </div>
+
+          <div class="resource-recommendations">
+            <div class="recommendation success">
+              <i class="fas fa-check-circle" aria-hidden="true"></i>
+              <span>GPU detected - processing will be accelerated</span>
+            </div>
+            <div class="recommendation info">
+              <i class="fas fa-info-circle" aria-hidden="true"></i>
+              <span>Estimated 3x faster than CPU-only processing</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Processing Estimate -->
+    <div>
+      <h3 style="margin-bottom: 12px; font-size: 14px; font-weight: 600;">Processing Estimate</h3>
+      <div class="processing-estimate">
+        <div class="estimate-header">
+          <span class="estimate-title">Estimated Processing Time</span>
+          <span class="estimate-mode gpu">GPU Accelerated</span>
+        </div>
+        <div class="estimate-grid">
+          <div class="estimate-item">
+            <div class="estimate-value">~3</div>
+            <div class="estimate-label">minutes</div>
+          </div>
+          <div class="estimate-item">
+            <div class="estimate-value">2</div>
+            <div class="estimate-label">persons</div>
+          </div>
+          <div class="estimate-item">
+            <div class="estimate-value">12:34</div>
+            <div class="estimate-label">video length</div>
+          </div>
+        </div>
+        <div class="estimate-note">
+          <i class="fas fa-lightbulb" aria-hidden="true"></i>
+          <span>CPU-only would take approximately 9 minutes</span>
+        </div>
+      </div>
+
+      <div style="margin-top: 16px;">
+        <p style="font-size: 12px; color: var(--carbon-text-secondary); margin-bottom: 8px;">CPU-only mode:</p>
+        <div class="processing-estimate">
+          <div class="estimate-header">
+            <span class="estimate-title">Estimated Processing Time</span>
+            <span class="estimate-mode">CPU Only</span>
+          </div>
+          <div class="estimate-grid">
+            <div class="estimate-item">
+              <div class="estimate-value">~9</div>
+              <div class="estimate-label">minutes</div>
+            </div>
+            <div class="estimate-item">
+              <div class="estimate-value">2</div>
+              <div class="estimate-label">persons</div>
+            </div>
+            <div class="estimate-item">
+              <div class="estimate-value">12:34</div>
+              <div class="estimate-label">video length</div>
+            </div>
+          </div>
+          <div class="estimate-note">
+            <i class="fas fa-info-circle" aria-hidden="true"></i>
+            <span>No GPU detected. Consider EdgeTAM for faster CPU processing.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- System Requirements Check -->
+    <div>
+      <h3 style="margin-bottom: 12px; font-size: 14px; font-weight: 600;">Pre-flight Requirements Check</h3>
+      <div class="requirements-check">
+        <div class="requirements-title">
+          <i class="fas fa-clipboard-check" aria-hidden="true"></i>
+          System Requirements
+        </div>
+
+        <div class="requirement-item">
+          <div class="requirement-icon pass">
+            <i class="fas fa-check-circle" aria-hidden="true"></i>
+          </div>
+          <div class="requirement-info">
+            <div class="requirement-name">Memory</div>
+            <div class="requirement-detail">16 GB available (8 GB required)</div>
+          </div>
+          <span class="requirement-status ok">OK</span>
+        </div>
+
+        <div class="requirement-item">
+          <div class="requirement-icon pass">
+            <i class="fas fa-check-circle" aria-hidden="true"></i>
+          </div>
+          <div class="requirement-info">
+            <div class="requirement-name">GPU (CUDA)</div>
+            <div class="requirement-detail">RTX 3060, 12GB VRAM, CUDA 12.9</div>
+          </div>
+          <span class="requirement-status ok">Detected</span>
+        </div>
+
+        <div class="requirement-item">
+          <div class="requirement-icon pass">
+            <i class="fas fa-check-circle" aria-hidden="true"></i>
+          </div>
+          <div class="requirement-info">
+            <div class="requirement-name">Disk Space</div>
+            <div class="requirement-detail">124 GB free (10 GB required)</div>
+          </div>
+          <span class="requirement-status ok">OK</span>
+        </div>
+
+        <div class="requirement-item">
+          <div class="requirement-icon warn">
+            <i class="fas fa-exclamation-circle" aria-hidden="true"></i>
+          </div>
+          <div class="requirement-info">
+            <div class="requirement-name">CPU Cores</div>
+            <div class="requirement-detail">6 cores (8+ recommended)</div>
+          </div>
+          <span class="requirement-status limited">Limited</span>
+        </div>
+      </div>
+
+      <div style="margin-top: 16px;">
+        <p style="font-size: 12px; color: var(--carbon-text-secondary); margin-bottom: 8px;">No GPU scenario:</p>
+        <div class="requirements-check">
+          <div class="requirements-title">
+            <i class="fas fa-clipboard-check" aria-hidden="true"></i>
+            System Requirements
+          </div>
+
+          <div class="requirement-item">
+            <div class="requirement-icon warn">
+              <i class="fas fa-exclamation-circle" aria-hidden="true"></i>
+            </div>
+            <div class="requirement-info">
+              <div class="requirement-name">Memory</div>
+              <div class="requirement-detail">8 GB available (8 GB required)</div>
+            </div>
+            <span class="requirement-status limited">Limited</span>
+          </div>
+
+          <div class="requirement-item">
+            <div class="requirement-icon fail">
+              <i class="fas fa-times-circle" aria-hidden="true"></i>
+            </div>
+            <div class="requirement-info">
+              <div class="requirement-name">GPU (CUDA)</div>
+              <div class="requirement-detail">No NVIDIA GPU detected</div>
+            </div>
+            <span class="requirement-status unavailable">CPU Mode</span>
+          </div>
+
+          <div class="requirement-item">
+            <div class="requirement-icon pass">
+              <i class="fas fa-check-circle" aria-hidden="true"></i>
+            </div>
+            <div class="requirement-info">
+              <div class="requirement-name">Disk Space</div>
+              <div class="requirement-detail">45 GB free (10 GB required)</div>
+            </div>
+            <span class="requirement-status ok">OK</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Floating Widget Demo -->
+  <div class="resource-widget">
+    <div class="resource-mini" title="CPU Usage">
+      <i class="fas fa-microchip" aria-hidden="true"></i>
+      <div class="resource-mini-bar">
+        <div class="resource-mini-bar-fill" style="width: 45%;"></div>
+      </div>
+      <span class="resource-mini-value">45%</span>
+    </div>
+    <div class="resource-mini" title="Memory Usage">
+      <i class="fas fa-memory" aria-hidden="true"></i>
+      <div class="resource-mini-bar">
+        <div class="resource-mini-bar-fill" style="width: 51%;"></div>
+      </div>
+      <span class="resource-mini-value">8.2G</span>
+    </div>
+    <div class="resource-mini" title="GPU Usage">
+      <i class="fab fa-nvidia" aria-hidden="true"></i>
+      <div class="resource-mini-bar">
+        <div class="resource-mini-bar-fill" style="width: 32%;"></div>
+      </div>
+      <span class="resource-mini-value">32%</span>
+    </div>
+  </div>
+
+  <script>
+    // Simulate real-time updates
+    function updateResources() {
+      // In real implementation, this would fetch from backend API
+      // GET /api/system/resources
+      // Returns: { cpu: 45, memory: { used: 8.2, total: 16 }, gpu: { name: "RTX 3060", usage: 32, memory: { used: 6.2, total: 12 } } }
+    }
+
+    // Update every 2 seconds
+    // setInterval(updateResources, 2000);
+  </script>
+</body>
+</html>

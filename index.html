@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SYNAPSIS - Privacy-Aware Audiovisual Data Platform</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'sans': ['IBM Plex Sans', 'sans-serif'],
+                        'mono': ['IBM Plex Mono', 'monospace'],
+                    },
+                    colors: {
+                        'carbon': {
+                            'bg': '#ffffff',
+                            'bg-hover': '#f4f4f4',
+                            'border': '#e0e0e0',
+                            'text': '#161616',
+                            'text-secondary': '#525252',
+                            'interactive': '#0f62fe',
+                            'support-error': '#da1e28',
+                            'support-success': '#198038',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'IBM Plex Sans', sans-serif;
+            background-color: #ffffff;
+            color: #161616;
+        }
+        .accent-bar {
+            height: 3px;
+            background: #161616;
+        }
+        .card {
+            border: 1px solid #e0e0e0;
+            transition: all 0.15s ease;
+        }
+        .card:hover {
+            border-color: #161616;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.1);
+        }
+        .btn-primary {
+            background: #161616;
+            color: #ffffff;
+            transition: all 0.15s ease;
+        }
+        .btn-primary:hover {
+            background: #393939;
+        }
+        .btn-secondary {
+            background: #ffffff;
+            color: #161616;
+            border: 1px solid #161616;
+            transition: all 0.15s ease;
+        }
+        .btn-secondary:hover {
+            background: #f4f4f4;
+        }
+        .nav-link {
+            position: relative;
+            padding-bottom: 4px;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #161616;
+            transition: width 0.2s ease;
+        }
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        .stat-number {
+            font-family: 'IBM Plex Mono', monospace;
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <!-- Header -->
+    <header class="border-b border-carbon-border sticky top-0 z-50 bg-white">
+        <div class="accent-bar"></div>
+        <nav class="container mx-auto px-6 py-4">
+            <div class="flex justify-between items-center">
+                <a href="index.html" class="text-xl font-semibold tracking-tight">
+                    SYNAPSIS
+                </a>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#about" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">About</a>
+                    <a href="platform.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Platform</a>
+                    <a href="demo.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Demo</a>
+                    <a href="training.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Training</a>
+                    <a href="resources.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Resources</a>
+                    <a href="network.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Network</a>
+                    <a href="#contact" class="btn-primary px-4 py-2 text-sm font-medium">Contact</a>
+                </div>
+                <button class="md:hidden">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="py-24 px-6">
+        <div class="container mx-auto max-w-5xl">
+            <div class="mb-4">
+                <span class="text-xs font-mono uppercase tracking-widest text-carbon-text-secondary">NWO TDCC-SSH Project</span>
+            </div>
+            <h1 class="text-5xl md:text-6xl font-semibold leading-tight mb-6">
+                Privacy-aware audiovisual<br>data for research
+            </h1>
+            <p class="text-xl text-carbon-text-secondary max-w-2xl mb-10 leading-relaxed">
+                SYNAPSIS provides tools and training for masking sensitive information in video and audio data, enabling SSH researchers to share data while protecting privacy.
+            </p>
+            <div class="flex flex-wrap gap-4">
+                <a href="platform.html" class="btn-primary px-6 py-3 font-medium">
+                    Explore Platform <i class="fas fa-arrow-right ml-2"></i>
+                </a>
+                <a href="training.html" class="btn-secondary px-6 py-3 font-medium">
+                    View Training
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Bar -->
+    <section class="border-y border-carbon-border bg-carbon-bg-hover py-8">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+                <div class="text-center">
+                    <div class="stat-number text-3xl font-semibold">24</div>
+                    <div class="text-sm text-carbon-text-secondary mt-1">Months</div>
+                </div>
+                <div class="text-center">
+                    <div class="stat-number text-3xl font-semibold">€250K</div>
+                    <div class="text-sm text-carbon-text-secondary mt-1">Funding</div>
+                </div>
+                <div class="text-center">
+                    <div class="stat-number text-3xl font-semibold">7</div>
+                    <div class="text-sm text-carbon-text-secondary mt-1">Partners</div>
+                </div>
+                <div class="text-center">
+                    <div class="stat-number text-3xl font-semibold">100+</div>
+                    <div class="text-sm text-carbon-text-secondary mt-1">Target Trainees</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-20 px-6">
+        <div class="container mx-auto max-w-5xl">
+            <div class="grid md:grid-cols-2 gap-16">
+                <div>
+                    <span class="text-xs font-mono uppercase tracking-widest text-carbon-text-secondary">The Challenge</span>
+                    <h2 class="text-3xl font-semibold mt-4 mb-6">Privacy barriers limit data sharing</h2>
+                    <p class="text-carbon-text-secondary leading-relaxed mb-4">
+                        SSH researchers increasingly rely on audiovisual data to study complex human behaviours, but privacy concerns prevent sharing and reuse of this valuable data.
+                    </p>
+                    <p class="text-carbon-text-secondary leading-relaxed">
+                        Current masking tools are perceived as too technical, making it difficult for researchers to adopt privacy-preserving practices.
+                    </p>
+                </div>
+                <div>
+                    <span class="text-xs font-mono uppercase tracking-widest text-carbon-text-secondary">Our Solution</span>
+                    <h2 class="text-3xl font-semibold mt-4 mb-6">Platform + Training</h2>
+                    <p class="text-carbon-text-secondary leading-relaxed mb-4">
+                        SYNAPSIS integrates the MaskAnyone toolkit into a user-friendly platform with SURF cloud infrastructure, making masking accessible to all researchers.
+                    </p>
+                    <p class="text-carbon-text-secondary leading-relaxed">
+                        Our Masking School workshops train researchers and data stewards, building digital competence across Dutch universities.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Grid -->
+    <section class="py-20 px-6 bg-carbon-bg-hover border-y border-carbon-border">
+        <div class="container mx-auto max-w-5xl">
+            <div class="mb-12">
+                <span class="text-xs font-mono uppercase tracking-widest text-carbon-text-secondary">Capabilities</span>
+                <h2 class="text-3xl font-semibold mt-4">What SYNAPSIS offers</h2>
+            </div>
+            <div class="grid md:grid-cols-3 gap-6">
+                <div class="card bg-white p-6">
+                    <div class="w-12 h-12 border border-carbon-border flex items-center justify-center mb-4">
+                        <i class="fas fa-user-shield text-xl"></i>
+                    </div>
+                    <h3 class="font-semibold mb-2">Face Masking</h3>
+                    <p class="text-sm text-carbon-text-secondary">Blur, pixelate, or replace faces while preserving research-relevant features.</p>
+                </div>
+                <div class="card bg-white p-6">
+                    <div class="w-12 h-12 border border-carbon-border flex items-center justify-center mb-4">
+                        <i class="fas fa-microphone-slash text-xl"></i>
+                    </div>
+                    <h3 class="font-semibold mb-2">Voice Masking</h3>
+                    <p class="text-sm text-carbon-text-secondary">Alter voice characteristics to prevent speaker identification.</p>
+                </div>
+                <div class="card bg-white p-6">
+                    <div class="w-12 h-12 border border-carbon-border flex items-center justify-center mb-4">
+                        <i class="fas fa-running text-xl"></i>
+                    </div>
+                    <h3 class="font-semibold mb-2">Body Kinematics</h3>
+                    <p class="text-sm text-carbon-text-secondary">Extract pose data and movement analytics from masked videos.</p>
+                </div>
+                <div class="card bg-white p-6">
+                    <div class="w-12 h-12 border border-carbon-border flex items-center justify-center mb-4">
+                        <i class="fas fa-cloud text-xl"></i>
+                    </div>
+                    <h3 class="font-semibold mb-2">Cloud Platform</h3>
+                    <p class="text-sm text-carbon-text-secondary">SURF-integrated infrastructure for secure, scalable processing.</p>
+                </div>
+                <div class="card bg-white p-6">
+                    <div class="w-12 h-12 border border-carbon-border flex items-center justify-center mb-4">
+                        <i class="fas fa-graduation-cap text-xl"></i>
+                    </div>
+                    <h3 class="font-semibold mb-2">Training</h3>
+                    <p class="text-sm text-carbon-text-secondary">Masking School workshops for researchers and data stewards.</p>
+                </div>
+                <div class="card bg-white p-6">
+                    <div class="w-12 h-12 border border-carbon-border flex items-center justify-center mb-4">
+                        <i class="fas fa-balance-scale text-xl"></i>
+                    </div>
+                    <h3 class="font-semibold mb-2">GDPR Compliance</h3>
+                    <p class="text-sm text-carbon-text-secondary">Tools and guidelines for privacy-compliant data sharing.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Work Packages -->
+    <section class="py-20 px-6">
+        <div class="container mx-auto max-w-5xl">
+            <div class="mb-12">
+                <span class="text-xs font-mono uppercase tracking-widest text-carbon-text-secondary">Project Structure</span>
+                <h2 class="text-3xl font-semibold mt-4">Work Packages</h2>
+            </div>
+            <div class="space-y-6">
+                <div class="border-l-4 border-carbon-text pl-6 py-4">
+                    <div class="flex items-baseline gap-4 mb-2">
+                        <span class="font-mono text-sm">WP1</span>
+                        <h3 class="font-semibold">Platform Foundation & Community Engagement</h3>
+                    </div>
+                    <p class="text-sm text-carbon-text-secondary">Months 1-12 | MaskAnyone integration, pilot deployment, Masking School workshops</p>
+                </div>
+                <div class="border-l-4 border-carbon-text-secondary pl-6 py-4">
+                    <div class="flex items-baseline gap-4 mb-2">
+                        <span class="font-mono text-sm">WP2</span>
+                        <h3 class="font-semibold">Platform Expansion, Survey & Co-Creation</h3>
+                    </div>
+                    <p class="text-sm text-carbon-text-secondary">Months 7-20 | Community survey, Masking Lab, policy paper, metadata standards</p>
+                </div>
+                <div class="border-l-4 border-carbon-border pl-6 py-4">
+                    <div class="flex items-baseline gap-4 mb-2">
+                        <span class="font-mono text-sm">WP3</span>
+                        <h3 class="font-semibold">Platform Rollout & Roadmap</h3>
+                    </div>
+                    <p class="text-sm text-carbon-text-secondary">Months 18-24 | SURF deployment, Maskathon, sustainability planning</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Partners -->
+    <section class="py-20 px-6 bg-carbon-bg-hover border-y border-carbon-border">
+        <div class="container mx-auto max-w-5xl">
+            <div class="mb-12">
+                <span class="text-xs font-mono uppercase tracking-widest text-carbon-text-secondary">Collaboration</span>
+                <h2 class="text-3xl font-semibold mt-4">Partners</h2>
+            </div>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                <div class="text-center py-6 border border-carbon-border bg-white">
+                    <div class="font-semibold">Radboud</div>
+                    <div class="text-xs text-carbon-text-secondary">Lead Institution</div>
+                </div>
+                <div class="text-center py-6 border border-carbon-border bg-white">
+                    <div class="font-semibold">VU Amsterdam</div>
+                    <div class="text-xs text-carbon-text-secondary">Masking Lab</div>
+                </div>
+                <div class="text-center py-6 border border-carbon-border bg-white">
+                    <div class="font-semibold">UvA</div>
+                    <div class="text-xs text-carbon-text-secondary">Training</div>
+                </div>
+                <div class="text-center py-6 border border-carbon-border bg-white">
+                    <div class="font-semibold">EUR</div>
+                    <div class="text-xs text-carbon-text-secondary">Training</div>
+                </div>
+                <div class="text-center py-6 border border-carbon-border bg-white">
+                    <div class="font-semibold">SURF</div>
+                    <div class="text-xs text-carbon-text-secondary">Infrastructure</div>
+                </div>
+                <div class="text-center py-6 border border-carbon-border bg-white">
+                    <div class="font-semibold">DANS</div>
+                    <div class="text-xs text-carbon-text-secondary">Archiving</div>
+                </div>
+                <div class="text-center py-6 border border-carbon-border bg-white">
+                    <div class="font-semibold">eScience Center</div>
+                    <div class="text-xs text-carbon-text-secondary">Sustainability</div>
+                </div>
+                <div class="text-center py-6 border border-carbon-border bg-white">
+                    <div class="font-semibold">CLARIAH</div>
+                    <div class="text-xs text-carbon-text-secondary">Advisory</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-20 px-6">
+        <div class="container mx-auto max-w-5xl">
+            <div class="grid md:grid-cols-2 gap-16">
+                <div>
+                    <span class="text-xs font-mono uppercase tracking-widest text-carbon-text-secondary">Get Involved</span>
+                    <h2 class="text-3xl font-semibold mt-4 mb-6">Contact Us</h2>
+                    <p class="text-carbon-text-secondary leading-relaxed mb-8">
+                        Interested in using the platform, hosting a workshop, or collaborating? Get in touch with the SYNAPSIS team.
+                    </p>
+                    <div class="space-y-4">
+                        <div class="flex items-center gap-4">
+                            <div class="w-10 h-10 border border-carbon-border flex items-center justify-center">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <div>
+                                <div class="text-sm text-carbon-text-secondary">Project Lead</div>
+                                <div class="font-medium">m.dingemanse@let.ru.nl</div>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <div class="w-10 h-10 border border-carbon-border flex items-center justify-center">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <div>
+                                <div class="text-sm text-carbon-text-secondary">Postdoc</div>
+                                <div class="font-medium">babajide.owoyele@ru.nl</div>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <div class="w-10 h-10 border border-carbon-border flex items-center justify-center">
+                                <i class="fab fa-github"></i>
+                            </div>
+                            <div>
+                                <div class="text-sm text-carbon-text-secondary">Repository</div>
+                                <a href="https://github.com/MaskAnyone/MaskAnyone" class="font-medium hover:underline">github.com/MaskAnyone</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-carbon-bg-hover border border-carbon-border p-8">
+                    <h3 class="font-semibold mb-6">Stay Updated</h3>
+                    <form class="space-y-4">
+                        <div>
+                            <label class="block text-sm text-carbon-text-secondary mb-2">Email</label>
+                            <input type="email" class="w-full border border-carbon-border px-4 py-3 focus:outline-none focus:border-carbon-text" placeholder="your@email.com">
+                        </div>
+                        <div>
+                            <label class="block text-sm text-carbon-text-secondary mb-2">Interest</label>
+                            <select class="w-full border border-carbon-border px-4 py-3 focus:outline-none focus:border-carbon-text bg-white">
+                                <option>Platform User</option>
+                                <option>Workshop Participant</option>
+                                <option>Pilot Site</option>
+                                <option>Partner Organization</option>
+                                <option>General Interest</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn-primary w-full py-3 font-medium">
+                            Subscribe to Updates
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="border-t border-carbon-border py-12 px-6">
+        <div class="container mx-auto max-w-5xl">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-8">
+                <div>
+                    <div class="font-semibold text-lg mb-2">SYNAPSIS</div>
+                    <div class="text-sm text-carbon-text-secondary">
+                        Funded by NWO Thematic Digital Competence Centers<br>
+                        TDCC-SSH-C2024-011
+                    </div>
+                </div>
+                <div class="flex gap-8">
+                    <a href="#" class="text-sm text-carbon-text-secondary hover:text-carbon-text">Privacy</a>
+                    <a href="https://github.com/MaskAnyone/MaskAnyone" class="text-sm text-carbon-text-secondary hover:text-carbon-text">GitHub</a>
+                </div>
+            </div>
+            <div class="mt-8 pt-8 border-t border-carbon-border flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div class="text-sm text-carbon-text-secondary">
+                    © 2026 SYNAPSIS Project. Radboud University.
+                </div>
+                <div class="flex gap-4 text-xs text-carbon-text-secondary">
+                    <a href="https://www.nwo.nl/en/projects/zazlb40252" class="hover:text-carbon-text">NWO</a>
+                    <a href="https://tdcc.nl/tdcc-ssh-challenge-projects/synapsis/" class="hover:text-carbon-text">TDCC-SSH</a>
+                    <a href="https://zenodo.org/records/16996002" class="hover:text-carbon-text">Zenodo</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

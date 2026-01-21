@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MaskAnyone - Batch Processing</title>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:'IBM Plex Sans',sans-serif;background:#f5f5f5;color:#000;line-height:1.5}
+    
+    .icon-box{width:44px;height:44px;background:#000;color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+    .icon-box-sm{width:32px;height:32px;font-size:14px}
+    .icon-box-lg{width:56px;height:56px;font-size:24px}
+    .icon-box-outline{background:#fff;color:#000;border:3px solid #000}
+    .icon-box-success{background:#00cc6a;color:#000}
+    .icon-box-warning{background:#ffd000;color:#000}
+    .icon-box-gray{background:#e5e5e5;color:#666}
+    
+    .card{background:#fff;border:2px solid #e5e5e5}
+    .card-elevated{background:#fff;border:3px solid #000;position:relative}
+    .card-elevated::before{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background:#000;z-index:-1;transform:translate(5px,5px)}
+    
+    .btn{display:inline-flex;align-items:center;gap:8px;padding:12px 20px;font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;transition:all .15s;border:none;text-transform:uppercase;letter-spacing:.5px}
+    .btn-primary{background:#000;color:#fff}.btn-primary:hover{background:#333}
+    .btn-secondary{background:#fff;color:#000;border:3px solid #000}.btn-secondary:hover{background:#000;color:#fff}
+    .btn-ghost{background:transparent;color:#666;border:2px solid transparent}.btn-ghost:hover{background:#e5e5e5;color:#000}
+    .btn-danger{background:#fff;color:#ff3b30;border:2px solid #ff3b30}.btn-danger:hover{background:#ff3b30;color:#fff}
+    .btn-sm{padding:8px 14px;font-size:11px}
+    .btn-icon{width:36px;height:36px;padding:0;justify-content:center}
+    
+    .tag{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px}
+    .tag-success{background:#00cc6a;color:#000}
+    .tag-warning{background:#ffd000;color:#000}
+    .tag-error{background:#ff3b30;color:#fff}
+    .tag-default{background:#e5e5e5;color:#666}
+    .tag-processing{background:#000;color:#fff}
+    
+    .progress-bar{height:8px;background:#e5e5e5;overflow:hidden}
+    .progress-bar-fill{height:100%;background:#000;transition:width .3s}
+    .progress-bar-fill.success{background:#00cc6a}
+    .progress-bar-fill.error{background:#ff3b30}
+    
+    .app-frame{min-height:100vh;display:flex;flex-direction:column}
+    
+    .app-header{display:flex;align-items:center;justify-content:space-between;padding:16px 32px;background:#fff;border-bottom:3px solid #000}
+    .app-logo{font-size:18px;font-weight:700;display:flex;align-items:center;gap:12px;letter-spacing:-0.5px}
+    .app-nav{display:flex;gap:4px}
+    .app-nav a{font-size:12px;font-weight:600;color:#666;text-decoration:none;padding:10px 16px;transition:all .15s;text-transform:uppercase;letter-spacing:.5px}
+    .app-nav a:hover{background:#f5f5f5;color:#000}
+    .app-nav a.active{background:#000;color:#fff}
+    
+    .main-content{flex:1;padding:32px;max-width:1400px;margin:0 auto;width:100%}
+    
+    .page-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:32px}
+    .page-title{font-size:32px;font-weight:300;margin-bottom:4px}
+    .page-title span{font-weight:700}
+    
+    .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:32px}
+    .stat-card{background:#fff;border:2px solid #e5e5e5;padding:20px;display:flex;align-items:center;gap:20px}
+    .stat-card:hover{border-color:#000}
+    .stat-value{font-size:36px;font-weight:300}
+    .stat-label{font-size:11px;color:#666;text-transform:uppercase;letter-spacing:1px;font-weight:600}
+    .stat-trend{font-size:11px;margin-top:4px;font-weight:600}
+    .stat-trend.up{color:#00cc6a}
+    
+    .batch-config{background:#fff;border:3px solid #000;padding:24px;margin-bottom:24px}
+    .config-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;padding-bottom:16px;border-bottom:2px solid #e5e5e5}
+    .config-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+    .config-item{padding:16px;background:#fafafa;border:2px solid #e5e5e5}
+    .config-item:hover{border-color:#000}
+    .config-label{font-size:10px;color:#666;text-transform:uppercase;letter-spacing:1px;font-weight:700;margin-bottom:8px}
+    .config-value{font-size:14px;font-weight:600;display:flex;align-items:center;gap:10px}
+    
+    .queue-controls{display:flex;gap:12px;align-items:center;margin-bottom:16px;padding:16px;background:#fff;border:2px solid #e5e5e5}
+    .search-box{display:flex;align-items:center;gap:10px;background:#f5f5f5;padding:10px 14px;flex:1;max-width:320px;border:2px solid transparent}
+    .search-box:focus-within{border-color:#000;background:#fff}
+    .search-box input{border:none;background:none;outline:none;font-family:inherit;font-size:13px;flex:1;font-weight:500}
+    .filter-btn{display:flex;align-items:center;gap:8px;padding:10px 16px;background:#fff;border:2px solid #e5e5e5;font-family:inherit;font-size:12px;font-weight:600;cursor:pointer}
+    .filter-btn:hover{border-color:#000}
+    
+    .queue-table{background:#fff;border:2px solid #000}
+    .table-header{display:flex;align-items:center;padding:14px 20px;background:#000;color:#fff;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px}
+    .table-row{display:flex;align-items:center;padding:16px 20px;border-bottom:2px solid #e5e5e5;transition:background .1s}
+    .table-row:hover{background:#fafafa}
+    .table-row:last-child{border-bottom:none}
+    .table-row.selected{background:#f0fff5;border-left:4px solid #00cc6a}
+    
+    .col-check{width:40px;flex-shrink:0}
+    .col-file{flex:1;min-width:200px;display:flex;align-items:center;gap:16px}
+    .col-duration{width:80px;flex-shrink:0;text-align:center}
+    .col-settings{width:160px;flex-shrink:0}
+    .col-status{width:130px;flex-shrink:0}
+    .col-progress{width:140px;flex-shrink:0}
+    .col-actions{width:100px;flex-shrink:0;display:flex;gap:4px;justify-content:flex-end}
+    
+    .file-thumb{width:64px;height:40px;background:#1a1a1a;display:flex;align-items:center;justify-content:center;flex-shrink:0;border:2px solid #333}
+    .file-info{min-width:0}
+    .file-name{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .file-meta{font-size:11px;color:#666;font-weight:500}
+    .settings-badge{font-size:11px;color:#666;font-weight:500;display:flex;align-items:center;gap:6px}
+    
+    .cli-panel{background:#1a1a1a;color:#fff;padding:20px;margin-top:32px;border:3px solid #000}
+    .cli-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+    .cli-title{font-size:11px;text-transform:uppercase;letter-spacing:1px;color:#888;font-weight:700}
+    .cli-content{background:#000;padding:16px;overflow-x:auto;border:2px solid #333}
+    .cli-content code{color:#00cc6a;font-size:12px}
+    
+    .action-bar{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:3px solid #000;padding:16px 32px;display:flex;justify-content:space-between;align-items:center;transform:translateY(100%);transition:transform .2s}
+    .action-bar.visible{transform:translateY(0)}
+    .selected-count{font-size:14px;font-weight:700}
+    
+    .drop-zone{border:3px dashed #ccc;padding:48px;text-align:center;cursor:pointer;transition:all .15s}
+    .drop-zone:hover{border-color:#000;background:#fafafa}
+    
+    .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:100;align-items:center;justify-content:center}
+    .modal-content{background:#fff;width:100%;max-width:600px;border:3px solid #000;position:relative}
+    .modal-content::before{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background:#000;z-index:-1;transform:translate(8px,8px)}
+    .modal-header{padding:24px;border-bottom:2px solid #e5e5e5;display:flex;justify-content:space-between;align-items:center}
+    .modal-body{padding:24px}
+    .modal-footer{padding:24px;border-top:2px solid #e5e5e5;display:flex;justify-content:space-between;align-items:center}
+    
+    .spinner-sm{width:14px;height:14px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite;display:inline-block}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    
+    h4{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#000}
+    .text-sm{font-size:13px}.text-xs{font-size:11px}.text-gray{color:#666}
+    .flex{display:flex}.flex-1{flex:1}.items-center{align-items:center}.justify-between{justify-content:space-between}
+    .gap-4{gap:4px}.gap-8{gap:8px}.gap-12{gap:12px}.gap-16{gap:16px}
+    .mb-16{margin-bottom:16px}.mb-24{margin-bottom:24px}
+    .checkbox{width:18px;height:18px;cursor:pointer;accent-color:#000}
+  </style>
+</head>
+<body>
+<div class="app-frame">
+  <div class="app-header">
+    <div class="flex items-center gap-16">
+      <div class="app-logo"><i class="fas fa-mask"></i> MASKANYONE</div>
+      <div class="app-nav">
+        <a href="#">Dashboard</a>
+        <a href="#">Quick Mask</a>
+        <a href="#">Advanced</a>
+        <a href="#" class="active">Batch</a>
+        <a href="#">Templates</a>
+      </div>
+    </div>
+    <div class="flex items-center gap-8">
+      <button class="btn btn-ghost btn-sm"><i class="fas fa-terminal"></i> CLI</button>
+      <button class="btn btn-ghost btn-sm"><i class="fas fa-cog"></i></button>
+    </div>
+  </div>
+
+  <div class="main-content">
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">Batch <span>Processing</span></h1>
+        <p class="text-gray" style="font-weight:500">Process multiple videos with consistent settings</p>
+      </div>
+      <div class="flex gap-8">
+        <button class="btn btn-secondary" onclick="showModal()"><i class="fas fa-folder-plus"></i> Add Videos</button>
+        <button class="btn btn-primary" onclick="startAll()"><i class="fas fa-play"></i> Start All</button>
+      </div>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="icon-box"><i class="fas fa-video"></i></div>
+        <div><div class="stat-value" id="statTotal">12</div><div class="stat-label">Total Videos</div></div>
+      </div>
+      <div class="stat-card">
+        <div class="icon-box-success icon-box"><i class="fas fa-check"></i></div>
+        <div><div class="stat-value" id="statCompleted">7</div><div class="stat-label">Completed</div><div class="stat-trend up">+3 today</div></div>
+      </div>
+      <div class="stat-card">
+        <div class="icon-box-warning icon-box"><i class="fas fa-sync"></i></div>
+        <div><div class="stat-value" id="statProcessing">2</div><div class="stat-label">Processing</div></div>
+      </div>
+      <div class="stat-card">
+        <div class="icon-box-gray icon-box"><i class="fas fa-clock"></i></div>
+        <div><div class="stat-value" id="statTime">~45m</div><div class="stat-label">Remaining</div></div>
+      </div>
+    </div>
+
+    <div class="batch-config">
+      <div class="config-header">
+        <h4><i class="fas fa-cog" style="margin-right:10px"></i> Batch Configuration</h4>
+        <button class="btn btn-ghost btn-sm"><i class="fas fa-edit"></i> Edit</button>
+      </div>
+      <div class="config-grid">
+        <div class="config-item">
+          <div class="config-label">Hiding Strategy</div>
+          <div class="config-value"><i class="fas fa-tint"></i> Blurring</div>
+        </div>
+        <div class="config-item">
+          <div class="config-label">Overlay</div>
+          <div class="config-value"><i class="fas fa-running"></i> MediaPipe Pose</div>
+        </div>
+        <div class="config-item">
+          <div class="config-label">Output Directory</div>
+          <div class="config-value"><i class="fas fa-folder"></i> /data/results/</div>
+        </div>
+        <div class="config-item">
+          <div class="config-label">Template</div>
+          <div class="config-value"><i class="fas fa-file-alt"></i> Clinical Standard</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="queue-controls">
+      <div class="search-box">
+        <i class="fas fa-search" style="color:#999"></i>
+        <input type="text" placeholder="Search videos..." id="searchInput" oninput="filterVideos()">
+      </div>
+      <button class="filter-btn"><i class="fas fa-filter"></i> All Status <i class="fas fa-chevron-down" style="font-size:10px;margin-left:4px"></i></button>
+      <div class="flex-1"></div>
+      <span class="text-xs" style="font-weight:600" id="selectionInfo">0 selected</span>
+      <button class="btn btn-ghost btn-sm" onclick="selectAll()"><i class="fas fa-check-double"></i> Select All</button>
+    </div>
+
+    <div class="queue-table">
+      <div class="table-header">
+        <div class="col-check"><input type="checkbox" class="checkbox" onclick="toggleSelectAll(this)"></div>
+        <div class="col-file">File</div>
+        <div class="col-duration">Duration</div>
+        <div class="col-settings">Settings</div>
+        <div class="col-status">Status</div>
+        <div class="col-progress">Progress</div>
+        <div class="col-actions">Actions</div>
+      </div>
+      <div id="queueList"></div>
+    </div>
+
+    <div class="cli-panel">
+      <div class="cli-header">
+        <span class="cli-title"><i class="fas fa-terminal" style="margin-right:8px"></i> CLI Command</span>
+        <button class="btn btn-ghost btn-sm" style="color:#888" onclick="copyCLI()"><i class="fas fa-copy"></i> Copy</button>
+      </div>
+      <div class="cli-content">
+        <code>docker compose -f docker-compose-cli.yml run cli python3 cli.py --input-path /data/videos --output-path /data/results --hiding-strategy blurring --overlay-strategy mp_pose</code>
+      </div>
+    </div>
+  </div>
+
+  <div class="action-bar" id="actionBar">
+    <div class="flex items-center gap-16">
+      <span class="selected-count"><span id="selectedCount">0</span> videos selected</span>
+      <button class="btn btn-ghost btn-sm" onclick="deselectAll()"><i class="fas fa-times"></i> Clear</button>
+    </div>
+    <div class="flex gap-8">
+      <button class="btn btn-secondary btn-sm"><i class="fas fa-cog"></i> Settings</button>
+      <button class="btn btn-danger btn-sm" onclick="removeSelected()"><i class="fas fa-trash"></i> Remove</button>
+      <button class="btn btn-primary btn-sm" onclick="processSelected()"><i class="fas fa-play"></i> Process</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="addModal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3 style="font-size:18px;font-weight:700">Add Videos to Queue</h3>
+      <button class="btn btn-icon btn-ghost" onclick="hideModal()"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="drop-zone">
+        <div class="icon-box icon-box-lg" style="margin:0 auto 20px"><i class="fas fa-cloud-upload-alt"></i></div>
+        <h3 style="margin-bottom:8px;font-weight:600">Drag and drop videos here</h3>
+        <p class="text-sm text-gray mb-16">Or click to browse. Supports MP4, AVI, MOV, MKV</p>
+        <button class="btn btn-secondary"><i class="fas fa-folder-open"></i> Browse Files</button>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <label class="flex items-center gap-8 text-sm" style="font-weight:500">
+        <input type="checkbox" class="checkbox" checked> Use batch configuration
+      </label>
+      <button class="btn btn-primary" onclick="addToQueue()"><i class="fas fa-plus"></i> Add to Queue</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const videos = [
+  { id: 1, name: 'Session_01_Participant_A.mp4', duration: '15:23', size: '245 MB', status: 'completed', progress: 100 },
+  { id: 2, name: 'Session_01_Participant_B.mp4', duration: '12:45', size: '198 MB', status: 'completed', progress: 100 },
+  { id: 3, name: 'Session_02_Participant_A.mp4', duration: '18:02', size: '312 MB', status: 'completed', progress: 100 },
+  { id: 4, name: 'Session_02_Participant_B.mp4', duration: '14:30', size: '220 MB', status: 'completed', progress: 100 },
+  { id: 5, name: 'Session_03_Participant_A.mp4', duration: '16:15', size: '256 MB', status: 'completed', progress: 100 },
+  { id: 6, name: 'Session_03_Participant_B.mp4', duration: '11:48', size: '175 MB', status: 'completed', progress: 100 },
+  { id: 7, name: 'Session_04_Participant_A.mp4', duration: '19:33', size: '340 MB', status: 'completed', progress: 100 },
+  { id: 8, name: 'Session_04_Participant_B.mp4', duration: '13:22', size: '205 MB', status: 'processing', progress: 67 },
+  { id: 9, name: 'Session_05_Participant_A.mp4', duration: '17:45', size: '285 MB', status: 'processing', progress: 23 },
+  { id: 10, name: 'Session_05_Participant_B.mp4', duration: '15:10', size: '238 MB', status: 'queued', progress: 0 },
+  { id: 11, name: 'Session_06_Participant_A.mp4', duration: '20:05', size: '356 MB', status: 'queued', progress: 0 },
+  { id: 12, name: 'Session_06_Participant_B.mp4', duration: '14:55', size: '228 MB', status: 'queued', progress: 0 },
+];
+
+let selectedIds = new Set();
+
+function renderQueue() {
+  const list = document.getElementById('queueList');
+  list.innerHTML = videos.map(v => `
+    <div class="table-row ${selectedIds.has(v.id) ? 'selected' : ''}" data-id="${v.id}">
+      <div class="col-check"><input type="checkbox" class="checkbox" ${selectedIds.has(v.id) ? 'checked' : ''} onchange="toggleSelect(${v.id})"></div>
+      <div class="col-file">
+        <div class="file-thumb"><i class="fas fa-video" style="color:#666"></i></div>
+        <div class="file-info">
+          <div class="file-name">${v.name}</div>
+          <div class="file-meta">${v.size}</div>
+        </div>
+      </div>
+      <div class="col-duration text-sm" style="font-weight:500">${v.duration}</div>
+      <div class="col-settings"><span class="settings-badge"><i class="fas fa-tint"></i> Blur • MP Pose</span></div>
+      <div class="col-status">${getStatusTag(v.status)}</div>
+      <div class="col-progress">
+        ${v.status === 'completed' ? '<span class="text-xs" style="color:#00cc6a;font-weight:600">Complete</span>' : 
+          v.status === 'error' ? '<span class="text-xs" style="color:#ff3b30;font-weight:600">Failed</span>' :
+          `<div><div class="progress-bar"><div class="progress-bar-fill" style="width:${v.progress}%"></div></div><span class="text-xs text-gray" style="font-weight:500">${v.progress}%</span></div>`}
+      </div>
+      <div class="col-actions">
+        ${v.status === 'completed' ? 
+          `<button class="btn btn-icon btn-ghost btn-sm" title="Download"><i class="fas fa-download"></i></button>
+           <button class="btn btn-icon btn-ghost btn-sm" title="Preview"><i class="fas fa-eye"></i></button>` :
+          v.status === 'processing' ?
+          `<button class="btn btn-icon btn-ghost btn-sm" title="Pause" onclick="pauseVideo(${v.id})"><i class="fas fa-pause"></i></button>` :
+          v.status === 'queued' ?
+          `<button class="btn btn-icon btn-ghost btn-sm" title="Start" onclick="startVideo(${v.id})"><i class="fas fa-play"></i></button>
+           <button class="btn btn-icon btn-ghost btn-sm" title="Remove" onclick="removeVideo(${v.id})"><i class="fas fa-times"></i></button>` :
+          `<button class="btn btn-icon btn-ghost btn-sm" title="Retry"><i class="fas fa-redo"></i></button>`}
+      </div>
+    </div>
+  `).join('');
+  updateSelectionInfo();
+}
+
+function getStatusTag(status) {
+  switch(status) {
+    case 'completed': return '<span class="tag tag-success"><i class="fas fa-check"></i> Done</span>';
+    case 'processing': return '<span class="tag tag-processing"><span class="spinner-sm"></span> Running</span>';
+    case 'queued': return '<span class="tag tag-default"><i class="fas fa-clock"></i> Queued</span>';
+    case 'error': return '<span class="tag tag-error"><i class="fas fa-exclamation"></i> Error</span>';
+    default: return '<span class="tag tag-default">Unknown</span>';
+  }
+}
+
+function toggleSelect(id) {
+  selectedIds.has(id) ? selectedIds.delete(id) : selectedIds.add(id);
+  renderQueue();
+}
+
+function toggleSelectAll(cb) {
+  cb.checked ? videos.forEach(v => selectedIds.add(v.id)) : selectedIds.clear();
+  renderQueue();
+}
+
+function selectAll() {
+  videos.forEach(v => selectedIds.add(v.id));
+  renderQueue();
+}
+
+function deselectAll() {
+  selectedIds.clear();
+  renderQueue();
+}
+
+function updateSelectionInfo() {
+  const count = selectedIds.size;
+  document.getElementById('selectionInfo').textContent = `${count} selected`;
+  document.getElementById('selectedCount').textContent = count;
+  document.getElementById('actionBar').classList.toggle('visible', count > 0);
+}
+
+function removeSelected() {
+  if (confirm(`Remove ${selectedIds.size} videos?`)) {
+    selectedIds.forEach(id => {
+      const idx = videos.findIndex(v => v.id === id);
+      if (idx > -1) videos.splice(idx, 1);
+    });
+    selectedIds.clear();
+    renderQueue();
+    updateStats();
+  }
+}
+
+function removeVideo(id) {
+  const idx = videos.findIndex(v => v.id === id);
+  if (idx > -1) { videos.splice(idx, 1); selectedIds.delete(id); renderQueue(); updateStats(); }
+}
+
+function startVideo(id) {
+  const v = videos.find(v => v.id === id);
+  if (v) { v.status = 'processing'; v.progress = 0; renderQueue(); simulateProgress(id); }
+}
+
+function pauseVideo(id) {
+  const v = videos.find(v => v.id === id);
+  if (v) { v.status = 'queued'; renderQueue(); }
+}
+
+function simulateProgress(id) {
+  const interval = setInterval(() => {
+    const v = videos.find(v => v.id === id);
+    if (!v || v.status !== 'processing') { clearInterval(interval); return; }
+    v.progress += Math.random() * 10;
+    if (v.progress >= 100) { v.progress = 100; v.status = 'completed'; clearInterval(interval); updateStats(); }
+    renderQueue();
+  }, 400);
+}
+
+function startAll() {
+  videos.filter(v => v.status === 'queued').forEach((v, i) => setTimeout(() => startVideo(v.id), i * 1500));
+}
+
+function processSelected() {
+  selectedIds.forEach((id, i) => {
+    const v = videos.find(v => v.id === id);
+    if (v && v.status === 'queued') setTimeout(() => startVideo(id), i * 1200);
+  });
+}
+
+function updateStats() {
+  const completed = videos.filter(v => v.status === 'completed').length;
+  const processing = videos.filter(v => v.status === 'processing').length;
+  const queued = videos.filter(v => v.status === 'queued').length;
+  document.getElementById('statTotal').textContent = videos.length;
+  document.getElementById('statCompleted').textContent = completed;
+  document.getElementById('statProcessing').textContent = processing;
+  document.getElementById('statTime').textContent = queued > 0 ? `~${queued * 15}m` : 'Done';
+}
+
+function filterVideos() {
+  const s = document.getElementById('searchInput').value.toLowerCase();
+  document.querySelectorAll('.table-row').forEach(row => {
+    const name = row.querySelector('.file-name').textContent.toLowerCase();
+    row.style.display = name.includes(s) ? 'flex' : 'none';
+  });
+}
+
+function showModal() { document.getElementById('addModal').style.display = 'flex'; }
+function hideModal() { document.getElementById('addModal').style.display = 'none'; }
+
+function addToQueue() {
+  const newId = Math.max(...videos.map(v => v.id)) + 1;
+  videos.push({ id: newId, name: `New_Video_${newId}.mp4`, duration: '10:00', size: '150 MB', status: 'queued', progress: 0 });
+  hideModal(); renderQueue(); updateStats();
+}
+
+function copyCLI() {
+  navigator.clipboard.writeText(document.querySelector('.cli-content code').textContent);
+  alert('Copied to clipboard');
+}
+
+renderQueue();
+updateStats();
+videos.filter(v => v.status === 'processing').forEach(v => simulateProgress(v.id));
+</script>
+</body>
+</html>

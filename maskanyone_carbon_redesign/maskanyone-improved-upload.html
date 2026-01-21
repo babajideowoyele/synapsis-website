@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MaskAnyone - Improved Upload Flow</title>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --carbon-bg: #ffffff;
+      --carbon-bg-hover: #f4f4f4;
+      --carbon-border: #e0e0e0;
+      --carbon-text: #161616;
+      --carbon-text-secondary: #393939; /* Improved from #525252 for better contrast (7:1 ratio) */
+      --carbon-focus: #0f62fe;
+      --carbon-success: #198038;
+      --carbon-warning: #f1c21b;
+      --carbon-text-on-dark: #f4f4f4; /* For text on dark backgrounds */
+    }
+
+    body {
+      font-family: 'IBM Plex Sans', sans-serif;
+      background: var(--carbon-bg);
+      color: var(--carbon-text);
+      line-height: 1.5;
+      min-height: 100vh;
+    }
+
+    /* Accessibility: Focus visible for keyboard navigation */
+    *:focus-visible {
+      outline: 2px solid var(--carbon-focus);
+      outline-offset: 2px;
+    }
+
+    /* Skip to main content link */
+    .skip-link {
+      position: absolute;
+      top: -40px;
+      left: 0;
+      background: var(--carbon-text);
+      color: white;
+      padding: 8px 16px;
+      z-index: 100;
+      transition: top 0.3s;
+    }
+    .skip-link:focus { top: 0; }
+
+    /* Components */
+    .icon-box {
+      width: 48px;
+      height: 48px;
+      background: var(--carbon-text);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .icon-box-lg { width: 64px; height: 64px; font-size: 24px; }
+    .icon-box-outline { background: #fff; color: var(--carbon-text); border: 1px solid var(--carbon-border); }
+
+    .card {
+      background: #fff;
+      border: 1px solid var(--carbon-border);
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    .card:hover { border-color: var(--carbon-text); box-shadow: 0 4px 14px rgba(0,0,0,0.1); }
+
+    /* Buttons - minimum 44x44px touch target */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 48px;
+      padding: 12px 24px;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s;
+      border: none;
+    }
+    .btn-primary { background: var(--carbon-text); color: #fff; }
+    .btn-primary:hover { background: #393939; }
+    .btn-primary:disabled { background: #8d8d8d; color: #ffffff; cursor: not-allowed; } /* Fixed contrast: white on gray (4.6:1) */
+    .btn-secondary { background: #fff; color: var(--carbon-text); border: 1px solid var(--carbon-text); }
+    .btn-secondary:hover { background: var(--carbon-bg-hover); }
+    .btn-ghost { background: transparent; color: var(--carbon-text); } /* Use primary text for better contrast */
+    .btn-ghost:hover { background: var(--carbon-bg-hover); color: var(--carbon-text); }
+
+    /* Tags */
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      padding: 6px 12px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+    .tag-recommended { background: var(--carbon-success); color: #fff; }
+    .tag-info { background: var(--carbon-bg-hover); color: var(--carbon-text-secondary); }
+
+    /* Tooltip */
+    .tooltip-trigger {
+      position: relative;
+      cursor: help;
+    }
+    .tooltip {
+      position: absolute;
+      bottom: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--carbon-text);
+      color: #fff;
+      padding: 8px 12px;
+      font-size: 12px;
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s;
+      z-index: 10;
+      margin-bottom: 8px;
+    }
+    .tooltip::after {
+      content: '';
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      border: 6px solid transparent;
+      border-top-color: var(--carbon-text);
+    }
+    .tooltip-trigger:hover .tooltip,
+    .tooltip-trigger:focus .tooltip { opacity: 1; }
+
+    /* Layout */
+    .app-frame { min-height: 100vh; display: flex; flex-direction: column; }
+    .accent-bar { height: 3px; background: var(--carbon-text); }
+
+    .app-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 24px;
+      border-bottom: 1px solid var(--carbon-border);
+    }
+    .app-logo {
+      font-size: 18px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    /* Progress Steps - simplified */
+    .progress-steps {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .progress-step {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      background: var(--carbon-bg-hover);
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--carbon-text-secondary);
+    }
+    .progress-step.active {
+      background: var(--carbon-text);
+      color: #fff;
+    }
+    .progress-step.completed {
+      background: var(--carbon-success);
+      color: #fff;
+    }
+    .progress-step-number {
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .main-content {
+      flex: 1;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 48px 24px;
+      width: 100%;
+    }
+
+    /* Section Header */
+    .section-header {
+      margin-bottom: 32px;
+    }
+    .section-label {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 12px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--carbon-text-secondary);
+      margin-bottom: 8px;
+    }
+    .section-title {
+      font-size: 32px;
+      font-weight: 300;
+      margin-bottom: 8px;
+    }
+    .section-title strong { font-weight: 600; }
+    .section-desc {
+      font-size: 16px;
+      color: var(--carbon-text-secondary);
+      max-width: 600px;
+    }
+
+    /* File Drop Zone */
+    .file-drop {
+      border: 2px dashed var(--carbon-border);
+      padding: 64px 48px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.15s;
+      background: var(--carbon-bg-hover);
+    }
+    .file-drop:hover,
+    .file-drop:focus,
+    .file-drop.dragover {
+      border-color: var(--carbon-text);
+      background: #fff;
+    }
+    .file-drop.has-file {
+      border-style: solid;
+      border-color: var(--carbon-success);
+      background: #fff;
+    }
+
+    /* Template Selection */
+    .template-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+      margin-top: 32px;
+    }
+    .template-card {
+      padding: 24px;
+      border: 1px solid var(--carbon-border);
+      cursor: pointer;
+      transition: all 0.15s;
+      position: relative;
+    }
+    .template-card:hover { border-color: var(--carbon-text); }
+    .template-card.selected {
+      border-color: var(--carbon-text);
+      background: var(--carbon-bg-hover);
+    }
+    .template-card[aria-checked="true"]::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: var(--carbon-text);
+    }
+    .template-icon {
+      width: 48px;
+      height: 48px;
+      background: var(--carbon-bg-hover);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 16px;
+      font-size: 20px;
+    }
+    .template-card.selected .template-icon {
+      background: var(--carbon-text);
+      color: #fff;
+    }
+    .template-title {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    .template-desc {
+      font-size: 14px;
+      color: var(--carbon-text-secondary);
+      line-height: 1.5;
+    }
+    .template-preview {
+      display: flex;
+      gap: 8px;
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid var(--carbon-border);
+    }
+    .preview-frame {
+      width: 60px;
+      height: 40px;
+      background: #1a1a1a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      color: #c6c6c6; /* Fixed contrast: light gray on dark (8.5:1) */
+    }
+
+    /* Tips Panel */
+    .tips-panel {
+      background: var(--carbon-bg-hover);
+      border-left: 3px solid var(--carbon-text);
+      padding: 20px 24px;
+      margin-top: 32px;
+    }
+    .tips-title {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .tips-list {
+      list-style: none;
+    }
+    .tips-list li {
+      font-size: 14px;
+      color: var(--carbon-text-secondary);
+      padding: 8px 0;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+    .tips-list li i {
+      color: var(--carbon-text);
+      margin-top: 2px;
+    }
+
+    /* Footer Navigation */
+    .footer-nav {
+      padding: 24px;
+      border-top: 1px solid var(--carbon-border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #fff;
+    }
+    .footer-info {
+      font-size: 14px;
+      color: var(--carbon-text-secondary);
+    }
+    .footer-actions {
+      display: flex;
+      gap: 12px;
+    }
+
+    /* Utility */
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      border: 0;
+    }
+
+    /* Reduced motion preference */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to main content</a>
+
+  <div class="app-frame">
+    <div class="accent-bar" role="presentation"></div>
+
+    <header class="app-header">
+      <div class="app-logo">
+        <i class="fas fa-mask" aria-hidden="true"></i>
+        <span>MASKANYONE</span>
+      </div>
+
+      <nav class="progress-steps" aria-label="Upload progress">
+        <div class="progress-step active" aria-current="step">
+          <span class="progress-step-number">1</span>
+          <span>Upload</span>
+        </div>
+        <div class="progress-step">
+          <span class="progress-step-number">2</span>
+          <span>Review</span>
+        </div>
+        <div class="progress-step">
+          <span class="progress-step-number">3</span>
+          <span>Export</span>
+        </div>
+      </nav>
+
+      <button class="btn btn-ghost" aria-label="Cancel and return to dashboard">
+        <i class="fas fa-times" aria-hidden="true"></i>
+        <span>Cancel</span>
+      </button>
+    </header>
+
+    <main id="main" class="main-content">
+      <div class="section-header">
+        <p class="section-label">Step 1 of 3</p>
+        <h1 class="section-title">Upload your <strong>video</strong></h1>
+        <p class="section-desc">
+          We'll automatically detect people in your video and help you anonymize them while preserving what matters for your research.
+        </p>
+      </div>
+
+      <!-- File Upload -->
+      <div
+        class="file-drop"
+        id="dropzone"
+        role="button"
+        tabindex="0"
+        aria-label="Upload video file. Click or drag and drop."
+        onclick="document.getElementById('fileInput').click()"
+        onkeydown="if(event.key==='Enter'||event.key===' ')document.getElementById('fileInput').click()"
+      >
+        <div class="icon-box icon-box-lg" style="margin: 0 auto 24px;" aria-hidden="true">
+          <i class="fas fa-cloud-upload-alt"></i>
+        </div>
+        <h2 style="font-size: 20px; font-weight: 600; margin-bottom: 8px;">
+          Drag and drop your video here
+        </h2>
+        <p style="color: var(--carbon-text-secondary); margin-bottom: 24px;">
+          or click to browse. We support MP4, AVI, MOV, MKV up to 2GB.
+        </p>
+        <button class="btn btn-secondary" type="button" onclick="event.stopPropagation();">
+          <i class="fas fa-folder-open" aria-hidden="true"></i>
+          Browse Files
+        </button>
+      </div>
+      <input
+        type="file"
+        id="fileInput"
+        accept="video/*"
+        class="sr-only"
+        aria-label="Select video file"
+      >
+
+      <!-- Research Template Selection -->
+      <section aria-labelledby="template-heading" style="margin-top: 48px;">
+        <h2 id="template-heading" style="font-size: 20px; font-weight: 600; margin-bottom: 8px;">
+          What type of recording is this?
+        </h2>
+        <p style="color: var(--carbon-text-secondary); margin-bottom: 24px;">
+          Choose a template to get started quickly with settings optimized for your research context.
+        </p>
+
+        <div class="template-grid" role="radiogroup" aria-label="Recording type templates">
+          <div
+            class="template-card selected"
+            role="radio"
+            aria-checked="true"
+            tabindex="0"
+            onclick="selectTemplate(this)"
+            onkeydown="if(event.key==='Enter'||event.key===' ')selectTemplate(this)"
+          >
+            <span class="tag tag-recommended" style="position: absolute; top: 16px; right: 16px;">
+              Recommended
+            </span>
+            <div class="template-icon" aria-hidden="true">
+              <i class="fas fa-comments"></i>
+            </div>
+            <h3 class="template-title">Interview Recording</h3>
+            <p class="template-desc">
+              Blurs faces while preserving gestures, body language, and audio. Ideal for qualitative research interviews.
+            </p>
+            <div class="template-preview">
+              <div class="preview-frame">Before</div>
+              <div class="preview-frame" style="position: relative;">
+                After
+                <div style="position: absolute; width: 15px; height: 15px; background: rgba(255,255,255,0.5); border-radius: 50%; top: 8px; left: 22px;"></div>
+              </div>
+            </div>
+          </div>
+
+          <div
+            class="template-card"
+            role="radio"
+            aria-checked="false"
+            tabindex="0"
+            onclick="selectTemplate(this)"
+            onkeydown="if(event.key==='Enter'||event.key===' ')selectTemplate(this)"
+          >
+            <div class="template-icon" aria-hidden="true">
+              <i class="fas fa-chalkboard-teacher"></i>
+            </div>
+            <h3 class="template-title">Classroom / Group</h3>
+            <p class="template-desc">
+              Anonymizes multiple participants. Option to keep instructor/presenter visible.
+            </p>
+            <div class="template-preview">
+              <div class="preview-frame">Before</div>
+              <div class="preview-frame">After</div>
+            </div>
+          </div>
+
+          <div
+            class="template-card"
+            role="radio"
+            aria-checked="false"
+            tabindex="0"
+            onclick="selectTemplate(this)"
+            onkeydown="if(event.key==='Enter'||event.key===' ')selectTemplate(this)"
+          >
+            <div class="template-icon" aria-hidden="true">
+              <i class="fas fa-walking"></i>
+            </div>
+            <h3 class="template-title">Movement / Gait Study</h3>
+            <p class="template-desc">
+              Full body anonymization with skeleton overlay. Preserves kinematics data for analysis.
+            </p>
+            <div class="template-preview">
+              <div class="preview-frame">Before</div>
+              <div class="preview-frame">Skeleton</div>
+            </div>
+          </div>
+
+          <div
+            class="template-card"
+            role="radio"
+            aria-checked="false"
+            tabindex="0"
+            onclick="selectTemplate(this)"
+            onkeydown="if(event.key==='Enter'||event.key===' ')selectTemplate(this)"
+          >
+            <div class="template-icon" aria-hidden="true">
+              <i class="fas fa-cog"></i>
+            </div>
+            <h3 class="template-title">Custom Settings</h3>
+            <p class="template-desc">
+              Start from scratch and configure exactly what to anonymize and how.
+            </p>
+            <div class="template-preview">
+              <div class="preview-frame" style="flex: 1; width: auto;">Configure all options</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Tips Panel -->
+      <aside class="tips-panel" aria-labelledby="tips-heading">
+        <h3 id="tips-heading" class="tips-title">
+          <i class="fas fa-lightbulb" aria-hidden="true"></i>
+          Tips for better results
+        </h3>
+        <ul class="tips-list">
+          <li>
+            <i class="fas fa-check" aria-hidden="true"></i>
+            <span><strong>Good lighting</strong> helps our AI detect faces and bodies more accurately</span>
+          </li>
+          <li>
+            <i class="fas fa-check" aria-hidden="true"></i>
+            <span><strong>720p or higher</strong> resolution gives better tracking results</span>
+          </li>
+          <li>
+            <i class="fas fa-check" aria-hidden="true"></i>
+            <span>You can <strong>review and adjust</strong> all detections before processing</span>
+          </li>
+        </ul>
+      </aside>
+    </main>
+
+    <footer class="footer-nav">
+      <div class="footer-info">
+        <i class="fas fa-lock" aria-hidden="true"></i>
+        Your video is processed securely and never leaves SURF infrastructure.
+      </div>
+      <div class="footer-actions">
+        <a href="maskanyone-keyboard-shortcuts.html" class="btn btn-ghost">
+          <i class="fas fa-keyboard" aria-hidden="true"></i>
+          Shortcuts
+        </a>
+        <button class="btn btn-ghost" type="button" onclick="document.getElementById('helpModal').classList.add('active')">
+          <i class="fas fa-question-circle" aria-hidden="true"></i>
+          Help
+        </button>
+        <button class="btn btn-primary" type="button" disabled aria-disabled="true">
+          Continue to Review
+          <i class="fas fa-arrow-right" aria-hidden="true"></i>
+        </button>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Help Modal (simplified - details on About page) -->
+  <div class="modal-overlay" id="helpModal" onclick="if(event.target===this)this.classList.remove('active')">
+    <div class="modal" role="dialog" aria-labelledby="help-title" aria-modal="true">
+      <div class="modal-header">
+        <h2 id="help-title" class="modal-title">Quick Help</h2>
+        <button type="button" class="modal-close" onclick="document.getElementById('helpModal').classList.remove('active')" aria-label="Close">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="help-section">
+          <h3 class="help-section-title">
+            <i class="fas fa-keyboard" aria-hidden="true"></i>
+            Keyboard Shortcuts
+          </h3>
+          <p class="help-text">
+            Press <kbd>?</kbd> anywhere to see shortcuts, or
+            <a href="maskanyone-keyboard-shortcuts.html">view the complete guide</a>.
+          </p>
+        </div>
+
+        <div class="help-section">
+          <h3 class="help-section-title">
+            <i class="fas fa-info-circle" aria-hidden="true"></i>
+            About MaskAnyone
+          </h3>
+          <p class="help-text">
+            Learn about MaskBench for quality evaluation, data archiving options, and project resources on the
+            <a href="maskanyone-about.html">About page</a>.
+          </p>
+        </div>
+
+        <div class="help-section">
+          <h3 class="help-section-title">
+            <i class="fas fa-life-ring" aria-hidden="true"></i>
+            Need Support?
+          </h3>
+          <p class="help-text">
+            Email <a href="mailto:support@synapsis-project.nl">support@synapsis-project.nl</a>
+            or visit <a href="https://synapsis-project.nl" target="_blank" rel="noopener">synapsis-project.nl</a>.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <style>
+    /* Modal styles */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s;
+      z-index: 1000;
+    }
+    .modal-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .modal {
+      background: #fff;
+      width: 90%;
+      max-width: 400px;
+      max-height: 80vh;
+      overflow-y: auto;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+    }
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 24px;
+      border-bottom: 1px solid var(--carbon-border);
+    }
+    .modal-title {
+      font-size: 18px;
+      font-weight: 600;
+    }
+    .modal-close {
+      width: 40px;
+      height: 40px;
+      background: transparent;
+      border: none;
+      font-size: 18px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-close:hover {
+      background: var(--carbon-bg-hover);
+    }
+    .modal-body {
+      padding: 24px;
+    }
+    .help-section {
+      margin-bottom: 20px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--carbon-border);
+    }
+    .help-section:last-child {
+      margin-bottom: 0;
+      padding-bottom: 0;
+      border-bottom: none;
+    }
+    .help-section-title {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .help-section-title i {
+      color: var(--carbon-text-secondary);
+    }
+    .help-text {
+      font-size: 14px;
+      color: var(--carbon-text-secondary);
+      line-height: 1.6;
+    }
+    .help-text a {
+      color: var(--carbon-text);
+      font-weight: 500;
+    }
+    .help-text kbd {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 24px;
+      height: 22px;
+      padding: 0 6px;
+      background: var(--carbon-bg-hover);
+      border: 1px solid var(--carbon-border);
+      border-bottom-width: 2px;
+      border-radius: 3px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+    }
+  </style>
+
+  <script>
+    // Close modal on Escape
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        document.getElementById('helpModal').classList.remove('active');
+      }
+      if (e.key === '?') {
+        window.location.href = 'maskanyone-keyboard-shortcuts.html';
+      }
+    });
+  </script>
+
+  <script>
+    function selectTemplate(el) {
+      // Deselect all
+      document.querySelectorAll('.template-card').forEach(card => {
+        card.classList.remove('selected');
+        card.setAttribute('aria-checked', 'false');
+      });
+      // Select clicked
+      el.classList.add('selected');
+      el.setAttribute('aria-checked', 'true');
+    }
+
+    // Drag and drop handling
+    const dropzone = document.getElementById('dropzone');
+
+    dropzone.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      dropzone.classList.add('dragover');
+    });
+
+    dropzone.addEventListener('dragleave', () => {
+      dropzone.classList.remove('dragover');
+    });
+
+    dropzone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      dropzone.classList.remove('dragover');
+      const file = e.dataTransfer.files[0];
+      if (file && file.type.startsWith('video/')) {
+        handleFile(file);
+      }
+    });
+
+    document.getElementById('fileInput').addEventListener('change', function() {
+      if (this.files[0]) handleFile(this.files[0]);
+    });
+
+    function handleFile(file) {
+      dropzone.classList.add('has-file');
+      dropzone.innerHTML = `
+        <div class="icon-box icon-box-lg" style="margin: 0 auto 24px; background: var(--carbon-success);">
+          <i class="fas fa-check"></i>
+        </div>
+        <h2 style="font-size: 20px; font-weight: 600; margin-bottom: 8px;">
+          ${file.name}
+        </h2>
+        <p style="color: var(--carbon-text-secondary); margin-bottom: 24px;">
+          ${(file.size / (1024 * 1024)).toFixed(1)} MB
+        </p>
+        <button class="btn btn-ghost" type="button" onclick="event.stopPropagation(); clearFile();">
+          <i class="fas fa-times"></i> Remove
+        </button>
+      `;
+      // Enable continue button
+      document.querySelector('.btn-primary').disabled = false;
+      document.querySelector('.btn-primary').removeAttribute('aria-disabled');
+    }
+
+    function clearFile() {
+      dropzone.classList.remove('has-file');
+      dropzone.innerHTML = `
+        <div class="icon-box icon-box-lg" style="margin: 0 auto 24px;">
+          <i class="fas fa-cloud-upload-alt"></i>
+        </div>
+        <h2 style="font-size: 20px; font-weight: 600; margin-bottom: 8px;">
+          Drag and drop your video here
+        </h2>
+        <p style="color: var(--carbon-text-secondary); margin-bottom: 24px;">
+          or click to browse. We support MP4, AVI, MOV, MKV up to 2GB.
+        </p>
+        <button class="btn btn-secondary" type="button" onclick="event.stopPropagation();">
+          <i class="fas fa-folder-open"></i>
+          Browse Files
+        </button>
+      `;
+      document.getElementById('fileInput').value = '';
+      document.querySelector('.btn-primary').disabled = true;
+      document.querySelector('.btn-primary').setAttribute('aria-disabled', 'true');
+    }
+  </script>
+</body>
+</html>

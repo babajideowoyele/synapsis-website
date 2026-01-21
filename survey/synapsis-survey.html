@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SYNAPSIS Platform Survey - Welcome</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .accent-line {
+            height: 2px;
+            background: linear-gradient(90deg, black 0%, transparent 100%);
+        }
+        .btn-primary {
+            background: black;
+            color: white;
+            border: 2px solid black;
+            padding: 16px 48px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 18px;
+        }
+        .btn-primary:hover {
+            background: white;
+            color: black;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .feature-card {
+            background: white;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 24px;
+            transition: all 0.3s ease;
+        }
+        .feature-card:hover {
+            border-color: black;
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+        }
+        .feature-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+        .info-box {
+            background: #f9fafb;
+            border-left: 4px solid black;
+            padding: 20px;
+            border-radius: 4px;
+            margin: 24px 0;
+        }
+        .timeline-item {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        .timeline-dot {
+            width: 40px;
+            height: 40px;
+            background: black;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+        .stat-card {
+            text-align: center;
+            padding: 20px;
+            background: #f9fafb;
+            border-radius: 8px;
+            border: 2px solid #e5e7eb;
+        }
+        .stat-number {
+            font-size: 36px;
+            font-weight: 300;
+            color: black;
+        }
+        .hero-gradient {
+            background: linear-gradient(135deg, #ffffff 0%, #f9fafb 100%);
+        }
+    </style>
+</head>
+<body class="bg-white">
+    <!-- Header -->
+    <header class="bg-white border-b-2 border-black sticky top-0 z-50">
+        <nav class="container mx-auto px-6 py-4">
+            <div class="flex justify-between items-center">
+                <a href="#" class="text-xl font-semibold flex items-center">
+                    <i class="fas fa-link mr-2"></i>
+                    SYNAPSIS
+                </a>
+                <div class="text-sm text-gray-600">
+                    Platform Survey 2025
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-gradient py-20">
+        <div class="container mx-auto px-6">
+            <div class="max-w-4xl mx-auto text-center">
+                <h1 class="text-5xl md:text-6xl font-light mb-6">
+                    SYNAPSIS Platform Survey
+                </h1>
+                <div class="accent-line mb-8 max-w-md mx-auto"></div>
+                <p class="text-xl text-gray-700 mb-4">
+                    Help Shape the Future of Audiovisual Data Management in SSH Research
+                </p>
+                <p class="text-gray-600 max-w-2xl mx-auto mb-8">
+                    Your insights will directly inform the design of a privacy-aware platform for managing, 
+                    masking, and archiving audiovisual research data in the Social Sciences and Humanities.
+                </p>
+                <a href="survey-section1.html" class="btn-primary inline-block">
+                    Begin Survey <i class="fas fa-arrow-right ml-2"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quick Stats -->
+    <section class="py-12 border-b-2 border-gray-100">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 max-w-5xl mx-auto">
+                <div class="stat-card">
+                    <div class="stat-number">15-20</div>
+                    <div class="text-sm text-gray-600">Minutes</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">10</div>
+                    <div class="text-sm text-gray-600">Sections</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">~50</div>
+                    <div class="text-sm text-gray-600">Questions</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">0€</div>
+                    <div class="text-sm text-gray-600">Cost</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About SYNAPSIS -->
+    <section class="py-16">
+        <div class="container mx-auto px-6">
+            <div class="max-w-4xl mx-auto">
+                <h2 class="text-3xl font-light mb-6 text-center">About SYNAPSIS</h2>
+                <div class="accent-line mb-8 max-w-md mx-auto"></div>
+                
+                <p class="text-lg text-gray-700 mb-6">
+                    <strong>SYNAPSIS</strong> (Synergy Network and Platform for Integrating Audiovisual Data Archiving 
+                    and Stewardship in Social Sciences and Humanities) is a collaborative project funded by NWO's 
+                    Thematic Digital Competence Centers (TDCC-SSH) program.
+                </p>
+
+                <div class="info-box">
+                    <h3 class="font-semibold text-lg mb-3 flex items-center">
+                        <i class="fas fa-bullseye mr-2"></i>
+                        Project Goals
+                    </h3>
+                    <ul class="space-y-2 text-gray-700">
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-green-600 mr-2 mt-1"></i>
+                            <span>Develop an easy-to-use, open-source platform with privacy-preserving masking tools</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-green-600 mr-2 mt-1"></i>
+                            <span>Increase audiovisual data reusability while protecting privacy (GDPR compliant)</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-green-600 mr-2 mt-1"></i>
+                            <span>Provide comprehensive training programs (Masking School, workshops, tutorials)</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-green-600 mr-2 mt-1"></i>
+                            <span>Build community capacity and establish best practices for audiovisual data stewardship</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                    <div class="feature-card">
+                        <div class="feature-icon">🎭</div>
+                        <h3 class="font-semibold text-lg mb-2">MaskAnyone Toolkit</h3>
+                        <p class="text-sm text-gray-600">
+                            Point-and-click interface for face masking, voice alteration, and body pose extraction
+                        </p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">☁️</div>
+                        <h3 class="font-semibold text-lg mb-2">Secure Infrastructure</h3>
+                        <p class="text-sm text-gray-600">
+                            Cloud-based platform with SURF integration and DANS archiving support
+                        </p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">📚</div>
+                        <h3 class="font-semibold text-lg mb-2">Training Programs</h3>
+                        <p class="text-sm text-gray-600">
+                            Masking School workshops, video tutorials, and hands-on training sessions
+                        </p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🤝</div>
+                        <h3 class="font-semibold text-lg mb-2">Community Building</h3>
+                        <p class="text-sm text-gray-600">
+                            Masking Lab forums, Maskathon events, and train-the-trainer programs
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Survey Sections -->
+    <section class="py-16 bg-gray-50">
+        <div class="container mx-auto px-6">
+            <div class="max-w-4xl mx-auto">
+                <h2 class="text-3xl font-light mb-6 text-center">Survey Contents</h2>
+                <div class="accent-line mb-12 max-w-md mx-auto"></div>
+
+                <div class="space-y-4">
+                    <div class="timeline-item">
+                        <div class="timeline-dot">1</div>
+                        <div class="bg-white p-4 rounded-lg border-2 border-gray-200 flex-1">
+                            <h4 class="font-semibold">Respondent Background</h4>
+                            <p class="text-sm text-gray-600">Your role, discipline, and experience with audiovisual data</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-dot">2</div>
+                        <div class="bg-white p-4 rounded-lg border-2 border-gray-200 flex-1">
+                            <h4 class="font-semibold">Current Practices & Challenges</h4>
+                            <p class="text-sm text-gray-600">Tools you use and barriers you face</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-dot">3</div>
+                        <div class="bg-white p-4 rounded-lg border-2 border-gray-200 flex-1">
+                            <h4 class="font-semibold">Masking & De-identification</h4>
+                            <p class="text-sm text-gray-600">Experience and needs for privacy-preserving techniques</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-dot">4</div>
+                        <div class="bg-white p-4 rounded-lg border-2 border-gray-200 flex-1">
+                            <h4 class="font-semibold">Platform Features & Requirements</h4>
+                            <p class="text-sm text-gray-600">Feature priorities and technical specifications</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-dot">5</div>
+                        <div class="bg-white p-4 rounded-lg border-2 border-gray-200 flex-1">
+                            <h4 class="font-semibold">Data Archiving & FAIR Principles</h4>
+                            <p class="text-sm text-gray-600">Repositories, metadata, and access control</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-dot">6</div>
+                        <div class="bg-white p-4 rounded-lg border-2 border-gray-200 flex-1">
+                            <h4 class="font-semibold">Training & Support Needs</h4>
+                            <p class="text-sm text-gray-600">Learning preferences and support mechanisms</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-dot">7</div>
+                        <div class="bg-white p-4 rounded-lg border-2 border-gray-200 flex-1">
+                            <h4 class="font-semibold">Advanced Features & Future Needs</h4>
+                            <p class="text-sm text-gray-600">Analytics, integrations, and collaboration</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-dot">8</div>
+                        <div class="bg-white p-4 rounded-lg border-2 border-gray-200 flex-1">
+                            <h4 class="font-semibold">Institutional Context & Bottlenecks</h4>
+                            <p class="text-sm text-gray-600">Policies, stakeholders, and barriers</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-dot">9</div>
+                        <div class="bg-white p-4 rounded-lg border-2 border-gray-200 flex-1">
+                            <h4 class="font-semibold">Use Cases & Scenarios</h4>
+                            <p class="text-sm text-gray-600">Your specific needs and participation interest</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-dot">10</div>
+                        <div class="bg-white p-4 rounded-lg border-2 border-gray-200 flex-1">
+                            <h4 class="font-semibold">Additional Input</h4>
+                            <p class="text-sm text-gray-600">Final feedback and contact information</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Who Should Participate -->
+    <section class="py-16">
+        <div class="container mx-auto px-6">
+            <div class="max-w-4xl mx-auto">
+                <h2 class="text-3xl font-light mb-6 text-center">Who Should Participate?</h2>
+                <div class="accent-line mb-12 max-w-md mx-auto"></div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="text-center p-6">
+                        <div class="text-5xl mb-4">👨‍🔬</div>
+                        <h3 class="font-semibold mb-2">Researchers</h3>
+                        <p class="text-sm text-gray-600">
+                            PIs, postdocs, and PhD candidates working with or interested in audiovisual data
+                        </p>
+                    </div>
+                    <div class="text-center p-6">
+                        <div class="text-5xl mb-4">📊</div>
+                        <h3 class="font-semibold mb-2">Data Stewards</h3>
+                        <p class="text-sm text-gray-600">
+                            RDM professionals supporting researchers with data management
+                        </p>
+                    </div>
+                    <div class="text-center p-6">
+                        <div class="text-5xl mb-4">💻</div>
+                        <h3 class="font-semibold mb-2">Support Staff</h3>
+                        <p class="text-sm text-gray-600">
+                            Technical staff, librarians, and ethics officers
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Privacy & Data -->
+    <section class="py-16 bg-gray-50">
+        <div class="container mx-auto px-6">
+            <div class="max-w-4xl mx-auto">
+                <h2 class="text-3xl font-light mb-6 text-center">Your Privacy Matters</h2>
+                <div class="accent-line mb-12 max-w-md mx-auto"></div>
+
+                <div class="bg-white border-2 border-gray-200 rounded-lg p-8">
+                    <div class="flex items-start gap-4 mb-6">
+                        <i class="fas fa-shield-alt text-3xl text-green-600"></i>
+                        <div>
+                            <h3 class="font-semibold text-lg mb-2">GDPR Compliant</h3>
+                            <p class="text-gray-700 mb-4">
+                                This survey is conducted in accordance with GDPR and institutional data protection policies.
+                            </p>
+                        </div>
+                    </div>
+
+                    <ul class="space-y-3 text-gray-700">
+                        <li class="flex items-start">
+                            <i class="fas fa-check text-green-600 mr-3 mt-1"></i>
+                            <span>Your responses are stored securely and will only be used for SYNAPSIS research purposes</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check text-green-600 mr-3 mt-1"></i>
+                            <span>Personal information (email) is stored separately from survey responses</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check text-green-600 mr-3 mt-1"></i>
+                            <span>Only aggregated, anonymized data will be published in reports</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check text-green-600 mr-3 mt-1"></i>
+                            <span>You can request deletion of your data at any time</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check text-green-600 mr-3 mt-1"></i>
+                            <span>Participation is completely voluntary and can be stopped at any time</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Partners -->
+    <section class="py-16">
+        <div class="container mx-auto px-6">
+            <div class="max-w-4xl mx-auto text-center">
+                <h2 class="text-3xl font-light mb-6">Project Partners</h2>
+                <div class="accent-line mb-12 max-w-md mx-auto"></div>
+
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8">
+                    <div class="p-4 bg-gray-50 rounded-lg border-2 border-gray-200">
+                        <div class="font-semibold">Radboud University</div>
+                        <div class="text-xs text-gray-600">Lead Institution</div>
+                    </div>
+                    <div class="p-4 bg-gray-50 rounded-lg border-2 border-gray-200">
+                        <div class="font-semibold">VU Amsterdam</div>
+                        <div class="text-xs text-gray-600">Partner</div>
+                    </div>
+                    <div class="p-4 bg-gray-50 rounded-lg border-2 border-gray-200">
+                        <div class="font-semibold">UvA</div>
+                        <div class="text-xs text-gray-600">Partner</div>
+                    </div>
+                    <div class="p-4 bg-gray-50 rounded-lg border-2 border-gray-200">
+                        <div class="font-semibold">EUR</div>
+                        <div class="text-xs text-gray-600">Partner</div>
+                    </div>
+                    <div class="p-4 bg-gray-50 rounded-lg border-2 border-gray-200">
+                        <div class="font-semibold">HPI Potsdam</div>
+                        <div class="text-xs text-gray-600">International Partner</div>
+                    </div>
+                    <div class="p-4 bg-gray-50 rounded-lg border-2 border-gray-200">
+                        <div class="font-semibold">SURF</div>
+                        <div class="text-xs text-gray-600">Infrastructure</div>
+                    </div>
+                    <div class="p-4 bg-gray-50 rounded-lg border-2 border-gray-200">
+                        <div class="font-semibold">DANS</div>
+                        <div class="text-xs text-gray-600">Archiving</div>
+                    </div>
+                    <div class="p-4 bg-gray-50 rounded-lg border-2 border-gray-200">
+                        <div class="font-semibold">NWO</div>
+                        <div class="text-xs text-gray-600">Funding</div>
+                    </div>
+                </div>
+
+                <p class="text-sm text-gray-600">
+                    In collaboration with CLARIAH, ODISSEI, and the broader SSH research community
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-20 bg-black text-white">
+        <div class="container mx-auto px-6 text-center">
+            <h2 class="text-4xl font-light mb-6">Ready to Get Started?</h2>
+            <p class="text-lg mb-8 max-w-2xl mx-auto opacity-90">
+                Your feedback will help create a platform that truly serves the SSH research community. 
+                The survey takes approximately 15-20 minutes to complete.
+            </p>
+            <a href="survey-section1.html" class="btn-primary inline-block" style="background: white; color: black;">
+                Begin Survey <i class="fas fa-arrow-right ml-2"></i>
+            </a>
+            <p class="text-sm mt-6 opacity-75">
+                Questions? Contact us at <a href="mailto:info@synapsis-project.org" class="underline">info@synapsis-project.org</a>
+            </p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="border-t-2 border-black py-8">
+        <div class="container mx-auto px-6">
+            <div class="flex flex-col md:flex-row md:justify-between md:items-center">
+                <p class="text-sm text-gray-600">© 2025 SYNAPSIS Project | NWO TDCC-SSH</p>
+                <p class="text-sm text-gray-600">Funded by the Dutch Research Council (NWO)</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

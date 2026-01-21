@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MaskAnyone - Templates</title>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:'IBM Plex Sans',sans-serif;background:#f5f5f5;color:#000;line-height:1.5}
+    .icon-box{width:40px;height:40px;background:#000;color:#fff;display:flex;align-items:center;justify-content:center;border-radius:8px;flex-shrink:0}
+    .icon-box-sm{width:32px;height:32px;font-size:14px}
+    .icon-box-lg{width:56px;height:56px;font-size:24px}
+    .icon-box-xl{width:72px;height:72px;font-size:28px}
+    .icon-box-outline{background:#fff;color:#000;border:2px solid #000}
+    .icon-box-gray{background:#e5e5e5;color:#666}
+    .card{background:#fff;border:1px solid #e5e5e5}
+    .card-elevated{background:#fff;border:3px solid #000;position:relative}
+    .card-elevated::before{content:'';position:absolute;top:-3px;left:-3px;right:-3px;bottom:-3px;background:#000;z-index:-1;transform:translate(6px,6px)}
+    .btn{display:inline-flex;align-items:center;gap:8px;padding:10px 20px;font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;border:none}
+    .btn-primary{background:#000;color:#fff}.btn-primary:hover{background:#333}
+    .btn-secondary{background:#fff;color:#000;border:2px solid #000}.btn-secondary:hover{background:#000;color:#fff}
+    .btn-ghost{background:transparent;color:#666}.btn-ghost:hover{background:#f0f0f0;color:#000}
+    .btn-sm{padding:8px 14px;font-size:12px}
+    .btn-icon{width:36px;height:36px;padding:0;justify-content:center}
+    .tag{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.5px}
+    .tag-blue{background:#e3f2fd;color:#1565c0}
+    .tag-green{background:#e8f5e9;color:#2e7d32}
+    .tag-purple{background:#f3e5f5;color:#7b1fa2}
+    .tag-orange{background:#fff3e0;color:#e65100}
+    .tag-gray{background:#f5f5f5;color:#666}
+    .tag-outline{background:#fff;color:#000;border:1px solid #e5e5e5}
+    .app-frame{min-height:100vh;display:flex;flex-direction:column}
+    .app-header{display:flex;align-items:center;justify-content:space-between;padding:16px 24px;background:#fff;border-bottom:1px solid #e5e5e5}
+    .app-logo{font-size:18px;font-weight:700;display:flex;align-items:center;gap:12px}
+    .app-nav{display:flex;gap:8px}
+    .app-nav a{font-size:13px;color:#666;text-decoration:none;padding:8px 16px;transition:all .2s}
+    .app-nav a:hover{background:#f5f5f5;color:#000}
+    .app-nav a.active{background:#000;color:#fff}
+    .main-content{flex:1;padding:24px;max-width:1400px;margin:0 auto;width:100%}
+    .page-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:24px}
+    .page-title{font-size:28px;font-weight:300;margin-bottom:4px}
+    .page-title span{font-weight:600}
+    .tabs{display:flex;gap:4px;margin-bottom:24px;border-bottom:1px solid #e5e5e5;padding-bottom:0}
+    .tab{padding:12px 20px;font-size:13px;font-weight:500;color:#666;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .2s}
+    .tab:hover{color:#000}
+    .tab.active{color:#000;border-bottom-color:#000}
+    .tab-count{background:#e5e5e5;color:#666;padding:2px 8px;border-radius:10px;font-size:11px;margin-left:8px}
+    .tab.active .tab-count{background:#000;color:#fff}
+    .templates-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+    .template-card{background:#fff;border:1px solid #e5e5e5;transition:all .2s;cursor:pointer;position:relative;overflow:hidden}
+    .template-card:hover{border-color:#000;transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,.1)}
+    .template-card.featured{border:3px solid #000}
+    .template-card.featured::before{content:'';position:absolute;top:-3px;left:-3px;right:-3px;bottom:-3px;background:#000;z-index:-1;transform:translate(4px,4px)}
+    .template-header{padding:20px 20px 16px;border-bottom:1px solid #f0f0f0}
+    .template-body{padding:16px 20px}
+    .template-footer{padding:12px 20px;background:#fafafa;display:flex;justify-content:space-between;align-items:center}
+    .template-icon{margin-bottom:16px}
+    .template-title{font-size:16px;font-weight:600;margin-bottom:4px}
+    .template-desc{font-size:13px;color:#666;line-height:1.5}
+    .template-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+    .template-meta{font-size:11px;color:#999}
+    .template-actions{display:flex;gap:8px}
+    .create-card{border:2px dashed #ccc;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:48px;text-align:center;cursor:pointer;transition:all .2s;min-height:280px}
+    .create-card:hover{border-color:#000;background:#fafafa}
+    .search-filter-bar{display:flex;gap:12px;margin-bottom:24px}
+    .search-box{display:flex;align-items:center;gap:8px;background:#fff;border:1px solid #e5e5e5;padding:10px 14px;flex:1;max-width:400px}
+    .search-box input{border:none;background:none;outline:none;font-family:inherit;font-size:13px;flex:1}
+    .filter-group{display:flex;gap:8px}
+    .filter-btn{padding:10px 16px;background:#fff;border:1px solid #e5e5e5;font-family:inherit;font-size:13px;cursor:pointer;display:flex;align-items:center;gap:8px;transition:all .2s}
+    .filter-btn:hover{border-color:#999}
+    .filter-btn.active{background:#000;color:#fff;border-color:#000}
+    .sort-dropdown{position:relative}
+    .preview-panel{position:fixed;right:-400px;top:0;bottom:0;width:400px;background:#fff;border-left:1px solid #e5e5e5;z-index:100;transition:right .3s;display:flex;flex-direction:column}
+    .preview-panel.open{right:0}
+    .preview-header{padding:20px;border-bottom:1px solid #e5e5e5;display:flex;justify-content:space-between;align-items:center}
+    .preview-body{flex:1;overflow-y:auto;padding:20px}
+    .preview-footer{padding:20px;border-top:1px solid #e5e5e5;display:flex;gap:12px}
+    .preview-section{margin-bottom:24px}
+    .preview-section h4{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:#666;margin-bottom:12px}
+    .preview-item{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #f0f0f0;font-size:13px}
+    .preview-item:last-child{border-bottom:none}
+    .preview-item-label{color:#666}
+    .preview-item-value{font-weight:500}
+    .config-visual{background:#f5f5f5;padding:16px;margin-bottom:16px}
+    .config-visual-row{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+    .config-visual-row:last-child{margin-bottom:0}
+    .overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:99;display:none}
+    .overlay.open{display:block}
+    .modal{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#fff;width:100%;max-width:600px;max-height:90vh;overflow-y:auto;z-index:101;display:none}
+    .modal.open{display:block}
+    .modal-header{padding:24px;border-bottom:1px solid #e5e5e5;display:flex;justify-content:space-between;align-items:center}
+    .modal-body{padding:24px}
+    .modal-footer{padding:24px;border-top:1px solid #e5e5e5;display:flex;justify-content:flex-end;gap:12px}
+    .form-group{margin-bottom:20px}
+    .form-label{display:block;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:#666;margin-bottom:8px}
+    .form-input{width:100%;padding:12px;border:2px solid #e5e5e5;font-family:inherit;font-size:14px;transition:border-color .2s}
+    .form-input:focus{outline:none;border-color:#000}
+    .form-select{width:100%;padding:12px;border:2px solid #e5e5e5;font-family:inherit;font-size:14px;background:#fff}
+    .form-textarea{width:100%;padding:12px;border:2px solid #e5e5e5;font-family:inherit;font-size:14px;resize:vertical;min-height:80px}
+    .strategy-select{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+    .strategy-option{padding:16px 12px;border:2px solid #e5e5e5;text-align:center;cursor:pointer;transition:all .2s}
+    .strategy-option:hover{border-color:#999}
+    .strategy-option.selected{border-color:#000;background:#fafafa}
+    .strategy-option i{font-size:20px;margin-bottom:8px;display:block}
+    .strategy-option span{font-size:11px}
+    h4{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:#666;margin-bottom:12px}
+    .text-sm{font-size:13px}.text-xs{font-size:11px}.text-gray{color:#666}
+    .flex{display:flex}.flex-col{flex-direction:column}.flex-1{flex:1}
+    .gap-8{gap:8px}.gap-12{gap:12px}.gap-16{gap:16px}
+    .items-center{align-items:center}.justify-between{justify-content:space-between}
+    .mb-8{margin-bottom:8px}.mb-16{margin-bottom:16px}.mb-24{margin-bottom:24px}
+    .accent-line{height:2px;background:linear-gradient(90deg,#000 0%,transparent 100%);max-width:40px}
+    .star-rating{color:#ffc107;font-size:12px}
+    .avatar-stack{display:flex}
+    .avatar{width:28px;height:28px;border-radius:50%;background:#e5e5e5;border:2px solid #fff;margin-left:-8px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600}
+    .avatar:first-child{margin-left:0}
+  </style>
+</head>
+<body>
+<div class="app-frame">
+  <div class="app-header">
+    <div class="flex items-center gap-16">
+      <div class="app-logo"><i class="fas fa-mask"></i> MaskAnyone</div>
+      <div class="app-nav">
+        <a href="#">Dashboard</a>
+        <a href="#">Quick Mask</a>
+        <a href="#">Advanced</a>
+        <a href="#">Batch</a>
+        <a href="#" class="active">Templates</a>
+      </div>
+    </div>
+    <div class="flex items-center gap-12">
+      <button class="btn btn-ghost btn-sm"><i class="fas fa-download"></i> Import</button>
+      <button class="btn btn-primary btn-sm" onclick="openCreateModal()"><i class="fas fa-plus"></i> New Template</button>
+    </div>
+  </div>
+
+  <div class="main-content">
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">Anonymization <span>Templates</span></h1>
+        <p class="text-gray">Save and reuse your de-identification configurations</p>
+      </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="tabs">
+      <div class="tab active" onclick="switchTab(this, 'my')">
+        <i class="fas fa-user" style="margin-right:6px"></i>My Templates<span class="tab-count">6</span>
+      </div>
+      <div class="tab" onclick="switchTab(this, 'team')">
+        <i class="fas fa-users" style="margin-right:6px"></i>Team<span class="tab-count">8</span>
+      </div>
+      <div class="tab" onclick="switchTab(this, 'community')">
+        <i class="fas fa-globe" style="margin-right:6px"></i>Community<span class="tab-count">24</span>
+      </div>
+      <div class="tab" onclick="switchTab(this, 'official')">
+        <i class="fas fa-check-circle" style="margin-right:6px"></i>Official<span class="tab-count">5</span>
+      </div>
+    </div>
+
+    <!-- Search & Filter -->
+    <div class="search-filter-bar">
+      <div class="search-box">
+        <i class="fas fa-search" style="color:#999"></i>
+        <input type="text" placeholder="Search templates..." id="searchInput" oninput="filterTemplates()">
+      </div>
+      <div class="filter-group">
+        <button class="filter-btn active" onclick="toggleFilter(this)"><i class="fas fa-th"></i> All</button>
+        <button class="filter-btn" onclick="toggleFilter(this)"><i class="fas fa-walking"></i> Clinical</button>
+        <button class="filter-btn" onclick="toggleFilter(this)"><i class="fas fa-comments"></i> Interview</button>
+        <button class="filter-btn" onclick="toggleFilter(this)"><i class="fas fa-hand-paper"></i> Gesture</button>
+        <button class="filter-btn" onclick="toggleFilter(this)"><i class="fas fa-users"></i> Crowd</button>
+      </div>
+      <div class="flex-1"></div>
+      <button class="filter-btn">
+        <i class="fas fa-sort"></i> Sort: Most Used
+        <i class="fas fa-chevron-down" style="font-size:10px"></i>
+      </button>
+    </div>
+
+    <!-- Templates Grid -->
+    <div class="templates-grid" id="templatesGrid">
+      <!-- Create New Card -->
+      <div class="create-card" onclick="openCreateModal()">
+        <div class="icon-box icon-box-lg icon-box-outline" style="margin-bottom:16px">
+          <i class="fas fa-plus"></i>
+        </div>
+        <h3 style="margin-bottom:8px">Create Template</h3>
+        <p class="text-sm text-gray">Save your current configuration</p>
+      </div>
+
+      <!-- Template Cards will be rendered here -->
+    </div>
+  </div>
+</div>
+
+<!-- Preview Panel -->
+<div class="preview-panel" id="previewPanel">
+  <div class="preview-header">
+    <h3 id="previewTitle">Template Name</h3>
+    <button class="btn btn-icon btn-ghost" onclick="closePreview()"><i class="fas fa-times"></i></button>
+  </div>
+  <div class="preview-body">
+    <div class="config-visual">
+      <div class="config-visual-row">
+        <div class="icon-box icon-box-sm"><i class="fas fa-tint" id="previewStrategyIcon"></i></div>
+        <div>
+          <div class="text-xs text-gray">Hiding Strategy</div>
+          <div class="text-sm" style="font-weight:600" id="previewStrategy">Blurring</div>
+        </div>
+      </div>
+      <div class="config-visual-row">
+        <div class="icon-box icon-box-sm icon-box-gray"><i class="fas fa-running"></i></div>
+        <div>
+          <div class="text-xs text-gray">Overlay</div>
+          <div class="text-sm" style="font-weight:600" id="previewOverlay">MediaPipe Pose</div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="preview-section">
+      <h4>Description</h4>
+      <p class="text-sm" id="previewDesc">Template description goes here.</p>
+    </div>
+
+    <div class="preview-section">
+      <h4>Settings</h4>
+      <div class="preview-item">
+        <span class="preview-item-label">Target</span>
+        <span class="preview-item-value" id="previewTarget">Face + Body</span>
+      </div>
+      <div class="preview-item">
+        <span class="preview-item-label">Intensity</span>
+        <span class="preview-item-value" id="previewIntensity">80%</span>
+      </div>
+      <div class="preview-item">
+        <span class="preview-item-label">Edge Feather</span>
+        <span class="preview-item-value" id="previewFeather">10px</span>
+      </div>
+      <div class="preview-item">
+        <span class="preview-item-label">Fill Color</span>
+        <span class="preview-item-value" id="previewColor">#000000</span>
+      </div>
+    </div>
+
+    <div class="preview-section">
+      <h4>Usage</h4>
+      <div class="preview-item">
+        <span class="preview-item-label">Times Used</span>
+        <span class="preview-item-value" id="previewUsed">24</span>
+      </div>
+      <div class="preview-item">
+        <span class="preview-item-label">Created</span>
+        <span class="preview-item-value" id="previewCreated">Dec 10, 2025</span>
+      </div>
+      <div class="preview-item">
+        <span class="preview-item-label">Last Modified</span>
+        <span class="preview-item-value" id="previewModified">Dec 12, 2025</span>
+      </div>
+    </div>
+
+    <div class="preview-section">
+      <h4>Tags</h4>
+      <div class="flex gap-8" style="flex-wrap:wrap" id="previewTags">
+        <span class="tag tag-outline">Clinical</span>
+        <span class="tag tag-outline">Full Body</span>
+      </div>
+    </div>
+  </div>
+  <div class="preview-footer">
+    <button class="btn btn-secondary flex-1" onclick="editTemplate()"><i class="fas fa-edit"></i> Edit</button>
+    <button class="btn btn-primary flex-1" onclick="useTemplate()"><i class="fas fa-play"></i> Use Template</button>
+  </div>
+</div>
+
+<!-- Overlay -->
+<div class="overlay" id="overlay" onclick="closeAll()"></div>
+
+<!-- Create/Edit Modal -->
+<div class="modal" id="createModal">
+  <div class="modal-header">
+    <h2 style="font-size:20px;font-weight:600" id="modalTitle">Create New Template</h2>
+    <button class="btn btn-icon btn-ghost" onclick="closeCreateModal()"><i class="fas fa-times"></i></button>
+  </div>
+  <div class="modal-body">
+    <div class="form-group">
+      <label class="form-label">Template Name</label>
+      <input type="text" class="form-input" placeholder="e.g., Clinical Gait Analysis" id="templateName">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Description</label>
+      <textarea class="form-textarea" placeholder="Describe when to use this template..." id="templateDesc"></textarea>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Category</label>
+      <select class="form-select" id="templateCategory">
+        <option value="clinical">Clinical</option>
+        <option value="interview">Interview</option>
+        <option value="gesture">Gesture Research</option>
+        <option value="crowd">Crowd Analysis</option>
+        <option value="education">Education</option>
+        <option value="other">Other</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Hiding Strategy</label>
+      <div class="strategy-select">
+        <div class="strategy-option selected" onclick="selectModalStrategy(this, 'blur')">
+          <i class="fas fa-tint"></i>
+          <span>Blur</span>
+        </div>
+        <div class="strategy-option" onclick="selectModalStrategy(this, 'solid')">
+          <i class="fas fa-square-full"></i>
+          <span>Solid</span>
+        </div>
+        <div class="strategy-option" onclick="selectModalStrategy(this, 'pixel')">
+          <i class="fas fa-th"></i>
+          <span>Pixelate</span>
+        </div>
+        <div class="strategy-option" onclick="selectModalStrategy(this, 'contour')">
+          <i class="fas fa-draw-polygon"></i>
+          <span>Contour</span>
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Overlay</label>
+      <select class="form-select" id="templateOverlay">
+        <option value="none">None</option>
+        <option value="mediapipe">MediaPipe Pose</option>
+        <option value="openpose25">OpenPose Body25</option>
+        <option value="openpose135">OpenPose 135</option>
+      </select>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+      <div class="form-group" style="margin-bottom:0">
+        <label class="form-label">Intensity</label>
+        <input type="range" style="width:100%" value="80" id="templateIntensity">
+      </div>
+      <div class="form-group" style="margin-bottom:0">
+        <label class="form-label">Edge Feather</label>
+        <input type="range" style="width:100%" value="10" max="50" id="templateFeather">
+      </div>
+    </div>
+    <div class="form-group" style="margin-top:20px">
+      <label class="form-label">Visibility</label>
+      <div class="flex gap-16">
+        <label class="flex items-center gap-8 text-sm" style="cursor:pointer">
+          <input type="radio" name="visibility" value="private" checked> Private
+        </label>
+        <label class="flex items-center gap-8 text-sm" style="cursor:pointer">
+          <input type="radio" name="visibility" value="team"> Team
+        </label>
+        <label class="flex items-center gap-8 text-sm" style="cursor:pointer">
+          <input type="radio" name="visibility" value="public"> Public
+        </label>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-ghost" onclick="closeCreateModal()">Cancel</button>
+    <button class="btn btn-primary" onclick="saveTemplate()"><i class="fas fa-save"></i> Save Template</button>
+  </div>
+</div>
+
+<script>
+const templates = [
+  { id: 1, name: 'Gait Analysis Standard', desc: 'Full body mask with OpenPose skeleton overlay. Optimized for clinical movement studies.', category: 'clinical', strategy: 'solid', overlay: 'OpenPose 135', target: 'Full Body', intensity: 100, feather: 0, color: '#000', used: 47, featured: true, tags: ['Clinical', 'Full Body', 'Skeleton'], created: 'Nov 15, 2025', modified: 'Dec 12, 2025' },
+  { id: 2, name: 'Interview Archive', desc: 'Face blur with moderate intensity. Preserves context while ensuring participant anonymity.', category: 'interview', strategy: 'blur', overlay: 'None', target: 'Face Only', intensity: 75, feather: 15, color: '#000', used: 36, featured: false, tags: ['Interview', 'Face', 'Audio'], created: 'Oct 20, 2025', modified: 'Dec 10, 2025' },
+  { id: 3, name: 'Gesture Research', desc: 'Face and body masked with hands visible. Includes MediaPipe hand tracking overlay.', category: 'gesture', strategy: 'pixel', overlay: 'MediaPipe Hands', target: 'Face + Body', intensity: 85, feather: 5, color: '#000', used: 28, featured: true, tags: ['Gesture', 'Hands', 'Research'], created: 'Nov 1, 2025', modified: 'Dec 8, 2025' },
+  { id: 4, name: 'Classroom Recording', desc: 'Multi-person detection with selective masking. Teacher remains visible, students anonymized.', category: 'education', strategy: 'blur', overlay: 'None', target: 'Face Only', intensity: 70, feather: 10, color: '#000', used: 19, featured: false, tags: ['Education', 'Multi-person', 'Selective'], created: 'Sep 5, 2025', modified: 'Nov 28, 2025' },
+  { id: 5, name: 'Public Space Survey', desc: 'Light pixelation for crowd behavior studies. Balances privacy with behavioral visibility.', category: 'crowd', strategy: 'pixel', overlay: 'MediaPipe Pose', target: 'Face Only', intensity: 50, feather: 0, color: '#000', used: 15, featured: false, tags: ['Crowd', 'Public', 'Light'], created: 'Aug 12, 2025', modified: 'Oct 15, 2025' },
+  { id: 6, name: 'Focus Group Standard', desc: 'Consistent face blur for multi-participant sessions. Optimized for seated discussions.', category: 'interview', strategy: 'blur', overlay: 'None', target: 'Face Only', intensity: 80, feather: 12, color: '#000', used: 22, featured: false, tags: ['Focus Group', 'Interview', 'Multi-person'], created: 'Jul 20, 2025', modified: 'Sep 30, 2025' },
+];
+
+const categoryIcons = {
+  clinical: 'fa-walking',
+  interview: 'fa-comments',
+  gesture: 'fa-hand-paper',
+  crowd: 'fa-users',
+  education: 'fa-chalkboard-teacher',
+  other: 'fa-file'
+};
+
+const categoryColors = {
+  clinical: 'tag-blue',
+  interview: 'tag-green',
+  gesture: 'tag-purple',
+  crowd: 'tag-orange',
+  education: 'tag-blue',
+  other: 'tag-gray'
+};
+
+const strategyIcons = {
+  blur: 'fa-tint',
+  solid: 'fa-square-full',
+  pixel: 'fa-th',
+  contour: 'fa-draw-polygon'
+};
+
+function renderTemplates() {
+  const grid = document.getElementById('templatesGrid');
+  const createCard = grid.querySelector('.create-card');
+  
+  // Clear existing cards except create card
+  grid.innerHTML = '';
+  grid.appendChild(createCard);
+  
+  templates.forEach(t => {
+    const card = document.createElement('div');
+    card.className = `template-card ${t.featured ? 'featured' : ''}`;
+    card.onclick = () => openPreview(t);
+    
+    card.innerHTML = `
+      <div class="template-header">
+        <div class="flex justify-between items-start">
+          <div class="icon-box icon-box-lg">
+            <i class="fas ${categoryIcons[t.category]}"></i>
+          </div>
+          <span class="tag ${categoryColors[t.category]}">${t.category.toUpperCase()}</span>
+        </div>
+        <div class="accent-line" style="margin:16px 0 12px"></div>
+        <h3 class="template-title">${t.name}</h3>
+      </div>
+      <div class="template-body">
+        <p class="template-desc">${t.desc}</p>
+        <div class="template-tags">
+          ${t.tags.slice(0, 3).map(tag => `<span class="tag tag-outline">${tag}</span>`).join('')}
+        </div>
+      </div>
+      <div class="template-footer">
+        <div class="template-meta">
+          <i class="fas fa-chart-bar"></i> Used ${t.used} times
+        </div>
+        <div class="template-actions">
+          <button class="btn btn-sm btn-ghost" onclick="event.stopPropagation();duplicateTemplate(${t.id})"><i class="fas fa-copy"></i></button>
+          <button class="btn btn-sm btn-secondary" onclick="event.stopPropagation();useTemplate(${t.id})">Use</button>
+        </div>
+      </div>
+    `;
+    
+    grid.appendChild(card);
+  });
+}
+
+function openPreview(template) {
+  const panel = document.getElementById('previewPanel');
+  const overlay = document.getElementById('overlay');
+  
+  document.getElementById('previewTitle').textContent = template.name;
+  document.getElementById('previewDesc').textContent = template.desc;
+  document.getElementById('previewStrategy').textContent = template.strategy.charAt(0).toUpperCase() + template.strategy.slice(1);
+  document.getElementById('previewStrategyIcon').className = `fas ${strategyIcons[template.strategy]}`;
+  document.getElementById('previewOverlay').textContent = template.overlay;
+  document.getElementById('previewTarget').textContent = template.target;
+  document.getElementById('previewIntensity').textContent = template.intensity + '%';
+  document.getElementById('previewFeather').textContent = template.feather + 'px';
+  document.getElementById('previewColor').textContent = template.color;
+  document.getElementById('previewUsed').textContent = template.used;
+  document.getElementById('previewCreated').textContent = template.created;
+  document.getElementById('previewModified').textContent = template.modified;
+  document.getElementById('previewTags').innerHTML = template.tags.map(t => `<span class="tag tag-outline">${t}</span>`).join('');
+  
+  panel.classList.add('open');
+  overlay.classList.add('open');
+}
+
+function closePreview() {
+  document.getElementById('previewPanel').classList.remove('open');
+  document.getElementById('overlay').classList.remove('open');
+}
+
+function openCreateModal() {
+  document.getElementById('createModal').classList.add('open');
+  document.getElementById('overlay').classList.add('open');
+  document.getElementById('modalTitle').textContent = 'Create New Template';
+}
+
+function closeCreateModal() {
+  document.getElementById('createModal').classList.remove('open');
+  document.getElementById('overlay').classList.remove('open');
+}
+
+function closeAll() {
+  closePreview();
+  closeCreateModal();
+}
+
+function selectModalStrategy(el, strategy) {
+  document.querySelectorAll('.strategy-option').forEach(opt => opt.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+function saveTemplate() {
+  const name = document.getElementById('templateName').value;
+  if (!name) {
+    alert('Please enter a template name');
+    return;
+  }
+  
+  const newTemplate = {
+    id: templates.length + 1,
+    name: name,
+    desc: document.getElementById('templateDesc').value || 'Custom template',
+    category: document.getElementById('templateCategory').value,
+    strategy: document.querySelector('.strategy-option.selected')?.dataset?.strategy || 'blur',
+    overlay: document.getElementById('templateOverlay').value,
+    target: 'Face + Body',
+    intensity: document.getElementById('templateIntensity').value,
+    feather: document.getElementById('templateFeather').value,
+    color: '#000',
+    used: 0,
+    featured: false,
+    tags: [document.getElementById('templateCategory').value],
+    created: 'Dec 14, 2025',
+    modified: 'Dec 14, 2025'
+  };
+  
+  templates.unshift(newTemplate);
+  renderTemplates();
+  closeCreateModal();
+  
+  // Reset form
+  document.getElementById('templateName').value = '';
+  document.getElementById('templateDesc').value = '';
+}
+
+function useTemplate(id) {
+  const template = templates.find(t => t.id === id) || templates[0];
+  alert(`Applying template: ${template.name}\n\nRedirecting to Quick Mask with these settings...`);
+  closePreview();
+}
+
+function editTemplate() {
+  openCreateModal();
+  document.getElementById('modalTitle').textContent = 'Edit Template';
+}
+
+function duplicateTemplate(id) {
+  const template = templates.find(t => t.id === id);
+  if (template) {
+    const copy = { ...template, id: templates.length + 1, name: template.name + ' (Copy)', used: 0 };
+    templates.unshift(copy);
+    renderTemplates();
+  }
+}
+
+function switchTab(el, tab) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  // Filter templates by tab
+}
+
+function toggleFilter(el) {
+  document.querySelectorAll('.filter-btn').forEach(f => f.classList.remove('active'));
+  el.classList.add('active');
+}
+
+function filterTemplates() {
+  const search = document.getElementById('searchInput').value.toLowerCase();
+  document.querySelectorAll('.template-card').forEach(card => {
+    const title = card.querySelector('.template-title')?.textContent.toLowerCase() || '';
+    const desc = card.querySelector('.template-desc')?.textContent.toLowerCase() || '';
+    const match = title.includes(search) || desc.includes(search);
+    card.style.display = match ? 'block' : 'none';
+  });
+}
+
+// Initialize
+renderTemplates();
+</script>
+</body>
+</html>

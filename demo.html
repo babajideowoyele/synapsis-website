@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SYNAPSIS Demo - MaskAnyone in Action</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'sans': ['IBM Plex Sans', 'sans-serif'],
+                        'mono': ['IBM Plex Mono', 'monospace'],
+                    },
+                    colors: {
+                        'carbon': {
+                            'bg': '#ffffff',
+                            'bg-hover': '#f4f4f4',
+                            'border': '#e0e0e0',
+                            'text': '#161616',
+                            'text-secondary': '#525252',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'IBM Plex Sans', sans-serif;
+            background-color: #ffffff;
+            color: #161616;
+        }
+        .accent-bar {
+            height: 3px;
+            background: #161616;
+        }
+        .nav-link {
+            position: relative;
+            padding-bottom: 4px;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #161616;
+            transition: width 0.2s ease;
+        }
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        .btn-primary {
+            background: #161616;
+            color: #ffffff;
+            transition: all 0.15s ease;
+        }
+        .btn-primary:hover {
+            background: #393939;
+        }
+        .btn-secondary {
+            background: #ffffff;
+            color: #161616;
+            border: 1px solid #161616;
+            transition: all 0.15s ease;
+        }
+        .btn-secondary:hover {
+            background: #f4f4f4;
+        }
+        .video-container {
+            position: relative;
+            background: #000;
+            border: 1px solid #e0e0e0;
+        }
+        .video-container video {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        .video-label {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            padding: 4px 12px;
+            font-size: 12px;
+            font-family: 'IBM Plex Mono', monospace;
+            text-transform: uppercase;
+        }
+        .comparison-slider {
+            position: relative;
+            overflow: hidden;
+        }
+        .feature-icon {
+            width: 48px;
+            height: 48px;
+            border: 1px solid #e0e0e0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .demo-card {
+            border: 1px solid #e0e0e0;
+            transition: all 0.15s ease;
+        }
+        .demo-card:hover {
+            border-color: #161616;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <!-- Header -->
+    <header class="border-b border-carbon-border sticky top-0 z-50 bg-white">
+        <div class="accent-bar"></div>
+        <nav class="container mx-auto px-6 py-4">
+            <div class="flex justify-between items-center">
+                <a href="index.html" class="text-xl font-semibold tracking-tight">
+                    SYNAPSIS
+                </a>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="index.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Home</a>
+                    <a href="platform.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Platform</a>
+                    <a href="demo.html" class="text-sm font-medium border-b-2 border-carbon-text pb-1">Demo</a>
+                    <a href="training.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Training</a>
+                    <a href="resources.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Resources</a>
+                    <a href="network.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Network</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Hero -->
+        <section class="py-20 px-6">
+            <div class="container mx-auto max-w-5xl">
+                <div class="mb-4">
+                    <span class="text-xs font-mono uppercase tracking-widest text-carbon-text-secondary">Live Demo</span>
+                </div>
+                <h1 class="text-5xl font-semibold leading-tight mb-6">
+                    MaskAnyone in Action
+                </h1>
+                <p class="text-xl text-carbon-text-secondary max-w-2xl mb-10 leading-relaxed">
+                    See how SYNAPSIS transforms identifiable audiovisual data into privacy-preserving research material while maintaining analytical value.
+                </p>
+            </div>
+        </section>
+
+        <!-- Demo Videos -->
+        <section class="py-12 px-6 bg-carbon-bg-hover border-y border-carbon-border">
+            <div class="container mx-auto max-w-6xl">
+                <div class="mb-12">
+                    <span class="text-xs font-mono uppercase tracking-widest text-carbon-text-secondary">Before & After</span>
+                    <h2 class="text-3xl font-semibold mt-4">Face Masking Demonstration</h2>
+                    <p class="text-carbon-text-secondary mt-2">Compare original footage with de-identified output</p>
+                </div>
+
+                <!-- Demo 1: Sample Video -->
+                <div class="demo-card bg-white p-8 mb-8">
+                    <h3 class="font-semibold text-lg mb-4 flex items-center">
+                        <i class="fas fa-video mr-3 text-carbon-text-secondary"></i>
+                        Sample Recording - Face Swap Method
+                    </h3>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div class="video-container">
+                            <div class="video-label"><i class="fas fa-eye mr-2"></i>Original</div>
+                            <video controls poster="demos/poster-original.jpg">
+                                <source src="demos/sample_original.mp4" type="video/mp4">
+                                Your browser does not support video playback.
+                            </video>
+                        </div>
+                        <div class="video-container">
+                            <div class="video-label" style="background: rgba(22,101,52,0.9);"><i class="fas fa-mask mr-2"></i>Masked</div>
+                            <video controls poster="demos/poster-masked.jpg">
+                                <source src="demos/sample_masked.mp4" type="video/mp4">
+                                Your browser does not support video playback.
+                            </video>
+                        </div>
+                    </div>
+                    <div class="mt-6 flex flex-wrap gap-4">
+                        <div class="flex items-center gap-2 text-sm text-carbon-text-secondary">
+                            <i class="fas fa-cog"></i>
+                            <span>Method: Face Swap (DeepPrivacy2)</span>
+                        </div>
+                        <div class="flex items-center gap-2 text-sm text-carbon-text-secondary">
+                            <i class="fas fa-clock"></i>
+                            <span>Processing: ~2 min</span>
+                        </div>
+                        <div class="flex items-center gap-2 text-sm text-carbon-text-secondary">
+                            <i class="fas fa-check-circle text-green-600"></i>
+                            <span>Expression preserved</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Demo 2: Classroom -->
+                <div class="demo-card bg-white p-8 mb-8">
+                    <h3 class="font-semibold text-lg mb-4 flex items-center">
+                        <i class="fas fa-chalkboard-teacher mr-3 text-carbon-text-secondary"></i>
+                        Classroom Recording - Selective Masking
+                    </h3>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div class="video-container">
+                            <div class="video-label"><i class="fas fa-eye mr-2"></i>Original</div>
+                            <video controls>
+                                <source src="demos/classroom_original.mp4" type="video/mp4">
+                                Your browser does not support video playback.
+                            </video>
+                        </div>
+                        <div class="video-container">
+                            <div class="video-label" style="background: rgba(22,101,52,0.9);"><i class="fas fa-mask mr-2"></i>Students Masked</div>
+                            <video controls>
+                                <source src="demos/classroom_masked.mp4" type="video/mp4">
+                                Your browser does not support video playback.
+                            </video>
+                        </div>
+                    </div>
+                    <div class="mt-6 flex flex-wrap gap-4">
+                        <div class="flex items-center gap-2 text-sm text-carbon-text-secondary">
+                            <i class="fas fa-cog"></i>
+                            <span>Method: Selective (teacher visible, students masked)</span>
+                        </div>
+                        <div class="flex items-center gap-2 text-sm text-carbon-text-secondary">
+                            <i class="fas fa-users"></i>
+                            <span>Multi-person detection</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Placeholder for more demos -->
+                <div class="border border-dashed border-carbon-border p-8 text-center">
+                    <i class="fas fa-film text-4xl text-carbon-text-secondary mb-4"></i>
+                    <h3 class="font-semibold mb-2">More Demos Coming Soon</h3>
+                    <p class="text-sm text-carbon-text-secondary mb-4">Voice anonymization, pose extraction, and batch processing examples</p>
+                    <a href="survey.html" class="btn-secondary px-4 py-2 text-sm inline-block">
+                        Request specific demo <i class="fas fa-arrow-right ml-2"></i>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Masking Methods -->
+        <section class="py-20 px-6">
+            <div class="container mx-auto max-w-5xl">
+                <div class="mb-12">
+                    <span class="text-xs font-mono uppercase tracking-widest text-carbon-text-secondary">Methods</span>
+                    <h2 class="text-3xl font-semibold mt-4">Available Masking Techniques</h2>
+                </div>
+                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div class="border border-carbon-border p-6">
+                        <div class="feature-icon mb-4">
+                            <i class="fas fa-square text-xl"></i>
+                        </div>
+                        <h3 class="font-semibold mb-2">Pixelation</h3>
+                        <p class="text-sm text-carbon-text-secondary">Block-based face obscuring. Fast, simple, widely understood.</p>
+                        <div class="mt-4 text-xs font-mono text-carbon-text-secondary">Privacy: High</div>
+                    </div>
+                    <div class="border border-carbon-border p-6">
+                        <div class="feature-icon mb-4">
+                            <i class="fas fa-circle text-xl" style="filter: blur(2px);"></i>
+                        </div>
+                        <h3 class="font-semibold mb-2">Blur</h3>
+                        <p class="text-sm text-carbon-text-secondary">Gaussian blur over facial regions. Adjustable intensity.</p>
+                        <div class="mt-4 text-xs font-mono text-carbon-text-secondary">Privacy: Medium-High</div>
+                    </div>
+                    <div class="border border-carbon-border p-6">
+                        <div class="feature-icon mb-4">
+                            <i class="fas fa-masks-theater text-xl"></i>
+                        </div>
+                        <h3 class="font-semibold mb-2">Face Swap</h3>
+                        <p class="text-sm text-carbon-text-secondary">Replace with synthetic face preserving expressions and gaze.</p>
+                        <div class="mt-4 text-xs font-mono text-carbon-text-secondary">Privacy: High | Utility: High</div>
+                    </div>
+                    <div class="border border-carbon-border p-6">
+                        <div class="feature-icon mb-4">
+                            <i class="fas fa-person text-xl"></i>
+                        </div>
+                        <h3 class="font-semibold mb-2">Skeleton Only</h3>
+                        <p class="text-sm text-carbon-text-secondary">Extract pose data, render skeleton visualization only.</p>
+                        <div class="mt-4 text-xs font-mono text-carbon-text-secondary">Privacy: Maximum</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pose Extraction -->
+        <section class="py-20 px-6 bg-carbon-bg-hover border-y border-carbon-border">
+            <div class="container mx-auto max-w-5xl">
+                <div class="grid md:grid-cols-2 gap-16 items-center">
+                    <div>
+                        <span class="text-xs font-mono uppercase tracking-widest text-carbon-text-secondary">Data Extraction</span>
+                        <h2 class="text-3xl font-semibold mt-4 mb-6">Pose & Kinematic Data</h2>
+                        <p class="text-carbon-text-secondary mb-6">
+                            Beyond masking, SYNAPSIS extracts skeletal pose data from videos - enabling gesture analysis, movement studies, and behavioral research without exposing identity.
+                        </p>
+                        <ul class="space-y-3">
+                            <li class="flex items-start gap-3">
+                                <i class="fas fa-check text-green-600 mt-1"></i>
+                                <span class="text-sm">33 body keypoints (MediaPipe) or 25 (OpenPose)</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i class="fas fa-check text-green-600 mt-1"></i>
+                                <span class="text-sm">Hand landmarks (21 points per hand)</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i class="fas fa-check text-green-600 mt-1"></i>
+                                <span class="text-sm">Export to JSON, CSV for analysis in R/Python</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i class="fas fa-check text-green-600 mt-1"></i>
+                                <span class="text-sm">Blendshape extraction for facial expression analysis</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="border border-carbon-border bg-white p-4">
+                        <div class="bg-carbon-text text-white p-4 font-mono text-xs overflow-x-auto">
+<pre>{
+  "frame": 42,
+  "timestamp": 1.4,
+  "pose": {
+    "nose": [0.52, 0.31, 0.98],
+    "left_shoulder": [0.61, 0.48, 0.95],
+    "right_shoulder": [0.43, 0.47, 0.96],
+    "left_wrist": [0.71, 0.62, 0.89],
+    "right_wrist": [0.33, 0.58, 0.91]
+    // ... 33 keypoints total
+  },
+  "hands": {
+    "left": [...],
+    "right": [...]
+  }
+}</pre>
+                        </div>
+                        <div class="mt-2 text-xs text-carbon-text-secondary text-center">Sample pose data output (JSON)</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA -->
+        <section class="py-20 px-6">
+            <div class="container mx-auto max-w-5xl text-center">
+                <h2 class="text-3xl font-semibold mb-4">Ready to Try?</h2>
+                <p class="text-carbon-text-secondary mb-8 max-w-xl mx-auto">
+                    Contact us to schedule a live demo or request access to the pilot platform.
+                </p>
+                <div class="flex flex-wrap justify-center gap-4">
+                    <a href="mailto:babajide.owoyele@ru.nl" class="btn-primary px-6 py-3 font-medium">
+                        <i class="fas fa-envelope mr-2"></i> Request Demo
+                    </a>
+                    <a href="training.html" class="btn-secondary px-6 py-3 font-medium">
+                        <i class="fas fa-graduation-cap mr-2"></i> View Training
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-carbon-border py-12 px-6">
+        <div class="container mx-auto max-w-5xl">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-8">
+                <div>
+                    <div class="font-semibold text-lg mb-2">SYNAPSIS</div>
+                    <div class="text-sm text-carbon-text-secondary">
+                        Funded by NWO TDCC-SSH
+                    </div>
+                </div>
+                <div class="flex gap-8">
+                    <a href="index.html" class="text-sm text-carbon-text-secondary hover:text-carbon-text">Home</a>
+                    <a href="platform.html" class="text-sm text-carbon-text-secondary hover:text-carbon-text">Platform</a>
+                    <a href="training.html" class="text-sm text-carbon-text-secondary hover:text-carbon-text">Training</a>
+                    <a href="https://github.com/MaskAnyone/MaskAnyone" class="text-sm text-carbon-text-secondary hover:text-carbon-text">GitHub</a>
+                </div>
+            </div>
+            <div class="mt-8 pt-8 border-t border-carbon-border flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div class="text-sm text-carbon-text-secondary">
+                    © 2026 SYNAPSIS Project. Radboud University.
+                </div>
+                <div class="flex gap-4 text-xs text-carbon-text-secondary">
+                    <a href="https://www.nwo.nl/en/projects/zazlb40252" class="hover:text-carbon-text">NWO</a>
+                    <a href="https://tdcc.nl/tdcc-ssh-challenge-projects/synapsis/" class="hover:text-carbon-text">TDCC-SSH</a>
+                    <a href="https://zenodo.org/records/16996002" class="hover:text-carbon-text">Zenodo</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

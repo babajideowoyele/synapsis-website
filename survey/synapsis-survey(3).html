@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SYNAPSIS Survey - Section 7: Advanced Features & Future Needs</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .accent-line {
+            height: 2px;
+            background: linear-gradient(90deg, black 0%, transparent 100%);
+        }
+        .radio-custom, .checkbox-custom {
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #e5e7eb;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .radio-custom {
+            border-radius: 50%;
+        }
+        .radio-custom:checked, .checkbox-custom:checked {
+            background: black;
+            border-color: black;
+        }
+        .radio-custom:checked::after, .checkbox-custom:checked::after {
+            content: '✓';
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        .progress-bar {
+            height: 4px;
+            background: #e5e7eb;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background: black;
+            transition: width 0.5s ease;
+        }
+        .btn-primary {
+            background: black;
+            color: white;
+            border: 2px solid black;
+            padding: 12px 32px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover {
+            background: white;
+            color: black;
+        }
+        .btn-secondary {
+            background: white;
+            color: black;
+            border: 2px solid #e5e7eb;
+            padding: 12px 32px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .btn-secondary:hover {
+            border-color: black;
+        }
+        .question-card {
+            background: white;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 32px;
+            margin-bottom: 24px;
+            transition: all 0.3s ease;
+        }
+        .question-card:hover {
+            border-color: #d1d5db;
+        }
+        .input-text {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        .input-text:focus {
+            outline: none;
+            border-color: black;
+        }
+        .option-label {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .option-label:hover {
+            border-color: #d1d5db;
+            background: #f9fafb;
+        }
+        .option-label.selected {
+            border-color: black;
+            background: #f9fafb;
+        }
+        .rating-scale {
+            display: grid;
+            grid-template-columns: 2fr repeat(4, 1fr);
+            gap: 8px;
+            align-items: center;
+            padding: 12px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            transition: all 0.3s ease;
+        }
+        .rating-scale:hover {
+            border-color: #d1d5db;
+            background: #f9fafb;
+        }
+        .rating-option {
+            text-align: center;
+        }
+        .rating-option input[type="radio"] {
+            margin: 0 auto;
+        }
+        .rating-header {
+            display: grid;
+            grid-template-columns: 2fr repeat(4, 1fr);
+            gap: 8px;
+            padding: 12px;
+            font-weight: 600;
+            text-align: center;
+            font-size: 11px;
+            color: #6b7280;
+        }
+        .rating-header div:first-child {
+            text-align: left;
+        }
+        .info-box {
+            background: #f9fafb;
+            border-left: 4px solid black;
+            padding: 16px;
+            margin-bottom: 16px;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body class="bg-white">
+    <!-- Header -->
+    <header class="bg-white border-b-2 border-black sticky top-0 z-50">
+        <nav class="container mx-auto px-6 py-4">
+            <div class="flex justify-between items-center">
+                <a href="index.html" class="text-xl font-semibold flex items-center">
+                    <i class="fas fa-link mr-2"></i>
+                    SYNAPSIS Survey
+                </a>
+                <div class="text-sm text-gray-600">
+                    Section 7 of 10
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Progress Bar -->
+    <div class="bg-white border-b border-gray-200">
+        <div class="container mx-auto px-6 py-4">
+            <div class="progress-bar">
+                <div class="progress-fill" style="width: 70%;"></div>
+            </div>
+            <div class="flex justify-between mt-2 text-xs text-gray-600">
+                <span>Advanced Features & Future Needs</span>
+                <span>70% Complete</span>
+            </div>
+        </div>
+    </div>
+
+    <main class="container mx-auto px-6 py-12 max-w-5xl">
+        <!-- Section Header -->
+        <div class="text-center mb-12">
+            <h1 class="text-4xl font-light mb-4">Section 7: Advanced Features & Future Needs</h1>
+            <div class="accent-line mb-6 max-w-md mx-auto"></div>
+            <p class="text-gray-600 max-w-2xl mx-auto">
+                Help us understand your interest in advanced analytics, integrations, and collaborative features.
+            </p>
+        </div>
+
+        <form id="surveyForm">
+            <!-- Question 7.1 -->
+            <div class="question-card">
+                <label class="block mb-4">
+                    <span class="text-lg font-semibold">7.1 Would you be interested in advanced analytics features?</span>
+                    <span class="text-red-500">*</span>
+                    <p class="text-sm text-gray-600 mt-1">Rate your interest in each feature</p>
+                </label>
+                
+                <!-- Rating Scale Header -->
+                <div class="rating-header">
+                    <div>Feature</div>
+                    <div>Very Interested</div>
+                    <div>Somewhat Interested</div>
+                    <div>Not Interested</div>
+                    <div>Not Sure</div>
+                </div>
+
+                <div class="rating-scale">
+                    <div class="text-sm">Automatic gesture classification</div>
+                    <div class="rating-option"><input type="radio" name="analytics_gesture" value="very" class="radio-custom" required></div>
+                    <div class="rating-option"><input type="radio" name="analytics_gesture" value="somewhat" class="radio-custom"></div>
+                    <div class="rating-option"><input type="radio" name="analytics_gesture" value="not" class="radio-custom"></div>
+                    <div class="rating-option"><input type="radio" name="analytics_gesture" value="unsure" class="radio-custom"></div>
+                </div>
+
+                <div class="rating-scale">
+                    <div class="text-sm">Prosody and intonation extraction</div>
+                    <div class="rating-option"><input type="radio" name="analytics_prosody" value="very" class="radio-custom" required></div>
+                    <div class="rating-option"><input type="radio" name="analytics_prosody" value="somewhat" class="radio-custom"></div>
+                    <div class="rating-option"><input type="radio" name="analytics_prosody" value="not" class="radio-custom"></div>
+                    <div class="rating-option"><input type="radio" name="analytics_prosody" value="unsure" class="radio-custom"></div>
+                </div>
+
+                <div class="rating-scale">
+                    <div class="text-sm">Emotional expression analysis</div>
+                    <div class="rating-option"><input type="radio" name="analytics_emotion" value="very" class="radio-custom" required></div>
+                    <div class="rating-option"><input type="radio" name="analytics_emotion" value="somewhat" class="radio-custom"></div>
+                    <div class="rating-option"><input type="radio" name="analytics_emotion" value="not" class="radio-custom"></div>
+                    <div class="rating-option"><input type="radio" name="analytics_emotion" value="unsure" class="radio-custom"></div>
+                </div>
+
+                <div class="rating-scale">
+                    <div class="text-sm">Gaze tracking and attention analysis</div>
+                    <div class="rating-option"><input type="radio" name="analytics_gaze" value="very" class="radio-custom" required></div>
+                    <div class="rating-option"><input type="radio" name="analytics_gaze" value="somewhat" class="radio-custom"></div>
+                    <div class="rating-option"><input type="radio" name="analytics_gaze" value="not" class="radio-custom"></div>
+                    <div class="rating-option"><input type="radio" name="analytics_gaze" value="unsure" class="radio-custom"></div>
+                </div>
+
+                <div class="rating-scale">
+                    <div class="text-sm">Multi-party interaction dynamics</div>
+                    <div class="rating-option"><input type="radio" name="analytics_multiparty" value="very" class="radio-custom" required></div>
+                    <div class="rating-option"><input type="radio" name="analytics_multiparty" value="somewhat" class="radio-custom"></div>
+                    <div class="rating-option"><input type="radio" name="analytics_multiparty" value="not" class="radio-custom"></div>
+                    <div class="rating-option"><input type="radio" name="analytics_multiparty" value="unsure" class="radio-custom"></div>
+                </div>
+
+                <div class="rating-scale">
+                    <div class="text-sm">Cross-modal synchronization analysis</div>
+                    <div class="rating-option"><input type="radio" name="analytics_crossmodal" value="very" class="radio-custom" required></div>
+                    <div class="rating-option"><input type="radio" name="analytics_crossmodal" value="somewhat" class="radio-custom"></div>
+                    <div class="rating-option"><input type="radio" name="analytics_crossmodal" value="not" class="radio-custom"></div>
+                    <div class="rating-option"><input type="radio" name="analytics_crossmodal" value="unsure" class="radio-custom"></div>
+                </div>
+
+                <div class="rating-scale">
+                    <div class="text-sm">Machine learning model training on your data</div>
+                    <div class="rating-option"><input type="radio" name="analytics_ml" value="very" class="radio-custom" required></div>
+                    <div class="rating-option"><input type="radio" name="analytics_ml" value="somewhat" class="radio-custom"></div>
+                    <div class="rating-option"><input type="radio" name="analytics_ml" value="not" class="radio-custom"></div>
+                    <div class="rating-option"><input type="radio" name="analytics_ml" value="unsure" class="radio-custom"></div>
+                </div>
+            </div>
+
+            <!-- Question 7.2 -->
+            <div class="question-card">
+                <label class="block mb-4">
+                    <span class="text-lg font-semibold">7.2 How important is interoperability with other research tools/platforms?</span>
+                    <span class="text-red-500">*</span>
+                </label>
+                <div class="space-y-3">
+                    <label class="option-label">
+                        <input type="radio" name="interoperability" value="essential" class="radio-custom" required>
+                        <div>
+                            <div class="font-medium">Essential</div>
+                            <div class="text-sm text-gray-600">Must integrate with my existing tools</div>
+                        </div>
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="interoperability" value="very" class="radio-custom">
+                        <div>
+                            <div class="font-medium">Very important</div>
+                            <div class="text-sm text-gray-600">Strong preference for integration</div>
+                        </div>
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="interoperability" value="important" class="radio-custom">
+                        <div>
+                            <div class="font-medium">Important</div>
+                            <div class="text-sm text-gray-600">Helpful but not critical</div>
+                        </div>
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="interoperability" value="nice" class="radio-custom">
+                        <span>Nice to have</span>
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="interoperability" value="not" class="radio-custom">
+                        <span>Not important - can work standalone</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Question 7.3 -->
+            <div class="question-card">
+                <label class="block mb-4">
+                    <span class="text-lg font-semibold">7.3 Which tools would you most want integration with?</span>
+                    <span class="text-red-500">*</span>
+                    <p class="text-sm text-gray-600 mt-1">Select all that apply</p>
+                </label>
+                <div class="space-y-3">
+                    <label class="option-label">
+                        <input type="checkbox" name="integration_tools" value="elan" class="checkbox-custom">
+                        <span>ELAN (annotation software)</span>
+                    </label>
+                    <label class="option-label">
+                        <input type="checkbox" name="integration_tools" value="praat" class="checkbox-custom">
+                        <span>Praat (phonetics analysis)</span>
+                    </label>
+                    <label class="option-label">
+                        <input type="checkbox" name="integration_tools" value="qualitative" class="checkbox-custom">
+                        <span>MAXQDA / NVivo (qualitative analysis)</span>
+                    </label>
+                    <label class="option-label">
+                        <input type="checkbox" name="integration_tools" value="r" class="checkbox-custom">
+                        <span>R/RStudio</span>
+                    </label>
+                    <label class="option-label">
+                        <input type="checkbox" name="integration_tools" value="python" class="checkbox-custom">
+                        <span>Python (Jupyter notebooks)</span>
+                    </label>
+                    <label class="option-label">
+                        <input type="checkbox" name="integration_tools" value="excel" class="checkbox-custom">
+                        <span>Excel/spreadsheet software</span>
+                    </label>
+                    <label class="option-label">
+                        <input type="checkbox" name="integration_tools" value="stats" class="checkbox-custom">
+                        <span>Statistical packages (SPSS, Stata)</span>
+                    </label>
+                    <label class="option-label">
+                        <input type="checkbox" name="integration_tools" value="reference" class="checkbox-custom">
+                        <span>Reference managers (Zotero, Mendeley)</span>
+                    </label>
+                    <label class="option-label">
+                        <input type="checkbox" name="integration_tools" value="git" class="checkbox-custom">
+                        <span>Git/version control</span>
+                    </label>
+                    <label class="option-label">
+                        <input type="checkbox" name="integration_tools" value="osf" class="checkbox-custom">
+                        <span>OSF (Open Science Framework)</span>
+                    </label>
+                    <label class="option-label">
+                        <input type="checkbox" name="integration_tools" value="none" class="checkbox-custom">
+                        <span>None - prefer standalone platform</span>
+                    </label>
+                    <label class="option-label">
+                        <input type="checkbox" name="integration_tools" value="other" class="checkbox-custom">
+                        <span>Other</span>
+                    </label>
+                </div>
+                <div id="integrationOther" class="mt-3 hidden">
+                    <input type="text" class="input-text" placeholder="Please specify tools for integration">
+                </div>
+            </div>
+
+            <!-- Question 7.4 -->
+            <div class="question-card">
+                <label class="block mb-4">
+                    <span class="text-lg font-semibold">7.4 Would you use the platform for collaborative research projects?</span>
+                    <span class="text-red-500">*</span>
+                </label>
+                <div class="space-y-3">
+                    <label class="option-label">
+                        <input type="radio" name="collaboration" value="regularly" class="radio-custom" required>
+                        <div>
+                            <div class="font-medium">Yes, regularly</div>
+                            <div class="text-sm text-gray-600">Collaboration features are important</div>
+                        </div>
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="collaboration" value="occasionally" class="radio-custom">
+                        <div>
+                            <div class="font-medium">Yes, occasionally</div>
+                            <div class="text-sm text-gray-600">Would use for some projects</div>
+                        </div>
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="collaboration" value="probably_not" class="radio-custom">
+                        <div>
+                            <div class="font-medium">Probably not</div>
+                            <div class="text-sm text-gray-600">Mostly solo work</div>
+                        </div>
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="collaboration" value="no" class="radio-custom">
+                        <span>No - not relevant to my workflow</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Question 7.5 -->
+            <div class="question-card">
+                <label class="block mb-4">
+                    <span class="text-lg font-semibold">7.5 What collaboration features would be most valuable?</span>
+                    <span class="text-red-500">*</span>
+                    <p class="text-sm text-gray-600 mt-1">Select all that apply</p>
+                </label>
+                <div class="space-y-3">
+                    <label class="option-label">
+                        <input type="checkbox" name="collab_features" value="shared_spaces" class="checkbox-custom">
+                        <span>Shared project spaces</span>
+                    </label>
+                    <label class="option-label">
+                        <input type="checkbox" name="collab_features" value="role_based" class="checkbox-custom">
+                        <span>Role-based access control (PI, researcher, annotator)</span>
+                    </label>
+                    <label class="option-label">
+                        <input type="checkbox" name="collab_features" value="commenting" class="checkbox-custom">
+                        <span>Commenting and annotation sharing</span>
+                    </label>
+                    <label class="option-label">
+                        <input type="checkbox" name="collab_features" value="version_tracking" class="checkbox-custom">
+                        <span>Version tracking and comparison</span>
+                    </label>
+                    <label class="option-label">
+                        <input type="checkbox" name="collab_features" value="activity_logs" class="checkbox-custom">
+                        <span>Activity logs/audit trails</span>
+                    </label>
+                    <label class="option-label">
+                        <input type="checkbox" name="collab_features" value="realtime" class="checkbox-custom">
+                        <span>Real-time collaboration</span>
+                    </label>
+                    <label class="option-label">
+                        <input type="checkbox" name="collab_features" value="task_management" class="checkbox-custom">
+                        <span>Task management/assignment</span>
+                    </label>
+                    <label class="option-label">
+                        <input type="checkbox" name="collab_features" value="not_applicable" class="checkbox-custom">
+                        <span>Not applicable - don't need collaboration features</span>
+                    </label>
+                    <label class="option-label">
+                        <input type="checkbox" name="collab_features" value="other" class="checkbox-custom">
+                        <span>Other</span>
+                    </label>
+                </div>
+                <div id="collabOther" class="mt-3 hidden">
+                    <input type="text" class="input-text" placeholder="Please specify collaboration features">
+                </div>
+            </div>
+
+            <!-- Navigation Buttons -->
+            <div class="flex justify-between items-center mt-12 pt-8 border-t-2 border-gray-200">
+                <button type="button" class="btn-secondary" onclick="window.location.href='survey-section6.html'">
+                    <i class="fas fa-arrow-left mr-2"></i>Previous
+                </button>
+                <button type="submit" class="btn-primary">
+                    Next Section<i class="fas fa-arrow-right ml-2"></i>
+                </button>
+            </div>
+        </form>
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t-2 border-black py-8 mt-16">
+        <div class="container mx-auto px-6">
+            <div class="flex flex-col md:flex-row md:justify-between md:items-center">
+                <p class="text-sm text-gray-600">© 2025 SYNAPSIS Project | NWO TDCC-SSH</p>
+                <p class="text-sm text-gray-600">Questions? Contact: synapsis@example.org</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Handle "Other" option visibility
+        document.querySelectorAll('input[name="integration_tools"]').forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                const otherDiv = document.getElementById('integrationOther');
+                const otherChecked = document.querySelector('input[name="integration_tools"][value="other"]').checked;
+                otherDiv.classList.toggle('hidden', !otherChecked);
+            });
+        });
+
+        document.querySelectorAll('input[name="collab_features"]').forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                const otherDiv = document.getElementById('collabOther');
+                const otherChecked = document.querySelector('input[name="collab_features"][value="other"]').checked;
+                otherDiv.classList.toggle('hidden', !otherChecked);
+            });
+        });
+
+        // Visual feedback for selected options
+        document.querySelectorAll('.option-label').forEach(label => {
+            const input = label.querySelector('input');
+            if (input && input.type === 'radio') {
+                input.addEventListener('change', function() {
+                    document.querySelectorAll(`input[name="${input.name}"]`).forEach(radio => {
+                        const parentLabel = radio.closest('.option-label');
+                        if (parentLabel) parentLabel.classList.remove('selected');
+                    });
+                    const parentLabel = input.closest('.option-label');
+                    if (parentLabel && input.checked) {
+                        parentLabel.classList.add('selected');
+                    }
+                });
+            }
+        });
+
+        // Form submission
+        document.getElementById('surveyForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Save to localStorage
+            const formData = new FormData(this);
+            const responses = Object.fromEntries(formData);
+            localStorage.setItem('synapsis_survey_section7', JSON.stringify(responses));
+            
+            // Navigate to next section
+            window.location.href = 'survey-section8.html';
+        });
+    </script>
+</body>
+</html>

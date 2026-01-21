@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SYNAPSIS Training & Events</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'sans': ['IBM Plex Sans', 'sans-serif'],
+                        'mono': ['IBM Plex Mono', 'monospace'],
+                    },
+                    colors: {
+                        'carbon': {
+                            'bg': '#ffffff',
+                            'bg-hover': '#f4f4f4',
+                            'border': '#e0e0e0',
+                            'text': '#161616',
+                            'text-secondary': '#525252',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'IBM Plex Sans', sans-serif;
+            background-color: #ffffff;
+            color: #161616;
+        }
+        .accent-bar {
+            height: 3px;
+            background: #161616;
+        }
+        .card {
+            border: 1px solid #e0e0e0;
+            transition: all 0.15s ease;
+        }
+        .card:hover {
+            border-color: #161616;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.1);
+        }
+        .btn-primary {
+            background: #161616;
+            color: #ffffff;
+            transition: all 0.15s ease;
+        }
+        .btn-primary:hover {
+            background: #393939;
+        }
+        .btn-secondary {
+            background: #ffffff;
+            color: #161616;
+            border: 1px solid #161616;
+            transition: all 0.15s ease;
+        }
+        .btn-secondary:hover {
+            background: #f4f4f4;
+        }
+        .nav-link {
+            position: relative;
+            padding-bottom: 4px;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #161616;
+            transition: width 0.2s ease;
+        }
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        .learning-path {
+            position: relative;
+            padding-left: 50px;
+            padding-bottom: 40px;
+        }
+        .learning-path::before {
+            content: '';
+            position: absolute;
+            left: 19px;
+            top: 30px;
+            bottom: 0;
+            width: 2px;
+            background: #e0e0e0;
+        }
+        .learning-path:last-child::before {
+            display: none;
+        }
+        .learning-path-icon {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 40px;
+            height: 40px;
+            background: #161616;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .badge {
+            display: inline-block;
+            padding: 2px 8px;
+            font-size: 11px;
+            font-family: 'IBM Plex Mono', monospace;
+            text-transform: uppercase;
+        }
+        .badge-upcoming {
+            background: #161616;
+            color: white;
+        }
+        .badge-level {
+            background: #f4f4f4;
+            border: 1px solid #e0e0e0;
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <!-- Header -->
+    <header class="border-b border-carbon-border sticky top-0 z-50 bg-white">
+        <div class="accent-bar"></div>
+        <nav class="container mx-auto px-6 py-4">
+            <div class="flex justify-between items-center">
+                <a href="index.html" class="text-xl font-semibold tracking-tight">
+                    SYNAPSIS
+                </a>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="index.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Home</a>
+                    <a href="platform.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Platform</a>
+                    <a href="training.html" class="text-sm font-medium border-b-2 border-carbon-text pb-1">Training</a>
+                    <a href="resources.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Resources</a>
+                    <a href="network.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Network</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Hero -->
+        <section class="py-20 px-6">
+            <div class="container mx-auto max-w-5xl">
+                <div class="mb-4">
+                    <span class="text-xs font-mono uppercase tracking-widest text-carbon-text-secondary">Training</span>
+                </div>
+                <h1 class="text-5xl font-semibold leading-tight mb-6">
+                    Masking School
+                </h1>
+                <p class="text-xl text-carbon-text-secondary max-w-2xl mb-10 leading-relaxed">
+                    Building digital competence in privacy-aware audiovisual data management. Join our comprehensive training programs designed for SSH researchers and data stewards.
+                </p>
+                <div class="flex flex-wrap gap-4">
+                    <a href="#courses" class="btn-primary px-6 py-3 font-medium">
+                        View Courses <i class="fas fa-arrow-right ml-2"></i>
+                    </a>
+                    <a href="#calendar" class="btn-secondary px-6 py-3 font-medium">
+                        Event Calendar
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Learning Paths -->
+        <section class="py-20 px-6 bg-carbon-bg-hover border-y border-carbon-border">
+            <div class="container mx-auto max-w-5xl">
+                <div class="mb-12">
+                    <span class="text-xs font-mono uppercase tracking-widest text-carbon-text-secondary">Paths</span>
+                    <h2 class="text-3xl font-semibold mt-4">Learning Paths</h2>
+                </div>
+                <div class="grid md:grid-cols-2 gap-12">
+                    <div>
+                        <div class="learning-path">
+                            <div class="learning-path-icon">
+                                <i class="fas fa-user-graduate"></i>
+                            </div>
+                            <div class="border border-carbon-border bg-white p-6">
+                                <h3 class="font-semibold mb-2">For Researchers</h3>
+                                <p class="text-sm text-carbon-text-secondary mb-4">Learn to de-identify audiovisual data, extract behavioral features, and integrate masking into research workflows.</p>
+                                <ul class="space-y-2 text-sm">
+                                    <li class="flex items-center gap-2"><i class="fas fa-check text-green-600"></i> Introduction to Masking (1.5h)</li>
+                                    <li class="flex items-center gap-2"><i class="fas fa-check text-green-600"></i> Hands-on Workshop (4h)</li>
+                                    <li class="flex items-center gap-2"><i class="fas fa-check text-green-600"></i> Summer/Winter School (3 days)</li>
+                                </ul>
+                                <div class="mt-4 pt-4 border-t border-carbon-border text-sm text-carbon-text-secondary">
+                                    <span class="font-medium">Duration:</span> ~20 hours | <span class="font-medium">Cost:</span> Free for partners
+                                </div>
+                            </div>
+                        </div>
+                        <div class="learning-path">
+                            <div class="learning-path-icon">
+                                <i class="fas fa-database"></i>
+                            </div>
+                            <div class="border border-carbon-border bg-white p-6">
+                                <h3 class="font-semibold mb-2">For Data Stewards</h3>
+                                <p class="text-sm text-carbon-text-secondary mb-4">Develop expertise in data governance, GDPR compliance, and supporting researchers with privacy-aware data management.</p>
+                                <ul class="space-y-2 text-sm">
+                                    <li class="flex items-center gap-2"><i class="fas fa-check text-green-600"></i> Data Governance Fundamentals (4h)</li>
+                                    <li class="flex items-center gap-2"><i class="fas fa-check text-green-600"></i> Masking Lab Co-creation (8h)</li>
+                                    <li class="flex items-center gap-2"><i class="fas fa-check text-green-600"></i> Train-the-Trainer Workshop</li>
+                                </ul>
+                                <div class="mt-4 pt-4 border-t border-carbon-border text-sm text-carbon-text-secondary">
+                                    <span class="font-medium">Duration:</span> ~15 hours | <span class="font-medium">Cost:</span> Free for partners
+                                </div>
+                            </div>
+                        </div>
+                        <div class="learning-path">
+                            <div class="learning-path-icon">
+                                <i class="fas fa-code"></i>
+                            </div>
+                            <div class="border border-carbon-border bg-white p-6">
+                                <h3 class="font-semibold mb-2">For Developers</h3>
+                                <p class="text-sm text-carbon-text-secondary mb-4">Contribute to the SYNAPSIS platform, develop new masking algorithms, and build custom integrations.</p>
+                                <ul class="space-y-2 text-sm">
+                                    <li class="flex items-center gap-2"><i class="fas fa-check text-green-600"></i> Platform Architecture (2h)</li>
+                                    <li class="flex items-center gap-2"><i class="fas fa-check text-green-600"></i> API Integration Workshop (4h)</li>
+                                    <li class="flex items-center gap-2"><i class="fas fa-check text-green-600"></i> Maskathon Hackathon (2 days)</li>
+                                </ul>
+                                <div class="mt-4 pt-4 border-t border-carbon-border text-sm text-carbon-text-secondary">
+                                    <span class="font-medium">Duration:</span> ~18 hours | <span class="font-medium">Cost:</span> Free for partners
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="border border-carbon-border bg-white p-8 mb-6">
+                            <h3 class="font-semibold mb-4">Certification Program</h3>
+                            <p class="text-sm text-carbon-text-secondary mb-6">Complete the SYNAPSIS training track and earn a certificate demonstrating your competence in privacy-aware audiovisual data management.</p>
+                            <div class="bg-carbon-text text-white p-6 text-center mb-6">
+                                <i class="fas fa-certificate text-4xl mb-3"></i>
+                                <h4 class="font-semibold">SYNAPSIS Certified</h4>
+                                <p class="text-sm opacity-80">Audiovisual Data Management Specialist</p>
+                            </div>
+                            <h4 class="font-medium mb-3 text-sm">Certificate Benefits:</h4>
+                            <ul class="space-y-2 text-sm text-carbon-text-secondary">
+                                <li class="flex items-center gap-2"><i class="fas fa-check text-green-600"></i> Recognition of expertise</li>
+                                <li class="flex items-center gap-2"><i class="fas fa-check text-green-600"></i> Priority platform access</li>
+                                <li class="flex items-center gap-2"><i class="fas fa-check text-green-600"></i> API credentials eligibility</li>
+                                <li class="flex items-center gap-2"><i class="fas fa-check text-green-600"></i> Community network access</li>
+                            </ul>
+                        </div>
+                        <div class="bg-blue-50 border-l-4 border-blue-400 p-4">
+                            <div class="flex items-start gap-3">
+                                <i class="fas fa-lightbulb text-blue-600"></i>
+                                <div>
+                                    <h4 class="font-medium mb-1">Not Sure Where to Start?</h4>
+                                    <p class="text-sm text-carbon-text-secondary">Take our quick assessment to find the right learning path for your role and experience level.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Course Catalog -->
+        <section id="courses" class="py-20 px-6">
+            <div class="container mx-auto max-w-5xl">
+                <div class="mb-12">
+                    <span class="text-xs font-mono uppercase tracking-widest text-carbon-text-secondary">Courses</span>
+                    <h2 class="text-3xl font-semibold mt-4">Course Catalog</h2>
+                </div>
+                <div class="grid md:grid-cols-3 gap-6">
+                    <div class="card bg-white p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="badge badge-level">Level 1</span>
+                            <span class="text-xs text-carbon-text-secondary font-mono">1.5h</span>
+                        </div>
+                        <div class="w-10 h-10 border border-carbon-border flex items-center justify-center mb-4">
+                            <i class="fas fa-play-circle"></i>
+                        </div>
+                        <h3 class="font-semibold mb-2">Introduction to Masking</h3>
+                        <p class="text-sm text-carbon-text-secondary mb-4">Fundamentals of audiovisual data de-identification, privacy principles, and MaskAnyone toolkit overview.</p>
+                        <div class="text-xs text-carbon-text-secondary mb-4">
+                            <div><i class="fas fa-user-tie mr-2"></i>PIs & Support Staff</div>
+                            <div><i class="fas fa-map-marker-alt mr-2"></i>VU Amsterdam (Hybrid)</div>
+                        </div>
+                        <a href="#" class="btn-primary w-full py-2 text-sm text-center block">View Schedule</a>
+                    </div>
+                    <div class="card bg-white p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="badge badge-level">Level 2</span>
+                            <span class="text-xs text-carbon-text-secondary font-mono">4h</span>
+                        </div>
+                        <div class="w-10 h-10 border border-carbon-border flex items-center justify-center mb-4">
+                            <i class="fas fa-hands-helping"></i>
+                        </div>
+                        <h3 class="font-semibold mb-2">Hands-on Workshop</h3>
+                        <p class="text-sm text-carbon-text-secondary mb-4">Practical training with real datasets. Upload, configure, process, and archive masked audiovisual data.</p>
+                        <div class="text-xs text-carbon-text-secondary mb-4">
+                            <div><i class="fas fa-user-graduate mr-2"></i>ECRs & Data Stewards</div>
+                            <div><i class="fas fa-map-marker-alt mr-2"></i>UvA & EUR (In-person)</div>
+                        </div>
+                        <a href="#" class="btn-primary w-full py-2 text-sm text-center block">View Schedule</a>
+                    </div>
+                    <div class="card bg-white p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="badge badge-level">Level 3</span>
+                            <span class="text-xs text-carbon-text-secondary font-mono">3 days</span>
+                        </div>
+                        <div class="w-10 h-10 border border-carbon-border flex items-center justify-center mb-4">
+                            <i class="fas fa-mountain"></i>
+                        </div>
+                        <h3 class="font-semibold mb-2">Summer/Winter School</h3>
+                        <p class="text-sm text-carbon-text-secondary mb-4">Intensive 3-day program covering advanced masking techniques, ethics, FAIR principles, and collaborative workflows.</p>
+                        <div class="text-xs text-carbon-text-secondary mb-4">
+                            <div><i class="fas fa-users mr-2"></i>All Researchers</div>
+                            <div><i class="fas fa-map-marker-alt mr-2"></i>Radboud University</div>
+                        </div>
+                        <a href="#" class="btn-primary w-full py-2 text-sm text-center block">View Schedule</a>
+                    </div>
+                </div>
+
+                <!-- What You'll Learn -->
+                <div class="mt-12 border border-carbon-border bg-white p-8">
+                    <h3 class="font-semibold mb-6">What You'll Learn</h3>
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <div>
+                            <h4 class="font-medium mb-4 text-sm">Core Topics</h4>
+                            <ul class="space-y-2 text-sm text-carbon-text-secondary">
+                                <li class="flex items-start gap-2"><i class="fas fa-check text-green-600 mt-1"></i> Privacy principles and GDPR compliance</li>
+                                <li class="flex items-start gap-2"><i class="fas fa-check text-green-600 mt-1"></i> MaskAnyone toolkit features and customization</li>
+                                <li class="flex items-start gap-2"><i class="fas fa-check text-green-600 mt-1"></i> Face de-identification methods and evaluation</li>
+                                <li class="flex items-start gap-2"><i class="fas fa-check text-green-600 mt-1"></i> Voice anonymization and prosody preservation</li>
+                                <li class="flex items-start gap-2"><i class="fas fa-check text-green-600 mt-1"></i> Body movement tracking and behavioral extraction</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-medium mb-4 text-sm">Practical Skills</h4>
+                            <ul class="space-y-2 text-sm text-carbon-text-secondary">
+                                <li class="flex items-start gap-2"><i class="fas fa-check text-green-600 mt-1"></i> Uploading and managing data securely</li>
+                                <li class="flex items-start gap-2"><i class="fas fa-check text-green-600 mt-1"></i> Selecting appropriate masking methods</li>
+                                <li class="flex items-start gap-2"><i class="fas fa-check text-green-600 mt-1"></i> Quality control and verification</li>
+                                <li class="flex items-start gap-2"><i class="fas fa-check text-green-600 mt-1"></i> Metadata creation and FAIR archiving with DANS</li>
+                                <li class="flex items-start gap-2"><i class="fas fa-check text-green-600 mt-1"></i> Informed consent templates and ethical workflows</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Special Events -->
+        <section class="py-20 px-6 bg-carbon-bg-hover border-y border-carbon-border">
+            <div class="container mx-auto max-w-5xl">
+                <div class="mb-12">
+                    <span class="text-xs font-mono uppercase tracking-widest text-carbon-text-secondary">Events</span>
+                    <h2 class="text-3xl font-semibold mt-4">Special Events</h2>
+                </div>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <!-- Masking Lab -->
+                    <div class="border border-carbon-border bg-white p-8">
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="badge badge-upcoming">Q2 2026</span>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-3">Masking Lab</h3>
+                        <p class="text-carbon-text-secondary mb-4">A co-creation forum bringing together extensive users, data stewards, ethics officers, and infrastructure partners to address advanced challenges.</p>
+                        <div class="mb-6">
+                            <h4 class="font-medium text-sm mb-3">Focus Areas:</h4>
+                            <div class="space-y-2">
+                                <div class="flex items-start gap-3">
+                                    <div class="w-8 h-8 bg-carbon-bg-hover flex items-center justify-center flex-shrink-0">
+                                        <i class="fas fa-balance-scale text-sm"></i>
+                                    </div>
+                                    <div>
+                                        <h5 class="font-medium text-sm">Ethics & Compliance</h5>
+                                        <p class="text-xs text-carbon-text-secondary">GDPR, informed consent, IRB considerations</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start gap-3">
+                                    <div class="w-8 h-8 bg-carbon-bg-hover flex items-center justify-center flex-shrink-0">
+                                        <i class="fas fa-recycle text-sm"></i>
+                                    </div>
+                                    <div>
+                                        <h5 class="font-medium text-sm">FAIR Principles</h5>
+                                        <p class="text-xs text-carbon-text-secondary">Metadata standards, findability, accessibility</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <a href="#" class="btn-secondary w-full py-2 text-sm text-center block">Express Interest</a>
+                    </div>
+
+                    <!-- Maskathon -->
+                    <div class="border border-carbon-border bg-white p-8">
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="badge badge-upcoming">Q4 2026</span>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-3">Maskathon</h3>
+                        <p class="text-carbon-text-secondary mb-4">A hackathon-style collaborative event for developers, data stewards, and computer scientists to advance masking technology.</p>
+                        <div class="mb-6">
+                            <h4 class="font-medium text-sm mb-3">Challenge Tracks:</h4>
+                            <ul class="space-y-2 text-sm">
+                                <li class="flex items-center gap-2"><i class="fas fa-code text-blue-600"></i> Algorithm Development</li>
+                                <li class="flex items-center gap-2"><i class="fas fa-chart-line text-green-600"></i> Benchmark & Metrics</li>
+                                <li class="flex items-center gap-2"><i class="fas fa-puzzle-piece text-purple-600"></i> Platform Integration</li>
+                                <li class="flex items-center gap-2"><i class="fas fa-chalkboard-teacher text-orange-600"></i> Training Materials</li>
+                            </ul>
+                        </div>
+                        <div class="bg-carbon-bg-hover p-4 text-center mb-4">
+                            <div class="font-mono text-2xl font-semibold">€3,000</div>
+                            <div class="text-xs text-carbon-text-secondary">Total prizes</div>
+                        </div>
+                        <a href="#" class="btn-primary w-full py-2 text-sm text-center block">Get Notified</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Event Calendar -->
+        <section id="calendar" class="py-20 px-6">
+            <div class="container mx-auto max-w-5xl">
+                <div class="mb-12">
+                    <span class="text-xs font-mono uppercase tracking-widest text-carbon-text-secondary">Schedule</span>
+                    <h2 class="text-3xl font-semibold mt-4">Event Calendar 2026</h2>
+                </div>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div>
+                        <h3 class="font-semibold mb-6">Upcoming Events</h3>
+                        <div class="space-y-4">
+                            <div class="border border-carbon-border p-4 bg-white">
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="badge badge-upcoming">Q1 2026</span>
+                                    <span class="text-xs text-carbon-text-secondary">VU Amsterdam</span>
+                                </div>
+                                <h4 class="font-medium mb-1">Introduction to Masking Workshop</h4>
+                                <p class="text-sm text-carbon-text-secondary">1.5-hour introduction for PIs and support staff</p>
+                            </div>
+                            <div class="border border-carbon-border p-4 bg-white">
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="badge badge-upcoming">Q2 2026</span>
+                                    <span class="text-xs text-carbon-text-secondary">UvA</span>
+                                </div>
+                                <h4 class="font-medium mb-1">Hands-on Data Masking Workshop</h4>
+                                <p class="text-sm text-carbon-text-secondary">4-hour practical session for ECRs and data stewards</p>
+                            </div>
+                            <div class="border border-carbon-border p-4 bg-white">
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="badge badge-upcoming">Q2 2026</span>
+                                    <span class="text-xs text-carbon-text-secondary">VU Amsterdam</span>
+                                </div>
+                                <h4 class="font-medium mb-1">Masking Lab Co-Creation Forum</h4>
+                                <p class="text-sm text-carbon-text-secondary">Full-day workshop on ethics and FAIR principles</p>
+                            </div>
+                            <div class="border border-carbon-border p-4 bg-white">
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="badge badge-upcoming">Summer 2026</span>
+                                    <span class="text-xs text-carbon-text-secondary">Radboud</span>
+                                </div>
+                                <h4 class="font-medium mb-1">SYNAPSIS Summer School</h4>
+                                <p class="text-sm text-carbon-text-secondary">3-day intensive training program</p>
+                            </div>
+                            <div class="border border-carbon-border p-4 bg-white">
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="badge badge-upcoming">Q4 2026</span>
+                                    <span class="text-xs text-carbon-text-secondary">TBA</span>
+                                </div>
+                                <h4 class="font-medium mb-1">Maskathon Hackathon</h4>
+                                <p class="text-sm text-carbon-text-secondary">2-day collaborative development event</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold mb-6">Registration Information</h3>
+                        <div class="border border-carbon-border bg-white p-6 mb-6">
+                            <h4 class="font-medium mb-4">How to Register</h4>
+                            <ol class="space-y-3 text-sm text-carbon-text-secondary">
+                                <li class="flex items-start gap-2"><span class="font-mono font-medium">1.</span> Check event eligibility and prerequisites</li>
+                                <li class="flex items-start gap-2"><span class="font-mono font-medium">2.</span> Complete online registration form</li>
+                                <li class="flex items-start gap-2"><span class="font-mono font-medium">3.</span> Receive confirmation email with details</li>
+                                <li class="flex items-start gap-2"><span class="font-mono font-medium">4.</span> Attend event and earn certificate</li>
+                            </ol>
+                        </div>
+                        <div class="border border-carbon-border bg-white p-6 mb-6">
+                            <h4 class="font-medium mb-4">Eligibility Requirements</h4>
+                            <ul class="space-y-2 text-sm text-carbon-text-secondary">
+                                <li class="flex items-center gap-2"><i class="fas fa-check text-green-600"></i> Affiliated with partner institution</li>
+                                <li class="flex items-center gap-2"><i class="fas fa-check text-green-600"></i> Active researcher or support staff</li>
+                                <li class="flex items-center gap-2"><i class="fas fa-check text-green-600"></i> Working with audiovisual data</li>
+                                <li class="flex items-center gap-2"><i class="fas fa-times text-red-600"></i> No technical expertise required</li>
+                            </ul>
+                        </div>
+                        <div class="bg-blue-50 border-l-4 border-blue-400 p-4 mb-6">
+                            <div class="flex items-start gap-3">
+                                <i class="fas fa-info-circle text-blue-600"></i>
+                                <div>
+                                    <h4 class="font-medium mb-1">Scholarships Available</h4>
+                                    <p class="text-sm text-carbon-text-secondary">Fee waivers and travel scholarships available for participants from underfunded institutions.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <a href="#register" class="btn-primary w-full py-3 text-center block font-medium">Register for Events</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Registration Form -->
+        <section id="register" class="py-20 px-6 bg-carbon-bg-hover border-y border-carbon-border">
+            <div class="container mx-auto max-w-3xl">
+                <div class="text-center mb-12">
+                    <span class="text-xs font-mono uppercase tracking-widest text-carbon-text-secondary">Register</span>
+                    <h2 class="text-3xl font-semibold mt-4 mb-4">Register for Training</h2>
+                    <p class="text-carbon-text-secondary">Join the SYNAPSIS community and start your journey toward privacy-aware research excellence</p>
+                </div>
+                <div class="border border-carbon-border bg-white p-8">
+                    <form class="space-y-6">
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-sm font-medium mb-2">First Name *</label>
+                                <input type="text" class="w-full border border-carbon-border px-4 py-3 focus:outline-none focus:border-carbon-text" required>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium mb-2">Last Name *</label>
+                                <input type="text" class="w-full border border-carbon-border px-4 py-3 focus:outline-none focus:border-carbon-text" required>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Email Address *</label>
+                            <input type="email" class="w-full border border-carbon-border px-4 py-3 focus:outline-none focus:border-carbon-text" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Institution *</label>
+                            <input type="text" class="w-full border border-carbon-border px-4 py-3 focus:outline-none focus:border-carbon-text" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Role *</label>
+                            <select class="w-full border border-carbon-border px-4 py-3 focus:outline-none focus:border-carbon-text bg-white" required>
+                                <option value="">Select your role...</option>
+                                <option>Researcher/PI</option>
+                                <option>PhD Candidate/Postdoc</option>
+                                <option>Data Steward</option>
+                                <option>Developer/RSE</option>
+                                <option>Support Staff</option>
+                                <option>Other</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Interested Events *</label>
+                            <div class="space-y-2">
+                                <label class="flex items-center gap-3 text-sm">
+                                    <input type="checkbox" class="w-4 h-4"> Introduction to Masking Workshop
+                                </label>
+                                <label class="flex items-center gap-3 text-sm">
+                                    <input type="checkbox" class="w-4 h-4"> Hands-on Data Masking Workshop
+                                </label>
+                                <label class="flex items-center gap-3 text-sm">
+                                    <input type="checkbox" class="w-4 h-4"> Masking Lab Co-Creation Forum
+                                </label>
+                                <label class="flex items-center gap-3 text-sm">
+                                    <input type="checkbox" class="w-4 h-4"> Summer/Winter School
+                                </label>
+                                <label class="flex items-center gap-3 text-sm">
+                                    <input type="checkbox" class="w-4 h-4"> Maskathon Hackathon
+                                </label>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="flex items-start gap-3 text-sm">
+                                <input type="checkbox" class="w-4 h-4 mt-1" required>
+                                <span class="text-carbon-text-secondary">I agree to receive communications about SYNAPSIS training events and updates.</span>
+                            </label>
+                        </div>
+                        <button type="submit" class="btn-primary w-full py-3 font-medium">
+                            Submit Registration
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-carbon-border py-12 px-6">
+        <div class="container mx-auto max-w-5xl">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-8">
+                <div>
+                    <div class="font-semibold text-lg mb-2">SYNAPSIS</div>
+                    <div class="text-sm text-carbon-text-secondary">
+                        Funded by NWO TDCC-SSH
+                    </div>
+                </div>
+                <div class="flex gap-8">
+                    <a href="index.html" class="text-sm text-carbon-text-secondary hover:text-carbon-text">Home</a>
+                    <a href="platform.html" class="text-sm text-carbon-text-secondary hover:text-carbon-text">Platform</a>
+                    <a href="resources.html" class="text-sm text-carbon-text-secondary hover:text-carbon-text">Resources</a>
+                    <a href="https://github.com/MaskAnyone/MaskAnyone" class="text-sm text-carbon-text-secondary hover:text-carbon-text">GitHub</a>
+                </div>
+            </div>
+            <div class="mt-8 pt-8 border-t border-carbon-border text-sm text-carbon-text-secondary">
+                © 2026 SYNAPSIS Project. Radboud University.
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

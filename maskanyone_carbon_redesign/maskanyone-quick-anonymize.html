@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MaskAnyone - Quick Anonymize</title>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:'IBM Plex Sans',sans-serif;background:#f5f5f5;color:#000;line-height:1.5}
+    .icon-box{width:40px;height:40px;background:#000;color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s}
+    .icon-box-sm{width:32px;height:32px;font-size:14px}
+    .icon-box-lg{width:48px;height:48px;font-size:20px}
+    .icon-box-gray{background:#e5e5e5;color:#666}
+    .icon-box-outline{background:#fff;color:#000;border:2px solid #e5e5e5}
+    .card{background:#fff;border:1px solid #e5e5e5}
+    .btn{display:inline-flex;align-items:center;gap:8px;padding:12px 24px;font-family:inherit;font-size:14px;font-weight:600;cursor:pointer;transition:all .2s;border:none}
+    .btn-primary{background:#000;color:#fff}.btn-primary:hover{background:#333}
+    .btn-secondary{background:#fff;color:#000;border:2px solid #000}.btn-secondary:hover{background:#000;color:#fff}
+    .btn-ghost{background:transparent;color:#666;border:none}.btn-ghost:hover{background:#f0f0f0;color:#000}
+    .btn-sm{padding:8px 16px;font-size:12px}
+    .btn-lg{padding:16px 32px;font-size:16px}
+    .tag{display:inline-flex;align-items:center;padding:4px 12px;font-size:12px;font-weight:500;background:#000;color:#fff}
+    .tag-outline{background:#fff;color:#000;border:1px solid #e5e5e5}
+    .tag-success{background:#e6f9f0;color:#059669}
+    .progress-bar{height:4px;background:#e5e5e5;overflow:hidden}
+    .progress-bar-fill{height:100%;background:#000;transition:width .3s}
+    .app-frame{background:#fff;min-height:100vh;display:flex;flex-direction:column}
+    .app-header{display:flex;align-items:center;justify-content:space-between;padding:16px 24px;border-bottom:1px solid #e5e5e5}
+    .app-logo{font-size:18px;font-weight:700;display:flex;align-items:center;gap:10px}
+    .app-nav{display:flex;gap:4px}
+    .app-nav a{font-size:13px;font-weight:500;color:#666;text-decoration:none;padding:8px 14px;transition:all .2s}
+    .app-nav a:hover{background:#f5f5f5;color:#000}
+    .app-nav a.active{background:#000;color:#fff}
+    .app-body{display:flex;flex:1}
+    .sidebar{width:300px;background:#fafafa;border-right:1px solid #e5e5e5;display:flex;flex-direction:column}
+    .sidebar-section{padding:20px;border-bottom:1px solid #e5e5e5}
+    .sidebar-section:last-child{border-bottom:none}
+    .main-content{flex:1;display:flex;flex-direction:column;background:#f5f5f5}
+    .main-header{padding:20px 24px;background:#fff;border-bottom:1px solid #e5e5e5;display:flex;justify-content:space-between;align-items:center}
+    .main-body{padding:24px;display:flex;gap:24px}
+    .preset-card{padding:16px;border:1px solid #e5e5e5;cursor:pointer;transition:all .2s;background:#fff}
+    .preset-card:hover{border-color:#999}
+    .preset-card.selected{border-color:#000;border-width:2px;background:#fff}
+    .preset-card.selected .icon-box-gray{background:#000;color:#fff}
+    .video-panel{flex:1;display:flex;flex-direction:column;gap:16px}
+    .video-container{background:#1a1a1a;aspect-ratio:16/9;width:100%;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+    .video-placeholder{color:#666;text-align:center}
+    .video-controls{display:flex;align-items:center;gap:16px;padding:12px 16px;background:#fff;border:1px solid #e5e5e5}
+    .timeline{flex:1;height:8px;background:#e5e5e5;cursor:pointer;position:relative}
+    .timeline-progress{height:100%;background:#000;width:0%;transition:width .1s}
+    .timeline-handle{position:absolute;top:50%;transform:translate(-50%,-50%);width:16px;height:16px;background:#000;cursor:grab;left:0%}
+    .detection-badge{position:absolute;padding:4px 8px;background:rgba(0,0,0,.8);color:#fff;font-size:10px;font-weight:600;display:flex;align-items:center;gap:4px}
+    .intensity-slider{width:100%;-webkit-appearance:none;height:8px;background:#e5e5e5;outline:none}
+    .intensity-slider::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;background:#000;cursor:pointer}
+    .compare-container{display:flex;gap:2px}
+    .compare-panel{flex:1;display:flex;flex-direction:column;min-width:0}
+    .compare-label{padding:8px 16px;background:#fff;border:1px solid #e5e5e5;border-bottom:none;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.5px}
+    .info-banner{display:flex;align-items:center;gap:16px;padding:16px;background:#fff;border:1px solid #e5e5e5}
+    h2{font-size:18px;font-weight:600;margin-bottom:4px}
+    h3{font-size:14px;font-weight:600}
+    h4{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:#666;margin-bottom:12px}
+    .text-sm{font-size:13px}.text-xs{font-size:12px}.text-gray{color:#666}
+    .flex{display:flex}.flex-col{flex-direction:column}.flex-1{flex:1}
+    .gap-4{gap:4px}.gap-8{gap:8px}.gap-12{gap:12px}.gap-16{gap:16px}
+    .items-center{align-items:center}.justify-between{justify-content:space-between}.justify-center{justify-content:center}
+    .mb-4{margin-bottom:4px}.mb-8{margin-bottom:8px}.mb-16{margin-bottom:16px}
+    .processing-overlay{position:fixed;inset:0;background:rgba(255,255,255,.95);display:flex;align-items:center;justify-content:center;z-index:100;display:none}
+    .processing-overlay.active{display:flex}
+    .processing-card{text-align:center;padding:48px}
+    .spinner{width:48px;height:48px;border:4px solid #e5e5e5;border-top-color:#000;animation:spin 1s linear infinite;margin:0 auto 24px}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .complete-card{text-align:center;padding:48px;max-width:500px}
+    .checkmark{width:80px;height:80px;background:#000;color:#fff;display:flex;align-items:center;justify-content:center;font-size:32px;margin:0 auto 24px}
+    .result-preview{display:flex;gap:16px;padding:24px;background:#fafafa;border:1px solid #e5e5e5;margin:24px 0}
+    .face-indicator{position:absolute;border:2px solid #fff;box-shadow:0 0 0 1px rgba(0,0,0,.3)}
+    .face-indicator.blurred{background:rgba(255,255,255,.3);backdrop-filter:blur(8px)}
+    .person-item{display:flex;align-items:center;gap:12px;padding:10px;background:#fff;border:1px solid #e5e5e5;transition:all .2s}
+    .person-item:hover{border-color:#999}
+    .checkbox-custom{width:18px;height:18px;border:2px solid #ccc;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .2s;flex-shrink:0}
+    .checkbox-custom.checked{background:#000;border-color:#000;color:#fff}
+    .checkbox-custom i{font-size:10px}
+    .target-option{display:flex;align-items:center;gap:10px;padding:8px 0;cursor:pointer}
+    .target-option:hover .checkbox-custom{border-color:#999}
+    .workflow-panel{background:#fff;border:1px solid #e5e5e5;margin:0 24px 24px}
+    .workflow-header{display:flex;justify-content:space-between;align-items:center;padding:16px 20px;cursor:pointer;transition:background .2s}
+    .workflow-header:hover{background:#fafafa}
+    .workflow-progress-mini{width:100px;height:4px;background:#e5e5e5}
+    .workflow-progress-mini-fill{height:100%;background:#000;transition:width .3s}
+    .workflow-content{display:none;border-top:1px solid #e5e5e5;padding:24px}
+    .workflow-content.open{display:block}
+    .workflow-flow{display:flex;align-items:center;justify-content:center;gap:0;margin-bottom:24px;padding:20px 0}
+    .flow-step{display:flex;flex-direction:column;align-items:center;gap:8px}
+    .flow-icon{width:36px;height:36px;background:#e5e5e5;color:#999;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;transition:all .2s}
+    .flow-step.completed .flow-icon{background:#000;color:#fff}
+    .flow-step.active .flow-icon{background:#fff;color:#000;border:2px solid #000}
+    .flow-label{font-size:11px;font-weight:600;color:#999;text-transform:uppercase;letter-spacing:.5px}
+    .flow-step.completed .flow-label,.flow-step.active .flow-label{color:#000}
+    .flow-line{width:60px;height:2px;background:#e5e5e5;margin:0 8px;margin-bottom:24px}
+    .flow-line.completed{background:#000}
+    .workflow-checklist{border-top:1px solid #e5e5e5;padding-top:20px}
+    .checklist-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+    .checklist-item{display:flex;align-items:center;gap:10px;padding:12px;background:#fafafa;border:1px solid #e5e5e5;cursor:pointer;transition:all .2s}
+    .checklist-item:hover{border-color:#999}
+    .checklist-item.checked{background:#f0fff4;border-color:#a7f3d0}
+    .checklist-item.checked .check-box{background:#000;border-color:#000;color:#fff}
+    .check-box{width:20px;height:20px;border:2px solid #ccc;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s}
+    .check-box i{font-size:10px;opacity:0;transition:opacity .2s}
+    .checklist-item.checked .check-box i{opacity:1}
+    .checklist-item span{font-size:13px}
+    .accent-line{height:2px;background:linear-gradient(90deg,#000 0%,transparent 100%);width:40px}
+  </style>
+</head>
+<body>
+<div class="app-frame">
+  <div class="app-header">
+    <div class="flex items-center gap-16">
+      <div class="app-logo"><i class="fas fa-mask"></i> MaskAnyone</div>
+      <div class="app-nav">
+        <a href="#">Dashboard</a>
+        <a href="#" class="active">Quick Mask</a>
+        <a href="#">Advanced</a>
+        <a href="#">Batch</a>
+      </div>
+    </div>
+    <div class="flex items-center gap-12">
+      <button class="btn btn-ghost btn-sm"><i class="fas fa-bolt"></i> Quick Mode</button>
+      <button class="btn btn-ghost btn-sm"><i class="fas fa-question-circle"></i> Help</button>
+    </div>
+  </div>
+
+  <div class="app-body">
+    <div class="sidebar">
+      <div class="sidebar-section">
+        <h4><i class="fas fa-magic" style="margin-right:6px"></i> Presets</h4>
+        <div class="flex flex-col gap-8">
+          <div class="preset-card selected" onclick="selectPreset(this, 'face-blur')">
+            <div class="flex gap-12 items-center">
+              <div class="icon-box icon-box-sm"><i class="fas fa-user-slash"></i></div>
+              <div class="flex-1">
+                <h3>Face Blur</h3>
+                <p class="text-xs text-gray">Blur all detected faces</p>
+              </div>
+            </div>
+          </div>
+          <div class="preset-card" onclick="selectPreset(this, 'full-body')">
+            <div class="flex gap-12 items-center">
+              <div class="icon-box icon-box-sm icon-box-gray"><i class="fas fa-user-secret"></i></div>
+              <div class="flex-1">
+                <h3>Full Body Mask</h3>
+                <p class="text-xs text-gray">Mask entire person silhouette</p>
+              </div>
+            </div>
+          </div>
+          <div class="preset-card" onclick="selectPreset(this, 'skeleton')">
+            <div class="flex gap-12 items-center">
+              <div class="icon-box icon-box-sm icon-box-gray"><i class="fas fa-running"></i></div>
+              <div class="flex-1">
+                <h3>Skeleton Replace</h3>
+                <p class="text-xs text-gray">Replace with pose skeleton</p>
+              </div>
+            </div>
+          </div>
+          <div class="preset-card" onclick="selectPreset(this, 'pixelate')">
+            <div class="flex gap-12 items-center">
+              <div class="icon-box icon-box-sm icon-box-gray"><i class="fas fa-th"></i></div>
+              <div class="flex-1">
+                <h3>Pixelate All</h3>
+                <p class="text-xs text-gray">Mosaic effect on faces</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sidebar-section">
+        <h4><i class="fas fa-sliders-h" style="margin-right:6px"></i> Intensity</h4>
+        <input type="range" class="intensity-slider" id="intensitySlider" min="1" max="10" value="7" oninput="updateIntensity(this.value)">
+        <div class="flex justify-between text-xs text-gray" style="margin-top:8px">
+          <span>Light</span>
+          <span id="intensityValue" style="font-weight:600;color:#000">70%</span>
+          <span>Heavy</span>
+        </div>
+      </div>
+
+      <div class="sidebar-section">
+        <h4><i class="fas fa-crosshairs" style="margin-right:6px"></i> Target</h4>
+        <div class="flex flex-col gap-4">
+          <div class="target-option" onclick="toggleCheckbox(this)">
+            <div class="checkbox-custom checked"><i class="fas fa-check"></i></div>
+            <span class="text-sm">Faces</span>
+          </div>
+          <div class="target-option" onclick="toggleCheckbox(this)">
+            <div class="checkbox-custom"><i class="fas fa-check"></i></div>
+            <span class="text-sm">Full Body</span>
+          </div>
+          <div class="target-option" onclick="toggleCheckbox(this)">
+            <div class="checkbox-custom"><i class="fas fa-check"></i></div>
+            <span class="text-sm">Hands</span>
+          </div>
+          <div class="target-option" onclick="toggleCheckbox(this)">
+            <div class="checkbox-custom"><i class="fas fa-check"></i></div>
+            <span class="text-sm">License Plates</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="sidebar-section" style="flex:1">
+        <h4><i class="fas fa-users" style="margin-right:6px"></i> Detected (3)</h4>
+        <div class="flex flex-col gap-8">
+          <div class="person-item" onclick="togglePerson(this)">
+            <div class="checkbox-custom checked"><i class="fas fa-check"></i></div>
+            <div class="icon-box icon-box-sm"><i class="fas fa-user"></i></div>
+            <span class="flex-1 text-sm">Person 1</span>
+            <span class="text-xs text-gray">100%</span>
+          </div>
+          <div class="person-item" onclick="togglePerson(this)">
+            <div class="checkbox-custom checked"><i class="fas fa-check"></i></div>
+            <div class="icon-box icon-box-sm" style="background:#666"><i class="fas fa-user"></i></div>
+            <span class="flex-1 text-sm">Person 2</span>
+            <span class="text-xs text-gray">78%</span>
+          </div>
+          <div class="person-item" onclick="togglePerson(this)">
+            <div class="checkbox-custom checked"><i class="fas fa-check"></i></div>
+            <div class="icon-box icon-box-sm" style="background:#999"><i class="fas fa-user"></i></div>
+            <span class="flex-1 text-sm">Person 3</span>
+            <span class="text-xs text-gray">45%</span>
+          </div>
+        </div>
+      </div>
+
+      <div style="padding:20px;border-top:1px solid #e5e5e5">
+        <button class="btn btn-primary" style="width:100%" onclick="startProcessing()">
+          <i class="fas fa-play"></i> Process Video
+        </button>
+      </div>
+    </div>
+
+    <div class="main-content">
+      <div class="main-header">
+        <div>
+          <h2 id="videoTitle">interview_session_raw.mp4</h2>
+          <p class="text-sm text-gray">Duration: 12:34 • 1920×1080 • 30fps</p>
+        </div>
+        <div class="flex gap-8">
+          <button class="btn btn-ghost btn-sm" onclick="resetPreview()"><i class="fas fa-undo"></i> Reset</button>
+          <button class="btn btn-secondary btn-sm"><i class="fas fa-upload"></i> Change Video</button>
+        </div>
+      </div>
+
+      <div class="main-body">
+        <div class="compare-container" style="width:100%">
+          <div class="compare-panel">
+            <div class="compare-label">Original</div>
+            <div class="video-container" id="originalVideo">
+              <div class="video-placeholder">
+                <i class="fas fa-video" style="font-size:48px;margin-bottom:16px;display:block"></i>
+                <span>Original Video</span>
+              </div>
+              <div class="face-indicator" style="left:35%;top:20%;width:80px;height:100px"></div>
+              <div class="face-indicator" style="left:55%;top:25%;width:70px;height:90px"></div>
+              <div class="face-indicator" style="left:15%;top:30%;width:60px;height:80px"></div>
+              <div class="detection-badge" style="top:8px;left:8px"><i class="fas fa-eye"></i> 3 faces detected</div>
+            </div>
+          </div>
+          
+          <div class="compare-panel">
+            <div class="compare-label" style="background:#000;color:#fff">Preview <span class="tag" style="margin-left:8px;font-size:10px">LIVE</span></div>
+            <div class="video-container" id="previewVideo">
+              <div class="video-placeholder">
+                <i class="fas fa-mask" style="font-size:48px;margin-bottom:16px;display:block"></i>
+                <span>Masked Preview</span>
+              </div>
+              <div class="face-indicator blurred" style="left:35%;top:20%;width:80px;height:100px" id="face1-blur"></div>
+              <div class="face-indicator blurred" style="left:55%;top:25%;width:70px;height:90px" id="face2-blur"></div>
+              <div class="face-indicator blurred" style="left:15%;top:30%;width:60px;height:80px" id="face3-blur"></div>
+              <div class="detection-badge" style="top:8px;right:8px"><i class="fas fa-shield-alt"></i> Face Blur • 70%</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="video-controls">
+        <button class="btn btn-ghost btn-sm" onclick="skipBack()"><i class="fas fa-step-backward"></i></button>
+        <button class="btn btn-ghost btn-sm" id="playBtn" onclick="togglePlay()"><i class="fas fa-play"></i></button>
+        <button class="btn btn-ghost btn-sm" onclick="skipForward()"><i class="fas fa-step-forward"></i></button>
+        <span class="text-sm" style="font-family:monospace;min-width:100px" id="timeDisplay">00:00 / 12:34</span>
+        <div class="timeline" onclick="seekTo(event)" id="timeline">
+          <div class="timeline-progress" id="timelineProgress"></div>
+          <div class="timeline-handle" id="timelineHandle"></div>
+        </div>
+        <button class="btn btn-ghost btn-sm"><i class="fas fa-volume-up"></i></button>
+        <button class="btn btn-ghost btn-sm"><i class="fas fa-expand"></i></button>
+      </div>
+
+      <div class="workflow-panel" id="workflowPanel">
+        <div class="workflow-header" onclick="toggleWorkflow()">
+          <div class="flex items-center gap-12">
+            <div class="icon-box icon-box-sm"><i class="fas fa-tasks"></i></div>
+            <div>
+              <h3 style="font-size:13px">Workflow Progress</h3>
+              <p class="text-xs text-gray">3 of 5 steps completed</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-12">
+            <div class="workflow-progress-mini">
+              <div class="workflow-progress-mini-fill" style="width:60%"></div>
+            </div>
+            <i class="fas fa-chevron-down" id="workflowChevron" style="transition:transform .2s"></i>
+          </div>
+        </div>
+        <div class="workflow-content" id="workflowContent">
+          <div class="workflow-flow">
+            <div class="flow-step completed">
+              <div class="flow-icon"><i class="fas fa-check"></i></div>
+              <div class="flow-label">Upload</div>
+            </div>
+            <div class="flow-line completed"></div>
+            <div class="flow-step completed">
+              <div class="flow-icon"><i class="fas fa-check"></i></div>
+              <div class="flow-label">Detect</div>
+            </div>
+            <div class="flow-line completed"></div>
+            <div class="flow-step active">
+              <div class="flow-icon">3</div>
+              <div class="flow-label">Configure</div>
+            </div>
+            <div class="flow-line"></div>
+            <div class="flow-step">
+              <div class="flow-icon">4</div>
+              <div class="flow-label">Process</div>
+            </div>
+            <div class="flow-line"></div>
+            <div class="flow-step">
+              <div class="flow-icon">5</div>
+              <div class="flow-label">Export</div>
+            </div>
+          </div>
+          <div class="workflow-checklist">
+            <h4 style="margin-bottom:12px"><i class="fas fa-clipboard-check" style="margin-right:6px"></i> Pre-Process Checklist</h4>
+            <div class="checklist-grid">
+              <div class="checklist-item checked" onclick="toggleChecklist(this)">
+                <div class="check-box"><i class="fas fa-check"></i></div>
+                <span>Video uploaded</span>
+              </div>
+              <div class="checklist-item checked" onclick="toggleChecklist(this)">
+                <div class="check-box"><i class="fas fa-check"></i></div>
+                <span>Subjects detected</span>
+              </div>
+              <div class="checklist-item checked" onclick="toggleChecklist(this)">
+                <div class="check-box"><i class="fas fa-check"></i></div>
+                <span>Preset selected</span>
+              </div>
+              <div class="checklist-item" onclick="toggleChecklist(this)">
+                <div class="check-box"><i class="fas fa-check"></i></div>
+                <span>Preview reviewed</span>
+              </div>
+              <div class="checklist-item" onclick="toggleChecklist(this)">
+                <div class="check-box"><i class="fas fa-check"></i></div>
+                <span>Intensity adjusted</span>
+              </div>
+              <div class="checklist-item" onclick="toggleChecklist(this)">
+                <div class="check-box"><i class="fas fa-check"></i></div>
+                <span>Ready to process</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="processing-overlay" id="processingOverlay">
+  <div class="processing-card" id="processingCard">
+    <div class="spinner"></div>
+    <h2 style="font-size:24px;font-weight:300;margin-bottom:8px">Processing <span style="font-weight:600">Video</span></h2>
+    <p class="text-gray mb-16">Applying Face Blur at 70% intensity</p>
+    <div style="width:300px;margin:0 auto">
+      <div class="flex justify-between text-sm mb-4">
+        <span>Progress</span>
+        <span id="processPercent">0%</span>
+      </div>
+      <div class="progress-bar" style="height:8px">
+        <div class="progress-bar-fill" id="processFill" style="width:0%"></div>
+      </div>
+      <p class="text-xs text-gray" style="margin-top:12px" id="processStatus">Analyzing frames...</p>
+    </div>
+  </div>
+  
+  <div class="complete-card" id="completeCard" style="display:none">
+    <div class="checkmark"><i class="fas fa-check"></i></div>
+    <h2 style="font-size:24px;font-weight:300;margin-bottom:8px">Processing <span style="font-weight:600">Complete!</span></h2>
+    <p class="text-gray">Your video has been anonymized successfully</p>
+    <div class="result-preview">
+      <div style="width:160px;height:90px;background:#222;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+        <i class="fas fa-mask" style="color:#666;font-size:24px"></i>
+      </div>
+      <div style="text-align:left">
+        <h3 style="margin-bottom:4px">interview_session_masked.mp4</h3>
+        <p class="text-xs text-gray mb-8">Face Blur • 70% • 3 subjects</p>
+        <span class="tag-success text-xs"><i class="fas fa-check" style="margin-right:4px"></i> Faces Hidden</span>
+      </div>
+    </div>
+    <div class="flex gap-12 justify-center">
+      <button class="btn btn-primary" onclick="downloadResult()"><i class="fas fa-download"></i> Download</button>
+      <button class="btn btn-secondary" onclick="previewResult()"><i class="fas fa-play"></i> Preview</button>
+    </div>
+    <div class="flex gap-16 justify-center" style="margin-top:24px">
+      <button class="btn btn-ghost btn-sm" onclick="closeOverlay()"><i class="fas fa-plus"></i> Process Another</button>
+      <button class="btn btn-ghost btn-sm"><i class="fas fa-save"></i> Save Template</button>
+    </div>
+  </div>
+</div>
+
+<script>
+let isPlaying=false,currentTime=0,duration=754,selectedPreset='face-blur',intensity=70,playInterval;
+
+function selectPreset(el,preset){
+  document.querySelectorAll('.preset-card').forEach(c=>{
+    c.classList.remove('selected');
+    const i=c.querySelector('.icon-box');
+    i.classList.add('icon-box-gray');
+  });
+  el.classList.add('selected');
+  el.querySelector('.icon-box').classList.remove('icon-box-gray');
+  selectedPreset=preset;
+  updatePreview();
+}
+
+function updateIntensity(val){
+  intensity=val*10;
+  document.getElementById('intensityValue').textContent=intensity+'%';
+  updatePreview();
+}
+
+function updatePreview(){
+  const badge=document.querySelector('#previewVideo .detection-badge');
+  let name='Face Blur';
+  if(selectedPreset==='full-body')name='Full Body';
+  if(selectedPreset==='skeleton')name='Skeleton';
+  if(selectedPreset==='pixelate')name='Pixelate';
+  badge.innerHTML=`<i class="fas fa-shield-alt"></i> ${name} • ${intensity}%`;
+  const blur=Math.round(intensity/10);
+  document.querySelectorAll('.face-indicator.blurred').forEach(f=>{
+    if(selectedPreset==='face-blur'){
+      f.style.backdropFilter=`blur(${blur}px)`;
+      f.style.background='rgba(255,255,255,0.3)';
+    }else if(selectedPreset==='pixelate'){
+      f.style.backdropFilter='none';
+      f.style.background=`repeating-conic-gradient(#666 0% 25%, #999 0% 50%) 50% / ${12-blur}px ${12-blur}px`;
+    }else{
+      f.style.backdropFilter='none';
+      f.style.background='#000';
+    }
+  });
+}
+
+function toggleCheckbox(el){
+  const cb=el.querySelector('.checkbox-custom');
+  cb.classList.toggle('checked');
+}
+
+function togglePerson(el){
+  const cb=el.querySelector('.checkbox-custom');
+  cb.classList.toggle('checked');
+}
+
+function togglePlay(){
+  isPlaying=!isPlaying;
+  document.getElementById('playBtn').innerHTML=isPlaying?'<i class="fas fa-pause"></i>':'<i class="fas fa-play"></i>';
+  if(isPlaying){
+    playInterval=setInterval(()=>{
+      currentTime+=1;
+      if(currentTime>=duration){currentTime=0;togglePlay();}
+      updateTimeline();
+    },1000);
+  }else clearInterval(playInterval);
+}
+
+function updateTimeline(){
+  const p=(currentTime/duration)*100;
+  document.getElementById('timelineProgress').style.width=p+'%';
+  document.getElementById('timelineHandle').style.left=p+'%';
+  const m=Math.floor(currentTime/60),s=currentTime%60;
+  document.getElementById('timeDisplay').textContent=`${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')} / 12:34`;
+}
+
+function seekTo(e){
+  const t=document.getElementById('timeline'),r=t.getBoundingClientRect();
+  currentTime=Math.floor(((e.clientX-r.left)/r.width)*duration);
+  updateTimeline();
+}
+
+function skipBack(){currentTime=Math.max(0,currentTime-10);updateTimeline();}
+function skipForward(){currentTime=Math.min(duration,currentTime+10);updateTimeline();}
+function resetPreview(){document.querySelectorAll('.preset-card')[0].click();document.getElementById('intensitySlider').value=7;updateIntensity(7);}
+
+function startProcessing(){
+  const o=document.getElementById('processingOverlay'),pc=document.getElementById('processingCard'),cc=document.getElementById('completeCard');
+  o.classList.add('active');pc.style.display='block';cc.style.display='none';
+  let p=0;const st=['Analyzing frames...','Detecting faces...','Applying blur mask...','Rendering output...','Finalizing...'];
+  const iv=setInterval(()=>{
+    p+=Math.random()*12;if(p>100)p=100;
+    document.getElementById('processPercent').textContent=Math.round(p)+'%';
+    document.getElementById('processFill').style.width=p+'%';
+    document.getElementById('processStatus').textContent=st[Math.floor(p/25)]||st[4];
+    if(p>=100){clearInterval(iv);setTimeout(()=>{pc.style.display='none';cc.style.display='block';},500);}
+  },200);
+}
+
+function closeOverlay(){
+  document.getElementById('processingOverlay').classList.remove('active');
+  document.getElementById('processPercent').textContent='0%';
+  document.getElementById('processFill').style.width='0%';
+}
+
+function downloadResult(){alert('Download started: interview_session_masked.mp4');closeOverlay();}
+function previewResult(){alert('Opening preview in new window...');}
+
+function toggleWorkflow(){
+  const content=document.getElementById('workflowContent');
+  const chevron=document.getElementById('workflowChevron');
+  content.classList.toggle('open');
+  chevron.style.transform=content.classList.contains('open')?'rotate(180deg)':'rotate(0)';
+}
+
+function toggleChecklist(el){
+  el.classList.toggle('checked');
+  updateWorkflowProgress();
+}
+
+function updateWorkflowProgress(){
+  const items=document.querySelectorAll('.checklist-item');
+  const checked=document.querySelectorAll('.checklist-item.checked').length;
+  const pct=Math.round((checked/items.length)*100);
+  document.querySelector('.workflow-progress-mini-fill').style.width=pct+'%';
+  document.querySelector('.workflow-header p').textContent=`${checked} of ${items.length} items completed`;
+}
+
+updatePreview();
+</script>
+</body>
+</html>

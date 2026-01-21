@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MaskAnyone - Advanced Editor</title>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:'IBM Plex Sans',sans-serif;background:#f5f5f5;color:#000;line-height:1.4;overflow:hidden}
+    
+    .icon-box{width:32px;height:32px;background:#000;color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:12px}
+    .icon-box.active{background:#000;color:#fff;outline:2px solid #000;outline-offset:2px}
+    .icon-box-outline{background:#fff;color:#000;border:2px solid #000}
+    .icon-box-gray{background:#e5e5e5;color:#666}
+    
+    .btn{display:inline-flex;align-items:center;gap:8px;padding:10px 18px;font-family:inherit;font-size:12px;font-weight:600;cursor:pointer;transition:all .15s;border:none}
+    .btn-primary{background:#000;color:#fff}.btn-primary:hover{background:#333}
+    .btn-secondary{background:#fff;color:#000;border:2px solid #000}.btn-secondary:hover{background:#000;color:#fff}
+    .btn-ghost{background:transparent;color:#666;border:2px solid transparent}.btn-ghost:hover{background:#e5e5e5;color:#000}
+    .btn-sm{padding:8px 14px;font-size:11px}
+    .btn-icon{width:32px;height:32px;padding:0;justify-content:center}
+    
+    .tag{padding:4px 10px;font-size:10px;font-weight:600;background:#000;color:#fff;text-transform:uppercase;letter-spacing:.5px}
+    .tag-outline{background:#fff;color:#000;border:2px solid #000}
+    .tag-accent{background:#00cc6a;color:#000}
+    
+    .app-frame{height:100vh;display:flex;flex-direction:column;background:#fff}
+    
+    .app-header{display:flex;align-items:center;justify-content:space-between;padding:12px 20px;background:#fff;border-bottom:2px solid #000}
+    .app-logo{font-size:16px;font-weight:700;display:flex;align-items:center;gap:10px;color:#000}
+    .app-logo i{font-size:18px}
+    
+    .header-center{display:flex;align-items:center;gap:12px}
+    .header-right{display:flex;align-items:center;gap:8px}
+    
+    .toolbar{display:flex;align-items:center;gap:4px;padding:6px;background:#f5f5f5;border:2px solid #e5e5e5}
+    
+    .app-body{display:flex;flex:1;overflow:hidden}
+    
+    .panel{background:#fafafa;border-right:2px solid #e5e5e5;display:flex;flex-direction:column}
+    .panel-header{padding:16px;border-bottom:2px solid #e5e5e5;display:flex;align-items:center;justify-content:space-between;background:#fff}
+    .panel-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#000}
+    .panel-content{flex:1;overflow-y:auto;padding:16px}
+    
+    .left-panel{width:240px}
+    .right-panel{width:280px;border-right:none;border-left:2px solid #e5e5e5}
+    
+    .center-area{flex:1;display:flex;flex-direction:column;background:#e5e5e5}
+    
+    .canvas-area{flex:1;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;padding:24px}
+    .video-canvas{background:#1a1a1a;width:100%;max-width:900px;aspect-ratio:16/9;position:relative;border:3px solid #000;box-shadow:8px 8px 0 #000}
+    
+    .subject-box{position:absolute;border:3px solid #00cc6a;background:rgba(0,204,106,.1);cursor:move}
+    .subject-box.selected{border-color:#000;background:rgba(0,0,0,.1);box-shadow:0 0 0 3px rgba(0,0,0,.2)}
+    .subject-box-label{position:absolute;top:-28px;left:-3px;background:#00cc6a;color:#000;font-size:10px;font-weight:700;padding:4px 10px;text-transform:uppercase;letter-spacing:.5px}
+    .subject-box.selected .subject-box-label{background:#000;color:#fff}
+    
+    .resize-handle{position:absolute;width:10px;height:10px;background:#000}
+    .resize-handle.tl{top:-5px;left:-5px;cursor:nwse-resize}
+    .resize-handle.tr{top:-5px;right:-5px;cursor:nesw-resize}
+    .resize-handle.bl{bottom:-5px;left:-5px;cursor:nesw-resize}
+    .resize-handle.br{bottom:-5px;right:-5px;cursor:nwse-resize}
+    
+    .canvas-tools{position:absolute;bottom:20px;left:50%;transform:translateX(-50%);display:flex;gap:4px;background:#fff;padding:8px;border:2px solid #000}
+    
+    .timeline-area{height:200px;background:#fff;border-top:3px solid #000;display:flex;flex-direction:column}
+    .timeline-toolbar{display:flex;align-items:center;gap:16px;padding:12px 20px;border-bottom:2px solid #e5e5e5;background:#fafafa}
+    .timeline-time{font-family:'Inter',monospace;font-size:13px;font-weight:600;color:#000;min-width:130px;background:#fff;padding:6px 12px;border:2px solid #e5e5e5}
+    
+    .timeline-main{flex:1;display:flex;overflow:hidden}
+    .timeline-labels{width:200px;background:#fafafa;border-right:2px solid #e5e5e5;flex-shrink:0}
+    .timeline-tracks{flex:1;overflow-x:auto;position:relative;background:#fff}
+    
+    .track-label{height:40px;display:flex;align-items:center;gap:10px;padding:0 16px;border-bottom:2px solid #e5e5e5;font-size:12px;font-weight:600}
+    .track-label .icon-box{width:24px;height:24px;font-size:10px}
+    
+    .track-row{height:40px;border-bottom:2px solid #e5e5e5;position:relative}
+    .track-clip{position:absolute;top:6px;height:28px;background:#e5e5e5;cursor:pointer;display:flex;align-items:center;padding:0 12px;font-size:10px;font-weight:600;border:2px solid #ccc}
+    .track-clip.active{background:#00cc6a;color:#000;border-color:#000}
+    .track-clip.mask{background:#ddd;border-color:#999}
+    
+    .keyframe{position:absolute;top:50%;transform:translate(-50%,-50%) rotate(45deg);width:10px;height:10px;background:#000;cursor:pointer}
+    
+    .playhead{position:absolute;top:0;bottom:0;width:3px;background:#000;z-index:10;pointer-events:none}
+    .playhead::before{content:'';position:absolute;top:-8px;left:-6px;border:8px solid transparent;border-top-color:#000}
+    
+    .ruler{height:28px;background:#fafafa;border-bottom:2px solid #e5e5e5;position:relative}
+    .ruler-mark{position:absolute;bottom:0;width:2px;background:#ccc}
+    .ruler-mark.major{height:14px;background:#000}
+    .ruler-mark.major::after{content:attr(data-time);position:absolute;top:-16px;left:4px;font-size:10px;font-weight:600;color:#000}
+    .ruler-mark.minor{height:8px}
+    
+    .subject-item{display:flex;align-items:center;gap:12px;padding:12px;background:#fff;margin-bottom:8px;cursor:pointer;border:2px solid #e5e5e5;transition:all .15s}
+    .subject-item:hover{border-color:#999}
+    .subject-item.selected{border-color:#000;background:#f5f5f5}
+    .subject-item.selected::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:#00cc6a}
+    .subject-item{position:relative}
+    
+    .subject-color{width:14px;height:14px}
+    
+    .prop-group{margin-bottom:20px}
+    .prop-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#666;margin-bottom:10px}
+    .prop-row{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+    .prop-input{flex:1;background:#fff;border:2px solid #e5e5e5;color:#000;padding:8px 12px;font-size:12px;font-family:inherit;font-weight:500}
+    .prop-input:focus{outline:none;border-color:#000}
+    .prop-select{flex:1;background:#fff;border:2px solid #e5e5e5;color:#000;padding:8px 12px;font-size:12px;font-family:inherit;font-weight:500}
+    .prop-select:focus{outline:none;border-color:#000}
+    
+    .strategy-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+    .strategy-btn{padding:14px 10px;background:#fff;border:2px solid #e5e5e5;cursor:pointer;text-align:center;transition:all .15s}
+    .strategy-btn:hover{border-color:#999}
+    .strategy-btn.selected{border-color:#000;background:#f5f5f5}
+    .strategy-btn i{font-size:18px;margin-bottom:6px;display:block}
+    .strategy-btn span{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.5px}
+    
+    .color-grid{display:flex;gap:8px;flex-wrap:wrap}
+    .color-swatch{width:28px;height:28px;border:2px solid #e5e5e5;cursor:pointer;transition:all .15s}
+    .color-swatch:hover{border-color:#999}
+    .color-swatch.selected{border-color:#000;outline:2px solid #000;outline-offset:2px}
+    
+    .zoom-control{display:flex;align-items:center;gap:4px;background:#fff;padding:4px;border:2px solid #e5e5e5}
+    
+    h4{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#000;margin-bottom:12px}
+    
+    .text-xs{font-size:11px}.text-gray{color:#666}
+    .flex{display:flex}.flex-1{flex:1}.items-center{align-items:center}.justify-between{justify-content:space-between}
+    .gap-4{gap:4px}.gap-8{gap:8px}.gap-12{gap:12px}.gap-16{gap:16px}
+    
+    .divider{height:2px;background:#e5e5e5;margin:16px 0}
+    
+    .slider{width:100%;-webkit-appearance:none;height:6px;background:#e5e5e5;outline:none}
+    .slider::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;background:#000;cursor:pointer}
+    
+    .checkbox-group{display:flex;flex-direction:column;gap:8px}
+    .checkbox-group label{display:flex;align-items:center;gap:10px;font-size:12px;font-weight:500;cursor:pointer;padding:8px 10px;background:#fff;border:2px solid #e5e5e5;transition:all .15s}
+    .checkbox-group label:hover{border-color:#999}
+    .checkbox-group input[type="checkbox"]{width:16px;height:16px;accent-color:#000}
+  </style>
+</head>
+<body>
+<div class="app-frame">
+  <div class="app-header">
+    <div class="flex items-center gap-16">
+      <div class="app-logo"><i class="fas fa-mask"></i> MASKANYONE</div>
+      <div style="width:2px;height:24px;background:#e5e5e5"></div>
+      <span class="text-xs" style="font-weight:500">Clinical_Study_P001.mp4</span>
+      <span class="tag-outline">Unsaved</span>
+    </div>
+    <div class="header-center">
+      <div class="toolbar">
+        <button class="btn btn-icon btn-ghost" title="Undo"><i class="fas fa-undo"></i></button>
+        <button class="btn btn-icon btn-ghost" title="Redo"><i class="fas fa-redo"></i></button>
+      </div>
+      <div class="toolbar">
+        <button class="btn btn-icon btn-ghost" title="Selection"><i class="fas fa-mouse-pointer"></i></button>
+        <button class="btn btn-icon" style="background:#000;color:#fff" title="Draw Mask"><i class="fas fa-draw-polygon"></i></button>
+        <button class="btn btn-icon btn-ghost" title="Brush"><i class="fas fa-paint-brush"></i></button>
+        <button class="btn btn-icon btn-ghost" title="Eraser"><i class="fas fa-eraser"></i></button>
+      </div>
+    </div>
+    <div class="header-right">
+      <button class="btn btn-ghost btn-sm"><i class="fas fa-save"></i> Save</button>
+      <button class="btn btn-secondary btn-sm"><i class="fas fa-file-export"></i> Export</button>
+      <button class="btn btn-primary btn-sm"><i class="fas fa-play"></i> Render</button>
+    </div>
+  </div>
+
+  <div class="app-body">
+    <div class="panel left-panel">
+      <div class="panel-header">
+        <span class="panel-title"><i class="fas fa-users" style="margin-right:8px"></i> Subjects</span>
+        <button class="btn btn-icon btn-ghost btn-sm" title="Add"><i class="fas fa-plus"></i></button>
+      </div>
+      <div class="panel-content">
+        <div class="subject-item selected" onclick="selectSubject(0)">
+          <div class="subject-color" style="background:#00cc6a"></div>
+          <div class="icon-box" style="width:28px;height:28px;background:#00cc6a;color:#000"><i class="fas fa-user"></i></div>
+          <div class="flex-1">
+            <div class="text-xs" style="font-weight:600">Person 1</div>
+            <div class="text-xs text-gray">0:00 - 12:34</div>
+          </div>
+          <button class="btn btn-icon btn-ghost btn-sm"><i class="fas fa-eye"></i></button>
+        </div>
+        <div class="subject-item" onclick="selectSubject(1)">
+          <div class="subject-color" style="background:#ff5757"></div>
+          <div class="icon-box" style="width:28px;height:28px;background:#ff5757;color:#fff"><i class="fas fa-user"></i></div>
+          <div class="flex-1">
+            <div class="text-xs" style="font-weight:600">Person 2</div>
+            <div class="text-xs text-gray">2:15 - 10:22</div>
+          </div>
+          <button class="btn btn-icon btn-ghost btn-sm"><i class="fas fa-eye"></i></button>
+        </div>
+        <div class="subject-item" onclick="selectSubject(2)">
+          <div class="subject-color" style="background:#4ecdc4"></div>
+          <div class="icon-box" style="width:28px;height:28px;background:#4ecdc4;color:#000"><i class="fas fa-user"></i></div>
+          <div class="flex-1">
+            <div class="text-xs" style="font-weight:600">Person 3</div>
+            <div class="text-xs text-gray">5:00 - 8:45</div>
+          </div>
+          <button class="btn btn-icon btn-ghost btn-sm"><i class="fas fa-eye"></i></button>
+        </div>
+        
+        <div class="divider"></div>
+        
+        <h4><i class="fas fa-crosshairs" style="margin-right:8px"></i> Body Parts</h4>
+        <div class="checkbox-group">
+          <label><input type="checkbox" checked> Face</label>
+          <label><input type="checkbox" checked> Body</label>
+          <label><input type="checkbox"> Hands</label>
+          <label><input type="checkbox"> Feet</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="center-area">
+      <div class="canvas-area">
+        <div class="video-canvas" id="videoCanvas">
+          <div class="subject-box selected" style="left:30%;top:15%;width:120px;height:160px">
+            <span class="subject-box-label">Person 1</span>
+            <div class="resize-handle tl"></div>
+            <div class="resize-handle tr"></div>
+            <div class="resize-handle bl"></div>
+            <div class="resize-handle br"></div>
+          </div>
+          <div class="subject-box" style="left:55%;top:20%;width:100px;height:140px;border-color:#ff5757">
+            <span class="subject-box-label" style="background:#ff5757;color:#fff">Person 2</span>
+            <div class="resize-handle tl"></div>
+            <div class="resize-handle tr"></div>
+            <div class="resize-handle bl"></div>
+            <div class="resize-handle br"></div>
+          </div>
+          <div class="subject-box" style="left:12%;top:25%;width:90px;height:130px;border-color:#4ecdc4">
+            <span class="subject-box-label" style="background:#4ecdc4">Person 3</span>
+            <div class="resize-handle tl"></div>
+            <div class="resize-handle tr"></div>
+            <div class="resize-handle bl"></div>
+            <div class="resize-handle br"></div>
+          </div>
+          
+          <div class="canvas-tools">
+            <button class="btn btn-icon btn-ghost"><i class="fas fa-search-minus"></i></button>
+            <span class="text-xs" style="padding:0 12px;font-weight:600">100%</span>
+            <button class="btn btn-icon btn-ghost"><i class="fas fa-search-plus"></i></button>
+            <div style="width:2px;height:20px;background:#e5e5e5;margin:0 4px"></div>
+            <button class="btn btn-icon btn-ghost"><i class="fas fa-expand"></i></button>
+            <button class="btn btn-icon btn-ghost"><i class="fas fa-th"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-area">
+        <div class="timeline-toolbar">
+          <div class="toolbar">
+            <button class="btn btn-icon btn-ghost"><i class="fas fa-step-backward"></i></button>
+            <button class="btn btn-icon btn-ghost"><i class="fas fa-chevron-left"></i></button>
+            <button class="btn btn-icon" style="background:#000;color:#fff"><i class="fas fa-play"></i></button>
+            <button class="btn btn-icon btn-ghost"><i class="fas fa-chevron-right"></i></button>
+            <button class="btn btn-icon btn-ghost"><i class="fas fa-step-forward"></i></button>
+          </div>
+          <div class="timeline-time">00:03:24 / 12:34</div>
+          <div style="width:2px;height:24px;background:#e5e5e5"></div>
+          <button class="btn btn-secondary btn-sm"><i class="fas fa-diamond"></i> Keyframe</button>
+          <button class="btn btn-ghost btn-sm"><i class="fas fa-cut"></i> Split</button>
+          <div class="flex-1"></div>
+          <div class="zoom-control">
+            <button class="btn btn-icon btn-ghost btn-sm"><i class="fas fa-minus"></i></button>
+            <span class="text-xs" style="min-width:50px;text-align:center;font-weight:600">100%</span>
+            <button class="btn btn-icon btn-ghost btn-sm"><i class="fas fa-plus"></i></button>
+          </div>
+        </div>
+        
+        <div class="timeline-main">
+          <div class="timeline-labels">
+            <div style="height:28px;border-bottom:2px solid #e5e5e5"></div>
+            <div class="track-label">
+              <div class="icon-box" style="background:#00cc6a;color:#000"><i class="fas fa-user"></i></div>
+              <span class="flex-1">Person 1</span>
+              <i class="fas fa-lock-open text-gray"></i>
+            </div>
+            <div class="track-label">
+              <div class="icon-box" style="background:#ff5757;color:#fff"><i class="fas fa-user"></i></div>
+              <span class="flex-1">Person 2</span>
+              <i class="fas fa-lock-open text-gray"></i>
+            </div>
+            <div class="track-label">
+              <div class="icon-box" style="background:#4ecdc4;color:#000"><i class="fas fa-user"></i></div>
+              <span class="flex-1">Person 3</span>
+              <i class="fas fa-lock-open text-gray"></i>
+            </div>
+          </div>
+          
+          <div class="timeline-tracks">
+            <div class="ruler">
+              <div class="ruler-mark major" style="left:0%" data-time="0:00"></div>
+              <div class="ruler-mark major" style="left:25%" data-time="3:00"></div>
+              <div class="ruler-mark major" style="left:50%" data-time="6:00"></div>
+              <div class="ruler-mark major" style="left:75%" data-time="9:00"></div>
+              <div class="ruler-mark major" style="left:100%" data-time="12:00"></div>
+            </div>
+            <div class="track-row">
+              <div class="track-clip active" style="left:0%;width:100%">
+                <span>Full Duration</span>
+                <div class="keyframe" style="left:10%"></div>
+                <div class="keyframe" style="left:45%"></div>
+                <div class="keyframe" style="left:78%"></div>
+              </div>
+            </div>
+            <div class="track-row">
+              <div class="track-clip mask" style="left:18%;width:65%">
+                <span>2:15 - 10:22</span>
+                <div class="keyframe" style="left:30%"></div>
+              </div>
+            </div>
+            <div class="track-row">
+              <div class="track-clip mask" style="left:40%;width:30%">
+                <span>5:00 - 8:45</span>
+              </div>
+            </div>
+            <div class="playhead" style="left:27%"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel right-panel">
+      <div class="panel-header">
+        <span class="panel-title"><i class="fas fa-sliders-h" style="margin-right:8px"></i> Properties</span>
+      </div>
+      <div class="panel-content">
+        <div class="prop-group">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px">
+            <div class="icon-box" style="background:#00cc6a;color:#000;width:24px;height:24px"><i class="fas fa-user" style="font-size:10px"></i></div>
+            <span style="font-weight:600;font-size:13px">Person 1</span>
+            <span class="tag-accent" style="margin-left:auto">Selected</span>
+          </div>
+          <div class="prop-row">
+            <span class="text-xs text-gray" style="width:50px">Name</span>
+            <input type="text" class="prop-input" value="Person 1">
+          </div>
+        </div>
+        
+        <div class="divider"></div>
+        
+        <div class="prop-group">
+          <h4><i class="fas fa-eye-slash" style="margin-right:8px"></i> Hiding Strategy</h4>
+          <div class="strategy-grid">
+            <div class="strategy-btn"><i class="fas fa-tint"></i><span>Blur</span></div>
+            <div class="strategy-btn selected"><i class="fas fa-square-full"></i><span>Solid</span></div>
+            <div class="strategy-btn"><i class="fas fa-th"></i><span>Pixelate</span></div>
+            <div class="strategy-btn"><i class="fas fa-draw-polygon"></i><span>Contour</span></div>
+          </div>
+        </div>
+        
+        <div class="prop-group">
+          <h4><i class="fas fa-running" style="margin-right:8px"></i> Overlay</h4>
+          <select class="prop-select">
+            <option value="none">None</option>
+            <option value="mediapipe">MediaPipe Pose (33 pts)</option>
+            <option value="openpose25">OpenPose Body25</option>
+            <option value="openpose135" selected>OpenPose 135</option>
+          </select>
+        </div>
+        
+        <div class="prop-group">
+          <h4><i class="fas fa-palette" style="margin-right:8px"></i> Fill Color</h4>
+          <div class="color-grid">
+            <div class="color-swatch selected" style="background:#000"></div>
+            <div class="color-swatch" style="background:#fff"></div>
+            <div class="color-swatch" style="background:#666"></div>
+            <div class="color-swatch" style="background:#00cc6a"></div>
+            <div class="color-swatch" style="background:#ff5757"></div>
+            <div class="color-swatch" style="background:#4ecdc4"></div>
+          </div>
+        </div>
+        
+        <div class="prop-group">
+          <h4><i class="fas fa-adjust" style="margin-right:8px"></i> Intensity</h4>
+          <input type="range" class="slider" min="0" max="100" value="80">
+          <div class="flex justify-between text-xs text-gray" style="margin-top:6px">
+            <span>0%</span>
+            <span style="font-weight:600;color:#000">80%</span>
+            <span>100%</span>
+          </div>
+        </div>
+        
+        <div class="prop-group">
+          <h4><i class="fas fa-feather" style="margin-right:8px"></i> Edge Feather</h4>
+          <input type="range" class="slider" min="0" max="50" value="10">
+          <div class="flex justify-between text-xs text-gray" style="margin-top:6px">
+            <span>0px</span>
+            <span style="font-weight:600;color:#000">10px</span>
+            <span>50px</span>
+          </div>
+        </div>
+        
+        <div class="divider"></div>
+        
+        <div class="prop-group">
+          <h4><i class="fas fa-vector-square" style="margin-right:8px"></i> Transform</h4>
+          <div class="prop-row">
+            <span class="text-xs" style="width:24px;font-weight:600">X</span>
+            <input type="number" class="prop-input" value="288" style="width:70px">
+            <span class="text-xs" style="width:24px;font-weight:600">Y</span>
+            <input type="number" class="prop-input" value="72" style="width:70px">
+          </div>
+          <div class="prop-row">
+            <span class="text-xs" style="width:24px;font-weight:600">W</span>
+            <input type="number" class="prop-input" value="120" style="width:70px">
+            <span class="text-xs" style="width:24px;font-weight:600">H</span>
+            <input type="number" class="prop-input" value="160" style="width:70px">
+          </div>
+        </div>
+        
+        <div class="divider"></div>
+        
+        <button class="btn btn-secondary" style="width:100%;margin-bottom:8px">
+          <i class="fas fa-copy"></i> Copy Settings
+        </button>
+        <button class="btn btn-ghost" style="width:100%;border:2px solid #e5e5e5">
+          <i class="fas fa-paste"></i> Paste to All
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function selectSubject(index) {
+  document.querySelectorAll('.subject-item').forEach((item, i) => {
+    item.classList.toggle('selected', i === index);
+  });
+  document.querySelectorAll('.subject-box').forEach((box, i) => {
+    box.classList.toggle('selected', i === index);
+  });
+}
+
+document.querySelectorAll('.strategy-btn').forEach(btn => {
+  btn.addEventListener('click', function() {
+    document.querySelectorAll('.strategy-btn').forEach(b => b.classList.remove('selected'));
+    this.classList.add('selected');
+  });
+});
+
+document.querySelectorAll('.color-swatch').forEach(swatch => {
+  swatch.addEventListener('click', function() {
+    document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('selected'));
+    this.classList.add('selected');
+  });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SYNAPSIS Network</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'sans': ['IBM Plex Sans', 'sans-serif'],
+                        'mono': ['IBM Plex Mono', 'monospace'],
+                    },
+                    colors: {
+                        'carbon': {
+                            'bg': '#ffffff',
+                            'bg-hover': '#f4f4f4',
+                            'border': '#e0e0e0',
+                            'text': '#161616',
+                            'text-secondary': '#525252',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'IBM Plex Sans', sans-serif;
+            background-color: #ffffff;
+            color: #161616;
+        }
+        .accent-bar {
+            height: 3px;
+            background: #161616;
+        }
+        .nav-link {
+            position: relative;
+            padding-bottom: 4px;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #161616;
+            transition: width 0.2s ease;
+        }
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        .btn-primary {
+            background: #161616;
+            color: #ffffff;
+            transition: all 0.15s ease;
+        }
+        .btn-primary:hover {
+            background: #393939;
+        }
+        .btn-secondary {
+            background: #ffffff;
+            color: #161616;
+            border: 1px solid #161616;
+            transition: all 0.15s ease;
+        }
+        .btn-secondary:hover {
+            background: #f4f4f4;
+        }
+        #network {
+            background: #fafafa;
+            border: 1px solid #e0e0e0;
+            cursor: grab;
+        }
+        #network:active {
+            cursor: grabbing;
+        }
+        .node {
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .node:hover {
+            filter: brightness(0.85);
+        }
+        .link {
+            stroke: #d1d5db;
+            stroke-opacity: 0.6;
+        }
+        .link.strong {
+            stroke: #525252;
+            stroke-opacity: 0.8;
+        }
+        .node-label {
+            font-size: 11px;
+            font-weight: 500;
+            text-anchor: middle;
+            pointer-events: none;
+            user-select: none;
+            font-family: 'IBM Plex Sans', sans-serif;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 12px;
+            background: white;
+            border: 1px solid #e0e0e0;
+            font-size: 12px;
+        }
+        .legend-dot {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+        }
+        .control-btn {
+            background: white;
+            border: 1px solid #e0e0e0;
+            padding: 8px 16px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+        .control-btn:hover {
+            background: #161616;
+            color: white;
+            border-color: #161616;
+        }
+        .control-btn.active {
+            background: #161616;
+            color: white;
+            border-color: #161616;
+        }
+        .info-panel {
+            background: white;
+            border: 1px solid #e0e0e0;
+            padding: 24px;
+            max-height: 600px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <!-- Header -->
+    <header class="border-b border-carbon-border sticky top-0 z-50 bg-white">
+        <div class="accent-bar"></div>
+        <nav class="container mx-auto px-6 py-4">
+            <div class="flex justify-between items-center">
+                <a href="index.html" class="text-xl font-semibold tracking-tight">
+                    SYNAPSIS
+                </a>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="index.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Home</a>
+                    <a href="platform.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Platform</a>
+                    <a href="training.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Training</a>
+                    <a href="resources.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Resources</a>
+                    <a href="network.html" class="text-sm font-medium border-b-2 border-carbon-text pb-1">Network</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Hero -->
+        <section class="py-16 px-6">
+            <div class="container mx-auto max-w-5xl">
+                <div class="mb-4">
+                    <span class="text-xs font-mono uppercase tracking-widest text-carbon-text-secondary">Network</span>
+                </div>
+                <h1 class="text-5xl font-semibold leading-tight mb-6">
+                    Stakeholder Network
+                </h1>
+                <p class="text-xl text-carbon-text-secondary max-w-2xl leading-relaxed">
+                    Interactive visualization of the SYNAPSIS ecosystem. Click nodes for details, drag to reorganize, scroll to zoom.
+                </p>
+            </div>
+        </section>
+
+        <!-- Network Visualization -->
+        <section class="px-6 pb-20">
+            <div class="container mx-auto max-w-7xl">
+                <!-- Controls & Legend -->
+                <div class="flex flex-wrap gap-4 items-center justify-between mb-6">
+                    <div class="flex flex-wrap gap-2">
+                        <button class="control-btn" onclick="resetZoom()">
+                            <i class="fas fa-search-minus mr-2"></i>Reset View
+                        </button>
+                        <button class="control-btn" onclick="centerNetwork()">
+                            <i class="fas fa-compress-arrows-alt mr-2"></i>Center
+                        </button>
+                        <button class="control-btn active" id="physicsBtn" onclick="togglePhysics()">
+                            <i class="fas fa-pause mr-2"></i>Pause
+                        </button>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <div class="legend-item">
+                            <div class="legend-dot" style="background: #161616;"></div>
+                            <span>Core</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-dot" style="background: #525252;"></div>
+                            <span>Universities</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-dot" style="background: #78716c;"></div>
+                            <span>Infrastructure</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-dot" style="background: #a3a3a3;"></div>
+                            <span>Pilots</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-dot" style="background: #d4d4d4;"></div>
+                            <span>Users</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <!-- Network Canvas -->
+                    <div class="lg:col-span-2">
+                        <svg id="network" width="100%" height="650"></svg>
+                    </div>
+
+                    <!-- Info Panel -->
+                    <div class="lg:col-span-1">
+                        <div class="info-panel" id="infoPanel">
+                            <div class="text-center text-carbon-text-secondary py-12">
+                                <i class="fas fa-hand-pointer text-5xl mb-4 opacity-30"></i>
+                                <p class="text-sm">Click a node to see details</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Partners List -->
+        <section class="py-20 px-6 bg-carbon-bg-hover border-y border-carbon-border">
+            <div class="container mx-auto max-w-5xl">
+                <div class="mb-12">
+                    <span class="text-xs font-mono uppercase tracking-widest text-carbon-text-secondary">Partners</span>
+                    <h2 class="text-3xl font-semibold mt-4">Core Partners</h2>
+                </div>
+                <div class="grid md:grid-cols-4 gap-6">
+                    <div class="border border-carbon-border bg-white p-6 text-center">
+                        <div class="font-semibold mb-1">Radboud University</div>
+                        <div class="text-xs text-carbon-text-secondary mb-4">Lead Institution</div>
+                        <p class="text-xs text-carbon-text-secondary">Humanities Lab, Technical Lead, Summer/Winter School</p>
+                    </div>
+                    <div class="border border-carbon-border bg-white p-6 text-center">
+                        <div class="font-semibold mb-1">VU Amsterdam</div>
+                        <div class="text-xs text-carbon-text-secondary mb-4">Partner</div>
+                        <p class="text-xs text-carbon-text-secondary">Masking Lab, Communication Science</p>
+                    </div>
+                    <div class="border border-carbon-border bg-white p-6 text-center">
+                        <div class="font-semibold mb-1">UvA</div>
+                        <div class="text-xs text-carbon-text-secondary mb-4">Partner</div>
+                        <p class="text-xs text-carbon-text-secondary">ILLC, Multimodal Analysis, Hands-on Workshops</p>
+                    </div>
+                    <div class="border border-carbon-border bg-white p-6 text-center">
+                        <div class="font-semibold mb-1">Erasmus University</div>
+                        <div class="text-xs text-carbon-text-secondary mb-4">Partner</div>
+                        <p class="text-xs text-carbon-text-secondary">DRIFT, Responsible Innovation, Ethics</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Infrastructure Partners -->
+        <section class="py-20 px-6">
+            <div class="container mx-auto max-w-5xl">
+                <div class="mb-12">
+                    <span class="text-xs font-mono uppercase tracking-widest text-carbon-text-secondary">Infrastructure</span>
+                    <h2 class="text-3xl font-semibold mt-4">Infrastructure Partners</h2>
+                </div>
+                <div class="grid md:grid-cols-3 gap-6">
+                    <div class="border border-carbon-border p-6">
+                        <div class="font-semibold mb-2">SURF</div>
+                        <p class="text-sm text-carbon-text-secondary mb-4">Dutch national ICT cooperative providing secure cloud infrastructure (SURF SANE) with encrypted storage and GPU computing.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="text-xs px-2 py-1 bg-carbon-bg-hover">Cloud</span>
+                            <span class="text-xs px-2 py-1 bg-carbon-bg-hover">GPU</span>
+                            <span class="text-xs px-2 py-1 bg-carbon-bg-hover">Storage</span>
+                        </div>
+                    </div>
+                    <div class="border border-carbon-border p-6">
+                        <div class="font-semibold mb-2">DANS</div>
+                        <p class="text-sm text-carbon-text-secondary mb-4">Data Archiving and Networked Services providing long-term FAIR preservation, DOI assignment, and metadata standards.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="text-xs px-2 py-1 bg-carbon-bg-hover">Archive</span>
+                            <span class="text-xs px-2 py-1 bg-carbon-bg-hover">FAIR</span>
+                            <span class="text-xs px-2 py-1 bg-carbon-bg-hover">DOI</span>
+                        </div>
+                    </div>
+                    <div class="border border-carbon-border p-6">
+                        <div class="font-semibold mb-2">eScience Center</div>
+                        <p class="text-sm text-carbon-text-secondary mb-4">Netherlands eScience Center providing expertise in research software sustainability and best practices.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="text-xs px-2 py-1 bg-carbon-bg-hover">RSE</span>
+                            <span class="text-xs px-2 py-1 bg-carbon-bg-hover">Sustainability</span>
+                        </div>
+                    </div>
+                    <div class="border border-carbon-border p-6">
+                        <div class="font-semibold mb-2">CLARIAH</div>
+                        <p class="text-sm text-carbon-text-secondary mb-4">Common Lab Research Infrastructure for Arts and Humanities providing tool integration and interoperability standards.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="text-xs px-2 py-1 bg-carbon-bg-hover">Humanities</span>
+                            <span class="text-xs px-2 py-1 bg-carbon-bg-hover">Tools</span>
+                        </div>
+                    </div>
+                    <div class="border border-carbon-border p-6">
+                        <div class="font-semibold mb-2">ODISSEI</div>
+                        <p class="text-sm text-carbon-text-secondary mb-4">Open Data Infrastructure for Social Science and Economic Innovations enabling cross-dataset discovery and integration.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="text-xs px-2 py-1 bg-carbon-bg-hover">Social Science</span>
+                            <span class="text-xs px-2 py-1 bg-carbon-bg-hover">Data</span>
+                        </div>
+                    </div>
+                    <div class="border border-carbon-border p-6">
+                        <div class="font-semibold mb-2">Hasso Plattner Institute</div>
+                        <p class="text-sm text-carbon-text-secondary mb-4">International partner in Potsdam providing technical expertise and contributing to method development.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="text-xs px-2 py-1 bg-carbon-bg-hover">Germany</span>
+                            <span class="text-xs px-2 py-1 bg-carbon-bg-hover">Technical</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Join Network -->
+        <section class="py-20 px-6 bg-carbon-text text-white">
+            <div class="container mx-auto max-w-5xl text-center">
+                <h2 class="text-3xl font-semibold mb-4">Join the Network</h2>
+                <p class="text-gray-400 mb-8 max-w-xl mx-auto">Interested in becoming a SYNAPSIS pilot site, partner institution, or contributing to the platform? Get in touch with our team.</p>
+                <div class="flex flex-wrap justify-center gap-4">
+                    <a href="mailto:babajide.owoyele@ru.nl" class="bg-white text-carbon-text px-6 py-3 font-medium hover:bg-gray-100 transition-colors">
+                        <i class="fas fa-envelope mr-2"></i> Contact Us
+                    </a>
+                    <a href="training.html" class="border border-white px-6 py-3 font-medium hover:bg-white hover:text-carbon-text transition-colors">
+                        Join Training
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-carbon-border py-12 px-6">
+        <div class="container mx-auto max-w-5xl">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-8">
+                <div>
+                    <div class="font-semibold text-lg mb-2">SYNAPSIS</div>
+                    <div class="text-sm text-carbon-text-secondary">
+                        Funded by NWO TDCC-SSH
+                    </div>
+                </div>
+                <div class="flex gap-8">
+                    <a href="index.html" class="text-sm text-carbon-text-secondary hover:text-carbon-text">Home</a>
+                    <a href="platform.html" class="text-sm text-carbon-text-secondary hover:text-carbon-text">Platform</a>
+                    <a href="training.html" class="text-sm text-carbon-text-secondary hover:text-carbon-text">Training</a>
+                    <a href="resources.html" class="text-sm text-carbon-text-secondary hover:text-carbon-text">Resources</a>
+                </div>
+            </div>
+            <div class="mt-8 pt-8 border-t border-carbon-border text-sm text-carbon-text-secondary">
+                © 2026 SYNAPSIS Project. Radboud University.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Network data - monochrome color scheme
+        const networkData = {
+            nodes: [
+                { id: 'synapsis', label: 'SYNAPSIS', type: 'core', size: 50 },
+                { id: 'radboud', label: 'Radboud\nUniversity', type: 'university', size: 35 },
+                { id: 'vu', label: 'VU\nAmsterdam', type: 'university', size: 30 },
+                { id: 'uva', label: 'University of\nAmsterdam', type: 'university', size: 30 },
+                { id: 'eur', label: 'EUR', type: 'university', size: 30 },
+                { id: 'hpi', label: 'HPI\nPotsdam', type: 'university', size: 25 },
+                { id: 'rug', label: 'University of\nGroningen', type: 'pilot', size: 28 },
+                { id: 'tilburg', label: 'Tilburg\nUniversity', type: 'pilot', size: 28 },
+                { id: 'surf', label: 'SURF', type: 'infrastructure', size: 35 },
+                { id: 'dans', label: 'DANS', type: 'infrastructure', size: 35 },
+                { id: 'clariah', label: 'CLARIAH', type: 'infrastructure', size: 25 },
+                { id: 'odissei', label: 'ODISSEI', type: 'infrastructure', size: 25 },
+                { id: 'researchers', label: 'Researchers', type: 'user', size: 30 },
+                { id: 'early_career', label: 'Early Career\nResearchers', type: 'user', size: 28 },
+                { id: 'stewards', label: 'Data\nStewards', type: 'user', size: 25 },
+                { id: 'developers', label: 'Developers', type: 'user', size: 25 },
+                { id: 'nwo', label: 'NWO', type: 'funding', size: 30 }
+            ],
+            links: [
+                { source: 'synapsis', target: 'radboud', strength: 'strong' },
+                { source: 'synapsis', target: 'vu', strength: 'strong' },
+                { source: 'synapsis', target: 'uva', strength: 'strong' },
+                { source: 'synapsis', target: 'eur', strength: 'strong' },
+                { source: 'synapsis', target: 'hpi', strength: 'normal' },
+                { source: 'synapsis', target: 'rug', strength: 'normal' },
+                { source: 'synapsis', target: 'tilburg', strength: 'normal' },
+                { source: 'synapsis', target: 'surf', strength: 'strong' },
+                { source: 'synapsis', target: 'dans', strength: 'strong' },
+                { source: 'synapsis', target: 'clariah', strength: 'normal' },
+                { source: 'synapsis', target: 'odissei', strength: 'normal' },
+                { source: 'nwo', target: 'synapsis', strength: 'strong' },
+                { source: 'researchers', target: 'synapsis', strength: 'strong' },
+                { source: 'early_career', target: 'synapsis', strength: 'strong' },
+                { source: 'stewards', target: 'synapsis', strength: 'normal' },
+                { source: 'developers', target: 'synapsis', strength: 'normal' },
+                { source: 'researchers', target: 'radboud', strength: 'normal' },
+                { source: 'researchers', target: 'vu', strength: 'normal' },
+                { source: 'researchers', target: 'uva', strength: 'normal' },
+                { source: 'early_career', target: 'rug', strength: 'normal' },
+                { source: 'early_career', target: 'tilburg', strength: 'normal' },
+                { source: 'surf', target: 'dans', strength: 'normal' },
+                { source: 'clariah', target: 'dans', strength: 'normal' }
+            ]
+        };
+
+        // Node details
+        const nodeDetails = {
+            synapsis: {
+                title: 'SYNAPSIS Platform',
+                role: 'Core Project',
+                description: 'Central platform integrating privacy-aware masking tools, secure infrastructure, and training programs for SSH researchers.',
+                details: ['MaskAnyone toolkit', 'Training programs', 'Community building', 'Standards development']
+            },
+            radboud: {
+                title: 'Radboud University',
+                role: 'Lead Institution',
+                description: 'Project coordination, Humanities Lab hosting, and technical platform development.',
+                details: ['Project lead', 'Technical development', 'Summer/Winter School', 'Pilot implementation']
+            },
+            vu: {
+                title: 'VU Amsterdam',
+                role: 'Partner University',
+                description: 'Communication linguistics research and Masking Lab co-creation forum host.',
+                details: ['Masking Lab', 'Ethics expertise', 'Training delivery', 'Research contribution']
+            },
+            uva: {
+                title: 'University of Amsterdam',
+                role: 'Partner University',
+                description: 'ILLC multimodal analysis research and hands-on workshop delivery.',
+                details: ['ILLC research', 'Hands-on workshops', 'Voice anonymization', 'Training programs']
+            },
+            eur: {
+                title: 'Erasmus University Rotterdam',
+                role: 'Partner University',
+                description: 'Design science methodology and responsible innovation through DRIFT institute.',
+                details: ['Co-lead', 'DRIFT institute', 'Ethics research', 'Policy development']
+            },
+            hpi: {
+                title: 'Hasso Plattner Institute',
+                role: 'International Partner',
+                description: 'German partner providing technical architecture expertise and method development.',
+                details: ['Technical architecture', 'International collaboration', 'Method development']
+            },
+            rug: {
+                title: 'University of Groningen',
+                role: 'Pilot Institution',
+                description: 'Pilot testing with early career researchers in social science interview contexts.',
+                details: ['Interview data pilots', 'Early adopter feedback', 'Training participation']
+            },
+            tilburg: {
+                title: 'Tilburg University',
+                role: 'Pilot Institution',
+                description: 'Pilot testing with educational and classroom observation data.',
+                details: ['Educational research pilots', 'Privacy compliance testing', 'User feedback']
+            },
+            surf: {
+                title: 'SURF',
+                role: 'Infrastructure Partner',
+                description: 'Dutch national ICT cooperative providing SURF SANE secure cloud computing.',
+                details: ['Cloud infrastructure', 'GPU resources', 'Encrypted storage', 'Technical support']
+            },
+            dans: {
+                title: 'DANS',
+                role: 'Archiving Partner',
+                description: 'Long-term FAIR data preservation, DOI assignment, and metadata standards.',
+                details: ['Data archiving', 'DOI assignment', 'FAIR metadata', 'Access control']
+            },
+            clariah: {
+                title: 'CLARIAH',
+                role: 'Research Infrastructure',
+                description: 'Digital humanities infrastructure providing tool interoperability and standards.',
+                details: ['Tool interoperability', 'Community coordination', 'Standards development']
+            },
+            odissei: {
+                title: 'ODISSEI',
+                role: 'Research Infrastructure',
+                description: 'Social science data infrastructure enabling cross-dataset discovery.',
+                details: ['Data discovery', 'Cross-dataset integration', 'Method sharing']
+            },
+            researchers: {
+                title: 'Researchers',
+                role: 'End Users',
+                description: 'SSH researchers using SYNAPSIS for privacy-aware audiovisual data management.',
+                details: ['Platform users', 'Video de-identification', 'Data archiving', 'Training participants']
+            },
+            early_career: {
+                title: 'Early Career Researchers',
+                role: 'Pilot Users',
+                description: 'PhD candidates and postdocs testing the platform in real research contexts.',
+                details: ['Pilot participants', 'Feedback providers', 'Use case developers', 'Community ambassadors']
+            },
+            stewards: {
+                title: 'Data Stewards',
+                role: 'Support Staff',
+                description: 'Data management professionals supporting researchers with GDPR compliance.',
+                details: ['Data governance', 'GDPR compliance', 'Policy development', 'Training delivery']
+            },
+            developers: {
+                title: 'Developers',
+                role: 'Contributors',
+                description: 'Technical contributors to the open-source platform.',
+                details: ['Open-source contributions', 'Algorithm development', 'Tool integration', 'Maskathon']
+            },
+            nwo: {
+                title: 'NWO',
+                role: 'Funding Organization',
+                description: 'Dutch Research Council funding through TDCC-SSH program.',
+                details: ['Project funding', 'TDCC-SSH program', '24-month grant', 'SSH support']
+            }
+        };
+
+        // Monochrome colors by type
+        const colors = {
+            core: '#161616',
+            university: '#525252',
+            infrastructure: '#78716c',
+            user: '#d4d4d4',
+            funding: '#a3a3a3',
+            pilot: '#a3a3a3'
+        };
+
+        // Setup SVG
+        const svg = d3.select('#network');
+        const width = svg.node().getBoundingClientRect().width;
+        const height = 650;
+
+        svg.attr('viewBox', [0, 0, width, height]);
+
+        const g = svg.append('g');
+
+        // Zoom behavior
+        const zoom = d3.zoom()
+            .scaleExtent([0.5, 3])
+            .on('zoom', (event) => {
+                g.attr('transform', event.transform);
+            });
+
+        svg.call(zoom);
+
+        // Force simulation
+        let simulation = d3.forceSimulation(networkData.nodes)
+            .force('link', d3.forceLink(networkData.links).id(d => d.id).distance(150))
+            .force('charge', d3.forceManyBody().strength(-800))
+            .force('center', d3.forceCenter(width / 2, height / 2))
+            .force('collision', d3.forceCollide().radius(d => d.size + 10));
+
+        // Draw links
+        const link = g.append('g')
+            .selectAll('line')
+            .data(networkData.links)
+            .join('line')
+            .attr('class', d => `link ${d.strength}`)
+            .attr('stroke-width', d => d.strength === 'strong' ? 3 : 2);
+
+        // Draw nodes
+        const node = g.append('g')
+            .selectAll('circle')
+            .data(networkData.nodes)
+            .join('circle')
+            .attr('class', 'node')
+            .attr('r', d => d.size)
+            .attr('fill', d => colors[d.type])
+            .attr('stroke', '#fff')
+            .attr('stroke-width', 2)
+            .call(drag(simulation))
+            .on('click', (event, d) => showNodeInfo(d));
+
+        // Draw labels
+        const label = g.append('g')
+            .selectAll('text')
+            .data(networkData.nodes)
+            .join('text')
+            .attr('class', 'node-label')
+            .attr('dy', d => d.size + 18)
+            .attr('fill', '#161616')
+            .selectAll('tspan')
+            .data(d => d.label.split('\n'))
+            .join('tspan')
+            .attr('x', 0)
+            .attr('dy', (d, i) => i * 12)
+            .text(d => d);
+
+        // Update positions
+        simulation.on('tick', () => {
+            link
+                .attr('x1', d => d.source.x)
+                .attr('y1', d => d.source.y)
+                .attr('x2', d => d.target.x)
+                .attr('y2', d => d.target.y);
+
+            node
+                .attr('cx', d => d.x)
+                .attr('cy', d => d.y);
+
+            g.selectAll('.node-label')
+                .attr('transform', d => `translate(${d.x},${d.y})`);
+        });
+
+        // Drag behavior
+        function drag(simulation) {
+            function dragstarted(event) {
+                if (!event.active) simulation.alphaTarget(0.3).restart();
+                event.subject.fx = event.subject.x;
+                event.subject.fy = event.subject.y;
+            }
+
+            function dragged(event) {
+                event.subject.fx = event.x;
+                event.subject.fy = event.y;
+            }
+
+            function dragended(event) {
+                if (!event.active) simulation.alphaTarget(0);
+                event.subject.fx = null;
+                event.subject.fy = null;
+            }
+
+            return d3.drag()
+                .on('start', dragstarted)
+                .on('drag', dragged)
+                .on('end', dragended);
+        }
+
+        // Show node information
+        function showNodeInfo(nodeData) {
+            const info = nodeDetails[nodeData.id];
+            const panel = document.getElementById('infoPanel');
+
+            panel.innerHTML = `
+                <div class="flex items-center gap-4 mb-6">
+                    <div class="w-14 h-14 rounded-full flex items-center justify-center text-white text-xl"
+                         style="background: ${colors[nodeData.type]}">
+                        <i class="fas fa-${nodeData.type === 'core' ? 'link' :
+                                         nodeData.type === 'university' ? 'university' :
+                                         nodeData.type === 'infrastructure' ? 'server' :
+                                         nodeData.type === 'user' ? 'user' :
+                                         nodeData.type === 'pilot' ? 'flask' : 'euro-sign'}"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-semibold">${info.title}</h3>
+                        <p class="text-carbon-text-secondary text-sm">${info.role}</p>
+                    </div>
+                </div>
+                <p class="text-carbon-text-secondary mb-6 text-sm leading-relaxed">${info.description}</p>
+                <h4 class="font-medium mb-3 text-sm">Key Contributions:</h4>
+                <ul class="space-y-2">
+                    ${info.details.map(detail => `
+                        <li class="flex items-start text-sm">
+                            <i class="fas fa-check text-carbon-text mr-2 mt-1"></i>
+                            <span class="text-carbon-text-secondary">${detail}</span>
+                        </li>
+                    `).join('')}
+                </ul>
+            `;
+        }
+
+        // Controls
+        function resetZoom() {
+            svg.transition().duration(750).call(
+                zoom.transform,
+                d3.zoomIdentity
+            );
+        }
+
+        function centerNetwork() {
+            const bounds = g.node().getBBox();
+            const fullWidth = bounds.width;
+            const fullHeight = bounds.height;
+            const midX = bounds.x + fullWidth / 2;
+            const midY = bounds.y + fullHeight / 2;
+
+            const scale = 0.9 / Math.max(fullWidth / width, fullHeight / height);
+            const translate = [width / 2 - scale * midX, height / 2 - scale * midY];
+
+            svg.transition().duration(750).call(
+                zoom.transform,
+                d3.zoomIdentity.translate(translate[0], translate[1]).scale(scale)
+            );
+        }
+
+        let physicsEnabled = true;
+        function togglePhysics() {
+            physicsEnabled = !physicsEnabled;
+            const btn = document.getElementById('physicsBtn');
+
+            if (physicsEnabled) {
+                simulation.alpha(0.3).restart();
+                btn.innerHTML = '<i class="fas fa-pause mr-2"></i>Pause';
+            } else {
+                simulation.stop();
+                btn.innerHTML = '<i class="fas fa-play mr-2"></i>Resume';
+            }
+        }
+
+        // Initial center after short delay
+        setTimeout(centerNetwork, 500);
+    </script>
+</body>
+</html>

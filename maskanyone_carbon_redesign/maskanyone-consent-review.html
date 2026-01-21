@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MaskAnyone - Review & Configure</title>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --carbon-bg: #ffffff;
+      --carbon-bg-hover: #f4f4f4;
+      --carbon-border: #e0e0e0;
+      --carbon-text: #161616;
+      --carbon-text-secondary: #393939; /* Improved from #525252 for better contrast (7:1 ratio) */
+      --carbon-focus: #0f62fe;
+      --carbon-success: #198038;
+      --carbon-success-dark: #0e6027; /* Darker green for text on light backgrounds */
+      --carbon-warning: #f1c21b;
+      --carbon-warning-dark: #735f00; /* Darker yellow for text (4.5:1 on white) */
+      --carbon-error: #da1e28;
+      --carbon-text-on-dark: #f4f4f4; /* For text on dark backgrounds */
+    }
+
+    body {
+      font-family: 'IBM Plex Sans', sans-serif;
+      background: var(--carbon-bg);
+      color: var(--carbon-text);
+      line-height: 1.5;
+      min-height: 100vh;
+    }
+
+    *:focus-visible {
+      outline: 2px solid var(--carbon-focus);
+      outline-offset: 2px;
+    }
+
+    .skip-link {
+      position: absolute;
+      top: -40px;
+      left: 0;
+      background: var(--carbon-text);
+      color: white;
+      padding: 8px 16px;
+      z-index: 100;
+    }
+    .skip-link:focus { top: 0; }
+
+    /* Layout */
+    .app-frame { min-height: 100vh; display: flex; flex-direction: column; }
+    .accent-bar { height: 3px; background: var(--carbon-text); }
+
+    .app-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 24px;
+      border-bottom: 1px solid var(--carbon-border);
+    }
+    .app-logo {
+      font-size: 18px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .progress-steps {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .progress-step {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      background: var(--carbon-bg-hover);
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--carbon-text-secondary);
+    }
+    .progress-step.active { background: var(--carbon-text); color: #fff; }
+    .progress-step.completed { background: var(--carbon-success); color: #fff; }
+    .progress-step-number {
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    /* Main Layout */
+    .main-layout {
+      display: flex;
+      flex: 1;
+      overflow: hidden;
+    }
+
+    /* Video Preview Panel */
+    .preview-panel {
+      flex: 1;
+      background: #1a1a1a;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+    .video-container {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      padding: 24px;
+    }
+    .video-frame {
+      width: 100%;
+      max-width: 800px;
+      aspect-ratio: 16/9;
+      background: #000;
+      position: relative;
+    }
+
+    /* Person Detection Boxes */
+    .person-box {
+      position: absolute;
+      border: 3px solid;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .person-box:hover { transform: scale(1.02); }
+    .person-box.selected { box-shadow: 0 0 0 4px rgba(255,255,255,0.3); }
+    .person-box.consent-full { border-color: var(--carbon-success); }
+    .person-box.consent-partial { border-color: var(--carbon-warning); }
+    .person-box.consent-none { border-color: var(--carbon-error); }
+    .person-box.consent-unknown { border-color: #6f6f6f; } /* Darker for visibility */
+
+    .person-label {
+      position: absolute;
+      top: -28px;
+      left: -3px;
+      padding: 4px 12px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #fff;
+    }
+    .consent-full .person-label { background: var(--carbon-success); }
+    .consent-partial .person-label { background: var(--carbon-warning); color: #161616; } /* Dark text on yellow for 8:1 contrast */
+    .consent-none .person-label { background: var(--carbon-error); }
+    .consent-unknown .person-label { background: #6f6f6f; } /* Darker gray for better contrast */
+
+    /* Video Controls */
+    .video-controls {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 16px 24px;
+      background: rgba(0,0,0,0.8);
+    }
+    .play-btn {
+      width: 48px;
+      height: 48px;
+      background: #fff;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+    .timeline {
+      flex: 1;
+      height: 8px;
+      background: #333;
+      cursor: pointer;
+      position: relative;
+    }
+    .timeline-progress {
+      height: 100%;
+      background: #fff;
+      width: 35%;
+    }
+    .time-display {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 14px;
+      color: #fff;
+    }
+
+    /* Settings Panel */
+    .settings-panel {
+      width: 400px;
+      background: var(--carbon-bg);
+      border-left: 1px solid var(--carbon-border);
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+    }
+
+    .panel-header {
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--carbon-border);
+    }
+    .panel-title {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .panel-subtitle {
+      font-size: 14px;
+      color: var(--carbon-text-secondary);
+    }
+
+    .panel-section {
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--carbon-border);
+    }
+    .section-label {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--carbon-text-secondary);
+      margin-bottom: 16px;
+    }
+
+    /* Person List */
+    .person-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .person-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px;
+      border: 1px solid var(--carbon-border);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .person-item:hover { border-color: var(--carbon-text); }
+    .person-item.selected {
+      border-color: var(--carbon-text);
+      background: var(--carbon-bg-hover);
+    }
+    .person-avatar {
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+    }
+    .person-avatar.consent-full { background: var(--carbon-success); color: #fff; } /* 4.5:1 contrast */
+    .person-avatar.consent-partial { background: var(--carbon-warning); color: #161616; } /* 8:1 contrast - dark on yellow */
+    .person-avatar.consent-none { background: var(--carbon-error); color: #fff; } /* 4.5:1 contrast */
+    .person-avatar.consent-unknown { background: #6f6f6f; color: #fff; } /* Darker gray for 4.5:1 contrast */
+
+    .person-info { flex: 1; }
+    .person-name { font-weight: 600; font-size: 14px; }
+    .person-time { font-size: 12px; color: var(--carbon-text-secondary); }
+
+    /* Consent Dropdown */
+    .consent-select {
+      padding: 8px 12px;
+      border: 1px solid var(--carbon-border);
+      background: #fff;
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      min-width: 120px;
+    }
+    .consent-select:focus {
+      outline: 2px solid var(--carbon-focus);
+      outline-offset: 2px;
+    }
+
+    /* Consent Badges - WCAG AA compliant contrast */
+    .consent-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 10px;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .consent-badge.full { background: rgba(25, 128, 56, 0.15); color: var(--carbon-success-dark); } /* 4.5:1 contrast */
+    .consent-badge.partial { background: rgba(241, 194, 27, 0.25); color: var(--carbon-warning-dark); } /* 4.5:1 contrast */
+    .consent-badge.none { background: rgba(218, 30, 40, 0.1); color: var(--carbon-error); } /* Already good contrast */
+    .consent-badge.unknown { background: var(--carbon-bg-hover); color: var(--carbon-text); } /* Use primary text */
+
+    /* Settings Form */
+    .settings-group {
+      margin-bottom: 20px;
+    }
+    .settings-label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    .settings-row {
+      display: flex;
+      gap: 12px;
+    }
+
+    .method-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+    }
+    .method-option {
+      padding: 16px;
+      border: 1px solid var(--carbon-border);
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .method-option:hover { border-color: var(--carbon-text); }
+    .method-option.selected {
+      border-color: var(--carbon-text);
+      background: var(--carbon-bg-hover);
+    }
+    .method-option i { font-size: 20px; margin-bottom: 8px; display: block; }
+    .method-option span { font-size: 12px; font-weight: 500; }
+
+    .slider-container {
+      padding: 12px 16px;
+      background: var(--carbon-bg-hover);
+      border: 1px solid var(--carbon-border);
+    }
+    .slider-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+    .slider-label { font-size: 12px; font-weight: 500; }
+    .slider-value { font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 600; }
+    .slider {
+      width: 100%;
+      -webkit-appearance: none;
+      height: 4px;
+      background: var(--carbon-border);
+    }
+    .slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 16px;
+      height: 16px;
+      background: var(--carbon-text);
+      cursor: pointer;
+    }
+
+    /* Summary */
+    .summary-box {
+      background: var(--carbon-bg-hover);
+      border-left: 3px solid var(--carbon-text);
+      padding: 16px 20px;
+    }
+    .summary-title {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+    .summary-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      font-size: 13px;
+      border-bottom: 1px solid var(--carbon-border);
+    }
+    .summary-item:last-child { border-bottom: none; }
+    .summary-item-label { color: var(--carbon-text-secondary); }
+    .summary-item-value { font-weight: 500; }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 48px;
+      padding: 12px 24px;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s;
+      border: none;
+    }
+    .btn-primary { background: var(--carbon-text); color: #fff; }
+    .btn-primary:hover { background: #393939; }
+    .btn-secondary { background: #fff; color: var(--carbon-text); border: 1px solid var(--carbon-text); }
+    .btn-secondary:hover { background: var(--carbon-bg-hover); }
+    .btn-ghost { background: transparent; color: var(--carbon-text); } /* Use primary text for better contrast */
+    .btn-ghost:hover { background: var(--carbon-bg-hover); color: var(--carbon-text); }
+
+    /* Footer */
+    .footer-nav {
+      padding: 16px 24px;
+      border-top: 1px solid var(--carbon-border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #fff;
+    }
+    .footer-actions { display: flex; gap: 12px; }
+
+    /* Helper tooltip */
+    .help-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 18px;
+      height: 18px;
+      border: 1px solid var(--carbon-border);
+      border-radius: 50%;
+      font-size: 10px;
+      color: var(--carbon-text-secondary);
+      cursor: help;
+      margin-left: 8px;
+    }
+
+    /* Alert Banner */
+    .alert-banner {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 16px 20px;
+      background: rgba(241, 194, 27, 0.1);
+      border-left: 3px solid var(--carbon-warning);
+    }
+    .alert-banner i { color: var(--carbon-warning); margin-top: 2px; }
+    .alert-banner p { font-size: 13px; }
+    .alert-banner a { color: var(--carbon-text); font-weight: 500; }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to main content</a>
+
+  <div class="app-frame">
+    <div class="accent-bar"></div>
+
+    <header class="app-header">
+      <div class="app-logo">
+        <i class="fas fa-mask"></i>
+        <span>MASKANYONE</span>
+      </div>
+
+      <nav class="progress-steps" aria-label="Upload progress">
+        <div class="progress-step completed">
+          <span class="progress-step-number"><i class="fas fa-check"></i></span>
+          <span>Upload</span>
+        </div>
+        <div class="progress-step active" aria-current="step">
+          <span class="progress-step-number">2</span>
+          <span>Review</span>
+        </div>
+        <div class="progress-step">
+          <span class="progress-step-number">3</span>
+          <span>Export</span>
+        </div>
+      </nav>
+
+      <button class="btn btn-ghost">
+        <i class="fas fa-times"></i> Cancel
+      </button>
+    </header>
+
+    <main id="main" class="main-layout">
+      <!-- Video Preview -->
+      <div class="preview-panel">
+        <div class="video-container">
+          <div class="video-frame">
+            <!-- Detected persons overlays -->
+            <div
+              class="person-box consent-none selected"
+              style="left: 25%; top: 15%; width: 120px; height: 180px;"
+              onclick="selectPerson(0)"
+              tabindex="0"
+              role="button"
+              aria-label="Person 1, No consent, selected"
+            >
+              <span class="person-label">Person 1</span>
+            </div>
+
+            <div
+              class="person-box consent-partial"
+              style="left: 55%; top: 20%; width: 100px; height: 160px;"
+              onclick="selectPerson(1)"
+              tabindex="0"
+              role="button"
+              aria-label="Person 2, Partial consent"
+            >
+              <span class="person-label">Person 2</span>
+            </div>
+
+            <div
+              class="person-box consent-full"
+              style="left: 10%; top: 30%; width: 90px; height: 140px;"
+              onclick="selectPerson(2)"
+              tabindex="0"
+              role="button"
+              aria-label="Person 3, Full consent"
+            >
+              <span class="person-label">Person 3</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="video-controls">
+          <button class="play-btn" aria-label="Play video">
+            <i class="fas fa-play"></i>
+          </button>
+          <div class="timeline" role="slider" aria-label="Video progress" aria-valuenow="35">
+            <div class="timeline-progress"></div>
+          </div>
+          <span class="time-display">04:23 / 12:34</span>
+        </div>
+      </div>
+
+      <!-- Settings Panel -->
+      <aside class="settings-panel">
+        <div class="panel-header">
+          <h1 class="panel-title">Review Detections</h1>
+          <p class="panel-subtitle">Set consent status and masking for each person</p>
+        </div>
+
+        <!-- Alert for missing consent -->
+        <div class="alert-banner">
+          <i class="fas fa-exclamation-triangle"></i>
+          <p>
+            <strong>1 person</strong> has no consent status set. They will be fully anonymized by default.
+            <a href="#person-1">Review now</a>
+          </p>
+        </div>
+
+        <!-- Person List -->
+        <div class="panel-section">
+          <h2 class="section-label">
+            <i class="fas fa-users" style="margin-right: 8px;"></i>
+            Detected Persons (3)
+          </h2>
+
+          <div class="person-list" role="listbox" aria-label="Detected persons">
+            <div
+              class="person-item selected"
+              id="person-1"
+              role="option"
+              aria-selected="true"
+              onclick="selectPerson(0)"
+              tabindex="0"
+            >
+              <div class="person-avatar consent-none">
+                <i class="fas fa-user"></i>
+              </div>
+              <div class="person-info">
+                <div class="person-name">Person 1</div>
+                <div class="person-time">0:00 - 12:34 (full duration)</div>
+              </div>
+              <select class="consent-select" aria-label="Consent status for Person 1" onchange="updateConsent(0, this.value)">
+                <option value="unknown">Select...</option>
+                <option value="full">Full consent</option>
+                <option value="partial">Partial consent</option>
+                <option value="none" selected>No consent</option>
+              </select>
+            </div>
+
+            <div
+              class="person-item"
+              id="person-2"
+              role="option"
+              aria-selected="false"
+              onclick="selectPerson(1)"
+              tabindex="0"
+            >
+              <div class="person-avatar consent-partial">
+                <i class="fas fa-user"></i>
+              </div>
+              <div class="person-info">
+                <div class="person-name">Person 2</div>
+                <div class="person-time">2:15 - 10:22</div>
+              </div>
+              <select class="consent-select" aria-label="Consent status for Person 2" onchange="updateConsent(1, this.value)">
+                <option value="unknown">Select...</option>
+                <option value="full">Full consent</option>
+                <option value="partial" selected>Partial consent</option>
+                <option value="none">No consent</option>
+              </select>
+            </div>
+
+            <div
+              class="person-item"
+              id="person-3"
+              role="option"
+              aria-selected="false"
+              onclick="selectPerson(2)"
+              tabindex="0"
+            >
+              <div class="person-avatar consent-full">
+                <i class="fas fa-user"></i>
+              </div>
+              <div class="person-info">
+                <div class="person-name">Person 3</div>
+                <div class="person-time">5:00 - 8:45</div>
+              </div>
+              <select class="consent-select" aria-label="Consent status for Person 3" onchange="updateConsent(2, this.value)">
+                <option value="unknown">Select...</option>
+                <option value="full" selected>Full consent</option>
+                <option value="partial">Partial consent</option>
+                <option value="none">No consent</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Settings for Selected Person -->
+        <div class="panel-section">
+          <h2 class="section-label">
+            <i class="fas fa-sliders-h" style="margin-right: 8px;"></i>
+            Settings for Person 1
+            <span class="help-icon" title="These settings apply only to the selected person">?</span>
+          </h2>
+
+          <div class="settings-group">
+            <label class="settings-label">What to hide</label>
+            <div class="method-grid">
+              <div class="method-option selected" tabindex="0" role="radio" aria-checked="true">
+                <i class="fas fa-user"></i>
+                <span>Face only</span>
+              </div>
+              <div class="method-option" tabindex="0" role="radio" aria-checked="false">
+                <i class="fas fa-user-alt"></i>
+                <span>Face + body</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="settings-group">
+            <label class="settings-label">How to hide</label>
+            <div class="method-grid">
+              <div class="method-option selected" tabindex="0" role="radio" aria-checked="true">
+                <i class="fas fa-tint"></i>
+                <span>Blur</span>
+              </div>
+              <div class="method-option" tabindex="0" role="radio" aria-checked="false">
+                <i class="fas fa-square-full"></i>
+                <span>Solid</span>
+              </div>
+              <div class="method-option" tabindex="0" role="radio" aria-checked="false">
+                <i class="fas fa-th"></i>
+                <span>Pixelate</span>
+              </div>
+              <div class="method-option" tabindex="0" role="radio" aria-checked="false">
+                <i class="fas fa-running"></i>
+                <span>Skeleton</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="settings-group">
+            <div class="slider-container">
+              <div class="slider-header">
+                <span class="slider-label">Blur intensity</span>
+                <span class="slider-value">75%</span>
+              </div>
+              <input type="range" class="slider" min="0" max="100" value="75" aria-label="Blur intensity">
+            </div>
+          </div>
+        </div>
+
+        <!-- Summary -->
+        <div class="panel-section">
+          <div class="summary-box">
+            <h3 class="summary-title">Processing Summary</h3>
+            <div class="summary-item">
+              <span class="summary-item-label">Will be masked</span>
+              <span class="summary-item-value">2 persons</span>
+            </div>
+            <div class="summary-item">
+              <span class="summary-item-label">Will remain visible</span>
+              <span class="summary-item-value">1 person (full consent)</span>
+            </div>
+            <div class="summary-item">
+              <span class="summary-item-label">Estimated time</span>
+              <span class="summary-item-value">~3 minutes</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="footer-nav">
+          <button class="btn btn-ghost">
+            <i class="fas fa-arrow-left"></i> Back
+          </button>
+          <div class="footer-actions">
+            <button class="btn btn-secondary">
+              <i class="fas fa-eye"></i> Preview
+            </button>
+            <button class="btn btn-primary">
+              Process Video <i class="fas fa-arrow-right"></i>
+            </button>
+          </div>
+        </div>
+      </aside>
+    </main>
+  </div>
+
+  <script>
+    const persons = [
+      { name: 'Person 1', consent: 'none', selected: true },
+      { name: 'Person 2', consent: 'partial', selected: false },
+      { name: 'Person 3', consent: 'full', selected: false }
+    ];
+
+    function selectPerson(index) {
+      // Update selection
+      persons.forEach((p, i) => p.selected = i === index);
+
+      // Update person items
+      document.querySelectorAll('.person-item').forEach((item, i) => {
+        item.classList.toggle('selected', i === index);
+        item.setAttribute('aria-selected', i === index);
+      });
+
+      // Update person boxes
+      document.querySelectorAll('.person-box').forEach((box, i) => {
+        box.classList.toggle('selected', i === index);
+      });
+
+      // Update settings title
+      document.querySelector('.panel-section:nth-child(4) .section-label').innerHTML =
+        `<i class="fas fa-sliders-h" style="margin-right: 8px;"></i>
+         Settings for ${persons[index].name}
+         <span class="help-icon" title="These settings apply only to the selected person">?</span>`;
+    }
+
+    function updateConsent(index, value) {
+      persons[index].consent = value;
+
+      // Update avatar
+      const avatar = document.querySelectorAll('.person-avatar')[index];
+      avatar.className = `person-avatar consent-${value}`;
+
+      // Update box
+      const box = document.querySelectorAll('.person-box')[index];
+      box.className = `person-box consent-${value}` + (persons[index].selected ? ' selected' : '');
+
+      // Update summary
+      updateSummary();
+    }
+
+    function updateSummary() {
+      const masked = persons.filter(p => p.consent !== 'full').length;
+      const visible = persons.filter(p => p.consent === 'full').length;
+
+      const summaryItems = document.querySelectorAll('.summary-item-value');
+      summaryItems[0].textContent = `${masked} person${masked !== 1 ? 's' : ''}`;
+      summaryItems[1].textContent = `${visible} person${visible !== 1 ? 's' : ''} (full consent)`;
+    }
+
+    // Method selection
+    document.querySelectorAll('.method-option').forEach(option => {
+      option.addEventListener('click', function() {
+        const parent = this.closest('.method-grid');
+        parent.querySelectorAll('.method-option').forEach(opt => {
+          opt.classList.remove('selected');
+          opt.setAttribute('aria-checked', 'false');
+        });
+        this.classList.add('selected');
+        this.setAttribute('aria-checked', 'true');
+      });
+
+      option.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          this.click();
+        }
+      });
+    });
+
+    // Slider value display
+    document.querySelector('.slider').addEventListener('input', function() {
+      document.querySelector('.slider-value').textContent = this.value + '%';
+    });
+  </script>
+</body>
+</html>
