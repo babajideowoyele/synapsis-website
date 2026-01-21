@@ -76,11 +76,16 @@
             position: relative;
             background: #000;
             border: 1px solid #e0e0e0;
+            aspect-ratio: 16 / 9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         .video-container video {
             width: 100%;
-            height: auto;
+            height: 100%;
             display: block;
+            object-fit: cover;
         }
         .video-label {
             position: absolute;
