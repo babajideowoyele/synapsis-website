@@ -116,9 +116,14 @@
                     <a href="network.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Network</a>
                     <a href="press.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Press</a>
                 </div>
-                <button onclick="toggleTheme()" class="theme-toggle" title="Toggle dark mode">
-                    <i class="fas fa-moon"></i><i class="fas fa-sun"></i>
-                </button>
+                <div class="flex items-center gap-3">
+                    <button class="md:hidden" aria-label="Menu">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                    <button onclick="toggleTheme()" class="theme-toggle" title="Toggle dark mode">
+                        <i class="fas fa-moon"></i><i class="fas fa-sun"></i>
+                    </button>
+                </div>
             </div>
         </nav>
     </header>
@@ -591,5 +596,6 @@
             });
         });
     </script>
+<script src="main.js"></script>
 </body>
 </html>
