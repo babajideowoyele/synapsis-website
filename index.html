@@ -88,6 +88,9 @@
         .stat-number {
             font-family: 'IBM Plex Mono', monospace;
         }
+        #networkCanvas {
+            opacity: 0.15;
+        }
     </style>
 </head>
 <body class="min-h-screen">
@@ -120,8 +123,9 @@
     </header>
 
     <!-- Hero Section -->
-    <section class="py-24 px-6">
-        <div class="container mx-auto max-w-5xl">
+    <section class="py-24 px-6 relative overflow-hidden">
+        <canvas id="networkCanvas" class="absolute inset-0 w-full h-full pointer-events-none"></canvas>
+        <div class="container mx-auto max-w-5xl relative z-10">
             <div class="mb-4">
                 <span class="text-xs font-mono uppercase tracking-widest text-carbon-text-secondary">NWO TDCC-SSH Project</span>
             </div>
@@ -140,6 +144,135 @@
                 </a>
             </div>
         </div>
+        <script>
+        (function() {
+            const canvas = document.getElementById('networkCanvas');
+            const ctx = canvas.getContext('2d');
+            const colors = ['#0077B3','#BC0031','#00A651','#E30613','#EB6923','#00838F','#6A1B9A'];
+            const nodeCount = 18;
+            const connectionDist = 180;
+            const mouseRadius = 200;
+            let mouse = { x: -1000, y: -1000 };
+            let nodes = [];
+            let animId;
+
+            function resize() {
+                const rect = canvas.parentElement.getBoundingClientRect();
+                canvas.width = rect.width;
+                canvas.height = rect.height;
+            }
+
+            function initNodes() {
+                nodes = [];
+                for (let i = 0; i < nodeCount; i++) {
+                    nodes.push({
+                        x: Math.random() * canvas.width,
+                        y: Math.random() * canvas.height,
+                        baseX: 0, baseY: 0,
+                        vx: (Math.random() - 0.5) * 0.3,
+                        vy: (Math.random() - 0.5) * 0.3,
+                        r: 3 + Math.random() * 5,
+                        color: colors[i % colors.length]
+                    });
+                }
+                nodes.forEach(n => { n.baseX = n.x; n.baseY = n.y; });
+            }
+
+            canvas.parentElement.addEventListener('mousemove', function(e) {
+                const rect = canvas.parentElement.getBoundingClientRect();
+                mouse.x = e.clientX - rect.left;
+                mouse.y = e.clientY - rect.top;
+            });
+            canvas.parentElement.addEventListener('mouseleave', function() {
+                mouse.x = -1000; mouse.y = -1000;
+            });
+
+            function draw() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                // Update positions
+                nodes.forEach(n => {
+                    n.x += n.vx;
+                    n.y += n.vy;
+
+                    // Gentle drift boundaries
+                    if (n.x < -20 || n.x > canvas.width + 20) n.vx *= -1;
+                    if (n.y < -20 || n.y > canvas.height + 20) n.vy *= -1;
+
+                    // Mouse repulsion
+                    const dx = n.x - mouse.x;
+                    const dy = n.y - mouse.y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    if (dist < mouseRadius && dist > 0) {
+                        const force = (mouseRadius - dist) / mouseRadius;
+                        n.x += (dx / dist) * force * 2.5;
+                        n.y += (dy / dist) * force * 2.5;
+                    }
+                });
+
+                // Draw connections
+                for (let i = 0; i < nodes.length; i++) {
+                    for (let j = i + 1; j < nodes.length; j++) {
+                        const dx = nodes[i].x - nodes[j].x;
+                        const dy = nodes[i].y - nodes[j].y;
+                        const dist = Math.sqrt(dx * dx + dy * dy);
+                        if (dist < connectionDist) {
+                            const alpha = 1 - dist / connectionDist;
+                            // Brighten connections near mouse
+                            const mx = (nodes[i].x + nodes[j].x) / 2;
+                            const my = (nodes[i].y + nodes[j].y) / 2;
+                            const mDist = Math.sqrt((mx - mouse.x) ** 2 + (my - mouse.y) ** 2);
+                            const boost = mDist < mouseRadius ? (1 - mDist / mouseRadius) * 0.6 : 0;
+                            ctx.beginPath();
+                            ctx.moveTo(nodes[i].x, nodes[i].y);
+                            ctx.lineTo(nodes[j].x, nodes[j].y);
+                            ctx.strokeStyle = `rgba(158,158,158,${alpha * 0.4 + boost})`;
+                            ctx.lineWidth = 1;
+                            ctx.stroke();
+                        }
+                    }
+                }
+
+                // Draw nodes
+                nodes.forEach(n => {
+                    const dx = n.x - mouse.x;
+                    const dy = n.y - mouse.y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    const glow = dist < mouseRadius ? (1 - dist / mouseRadius) : 0;
+                    const r = n.r + glow * 3;
+
+                    if (glow > 0) {
+                        ctx.beginPath();
+                        ctx.arc(n.x, n.y, r + 4, 0, Math.PI * 2);
+                        ctx.fillStyle = n.color.replace(')', `,${glow * 0.2})`).replace('rgb', 'rgba').replace('#', '');
+                        // Use a simpler glow
+                        ctx.shadowColor = n.color;
+                        ctx.shadowBlur = glow * 15;
+                        ctx.fill();
+                        ctx.shadowBlur = 0;
+                    }
+
+                    ctx.beginPath();
+                    ctx.arc(n.x, n.y, r, 0, Math.PI * 2);
+                    ctx.fillStyle = n.color;
+                    ctx.fill();
+                });
+
+                animId = requestAnimationFrame(draw);
+            }
+
+            window.addEventListener('resize', function() { resize(); });
+            resize();
+            initNodes();
+            draw();
+
+            // Pause when not visible
+            document.addEventListener('visibilitychange', function() {
+                if (document.hidden) { cancelAnimationFrame(animId); }
+                else { draw(); }
+            });
+        })();
+        </script>
     </section>
 
     <!-- Stats Bar -->
@@ -317,7 +450,7 @@
                     <div class="font-semibold">SURF</div>
                     <div class="text-xs text-carbon-text-secondary">Infrastructure</div>
                 </a>
-                <a href="https://dans.knaw.nl/" target="_blank" rel="noopener" class="text-center py-6 border border-carbon-border bg-white hover:border-carbon-interactive transition-colors no-underline text-inherit">
+                <a href="https://dans.knaw.nl/nl/" target="_blank" rel="noopener" class="text-center py-6 border border-carbon-border bg-white hover:border-carbon-interactive transition-colors no-underline text-inherit">
                     <div class="font-semibold">DANS</div>
                     <div class="text-xs text-carbon-text-secondary">Archiving</div>
                 </a>
