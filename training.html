@@ -7,6 +7,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="theme.css">
+    <script src="theme.js"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -17,11 +19,11 @@
                     },
                     colors: {
                         'carbon': {
-                            'bg': '#ffffff',
-                            'bg-hover': '#f4f4f4',
-                            'border': '#e0e0e0',
-                            'text': '#161616',
-                            'text-secondary': '#525252',
+                            'bg': 'var(--color-bg)',
+                            'bg-hover': 'var(--color-bg-hover)',
+                            'border': 'var(--color-border)',
+                            'text': 'var(--color-text)',
+                            'text-secondary': 'var(--color-text-secondary)',
                         }
                     }
                 }
@@ -31,37 +33,37 @@
     <style>
         body {
             font-family: 'IBM Plex Sans', sans-serif;
-            background-color: #ffffff;
-            color: #161616;
+            background-color: var(--color-bg);
+            color: var(--color-text);
         }
         .accent-bar {
             height: 3px;
-            background: #161616;
+            background: var(--color-accent);
         }
         .card {
-            border: 1px solid #e0e0e0;
+            border: 1px solid var(--color-border);
             transition: all 0.15s ease;
         }
         .card:hover {
-            border-color: #161616;
+            border-color: var(--color-text);
             box-shadow: 0 4px 14px rgba(0,0,0,0.1);
         }
         .btn-primary {
-            background: #161616;
-            color: #ffffff;
+            background: var(--color-accent);
+            color: var(--color-inverse);
             transition: all 0.15s ease;
         }
         .btn-primary:hover {
-            background: #393939;
+            background: var(--color-accent-hover);
         }
         .btn-secondary {
-            background: #ffffff;
-            color: #161616;
-            border: 1px solid #161616;
+            background: var(--color-bg);
+            color: var(--color-text);
+            border: 1px solid var(--color-accent);
             transition: all 0.15s ease;
         }
         .btn-secondary:hover {
-            background: #f4f4f4;
+            background: var(--color-bg-hover);
         }
         .nav-link {
             position: relative;
@@ -74,7 +76,7 @@
             left: 0;
             width: 0;
             height: 2px;
-            background: #161616;
+            background: var(--color-accent);
             transition: width 0.2s ease;
         }
         .nav-link:hover::after {
@@ -92,7 +94,7 @@
             top: 30px;
             bottom: 0;
             width: 2px;
-            background: #e0e0e0;
+            background: var(--color-border);
         }
         .learning-path:last-child::before {
             display: none;
@@ -103,7 +105,7 @@
             top: 0;
             width: 40px;
             height: 40px;
-            background: #161616;
+            background: var(--color-accent);
             color: white;
             display: flex;
             align-items: center;
@@ -117,12 +119,12 @@
             text-transform: uppercase;
         }
         .badge-upcoming {
-            background: #161616;
+            background: var(--color-accent);
             color: white;
         }
         .badge-level {
-            background: #f4f4f4;
-            border: 1px solid #e0e0e0;
+            background: var(--color-bg-hover);
+            border: 1px solid var(--color-border);
         }
     </style>
 </head>
@@ -145,6 +147,9 @@
                     <a href="network.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Network</a>
                     <a href="press.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Press</a>
                 </div>
+                <button onclick="toggleTheme()" class="theme-toggle" title="Toggle dark mode">
+                    <i class="fas fa-moon"></i><i class="fas fa-sun"></i>
+                </button>
             </div>
         </nav>
     </header>

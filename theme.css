@@ -1,0 +1,61 @@
+/* SYNAPSIS Theme - Light & Dark Mode */
+:root {
+    --color-bg: #ffffff;
+    --color-bg-hover: #f4f4f4;
+    --color-border: #e0e0e0;
+    --color-text: #161616;
+    --color-text-secondary: #525252;
+    --color-accent: #161616;
+    --color-accent-hover: #393939;
+    --color-inverse: #ffffff;
+}
+
+html.dark {
+    --color-bg: #161616;
+    --color-bg-hover: #262626;
+    --color-border: #393939;
+    --color-text: #f4f4f4;
+    --color-text-secondary: #a8a8a8;
+    --color-accent: #f4f4f4;
+    --color-accent-hover: #e0e0e0;
+    --color-inverse: #161616;
+}
+
+/* Override Tailwind bg-white in dark mode */
+html.dark .bg-white {
+    background-color: #161616 !important;
+}
+
+/* Override Tailwind bg-yellow-100 in dark mode */
+html.dark .bg-yellow-100 {
+    background-color: #3a3000 !important;
+}
+
+/* Dark mode toggle button */
+.theme-toggle {
+    background: none;
+    border: 1px solid var(--color-border);
+    color: var(--color-text-secondary);
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.theme-toggle:hover {
+    border-color: var(--color-text);
+    color: var(--color-text);
+}
+
+html.dark .theme-toggle .fa-moon { display: none; }
+html.dark .theme-toggle .fa-sun { display: inline; }
+html:not(.dark) .theme-toggle .fa-moon { display: inline; }
+html:not(.dark) .theme-toggle .fa-sun { display: none; }
+
+/* Logo line visibility in dark mode */
+html.dark .header-logo line {
+    stroke: #c0c0c0;
+}
