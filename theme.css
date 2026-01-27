@@ -79,6 +79,30 @@ html.dark .text-gray-500 {
 html.dark .hover\:bg-gray-100:hover {
     background-color: #262626 !important;
 }
+html.dark .text-gray-600 {
+    color: #a8a8a8 !important;
+}
+html.dark .text-gray-700 {
+    color: #c6c6c6 !important;
+}
+html.dark .bg-gray-50 {
+    background-color: #262626 !important;
+}
+html.dark .border-gray-200 {
+    border-color: #393939 !important;
+}
+html.dark .bg-gray-100 {
+    background-color: #262626 !important;
+}
+
+/* Survey form dark mode overrides */
+html.dark .survey-info-blue {
+    background-color: #1a2332 !important;
+    border-left-color: #3b82f6 !important;
+}
+html.dark .survey-info-blue .text-gray-700 {
+    color: #93c5fd !important;
+}
 
 /* Dark mode: keep accent sections dark (prevent text-color inversion) */
 html.dark .bg-carbon-text {

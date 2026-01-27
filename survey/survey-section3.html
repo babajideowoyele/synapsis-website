@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SYNAPSIS Survey - Section 3: Masking & De-identification</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="../theme.css">
+    <script src="../theme.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'sans': ['IBM Plex Sans', 'sans-serif'],
+                        'mono': ['IBM Plex Mono', 'monospace'],
+                    },
+                    colors: {
+                        'carbon': {
+                            'bg': 'var(--color-bg)',
+                            'bg-hover': 'var(--color-bg-hover)',
+                            'border': 'var(--color-border)',
+                            'text': 'var(--color-text)',
+                            'text-secondary': 'var(--color-text-secondary)',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'IBM Plex Sans', sans-serif;
+            background-color: var(--color-bg);
+            color: var(--color-text);
+        }
+        .accent-bar { height: 3px; background: var(--color-accent); }
+        .accent-line { height: 2px; background: linear-gradient(90deg, var(--color-accent) 0%, transparent 100%); }
+        .nav-link { position: relative; padding-bottom: 4px; }
+        .nav-link::after { content: ''; position: absolute; bottom: 0; left: 0; width: 0; height: 2px; background: var(--color-accent); transition: width 0.2s ease; }
+        .nav-link:hover::after { width: 100%; }
+        .radio-custom, .checkbox-custom {
+            appearance: none; width: 20px; height: 20px;
+            border: 1px solid var(--color-border); border-radius: 4px;
+            cursor: pointer; transition: all 0.15s ease;
+            background-color: var(--color-bg);
+        }
+        .radio-custom { border-radius: 50%; }
+        .radio-custom:checked, .checkbox-custom:checked {
+            background: var(--color-accent); border-color: var(--color-accent);
+        }
+        .radio-custom:checked::after, .checkbox-custom:checked::after {
+            content: '✓'; color: var(--color-inverse);
+            display: flex; justify-content: center; align-items: center;
+            font-size: 14px; font-weight: bold;
+        }
+        .progress-bar { height: 4px; background: var(--color-border); border-radius: 2px; overflow: hidden; }
+        .progress-fill { height: 100%; background: var(--color-accent); transition: width 0.5s ease; }
+        .survey-btn-primary {
+            background: var(--color-accent); color: var(--color-inverse);
+            border: 1px solid var(--color-accent); padding: 12px 32px;
+            font-weight: 600; cursor: pointer; transition: all 0.15s ease;
+        }
+        .survey-btn-primary:hover { background: var(--color-accent-hover); }
+        .survey-btn-secondary {
+            background: var(--color-bg); color: var(--color-text);
+            border: 1px solid var(--color-border); padding: 12px 32px;
+            font-weight: 600; cursor: pointer; transition: all 0.15s ease;
+        }
+        .survey-btn-secondary:hover { border-color: var(--color-accent); background: var(--color-bg-hover); }
+        .question-card {
+            background: var(--color-bg); border: 1px solid var(--color-border);
+            padding: 32px; margin-bottom: 24px; transition: all 0.15s ease;
+        }
+        .question-card:hover { border-color: var(--color-text-secondary); }
+        .input-text {
+            width: 100%; padding: 12px; border: 1px solid var(--color-border);
+            font-size: 16px; font-family: 'IBM Plex Sans', sans-serif;
+            transition: all 0.15s ease; background-color: var(--color-bg); color: var(--color-text);
+        }
+        .input-text:focus { outline: none; border-color: var(--color-accent); }
+        textarea.input-text { min-height: 100px; resize: vertical; }
+        .option-label {
+            display: flex; align-items: center; gap: 12px;
+            padding: 12px 16px; border: 1px solid var(--color-border);
+            cursor: pointer; transition: all 0.15s ease;
+        }
+        .option-label:hover { border-color: var(--color-text-secondary); background: var(--color-bg-hover); }
+        .option-label.selected { border-color: var(--color-accent); background: var(--color-bg-hover); }
+        .info-box {
+            background: var(--color-bg-hover); border-left: 4px solid var(--color-accent);
+            padding: 16px; margin-bottom: 16px;
+        }
+        .info-box.blue { border-left-color: #3b82f6; background: #eff6ff; }
+        .masking-preview {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-top: 16px;
+        }
+        .masking-example {
+            border: 1px solid var(--color-border);
+            padding: 16px;
+            text-align: center;
+            transition: all 0.15s ease;
+        }
+        .masking-example:hover {
+            border-color: var(--color-accent);
+        }
+        .masking-icon {
+            font-size: 48px;
+            margin-bottom: 12px;
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <header class="border-b border-carbon-border sticky top-0 z-50 bg-white">
+        <div class="accent-bar"></div>
+        <nav class="container mx-auto px-6 py-4">
+            <div class="flex justify-between items-center">
+                <a href="../index.html" class="flex items-center gap-2 text-xl font-semibold tracking-tight">
+                    <img src="../logo-mark.svg" alt="" class="h-7 w-auto header-logo">
+                    SYNAPSIS
+                </a>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="../index.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Home</a>
+                    <a href="../platform.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Platform</a>
+                    <a href="../demo.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Demo</a>
+                    <a href="../training.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Training</a>
+                    <a href="../resources.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Resources</a>
+                    <a href="../network.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Network</a>
+                    <a href="../press.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Press</a>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button onclick="toggleTheme()" class="theme-toggle" title="Toggle dark mode">
+                        <i class="fas fa-moon"></i><i class="fas fa-sun"></i>
+                    </button>
+                    <button class="md:hidden p-2" aria-label="Open menu">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="border-b border-carbon-border" style="background-color: var(--color-bg-hover);">
+        <div class="container mx-auto px-6 py-3">
+            <div class="flex justify-between items-center text-xs mb-2">
+                <span class="font-mono text-carbon-text-secondary">Section 3 of 10</span>
+                <span class="text-carbon-text-secondary">30% Complete</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" style="width: 30%;"></div>
+            </div>
+        </div>
+    </div>
+
+    <main class="container mx-auto px-6 py-12 max-w-4xl">
+        <!-- Section Header -->
+        <div class="text-center mb-12">
+            <h1 class="text-4xl font-light mb-4">Section 3: Masking & De-identification</h1>
+            <div class="accent-line mb-6 max-w-md mx-auto"></div>
+            <p class="text-gray-600 max-w-2xl mx-auto">
+                This section explores your experience and needs regarding privacy-preserving techniques for audiovisual data.
+            </p>
+        </div>
+
+        <!-- Visual Explainer -->
+        <div class="info-box blue survey-info-blue mb-8">
+            <div class="flex items-start gap-3">
+                <i class="fas fa-info-circle text-blue-600 text-xl mt-1"></i>
+                <div>
+                    <h3 class="font-semibold mb-2">What is Masking/De-identification?</h3>
+                    <p class="text-sm text-gray-700">
+                        Masking refers to techniques that remove or obscure personally identifiable information from audiovisual data
+                        (like faces, voices, or background details) while preserving research-relevant features like gestures, prosody,
+                        or interaction patterns. This enables GDPR-compliant data sharing.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <form id="surveyForm">
+            <!-- Question 3.1 -->
+            <div class="question-card">
+                <label class="block mb-4">
+                    <span class="text-lg font-semibold">3.1 Have you used any de-identification or masking techniques for audiovisual data?</span>
+                    <span class="text-red-500">*</span>
+                </label>
+                <div class="space-y-3">
+                    <label class="option-label">
+                        <input type="radio" name="masking_experience" value="regularly" class="radio-custom" required>
+                        <span>Yes, regularly</span>
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="masking_experience" value="occasionally" class="radio-custom">
+                        <span>Yes, occasionally</span>
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="masking_experience" value="interested" class="radio-custom">
+                        <span>No, but I'm interested</span>
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="masking_experience" value="not_relevant" class="radio-custom">
+                        <span>No, and not currently relevant to my work</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Question 3.2 -->
+            <div class="question-card">
+                <label class="block mb-4">
+                    <span class="text-lg font-semibold">3.2 Which masking/de-identification methods have you used or would be interested in?</span>
+                    <span class="text-red-500">*</span>
+                    <p class="text-sm text-gray-600 mt-1">Select all that apply</p>
+                </label>
+
+                <div class="masking-preview mb-6">
+                    <div class="masking-example">
+                        <div class="masking-icon">👤</div>
+                        <div class="text-sm font-semibold">Face Masking</div>
+                        <div class="text-xs text-gray-600 mt-1">Blur, pixelate, or replace faces</div>
+                    </div>
+                    <div class="masking-example">
+                        <div class="masking-icon">🎤</div>
+                        <div class="text-sm font-semibold">Voice Alteration</div>
+                        <div class="text-xs text-gray-600 mt-1">Pitch shift or voice synthesis</div>
+                    </div>
+                    <div class="masking-example">
+                        <div class="masking-icon">🖼️</div>
+                        <div class="text-sm font-semibold">Background</div>
+                        <div class="text-xs text-gray-600 mt-1">Remove or blur backgrounds</div>
+                    </div>
+                    <div class="masking-example">
+                        <div class="masking-icon">🦴</div>
+                        <div class="text-sm font-semibold">Pose Extraction</div>
+                        <div class="text-xs text-gray-600 mt-1">Body movement skeleton</div>
+                    </div>
+                </div>
+
+                <div class="space-y-3">
+                    <label class="option-label">
+                        <input type="checkbox" name="methods" value="face_blur" class="checkbox-custom">
+                        <span>Face blurring/pixelation</span>
+                    </label>
+                    <label class="option-label">
+                        <input type="checkbox" name="methods" value="face_swap" class="checkbox-custom">
+                        <span>Face replacement/swapping</span>
+                    </label>
+                    <label class="option-label">
+                        <input type="checkbox" name="methods" value="voice" class="checkbox-custom">
+                        <span>Voice alteration/pitch shifting</span>
+                    </label>
+                    <label class="option-label">
+                        <input type="checkbox" name="methods" value="background" class="checkbox-custom">
+                        <span>Background removal/blurring</span>
+                    </label>
+                    <label class="option-label">
+                        <input type="checkbox" name="methods" value="pose" class="checkbox-custom">
+                        <span>Body pose estimation (skeleton extraction)</span>
+                    </label>
+                    <label class="option-label">
+                        <input type="checkbox" name="methods" value="objects" class="checkbox-custom">
+                        <span>Removing identifiable objects (logos, signs, etc.)</span>
+                    </label>
+                    <label class="option-label">
+                        <input type="checkbox" name="methods" value="transcription" class="checkbox-custom">
+                        <span>Audio transcription with speaker de-identification</span>
+                    </label>
+                    <label class="option-label">
+                        <input type="checkbox" name="methods" value="gesture" class="checkbox-custom">
+                        <span>Gesture/movement tracking</span>
+                    </label>
+                    <label class="option-label">
+                        <input type="checkbox" name="methods" value="not_familiar" class="checkbox-custom">
+                        <span>None - not familiar with these methods</span>
+                    </label>
+                    <label class="option-label">
+                        <input type="checkbox" name="methods" value="other" class="checkbox-custom">
+                        <span>Other</span>
+                    </label>
+                </div>
+                <div id="methodsOther" class="mt-3 hidden">
+                    <input type="text" class="input-text" placeholder="Please specify the method">
+                </div>
+            </div>
+
+            <!-- Question 3.3 -->
+            <div class="question-card">
+                <label class="block mb-4">
+                    <span class="text-lg font-semibold">3.3 What level of de-identification do you typically need?</span>
+                    <span class="text-red-500">*</span>
+                </label>
+                <div class="space-y-3">
+                    <label class="option-label">
+                        <input type="radio" name="deidentification_level" value="complete" class="radio-custom" required>
+                        <div>
+                            <div class="font-medium">Complete anonymization</div>
+                            <div class="text-sm text-gray-600">No identifiable features remain</div>
+                        </div>
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="deidentification_level" value="partial" class="radio-custom">
+                        <div>
+                            <div class="font-medium">Partial anonymization</div>
+                            <div class="text-sm text-gray-600">Some features preserved for research purposes</div>
+                        </div>
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="deidentification_level" value="pseudonymization" class="radio-custom">
+                        <div>
+                            <div class="font-medium">Pseudonymization</div>
+                            <div class="text-sm text-gray-600">Coded identifiers, reversible with key</div>
+                        </div>
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="deidentification_level" value="context" class="radio-custom">
+                        <div>
+                            <div class="font-medium">Context-dependent</div>
+                            <div class="text-sm text-gray-600">Varies by participant or data type</div>
+                        </div>
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="deidentification_level" value="unsure" class="radio-custom">
+                        <span>Not sure / need guidance</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Question 3.4 -->
+            <div class="question-card">
+                <label class="block mb-4">
+                    <span class="text-lg font-semibold">3.4 How important is it to preserve NON-identifying data features while masking?</span>
+                    <span class="text-red-500">*</span>
+                    <p class="text-sm text-gray-600 mt-1">e.g., body movements, gestures, prosody, interaction patterns</p>
+                </label>
+                <div class="space-y-3">
+                    <label class="option-label">
+                        <input type="radio" name="preserve_features" value="extremely" class="radio-custom" required>
+                        <div>
+                            <div class="font-medium">Extremely important</div>
+                            <div class="text-sm text-gray-600">Essential for my research questions</div>
+                        </div>
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="preserve_features" value="very" class="radio-custom">
+                        <div>
+                            <div class="font-medium">Very important</div>
+                            <div class="text-sm text-gray-600">Highly valuable for analysis</div>
+                        </div>
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="preserve_features" value="moderately" class="radio-custom">
+                        <div>
+                            <div class="font-medium">Moderately important</div>
+                            <div class="text-sm text-gray-600">Nice to have but not critical</div>
+                        </div>
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="preserve_features" value="slightly" class="radio-custom">
+                        <div>
+                            <div class="font-medium">Slightly important</div>
+                            <div class="text-sm text-gray-600">Minor benefit</div>
+                        </div>
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="preserve_features" value="not" class="radio-custom">
+                        <div>
+                            <div class="font-medium">Not important</div>
+                            <div class="text-sm text-gray-600">Not relevant to my work</div>
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Question 3.5 -->
+            <div class="question-card">
+                <label class="block mb-4">
+                    <span class="text-lg font-semibold">3.5 What concerns do you have about using automated masking tools?</span>
+                    <span class="text-red-500">*</span>
+                    <p class="text-sm text-gray-600 mt-1">Select all that apply</p>
+                </label>
+                <div class="space-y-3">
+                    <label class="option-label">
+                        <input type="checkbox" name="concerns" value="accuracy" class="checkbox-custom">
+                        <span>Accuracy/reliability of the technology</span>
+                    </label>
+                    <label class="option-label">
+                        <input type="checkbox" name="concerns" value="privacy_risk" class="checkbox-custom">
+                        <span>Privacy risks if masking fails</span>
+                    </label>
+                    <label class="option-label">
+                        <input type="checkbox" name="concerns" value="data_loss" class="checkbox-custom">
+                        <span>Loss of important data features</span>
+                    </label>
+                    <label class="option-label">
+                        <input type="checkbox" name="concerns" value="complexity" class="checkbox-custom">
+                        <span>Technical complexity / steep learning curve</span>
+                    </label>
+                    <label class="option-label">
+                        <input type="checkbox" name="concerns" value="resources" class="checkbox-custom">
+                        <span>Computational resource requirements</span>
+                    </label>
+                    <label class="option-label">
+                        <input type="checkbox" name="concerns" value="cost" class="checkbox-custom">
+                        <span>Cost</span>
+                    </label>
+                    <label class="option-label">
+                        <input type="checkbox" name="concerns" value="control" class="checkbox-custom">
+                        <span>Lack of control over the process</span>
+                    </label>
+                    <label class="option-label">
+                        <input type="checkbox" name="concerns" value="legal" class="checkbox-custom">
+                        <span>Legal/ethical uncertainties</span>
+                    </label>
+                    <label class="option-label">
+                        <input type="checkbox" name="concerns" value="integration" class="checkbox-custom">
+                        <span>Integration with existing workflows</span>
+                    </label>
+                    <label class="option-label">
+                        <input type="checkbox" name="concerns" value="quality" class="checkbox-custom">
+                        <span>Quality assessment of masked output</span>
+                    </label>
+                    <label class="option-label">
+                        <input type="checkbox" name="concerns" value="no_concerns" class="checkbox-custom">
+                        <span>No significant concerns</span>
+                    </label>
+                    <label class="option-label">
+                        <input type="checkbox" name="concerns" value="other" class="checkbox-custom">
+                        <span>Other</span>
+                    </label>
+                </div>
+                <div id="concernsOther" class="mt-3 hidden">
+                    <input type="text" class="input-text" placeholder="Please specify your concern">
+                </div>
+            </div>
+
+            <!-- Navigation Buttons -->
+            <div class="flex justify-between items-center mt-12 pt-8 border-t border-carbon-border">
+                <button type="button" class="survey-btn-secondary" onclick="window.location.href='survey-section2.html'">
+                    <i class="fas fa-arrow-left mr-2"></i>Previous
+                </button>
+                <button type="submit" class="survey-btn-primary">
+                    Next Section<i class="fas fa-arrow-right ml-2"></i>
+                </button>
+            </div>
+        </form>
+    </main>
+
+    <footer class="border-t border-carbon-border py-12 px-6">
+        <div class="container mx-auto max-w-5xl">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-8">
+                <div>
+                    <div class="font-semibold text-lg mb-2">SYNAPSIS</div>
+                    <div class="text-sm text-carbon-text-secondary">Funded by NWO TDCC-SSH</div>
+                </div>
+                <div class="flex gap-8">
+                    <a href="../index.html" class="text-sm text-carbon-text-secondary hover:text-carbon-text">Home</a>
+                    <a href="../platform.html" class="text-sm text-carbon-text-secondary hover:text-carbon-text">Platform</a>
+                    <a href="../training.html" class="text-sm text-carbon-text-secondary hover:text-carbon-text">Training</a>
+                    <a href="../resources.html" class="text-sm text-carbon-text-secondary hover:text-carbon-text">Resources</a>
+                </div>
+            </div>
+            <div class="mt-8 pt-8 border-t border-carbon-border text-sm text-carbon-text-secondary">
+                © 2026 SYNAPSIS Project. Radboud University.
+            </div>
+        </div>
+    </footer>
+    <script src="../main.js"></script>
+
+    <script>
+        // Handle "Other" option visibility
+        document.querySelectorAll('input[name="methods"]').forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                const otherDiv = document.getElementById('methodsOther');
+                const otherChecked = document.querySelector('input[name="methods"][value="other"]').checked;
+                otherDiv.classList.toggle('hidden', !otherChecked);
+            });
+        });
+
+        document.querySelectorAll('input[name="concerns"]').forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                const otherDiv = document.getElementById('concernsOther');
+                const otherChecked = document.querySelector('input[name="concerns"][value="other"]').checked;
+                otherDiv.classList.toggle('hidden', !otherChecked);
+            });
+        });
+
+        // Visual feedback for selected options
+        document.querySelectorAll('.option-label').forEach(label => {
+            const input = label.querySelector('input');
+            input.addEventListener('change', function() {
+                if (input.type === 'radio') {
+                    document.querySelectorAll(`input[name="${input.name}"]`).forEach(radio => {
+                        radio.closest('.option-label').classList.remove('selected');
+                    });
+                }
+                if (input.checked) {
+                    label.classList.add('selected');
+                } else {
+                    label.classList.remove('selected');
+                }
+            });
+        });
+
+        // Form submission
+        document.getElementById('surveyForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            // Save to localStorage
+            const formData = new FormData(this);
+            const responses = Object.fromEntries(formData);
+            localStorage.setItem('synapsis_survey_section3', JSON.stringify(responses));
+
+            // Navigate to next section
+            window.location.href = 'survey-section4.html';
+        });
+    </script>
+</body>
+</html>

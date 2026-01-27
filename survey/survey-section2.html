@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SYNAPSIS Survey - Section 2: Current Practices & Challenges</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="../theme.css">
+    <script src="../theme.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'sans': ['IBM Plex Sans', 'sans-serif'],
+                        'mono': ['IBM Plex Mono', 'monospace'],
+                    },
+                    colors: {
+                        'carbon': {
+                            'bg': 'var(--color-bg)',
+                            'bg-hover': 'var(--color-bg-hover)',
+                            'border': 'var(--color-border)',
+                            'text': 'var(--color-text)',
+                            'text-secondary': 'var(--color-text-secondary)',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'IBM Plex Sans', sans-serif;
+            background-color: var(--color-bg);
+            color: var(--color-text);
+        }
+        .accent-bar { height: 3px; background: var(--color-accent); }
+        .accent-line { height: 2px; background: linear-gradient(90deg, var(--color-accent) 0%, transparent 100%); }
+        .nav-link { position: relative; padding-bottom: 4px; }
+        .nav-link::after { content: ''; position: absolute; bottom: 0; left: 0; width: 0; height: 2px; background: var(--color-accent); transition: width 0.2s ease; }
+        .nav-link:hover::after { width: 100%; }
+        .radio-custom, .checkbox-custom {
+            appearance: none; width: 20px; height: 20px;
+            border: 1px solid var(--color-border); border-radius: 4px;
+            cursor: pointer; transition: all 0.15s ease;
+            background-color: var(--color-bg);
+        }
+        .radio-custom { border-radius: 50%; }
+        .radio-custom:checked, .checkbox-custom:checked {
+            background: var(--color-accent); border-color: var(--color-accent);
+        }
+        .radio-custom:checked::after, .checkbox-custom:checked::after {
+            content: '\2713'; color: var(--color-inverse);
+            display: flex; justify-content: center; align-items: center;
+            font-size: 14px; font-weight: bold;
+        }
+        .progress-bar { height: 4px; background: var(--color-border); border-radius: 2px; overflow: hidden; }
+        .progress-fill { height: 100%; background: var(--color-accent); transition: width 0.5s ease; }
+        .survey-btn-primary {
+            background: var(--color-accent); color: var(--color-inverse);
+            border: 1px solid var(--color-accent); padding: 12px 32px;
+            font-weight: 600; cursor: pointer; transition: all 0.15s ease;
+        }
+        .survey-btn-primary:hover { background: var(--color-accent-hover); }
+        .survey-btn-secondary {
+            background: var(--color-bg); color: var(--color-text);
+            border: 1px solid var(--color-border); padding: 12px 32px;
+            font-weight: 600; cursor: pointer; transition: all 0.15s ease;
+        }
+        .survey-btn-secondary:hover { border-color: var(--color-accent); background: var(--color-bg-hover); }
+        .question-card {
+            background: var(--color-bg); border: 1px solid var(--color-border);
+            padding: 32px; margin-bottom: 24px; transition: all 0.15s ease;
+        }
+        .question-card:hover { border-color: var(--color-text-secondary); }
+        .input-text {
+            width: 100%; padding: 12px; border: 1px solid var(--color-border);
+            font-size: 16px; font-family: 'IBM Plex Sans', sans-serif;
+            transition: all 0.15s ease; background-color: var(--color-bg); color: var(--color-text);
+        }
+        .input-text:focus { outline: none; border-color: var(--color-accent); }
+        textarea.input-text { min-height: 100px; resize: vertical; }
+        .option-label {
+            display: flex; align-items: center; gap: 12px;
+            padding: 12px 16px; border: 1px solid var(--color-border);
+            cursor: pointer; transition: all 0.15s ease;
+            position: relative;
+        }
+        .option-label:hover { border-color: var(--color-text-secondary); background: var(--color-bg-hover); }
+        .option-label.selected { border-color: var(--color-accent); background: var(--color-bg-hover); }
+        .info-box {
+            background: var(--color-bg-hover); border-left: 4px solid var(--color-accent);
+            padding: 16px; margin-bottom: 16px;
+        }
+        .info-box.blue, .info-box.survey-info-blue { border-left-color: #3b82f6; background: #eff6ff; }
+        /* Section-specific: rank badge for challenge ranking */
+        .rank-badge {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--color-accent);
+            color: var(--color-inverse);
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        .rank-badge.hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <header class="border-b border-carbon-border sticky top-0 z-50 bg-white">
+        <div class="accent-bar"></div>
+        <nav class="container mx-auto px-6 py-4">
+            <div class="flex justify-between items-center">
+                <a href="../index.html" class="flex items-center gap-2 text-xl font-semibold tracking-tight">
+                    <img src="../logo-mark.svg" alt="" class="h-7 w-auto header-logo">
+                    SYNAPSIS
+                </a>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="../index.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Home</a>
+                    <a href="../platform.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Platform</a>
+                    <a href="../demo.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Demo</a>
+                    <a href="../training.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Training</a>
+                    <a href="../resources.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Resources</a>
+                    <a href="../network.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Network</a>
+                    <a href="../press.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Press</a>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button onclick="toggleTheme()" class="theme-toggle" title="Toggle dark mode">
+                        <i class="fas fa-moon"></i><i class="fas fa-sun"></i>
+                    </button>
+                    <button class="md:hidden p-2" aria-label="Open menu">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="border-b border-carbon-border" style="background-color: var(--color-bg-hover);">
+        <div class="container mx-auto px-6 py-3">
+            <div class="flex justify-between items-center text-xs mb-2">
+                <span class="font-mono text-carbon-text-secondary">Section 2 of 10</span>
+                <span class="text-carbon-text-secondary">20% Complete</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" style="width: 20%;"></div>
+            </div>
+        </div>
+    </div>
+
+    <main class="container mx-auto px-6 py-12 max-w-4xl">
+        <!-- Section Header -->
+        <div class="text-center mb-12">
+            <h1 class="text-4xl font-light mb-4">Section 2: Current Practices & Challenges</h1>
+            <div class="accent-line mb-6 max-w-md mx-auto"></div>
+            <p class="text-gray-600 max-w-2xl mx-auto">
+                Tell us about your current workflows and the challenges you face with audiovisual data.
+            </p>
+        </div>
+
+        <form id="surveyForm">
+            <!-- Question 2.1 -->
+            <div class="question-card">
+                <label class="block mb-4">
+                    <span class="text-lg font-semibold">2.1 What tools do you currently use for audiovisual data management?</span>
+                    <span class="text-red-500">*</span>
+                    <p class="text-sm text-gray-600 mt-1">Select all that apply</p>
+                </label>
+                <div class="space-y-3">
+                    <label class="option-label">
+                        <input type="checkbox" name="tools" value="elan" class="checkbox-custom">
+                        <span>ELAN (annotation software)</span>
+                    </label>
+                    <label class="option-label">
+                        <input type="checkbox" name="tools" value="praat" class="checkbox-custom">
+                        <span>Praat (phonetics analysis)</span>
+                    </label>
+                    <label class="option-label">
+                        <input type="checkbox" name="tools" value="qualitative" class="checkbox-custom">
+                        <span>MAXQDA / NVivo (qualitative analysis)</span>
+                    </label>
+                    <label class="option-label">
+                        <input type="checkbox" name="tools" value="scripting" class="checkbox-custom">
+                        <span>Custom scripts/programming (Python, R, etc.)</span>
+                    </label>
+                    <label class="option-label">
+                        <input type="checkbox" name="tools" value="manual" class="checkbox-custom">
+                        <span>Manual anonymization (blurring, pixelation)</span>
+                    </label>
+                    <label class="option-label">
+                        <input type="checkbox" name="tools" value="commercial" class="checkbox-custom">
+                        <span>Commercial video editing software</span>
+                    </label>
+                    <label class="option-label">
+                        <input type="checkbox" name="tools" value="adhoc" class="checkbox-custom">
+                        <span>No specific tools - ad hoc solutions</span>
+                    </label>
+                    <label class="option-label">
+                        <input type="checkbox" name="tools" value="none" class="checkbox-custom">
+                        <span>Not currently managing audiovisual data</span>
+                    </label>
+                    <label class="option-label">
+                        <input type="checkbox" name="tools" value="other" class="checkbox-custom">
+                        <span>Other</span>
+                    </label>
+                </div>
+                <div id="toolsOther" class="mt-3 hidden">
+                    <input type="text" class="input-text" placeholder="Please specify the tools you use">
+                </div>
+            </div>
+
+            <!-- Question 2.2 -->
+            <div class="question-card">
+                <label class="block mb-4">
+                    <span class="text-lg font-semibold">2.2 What are your THREE biggest challenges in managing audiovisual data?</span>
+                    <span class="text-red-500">*</span>
+                    <p class="text-sm text-gray-600 mt-1">Click to rank your top 3 challenges (1 = biggest challenge)</p>
+                </label>
+                <div class="info-box mb-4">
+                    <i class="fas fa-info-circle mr-2"></i>
+                    <span class="text-sm">Click up to 3 options in order of importance</span>
+                    <div id="rankingStatus" class="mt-2 text-sm font-semibold"></div>
+                </div>
+                <div class="space-y-3" id="challengesContainer">
+                    <label class="option-label" data-challenge="privacy">
+                        <input type="checkbox" name="challenges" value="privacy" class="checkbox-custom">
+                        <span>Privacy and GDPR compliance</span>
+                        <span class="rank-badge hidden">1</span>
+                    </label>
+                    <label class="option-label" data-challenge="consent">
+                        <input type="checkbox" name="challenges" value="consent" class="checkbox-custom">
+                        <span>Informed consent complexity</span>
+                        <span class="rank-badge hidden">1</span>
+                    </label>
+                    <label class="option-label" data-challenge="storage">
+                        <input type="checkbox" name="challenges" value="storage" class="checkbox-custom">
+                        <span>Secure file storage and management</span>
+                        <span class="rank-badge hidden">1</span>
+                    </label>
+                    <label class="option-label" data-challenge="sharing">
+                        <input type="checkbox" name="challenges" value="sharing" class="checkbox-custom">
+                        <span>Data sharing restrictions</span>
+                        <span class="rank-badge hidden">1</span>
+                    </label>
+                    <label class="option-label" data-challenge="skills">
+                        <input type="checkbox" name="challenges" value="skills" class="checkbox-custom">
+                        <span>Lack of technical skills/training</span>
+                        <span class="rank-badge hidden">1</span>
+                    </label>
+                    <label class="option-label" data-challenge="time">
+                        <input type="checkbox" name="challenges" value="time" class="checkbox-custom">
+                        <span>Time-consuming processing</span>
+                        <span class="rank-badge hidden">1</span>
+                    </label>
+                    <label class="option-label" data-challenge="support">
+                        <input type="checkbox" name="challenges" value="support" class="checkbox-custom">
+                        <span>Lack of institutional support</span>
+                        <span class="rank-badge hidden">1</span>
+                    </label>
+                    <label class="option-label" data-challenge="metadata">
+                        <input type="checkbox" name="challenges" value="metadata" class="checkbox-custom">
+                        <span>Creating proper metadata</span>
+                        <span class="rank-badge hidden">1</span>
+                    </label>
+                    <label class="option-label" data-challenge="archiving">
+                        <input type="checkbox" name="challenges" value="archiving" class="checkbox-custom">
+                        <span>Long-term archiving solutions</span>
+                        <span class="rank-badge hidden">1</span>
+                    </label>
+                    <label class="option-label" data-challenge="tools">
+                        <input type="checkbox" name="challenges" value="tools" class="checkbox-custom">
+                        <span>Finding and using appropriate tools</span>
+                        <span class="rank-badge hidden">1</span>
+                    </label>
+                    <label class="option-label" data-challenge="compute">
+                        <input type="checkbox" name="challenges" value="compute" class="checkbox-custom">
+                        <span>Computational resource limitations</span>
+                        <span class="rank-badge hidden">1</span>
+                    </label>
+                    <label class="option-label" data-challenge="cost">
+                        <input type="checkbox" name="challenges" value="cost" class="checkbox-custom">
+                        <span>Cost of software/infrastructure</span>
+                        <span class="rank-badge hidden">1</span>
+                    </label>
+                    <label class="option-label" data-challenge="other">
+                        <input type="checkbox" name="challenges" value="other" class="checkbox-custom">
+                        <span>Other</span>
+                        <span class="rank-badge hidden">1</span>
+                    </label>
+                </div>
+                <div id="challengesOther" class="mt-3 hidden">
+                    <input type="text" class="input-text" placeholder="Please specify your challenge">
+                </div>
+            </div>
+
+            <!-- Question 2.3 -->
+            <div class="question-card">
+                <label class="block mb-4">
+                    <span class="text-lg font-semibold">2.3 How concerned are you about privacy when sharing audiovisual data?</span>
+                    <span class="text-red-500">*</span>
+                </label>
+                <div class="space-y-3">
+                    <label class="option-label">
+                        <input type="radio" name="privacy_concern" value="extremely" class="radio-custom" required>
+                        <span>Extremely concerned (prevents me from sharing)</span>
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="privacy_concern" value="very" class="radio-custom">
+                        <span>Very concerned (major barrier)</span>
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="privacy_concern" value="moderately" class="radio-custom">
+                        <span>Moderately concerned (significant consideration)</span>
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="privacy_concern" value="slightly" class="radio-custom">
+                        <span>Slightly concerned (minor consideration)</span>
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="privacy_concern" value="not" class="radio-custom">
+                        <span>Not concerned at all</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Question 2.4 -->
+            <div class="question-card">
+                <label class="block mb-4">
+                    <span class="text-lg font-semibold">2.4 How often do you archive or share audiovisual research data?</span>
+                    <span class="text-red-500">*</span>
+                </label>
+                <div class="space-y-3">
+                    <label class="option-label">
+                        <input type="radio" name="sharing_frequency" value="regularly" class="radio-custom" required>
+                        <span>Regularly (most or all projects)</span>
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="sharing_frequency" value="occasionally" class="radio-custom">
+                        <span>Occasionally (some projects)</span>
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="sharing_frequency" value="rarely" class="radio-custom">
+                        <span>Rarely (very few projects)</span>
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="sharing_frequency" value="never" class="radio-custom">
+                        <span>Never</span>
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="sharing_frequency" value="barriers" class="radio-custom">
+                        <span>Would like to but face barriers</span>
+                    </label>
+                </div>
+                <div id="barriersExplain" class="mt-3 hidden">
+                    <textarea class="input-text" placeholder="Please explain the barriers you face..."></textarea>
+                </div>
+            </div>
+
+            <!-- Question 2.5 -->
+            <div class="question-card">
+                <label class="block mb-4">
+                    <span class="text-lg font-semibold">2.5 What prevents you from sharing audiovisual data?</span>
+                    <span class="text-red-500">*</span>
+                    <p class="text-sm text-gray-600 mt-1">Select all that apply</p>
+                </label>
+                <div class="space-y-3">
+                    <label class="option-label">
+                        <input type="checkbox" name="barriers" value="privacy" class="checkbox-custom">
+                        <span>Privacy concerns / lack of consent for sharing</span>
+                    </label>
+                    <label class="option-label">
+                        <input type="checkbox" name="barriers" value="policies" class="checkbox-custom">
+                        <span>Institutional policies</span>
+                    </label>
+                    <label class="option-label">
+                        <input type="checkbox" name="barriers" value="deidentification" class="checkbox-custom">
+                        <span>Lack of technical solutions for de-identification</span>
+                    </label>
+                    <label class="option-label">
+                        <input type="checkbox" name="barriers" value="timeconsuming" class="checkbox-custom">
+                        <span>Too time-consuming</span>
+                    </label>
+                    <label class="option-label">
+                        <input type="checkbox" name="barriers" value="infrastructure" class="checkbox-custom">
+                        <span>Insufficient storage infrastructure</span>
+                    </label>
+                    <label class="option-label">
+                        <input type="checkbox" name="barriers" value="misuse" class="checkbox-custom">
+                        <span>Concerns about data misuse</span>
+                    </label>
+                    <label class="option-label">
+                        <input type="checkbox" name="barriers" value="knowledge" class="checkbox-custom">
+                        <span>Lack of knowledge about how to share properly</span>
+                    </label>
+                    <label class="option-label">
+                        <input type="checkbox" name="barriers" value="notrequired" class="checkbox-custom">
+                        <span>Journal/funder doesn't require it</span>
+                    </label>
+                    <label class="option-label">
+                        <input type="checkbox" name="barriers" value="nothing" class="checkbox-custom">
+                        <span>Nothing prevents me - I regularly share data</span>
+                    </label>
+                    <label class="option-label">
+                        <input type="checkbox" name="barriers" value="other" class="checkbox-custom">
+                        <span>Other</span>
+                    </label>
+                </div>
+                <div id="barriersOther" class="mt-3 hidden">
+                    <input type="text" class="input-text" placeholder="Please specify what prevents you from sharing">
+                </div>
+            </div>
+
+            <!-- Navigation Buttons -->
+            <div class="flex justify-between items-center mt-12 pt-8 border-t border-carbon-border">
+                <button type="button" class="survey-btn-secondary" onclick="window.location.href='survey-section1.html'">
+                    <i class="fas fa-arrow-left mr-2"></i>Previous
+                </button>
+                <button type="submit" class="survey-btn-primary">
+                    Next Section<i class="fas fa-arrow-right ml-2"></i>
+                </button>
+            </div>
+        </form>
+    </main>
+
+    <footer class="border-t border-carbon-border py-12 px-6">
+        <div class="container mx-auto max-w-5xl">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-8">
+                <div>
+                    <div class="font-semibold text-lg mb-2">SYNAPSIS</div>
+                    <div class="text-sm text-carbon-text-secondary">Funded by NWO TDCC-SSH</div>
+                </div>
+                <div class="flex gap-8">
+                    <a href="../index.html" class="text-sm text-carbon-text-secondary hover:text-carbon-text">Home</a>
+                    <a href="../platform.html" class="text-sm text-carbon-text-secondary hover:text-carbon-text">Platform</a>
+                    <a href="../training.html" class="text-sm text-carbon-text-secondary hover:text-carbon-text">Training</a>
+                    <a href="../resources.html" class="text-sm text-carbon-text-secondary hover:text-carbon-text">Resources</a>
+                </div>
+            </div>
+            <div class="mt-8 pt-8 border-t border-carbon-border text-sm text-carbon-text-secondary">
+                &copy; 2026 SYNAPSIS Project. Radboud University.
+            </div>
+        </div>
+    </footer>
+    <script src="../main.js"></script>
+
+    <script>
+        // Handle "Other" option visibility for tools
+        document.querySelectorAll('input[name="tools"]').forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                const otherDiv = document.getElementById('toolsOther');
+                const otherChecked = document.querySelector('input[name="tools"][value="other"]').checked;
+                otherDiv.classList.toggle('hidden', !otherChecked);
+            });
+        });
+
+        // Handle ranking for challenges (Q2.2)
+        let challengeRanks = [];
+        const maxRanks = 3;
+
+        document.querySelectorAll('#challengesContainer .option-label').forEach(label => {
+            label.addEventListener('click', function(e) {
+                if (e.target.classList.contains('rank-badge')) return;
+
+                const checkbox = this.querySelector('input[type="checkbox"]');
+                const badge = this.querySelector('.rank-badge');
+                const value = checkbox.value;
+
+                if (checkbox.checked) {
+                    // Unchecking
+                    const rank = challengeRanks.indexOf(value);
+                    if (rank !== -1) {
+                        challengeRanks.splice(rank, 1);
+                        checkbox.checked = false;
+                        badge.classList.add('hidden');
+                        updateRankBadges();
+                    }
+                } else {
+                    // Checking
+                    if (challengeRanks.length < maxRanks) {
+                        challengeRanks.push(value);
+                        checkbox.checked = true;
+                        badge.classList.remove('hidden');
+                        updateRankBadges();
+                    }
+                }
+
+                updateRankingStatus();
+            });
+        });
+
+        function updateRankBadges() {
+            challengeRanks.forEach((value, index) => {
+                const label = document.querySelector(`[data-challenge="${value}"]`);
+                const badge = label.querySelector('.rank-badge');
+                badge.textContent = index + 1;
+            });
+        }
+
+        function updateRankingStatus() {
+            const status = document.getElementById('rankingStatus');
+            const remaining = maxRanks - challengeRanks.length;
+            if (remaining > 0) {
+                status.textContent = `Select ${remaining} more challenge${remaining > 1 ? 's' : ''}`;
+                status.className = 'mt-2 text-sm font-semibold text-gray-600';
+            } else {
+                status.textContent = '\u2713 All 3 challenges selected';
+                status.className = 'mt-2 text-sm font-semibold text-green-600';
+            }
+        }
+
+        updateRankingStatus();
+
+        // Handle "Other" for challenges
+        document.querySelectorAll('input[name="challenges"]').forEach(checkbox => {
+            if (checkbox.value === 'other') {
+                checkbox.addEventListener('change', function() {
+                    const otherDiv = document.getElementById('challengesOther');
+                    otherDiv.classList.toggle('hidden', !this.checked);
+                });
+            }
+        });
+
+        // Handle barriers explanation (Q2.4)
+        document.querySelectorAll('input[name="sharing_frequency"]').forEach(radio => {
+            radio.addEventListener('change', function() {
+                const explainDiv = document.getElementById('barriersExplain');
+                explainDiv.classList.toggle('hidden', this.value !== 'barriers');
+            });
+        });
+
+        // Handle "Other" for barriers (Q2.5)
+        document.querySelectorAll('input[name="barriers"]').forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                const otherDiv = document.getElementById('barriersOther');
+                const otherChecked = document.querySelector('input[name="barriers"][value="other"]').checked;
+                otherDiv.classList.toggle('hidden', !otherChecked);
+            });
+        });
+
+        // Visual feedback for selected options
+        document.querySelectorAll('.option-label').forEach(label => {
+            const input = label.querySelector('input');
+            input.addEventListener('change', function() {
+                if (input.type === 'radio') {
+                    document.querySelectorAll(`input[name="${input.name}"]`).forEach(radio => {
+                        radio.closest('.option-label').classList.remove('selected');
+                    });
+                }
+                if (input.checked) {
+                    label.classList.add('selected');
+                } else {
+                    label.classList.remove('selected');
+                }
+            });
+        });
+
+        // Form submission with validation
+        document.getElementById('surveyForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            // Validate challenges ranking
+            if (challengeRanks.length < 3) {
+                alert('Please select and rank your top 3 challenges in question 2.2');
+                document.getElementById('challengesContainer').scrollIntoView({ behavior: 'smooth', block: 'center' });
+                return;
+            }
+
+            // Save to localStorage
+            const formData = new FormData(this);
+            const responses = Object.fromEntries(formData);
+            responses.challengeRanks = challengeRanks;
+            localStorage.setItem('synapsis_survey_section2', JSON.stringify(responses));
+
+            // Navigate to next section
+            window.location.href = 'survey-section3.html';
+        });
+    </script>
+</body>
+</html>

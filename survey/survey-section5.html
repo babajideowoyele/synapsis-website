@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SYNAPSIS Survey - Section 5: Data Archiving & FAIR Principles</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="../theme.css">
+    <script src="../theme.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'sans': ['IBM Plex Sans', 'sans-serif'],
+                        'mono': ['IBM Plex Mono', 'monospace'],
+                    },
+                    colors: {
+                        'carbon': {
+                            'bg': 'var(--color-bg)',
+                            'bg-hover': 'var(--color-bg-hover)',
+                            'border': 'var(--color-border)',
+                            'text': 'var(--color-text)',
+                            'text-secondary': 'var(--color-text-secondary)',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'IBM Plex Sans', sans-serif; background-color: var(--color-bg); color: var(--color-text); }
+        .accent-bar { height: 3px; background: var(--color-accent); }
+        .accent-line { height: 2px; background: linear-gradient(90deg, var(--color-accent) 0%, transparent 100%); }
+        .nav-link { position: relative; padding-bottom: 4px; }
+        .nav-link::after { content: ''; position: absolute; bottom: 0; left: 0; width: 0; height: 2px; background: var(--color-accent); transition: width 0.2s ease; }
+        .nav-link:hover::after { width: 100%; }
+        .radio-custom, .checkbox-custom { appearance: none; width: 20px; height: 20px; border: 1px solid var(--color-border); border-radius: 4px; cursor: pointer; transition: all 0.15s ease; background-color: var(--color-bg); }
+        .radio-custom { border-radius: 50%; }
+        .radio-custom:checked, .checkbox-custom:checked { background: var(--color-accent); border-color: var(--color-accent); }
+        .radio-custom:checked::after, .checkbox-custom:checked::after { content: '\2713'; color: var(--color-inverse); display: flex; justify-content: center; align-items: center; font-size: 14px; font-weight: bold; }
+        .progress-bar { height: 4px; background: var(--color-border); border-radius: 2px; overflow: hidden; }
+        .progress-fill { height: 100%; background: var(--color-accent); transition: width 0.5s ease; }
+        .survey-btn-primary { background: var(--color-accent); color: var(--color-inverse); border: 1px solid var(--color-accent); padding: 12px 32px; font-weight: 600; cursor: pointer; transition: all 0.15s ease; }
+        .survey-btn-primary:hover { background: var(--color-accent-hover); }
+        .survey-btn-secondary { background: var(--color-bg); color: var(--color-text); border: 1px solid var(--color-border); padding: 12px 32px; font-weight: 600; cursor: pointer; transition: all 0.15s ease; }
+        .survey-btn-secondary:hover { border-color: var(--color-accent); background: var(--color-bg-hover); }
+        .question-card { background: var(--color-bg); border: 1px solid var(--color-border); padding: 32px; margin-bottom: 24px; transition: all 0.15s ease; }
+        .question-card:hover { border-color: var(--color-text-secondary); }
+        .input-text { width: 100%; padding: 12px; border: 1px solid var(--color-border); font-size: 16px; font-family: 'IBM Plex Sans', sans-serif; transition: all 0.15s ease; background-color: var(--color-bg); color: var(--color-text); }
+        .input-text:focus { outline: none; border-color: var(--color-accent); }
+        textarea.input-text { min-height: 100px; resize: vertical; }
+        .option-label { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border: 1px solid var(--color-border); cursor: pointer; transition: all 0.15s ease; }
+        .option-label:hover { border-color: var(--color-text-secondary); background: var(--color-bg-hover); }
+        .option-label.selected { border-color: var(--color-accent); background: var(--color-bg-hover); }
+        .info-box { background: var(--color-bg-hover); border-left: 4px solid var(--color-accent); padding: 16px; margin-bottom: 16px; }
+        .info-box.blue { border-left-color: #3b82f6; background: #eff6ff; }
+        .survey-info-blue { border-left-color: #3b82f6; background: #eff6ff; }
+        .fair-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin: 16px 0; }
+        .fair-card { border: 1px solid var(--color-border); padding: 16px; text-align: center; transition: all 0.15s ease; }
+        .fair-card:hover { border-color: var(--color-accent); background: var(--color-bg-hover); }
+        .fair-icon { font-size: 36px; margin-bottom: 8px; }
+    </style>
+</head>
+<body class="min-h-screen">
+    <header class="border-b border-carbon-border sticky top-0 z-50 bg-white">
+        <div class="accent-bar"></div>
+        <nav class="container mx-auto px-6 py-4">
+            <div class="flex justify-between items-center">
+                <a href="../index.html" class="flex items-center gap-2 text-xl font-semibold tracking-tight">
+                    <img src="../logo-mark.svg" alt="" class="h-7 w-auto header-logo">SYNAPSIS</a>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="../index.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Home</a>
+                    <a href="../platform.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Platform</a>
+                    <a href="../demo.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Demo</a>
+                    <a href="../training.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Training</a>
+                    <a href="../resources.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Resources</a>
+                    <a href="../network.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Network</a>
+                    <a href="../press.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Press</a>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button onclick="toggleTheme()" class="theme-toggle" title="Toggle dark mode"><i class="fas fa-moon"></i><i class="fas fa-sun"></i></button>
+                    <button class="md:hidden p-2" aria-label="Open menu"><i class="fas fa-bars"></i></button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="border-b border-carbon-border" style="background-color: var(--color-bg-hover);">
+        <div class="container mx-auto px-6 py-3">
+            <div class="flex justify-between items-center text-xs mb-2">
+                <span class="font-mono text-carbon-text-secondary">Section 5 of 10</span>
+                <span class="text-carbon-text-secondary">50% Complete</span>
+            </div>
+            <div class="progress-bar"><div class="progress-fill" style="width: 50%;"></div></div>
+        </div>
+    </div>
+
+    <main class="container mx-auto px-6 py-12 max-w-4xl">
+        <!-- Section Header -->
+        <div class="text-center mb-12">
+            <h1 class="text-4xl font-light mb-4">Section 5: Data Archiving & FAIR Principles</h1>
+            <div class="accent-line mb-6 max-w-md mx-auto"></div>
+            <p class="text-gray-600 max-w-2xl mx-auto">
+                Understanding your approach to data archiving and adherence to FAIR principles.
+            </p>
+        </div>
+
+        <!-- FAIR Principles Explainer -->
+        <div class="info-box blue survey-info-blue mb-8">
+            <div class="flex items-start gap-3 mb-4">
+                <i class="fas fa-info-circle text-blue-600 text-xl mt-1"></i>
+                <div>
+                    <h3 class="font-semibold mb-2">What are FAIR Principles?</h3>
+                    <p class="text-sm text-gray-700 mb-3">
+                        FAIR stands for Findable, Accessible, Interoperable, and Reusable. These principles guide data management
+                        to maximize data value and enable research transparency.
+                    </p>
+                </div>
+            </div>
+            <div class="fair-grid">
+                <div class="fair-card">
+                    <div class="fair-icon">&#128269;</div>
+                    <div class="font-semibold">Findable</div>
+                    <div class="text-xs text-gray-600 mt-1">Easy to locate with metadata</div>
+                </div>
+                <div class="fair-card">
+                    <div class="fair-icon">&#128275;</div>
+                    <div class="font-semibold">Accessible</div>
+                    <div class="text-xs text-gray-600 mt-1">Clear access conditions</div>
+                </div>
+                <div class="fair-card">
+                    <div class="fair-icon">&#128279;</div>
+                    <div class="font-semibold">Interoperable</div>
+                    <div class="text-xs text-gray-600 mt-1">Works with other data/tools</div>
+                </div>
+                <div class="fair-card">
+                    <div class="fair-icon">&#9851;&#65039;</div>
+                    <div class="font-semibold">Reusable</div>
+                    <div class="text-xs text-gray-600 mt-1">Can be used in new contexts</div>
+                </div>
+            </div>
+        </div>
+
+        <form id="surveyForm">
+            <!-- Question 5.1 -->
+            <div class="question-card">
+                <label class="block mb-4">
+                    <span class="text-lg font-semibold">5.1 Are you familiar with FAIR principles (Findable, Accessible, Interoperable, Reusable)?</span>
+                    <span class="text-red-500">*</span>
+                </label>
+                <div class="space-y-3">
+                    <label class="option-label">
+                        <input type="radio" name="fair_familiarity" value="very" class="radio-custom" required>
+                        <div>
+                            <div class="font-medium">Very familiar</div>
+                            <div class="text-sm text-gray-600">Actively implement them in my work</div>
+                        </div>
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="fair_familiarity" value="somewhat" class="radio-custom">
+                        <div>
+                            <div class="font-medium">Somewhat familiar</div>
+                            <div class="text-sm text-gray-600">Aware of basic concepts</div>
+                        </div>
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="fair_familiarity" value="heard" class="radio-custom">
+                        <div>
+                            <div class="font-medium">Heard of them</div>
+                            <div class="text-sm text-gray-600">But not familiar with details</div>
+                        </div>
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="fair_familiarity" value="not_familiar" class="radio-custom">
+                        <span>Not familiar at all</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Question 5.2 -->
+            <div class="question-card">
+                <label class="block mb-4">
+                    <span class="text-lg font-semibold">5.2 Where do you currently archive or plan to archive your audiovisual data?</span>
+                    <span class="text-red-500">*</span>
+                    <p class="text-sm text-gray-600 mt-1">Select all that apply</p>
+                </label>
+                <div class="space-y-3">
+                    <label class="option-label">
+                        <input type="checkbox" name="archive_location" value="dans" class="checkbox-custom">
+                        <div>
+                            <div class="font-medium">DANS (Data Archiving and Networked Services)</div>
+                            <div class="text-sm text-gray-600">Dutch national research data repository</div>
+                        </div>
+                    </label>
+                    <label class="option-label">
+                        <input type="checkbox" name="archive_location" value="institutional" class="checkbox-custom">
+                        <div>
+                            <div class="font-medium">Institutional repository</div>
+                            <div class="text-sm text-gray-600">My university's data archive</div>
+                        </div>
+                    </label>
+                    <label class="option-label">
+                        <input type="checkbox" name="archive_location" value="clariah" class="checkbox-custom">
+                        <div>
+                            <div class="font-medium">CLARIN/CLARIAH</div>
+                            <div class="text-sm text-gray-600">Infrastructure for humanities and social sciences</div>
+                        </div>
+                    </label>
+                    <label class="option-label">
+                        <input type="checkbox" name="archive_location" value="odissei" class="checkbox-custom">
+                        <div>
+                            <div class="font-medium">ODISSEI</div>
+                            <div class="text-sm text-gray-600">Open Data Infrastructure for Social Science</div>
+                        </div>
+                    </label>
+                    <label class="option-label">
+                        <input type="checkbox" name="archive_location" value="tla" class="checkbox-custom">
+                        <div>
+                            <div class="font-medium">TLA (The Language Archive)</div>
+                            <div class="text-sm text-gray-600">Max Planck Institute archive</div>
+                        </div>
+                    </label>
+                    <label class="option-label">
+                        <input type="checkbox" name="archive_location" value="commercial" class="checkbox-custom">
+                        <div>
+                            <div class="font-medium">Commercial cloud storage</div>
+                            <div class="text-sm text-gray-600">Dropbox, Google Drive, OneDrive, etc.</div>
+                        </div>
+                    </label>
+                    <label class="option-label">
+                        <input type="checkbox" name="archive_location" value="network" class="checkbox-custom">
+                        <span>Institutional network drives</span>
+                    </label>
+                    <label class="option-label">
+                        <input type="checkbox" name="archive_location" value="personal" class="checkbox-custom">
+                        <span>Personal storage (external drives, personal computer)</span>
+                    </label>
+                    <label class="option-label">
+                        <input type="checkbox" name="archive_location" value="delete" class="checkbox-custom">
+                        <span>Don't archive - delete after publication</span>
+                    </label>
+                    <label class="option-label">
+                        <input type="checkbox" name="archive_location" value="other" class="checkbox-custom">
+                        <span>Other</span>
+                    </label>
+                </div>
+                <div id="archiveOther" class="mt-3 hidden">
+                    <input type="text" class="input-text" placeholder="Please specify where you archive data">
+                </div>
+            </div>
+
+            <!-- Question 5.3 -->
+            <div class="question-card">
+                <label class="block mb-4">
+                    <span class="text-lg font-semibold">5.3 What metadata standards do you use or are you aware of?</span>
+                    <span class="text-red-500">*</span>
+                    <p class="text-sm text-gray-600 mt-1">Select all that apply</p>
+                </label>
+                <div class="space-y-3">
+                    <label class="option-label">
+                        <input type="checkbox" name="metadata_standards" value="dublin_core" class="checkbox-custom">
+                        <div>
+                            <div class="font-medium">Dublin Core</div>
+                            <div class="text-sm text-gray-600">General-purpose metadata standard</div>
+                        </div>
+                    </label>
+                    <label class="option-label">
+                        <input type="checkbox" name="metadata_standards" value="datacite" class="checkbox-custom">
+                        <div>
+                            <div class="font-medium">DataCite</div>
+                            <div class="text-sm text-gray-600">Standard for research data citation</div>
+                        </div>
+                    </label>
+                    <label class="option-label">
+                        <input type="checkbox" name="metadata_standards" value="imdi" class="checkbox-custom">
+                        <div>
+                            <div class="font-medium">IMDI (ISLE Metadata Initiative)</div>
+                            <div class="text-sm text-gray-600">For multimedia language resources</div>
+                        </div>
+                    </label>
+                    <label class="option-label">
+                        <input type="checkbox" name="metadata_standards" value="cmdi" class="checkbox-custom">
+                        <div>
+                            <div class="font-medium">CMDI (Component Metadata Infrastructure)</div>
+                            <div class="text-sm text-gray-600">Flexible framework for language resources</div>
+                        </div>
+                    </label>
+                    <label class="option-label">
+                        <input type="checkbox" name="metadata_standards" value="custom" class="checkbox-custom">
+                        <span>Custom/disciplinary standards</span>
+                    </label>
+                    <label class="option-label">
+                        <input type="checkbox" name="metadata_standards" value="not_aware" class="checkbox-custom">
+                        <span>Not aware of specific standards</span>
+                    </label>
+                    <label class="option-label">
+                        <input type="checkbox" name="metadata_standards" value="other" class="checkbox-custom">
+                        <span>Other</span>
+                    </label>
+                </div>
+                <div id="metadataOther" class="mt-3 hidden">
+                    <input type="text" class="input-text" placeholder="Please specify the metadata standard">
+                </div>
+            </div>
+
+            <!-- Question 5.4 -->
+            <div class="question-card">
+                <label class="block mb-4">
+                    <span class="text-lg font-semibold">5.4 How important is it that the platform automatically generates appropriate metadata?</span>
+                    <span class="text-red-500">*</span>
+                </label>
+                <div class="space-y-3">
+                    <label class="option-label">
+                        <input type="radio" name="metadata_importance" value="essential" class="radio-custom" required>
+                        <div>
+                            <div class="font-medium">Essential</div>
+                            <div class="text-sm text-gray-600">I need this feature to use the platform</div>
+                        </div>
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="metadata_importance" value="very" class="radio-custom">
+                        <div>
+                            <div class="font-medium">Very important</div>
+                            <div class="text-sm text-gray-600">Would save significant time and effort</div>
+                        </div>
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="metadata_importance" value="important" class="radio-custom">
+                        <div>
+                            <div class="font-medium">Important</div>
+                            <div class="text-sm text-gray-600">Helpful but I can create metadata manually</div>
+                        </div>
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="metadata_importance" value="nice" class="radio-custom">
+                        <span>Nice to have</span>
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="metadata_importance" value="not" class="radio-custom">
+                        <span>Not important</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Question 5.5 -->
+            <div class="question-card">
+                <label class="block mb-4">
+                    <span class="text-lg font-semibold">5.5 What access control levels do you need for archived data?</span>
+                    <span class="text-red-500">*</span>
+                    <p class="text-sm text-gray-600 mt-1">Select all that apply</p>
+                </label>
+                <div class="space-y-3">
+                    <label class="option-label">
+                        <input type="checkbox" name="access_control" value="open" class="checkbox-custom">
+                        <div>
+                            <div class="font-medium">Open access (public)</div>
+                            <div class="text-sm text-gray-600">Anyone can access without restrictions</div>
+                        </div>
+                    </label>
+                    <label class="option-label">
+                        <input type="checkbox" name="access_control" value="restricted" class="checkbox-custom">
+                        <div>
+                            <div class="font-medium">Restricted access</div>
+                            <div class="text-sm text-gray-600">Registered researchers only</div>
+                        </div>
+                    </label>
+                    <label class="option-label">
+                        <input type="checkbox" name="access_control" value="request" class="checkbox-custom">
+                        <div>
+                            <div class="font-medium">Access upon request</div>
+                            <div class="text-sm text-gray-600">Manual approval by data owner</div>
+                        </div>
+                    </label>
+                    <label class="option-label">
+                        <input type="checkbox" name="access_control" value="embargoed" class="checkbox-custom">
+                        <div>
+                            <div class="font-medium">Time-embargoed access</div>
+                            <div class="text-sm text-gray-600">Public after a specified period</div>
+                        </div>
+                    </label>
+                    <label class="option-label">
+                        <input type="checkbox" name="access_control" value="tiered" class="checkbox-custom">
+                        <div>
+                            <div class="font-medium">Tiered access</div>
+                            <div class="text-sm text-gray-600">Different versions for different user groups</div>
+                        </div>
+                    </label>
+                    <label class="option-label">
+                        <input type="checkbox" name="access_control" value="institutional" class="checkbox-custom">
+                        <span>Institutional access only</span>
+                    </label>
+                    <label class="option-label">
+                        <input type="checkbox" name="access_control" value="unsure" class="checkbox-custom">
+                        <span>Not sure / need guidance</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Navigation Buttons -->
+            <div class="flex justify-between items-center mt-12 pt-8 border-t border-carbon-border">
+                <button type="button" class="survey-btn-secondary" onclick="window.location.href='survey-section4.html'">
+                    <i class="fas fa-arrow-left mr-2"></i>Previous
+                </button>
+                <button type="submit" class="survey-btn-primary">
+                    Next Section<i class="fas fa-arrow-right ml-2"></i>
+                </button>
+            </div>
+        </form>
+    </main>
+
+    <footer class="border-t border-carbon-border py-12 px-6">
+        <div class="container mx-auto max-w-5xl">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-8">
+                <div><div class="font-semibold text-lg mb-2">SYNAPSIS</div><div class="text-sm text-carbon-text-secondary">Funded by NWO TDCC-SSH</div></div>
+                <div class="flex gap-8">
+                    <a href="../index.html" class="text-sm text-carbon-text-secondary hover:text-carbon-text">Home</a>
+                    <a href="../platform.html" class="text-sm text-carbon-text-secondary hover:text-carbon-text">Platform</a>
+                    <a href="../training.html" class="text-sm text-carbon-text-secondary hover:text-carbon-text">Training</a>
+                    <a href="../resources.html" class="text-sm text-carbon-text-secondary hover:text-carbon-text">Resources</a>
+                </div>
+            </div>
+            <div class="mt-8 pt-8 border-t border-carbon-border text-sm text-carbon-text-secondary">&copy; 2026 SYNAPSIS Project. Radboud University.</div>
+        </div>
+    </footer>
+    <script src="../main.js"></script>
+
+    <script>
+        // Handle "Other" option visibility
+        document.querySelectorAll('input[name="archive_location"]').forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                const otherDiv = document.getElementById('archiveOther');
+                const otherChecked = document.querySelector('input[name="archive_location"][value="other"]').checked;
+                otherDiv.classList.toggle('hidden', !otherChecked);
+            });
+        });
+
+        document.querySelectorAll('input[name="metadata_standards"]').forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                const otherDiv = document.getElementById('metadataOther');
+                const otherChecked = document.querySelector('input[name="metadata_standards"][value="other"]').checked;
+                otherDiv.classList.toggle('hidden', !otherChecked);
+            });
+        });
+
+        // Visual feedback for selected options
+        document.querySelectorAll('.option-label').forEach(label => {
+            const input = label.querySelector('input');
+            if (input) {
+                input.addEventListener('change', function() {
+                    if (input.type === 'radio') {
+                        document.querySelectorAll(`input[name="${input.name}"]`).forEach(radio => {
+                            const parentLabel = radio.closest('.option-label');
+                            if (parentLabel) parentLabel.classList.remove('selected');
+                        });
+                    }
+                    const parentLabel = input.closest('.option-label');
+                    if (parentLabel) {
+                        if (input.checked) {
+                            parentLabel.classList.add('selected');
+                        } else {
+                            parentLabel.classList.remove('selected');
+                        }
+                    }
+                });
+            }
+        });
+
+        // Form submission
+        document.getElementById('surveyForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            // Save to localStorage
+            const formData = new FormData(this);
+            const responses = Object.fromEntries(formData);
+            localStorage.setItem('synapsis_survey_section5', JSON.stringify(responses));
+
+            // Navigate to next section
+            window.location.href = 'survey-section6.html';
+        });
+    </script>
+</body>
+</html>
