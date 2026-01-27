@@ -89,7 +89,7 @@ This project will collect/generate the following audiovisual data:
 
 | Parameter | Selected Option | Rationale |
 |-----------|-----------------|-----------|
-| Face method | [ ] Blur / [ ] Pixelate / [ ] Face swap / [ ] DeepPrivacy2 | [Explain choice] |
+| Face method | [ ] Blur / [ ] Pixelate / [ ] Face masking / [ ] DeepPrivacy2 | [Explain choice] |
 | Blur intensity | [ ] Low / [ ] Medium / [ ] High | |
 | Voice method | [ ] Pitch shift / [ ] Formant / [ ] None / [ ] Remove | |
 | Pose extraction | [ ] Yes / [ ] No | |

@@ -25,7 +25,7 @@ This report documents the de-identification procedures applied to audiovisual re
 | **Total files processed** | [X] |
 | **Total duration** | [X hours X minutes] |
 | **Processing date** | [DD/MM/YYYY] |
-| **Primary masking method** | [Face swap / Blur / Pixelate] |
+| **Primary masking method** | [Face masking / Blur / Pixelate] |
 | **Quality assessment** | [Excellent / Good / Acceptable] |
 
 ---
@@ -72,15 +72,15 @@ This report documents the de-identification procedures applied to audiovisual re
 
 | Parameter | Setting | Notes |
 |-----------|---------|-------|
-| **Method** | [Blur / Pixelate / Face Swap / DeepPrivacy2] | |
+| **Method** | [Blur / Pixelate / Face Masking / DeepPrivacy2] | |
 | **Intensity** | [Low / Medium / High] | |
 | **Detection model** | [RetinaFace / MTCNN / MediaPipe] | |
 | **Confidence threshold** | [0.X] | Faces below threshold may be missed |
 | **Temporal smoothing** | [Enabled / Disabled] | Reduces flickering |
-| **Expression preservation** | [Yes / No] | For face swap methods |
+| **Expression preservation** | [Yes / No] | For face masking methods |
 
 **Rationale for method selection:**
-[Explain why this method was chosen - e.g., "Face swap selected to preserve facial expressions important for emotion research while ensuring privacy protection."]
+[Explain why this method was chosen - e.g., "Face masking selected to preserve facial expressions important for emotion research while ensuring privacy protection."]
 
 ### 3.2 Voice Anonymization
 
@@ -132,8 +132,8 @@ This report documents the de-identification procedures applied to audiovisual re
 
 | Original File | Duration | Faces Detected | Masking Applied | Output File | Status |
 |---------------|----------|----------------|-----------------|-------------|--------|
-| recording_001.mp4 | 00:15:32 | 2 | Face swap, Pitch shift | recording_001_masked.mp4 | Complete |
-| recording_002.mp4 | 00:22:45 | 3 | Face swap, Pitch shift | recording_002_masked.mp4 | Complete |
+| recording_001.mp4 | 00:15:32 | 2 | Face masking, Pitch shift | recording_001_masked.mp4 | Complete |
+| recording_002.mp4 | 00:22:45 | 3 | Face masking, Pitch shift | recording_002_masked.mp4 | Complete |
 | [Add more rows] | | | | | |
 
 ### 4.3 Extracted Data
