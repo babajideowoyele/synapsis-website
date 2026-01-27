@@ -110,6 +110,9 @@
                     <a href="../press.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Press</a>
                 </div>
                 <div class="flex items-center gap-2">
+                    <button onclick="openSearch()" class="search-btn" title="Search (Ctrl+K)" aria-label="Search">
+                        <i class="fas fa-search"></i>
+                    </button>
                     <button onclick="toggleTheme()" class="theme-toggle" title="Toggle dark mode"><i class="fas fa-moon"></i><i class="fas fa-sun"></i></button>
                     <button class="md:hidden p-2" aria-label="Open menu"><i class="fas fa-bars"></i></button>
                 </div>
@@ -325,6 +328,7 @@
         </div>
     </footer>
     <script src="../main.js"></script>
+    <script src="../search.js"></script>
 
     <script>
         // Show/hide contact info based on permission
@@ -382,24 +386,52 @@
                 }
             }
 
-            // Log complete survey data (in production, this would be sent to a server)
-            console.log('Complete Survey Data:', allData);
+            // Save compiled data locally as backup
             localStorage.setItem('synapsis_survey_complete', JSON.stringify(allData));
 
-            // Simulate submission delay
-            setTimeout(() => {
-                // Update progress bar to 100%
-                document.getElementById('progressBar').style.width = '100%';
-                document.getElementById('progressText').textContent = '100% Complete!';
+            // Submit to Formspree
+            fetch('https://formspree.io/f/{SURVEY_FORM_ID}', {
+                method: 'POST',
+                body: JSON.stringify(allData),
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                }
+            })
+            .then(function(response) {
+                if (response.ok) {
+                    document.getElementById('progressBar').style.width = '100%';
+                    document.getElementById('progressText').textContent = '100% Complete!';
+                    document.getElementById('surveyFormContainer').style.display = 'none';
+                    document.getElementById('sectionHeader').style.display = 'none';
+                    document.getElementById('thankYouCard').classList.add('active');
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
 
-                // Hide form and show thank you
-                document.getElementById('surveyFormContainer').style.display = 'none';
-                document.getElementById('sectionHeader').style.display = 'none';
-                document.getElementById('thankYouCard').classList.add('active');
+                    // Clear individual section data from localStorage
+                    for (var i = 1; i <= 10; i++) {
+                        localStorage.removeItem('synapsis_survey_section' + i);
+                    }
+                } else {
+                    throw new Error('Server responded with status ' + response.status);
+                }
+            })
+            .catch(function(err) {
+                console.error('Survey submission error:', err);
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = 'Submit Survey <i class="fas fa-check ml-2"></i>';
 
-                // Scroll to top
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            }, 1500);
+                var errorEl = document.getElementById('submitError');
+                if (!errorEl) {
+                    errorEl = document.createElement('div');
+                    errorEl.id = 'submitError';
+                    errorEl.className = 'mt-4 p-4 border text-sm';
+                    errorEl.style.cssText = 'border-color:#ef4444;color:#ef4444';
+                    submitBtn.parentNode.appendChild(errorEl);
+                }
+                errorEl.innerHTML = '<i class="fas fa-exclamation-triangle mr-2"></i>' +
+                    'Submission failed. Your responses have been saved locally. ' +
+                    'Please check your connection and try again.';
+            });
         });
     </script>
 </body>

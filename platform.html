@@ -156,6 +156,9 @@
                     <button class="md:hidden" aria-label="Menu">
                         <i class="fas fa-bars text-xl"></i>
                     </button>
+                    <button onclick="openSearch()" class="search-btn" title="Search (Ctrl+K)" aria-label="Search">
+                        <i class="fas fa-search"></i>
+                    </button>
                     <button onclick="toggleTheme()" class="theme-toggle" title="Toggle dark mode">
                         <i class="fas fa-moon"></i><i class="fas fa-sun"></i>
                     </button>
@@ -657,5 +660,6 @@ result.download_pose_data(<span class="text-green-400">"pose_data.json"</span>)<
         });
     </script>
 <script src="main.js"></script>
+<script src="search.js"></script>
 </body>
 </html>

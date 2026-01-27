@@ -111,6 +111,9 @@
                     <a href="../press.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Press</a>
                 </div>
                 <div class="flex items-center gap-2">
+                    <button onclick="openSearch()" class="search-btn" title="Search (Ctrl+K)" aria-label="Search">
+                        <i class="fas fa-search"></i>
+                    </button>
                     <button onclick="toggleTheme()" class="theme-toggle" title="Toggle dark mode"><i class="fas fa-moon"></i><i class="fas fa-sun"></i></button>
                     <button class="md:hidden p-2" aria-label="Open menu"><i class="fas fa-bars"></i></button>
                 </div>
@@ -369,6 +372,7 @@
         </div>
     </footer>
     <script src="../main.js"></script>
+    <script src="../search.js"></script>
 
     <script>
         // Character counters

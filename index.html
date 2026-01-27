@@ -116,6 +116,9 @@
                     <button class="md:hidden" aria-label="Menu">
                         <i class="fas fa-bars text-xl"></i>
                     </button>
+                    <button onclick="openSearch()" class="search-btn" title="Search (Ctrl+K)" aria-label="Search">
+                        <i class="fas fa-search"></i>
+                    </button>
                     <button onclick="toggleTheme()" class="theme-toggle" title="Toggle dark mode">
                         <i class="fas fa-moon"></i><i class="fas fa-sun"></i>
                     </button>
@@ -608,14 +611,15 @@
                 </div>
                 <div class="bg-carbon-bg-hover border border-carbon-border p-8">
                     <h3 class="font-semibold mb-6">Stay Updated</h3>
-                    <form class="space-y-4">
+                    <form id="contactForm" class="space-y-4">
+                        <input type="text" name="_gotcha" title="Do not fill" class="hidden" tabindex="-1" autocomplete="off">
                         <div>
                             <label class="block text-sm text-carbon-text-secondary mb-2">Email</label>
-                            <input type="email" class="w-full border border-carbon-border px-4 py-3 focus:outline-none focus:border-carbon-text" placeholder="your@email.com">
+                            <input type="email" name="email" required class="form-input w-full border border-carbon-border px-4 py-3 focus:outline-none focus:border-carbon-text" placeholder="your@email.com">
                         </div>
                         <div>
                             <label class="block text-sm text-carbon-text-secondary mb-2">Interest</label>
-                            <select class="w-full border border-carbon-border px-4 py-3 focus:outline-none focus:border-carbon-text bg-white">
+                            <select name="interest" class="form-input w-full border border-carbon-border px-4 py-3 focus:outline-none focus:border-carbon-text">
                                 <option>Platform User</option>
                                 <option>Workshop Participant</option>
                                 <option>Pilot Site</option>
@@ -623,9 +627,10 @@
                                 <option>General Interest</option>
                             </select>
                         </div>
-                        <button type="submit" class="btn-primary w-full py-3 font-medium">
+                        <button type="submit" id="contactSubmitBtn" class="btn-primary w-full py-3 font-medium">
                             Subscribe to Updates
                         </button>
+                        <div id="contactFormStatus" class="hidden mt-3 p-3 text-sm" role="alert"></div>
                     </form>
                 </div>
             </div>
@@ -662,5 +667,49 @@
         </div>
     </footer>
 <script src="main.js"></script>
+<script src="search.js"></script>
+<script>
+(function() {
+    var form = document.getElementById('contactForm');
+    if (!form) return;
+
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        var btn = document.getElementById('contactSubmitBtn');
+        var status = document.getElementById('contactFormStatus');
+        var originalText = btn.textContent;
+
+        btn.disabled = true;
+        btn.textContent = 'Sending\u2026';
+        status.className = 'hidden mt-3 p-3 text-sm';
+
+        fetch('https://formspree.io/f/{CONTACT_FORM_ID}', {
+            method: 'POST',
+            body: new FormData(form),
+            headers: { 'Accept': 'application/json' }
+        })
+        .then(function(response) {
+            if (response.ok) {
+                status.textContent = 'Thank you! You have been subscribed to updates.';
+                status.className = 'mt-3 p-3 text-sm border border-green-600 text-green-600';
+                form.reset();
+            } else {
+                return response.json().then(function(data) {
+                    throw new Error(data.errors ? data.errors.map(function(e) { return e.message; }).join(', ') : 'Submission failed');
+                });
+            }
+        })
+        .catch(function() {
+            status.textContent = 'Something went wrong. Please try again or email us directly.';
+            status.className = 'mt-3 p-3 text-sm border border-red-500 text-red-500';
+        })
+        .finally(function() {
+            btn.disabled = false;
+            btn.textContent = originalText;
+        });
+    });
+})();
+</script>
 </body>
 </html>

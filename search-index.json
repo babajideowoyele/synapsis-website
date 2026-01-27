@@ -1,0 +1,296 @@
+[
+  {
+    "page": "index.html",
+    "title": "Home",
+    "sections": [
+      {
+        "anchor": "",
+        "heading": "Privacy-aware audiovisual data for research",
+        "description": "SYNAPSIS integrates the MaskAnyone toolkit with SURF cloud infrastructure and training for SSH researchers.",
+        "keywords": ["privacy", "audiovisual", "masking", "video", "audio", "SSH", "research", "NWO", "TDCC", "homepage"]
+      },
+      {
+        "anchor": "#about",
+        "heading": "The Challenge & Our Solution",
+        "description": "Privacy barriers limit audiovisual data sharing. SYNAPSIS offers a platform and training solution for researchers.",
+        "keywords": ["privacy barriers", "data sharing", "challenge", "solution", "platform"]
+      },
+      {
+        "anchor": "",
+        "heading": "What SYNAPSIS Offers",
+        "description": "Face masking, voice masking, body kinematics, cloud platform, training, and GDPR compliance tools.",
+        "keywords": ["face masking", "voice masking", "body kinematics", "cloud", "GDPR", "compliance", "features"]
+      },
+      {
+        "anchor": "",
+        "heading": "Work Packages",
+        "description": "Platform Foundation, Platform Expansion with Survey and Co-Creation, and Platform Rollout phases.",
+        "keywords": ["work packages", "timeline", "rollout", "co-creation", "WP1", "WP2"]
+      },
+      {
+        "anchor": "",
+        "heading": "Partners",
+        "description": "Radboud University, VU Amsterdam, University of Amsterdam, Erasmus University Rotterdam, Hasso Plattner Institute, SURF, DANS.",
+        "keywords": ["partners", "Radboud", "VU", "UvA", "EUR", "HPI", "SURF", "DANS", "institutions"]
+      },
+      {
+        "anchor": "",
+        "heading": "Team Co-Pilots",
+        "description": "The SYNAPSIS project team members and their roles.",
+        "keywords": ["team", "co-pilots", "people", "staff", "members"]
+      },
+      {
+        "anchor": "#contact",
+        "heading": "Contact Us",
+        "description": "Get in touch with the SYNAPSIS team. Subscribe to updates.",
+        "keywords": ["contact", "email", "subscribe", "updates"]
+      }
+    ]
+  },
+  {
+    "page": "platform.html",
+    "title": "Platform",
+    "sections": [
+      {
+        "anchor": "",
+        "heading": "MaskAnyone Toolkit",
+        "description": "The core platform for privacy-aware processing of audiovisual research data.",
+        "keywords": ["MaskAnyone", "toolkit", "platform", "processing", "privacy"]
+      },
+      {
+        "anchor": "",
+        "heading": "Platform Features",
+        "description": "Face de-identification, voice anonymization, body movement tracking, cloud infrastructure, FAIR data archiving, and user-friendly interface.",
+        "keywords": ["face de-identification", "voice anonymization", "body movement", "tracking", "cloud", "FAIR", "archiving", "interface", "features"]
+      },
+      {
+        "anchor": "",
+        "heading": "Research Workflow",
+        "description": "Five-step workflow: Upload, Configure, Process, Quality Check, and Archive.",
+        "keywords": ["workflow", "upload", "configure", "process", "quality check", "archive", "steps"]
+      },
+      {
+        "anchor": "",
+        "heading": "Technical Stack",
+        "description": "System architecture, masking methods, infrastructure details, and API documentation.",
+        "keywords": ["technical", "architecture", "system", "stack", "API", "REST"]
+      },
+      {
+        "anchor": "",
+        "heading": "Masking Techniques",
+        "description": "Face masking methods including DeepPrivacy2, pixelation, blur, and solid overlay. Audio masking via voice conversion.",
+        "keywords": ["DeepPrivacy2", "pixelation", "blur", "overlay", "voice conversion", "masking techniques"]
+      },
+      {
+        "anchor": "",
+        "heading": "Infrastructure & Security",
+        "description": "SURF cloud hosting, GDPR compliance, encryption, and performance metrics.",
+        "keywords": ["infrastructure", "security", "SURF", "GDPR", "encryption", "cloud hosting", "performance"]
+      },
+      {
+        "anchor": "",
+        "heading": "API & Integration",
+        "description": "REST API documentation with Python examples and access requirements.",
+        "keywords": ["API", "REST", "Python", "integration", "endpoints", "documentation"]
+      },
+      {
+        "anchor": "#get-started",
+        "heading": "Get Started with SYNAPSIS",
+        "description": "Register, get trained, and start masking. System requirements for web and local installation.",
+        "keywords": ["get started", "register", "onboarding", "system requirements", "installation"]
+      }
+    ]
+  },
+  {
+    "page": "demo.html",
+    "title": "Demo",
+    "sections": [
+      {
+        "anchor": "",
+        "heading": "MaskAnyone in Action",
+        "description": "Live demonstrations of the MaskAnyone masking toolkit with before and after comparisons.",
+        "keywords": ["demo", "demonstration", "video", "live", "example", "action"]
+      },
+      {
+        "anchor": "",
+        "heading": "Face Masking Demonstration",
+        "description": "Sample and classroom recordings showing face masking with DeepPrivacy2 and selective multi-person detection.",
+        "keywords": ["face masking", "DeepPrivacy2", "classroom", "recording", "selective", "multi-person"]
+      },
+      {
+        "anchor": "",
+        "heading": "Available Masking Techniques",
+        "description": "Pixelation, blur, face masking, and skeleton-only visualization methods.",
+        "keywords": ["pixelation", "blur", "face masking", "skeleton", "techniques", "methods"]
+      },
+      {
+        "anchor": "",
+        "heading": "Pose & Kinematic Data",
+        "description": "Body keypoint extraction with 33 body keypoints, hand landmarks, and JSON data format.",
+        "keywords": ["pose", "kinematic", "keypoints", "body", "hand", "landmarks", "JSON", "data extraction"]
+      }
+    ]
+  },
+  {
+    "page": "training.html",
+    "title": "Training",
+    "sections": [
+      {
+        "anchor": "",
+        "heading": "Masking School",
+        "description": "Training program for researchers, data stewards, and developers on privacy-aware data handling.",
+        "keywords": ["masking school", "training", "program", "education", "learning", "workshops"]
+      },
+      {
+        "anchor": "",
+        "heading": "Learning Paths",
+        "description": "Structured paths for researchers (20h), data stewards (15h), and developers (18h) with certification.",
+        "keywords": ["learning paths", "researchers", "data stewards", "developers", "certification", "courses"]
+      },
+      {
+        "anchor": "#courses",
+        "heading": "Course Catalog",
+        "description": "Three-level courses: Introduction to Masking, Hands-on Workshop, and Summer/Winter School.",
+        "keywords": ["course catalog", "introduction", "workshop", "summer school", "winter school", "levels"]
+      },
+      {
+        "anchor": "",
+        "heading": "Special Events",
+        "description": "Masking Lab co-creation forum and Maskathon hackathon with prize pool.",
+        "keywords": ["masking lab", "maskathon", "hackathon", "events", "co-creation", "prizes"]
+      },
+      {
+        "anchor": "#calendar",
+        "heading": "Event Calendar 2026-2027",
+        "description": "Timeline of past and upcoming training events, bootcamps, and workshops.",
+        "keywords": ["calendar", "events", "schedule", "2026", "2027", "bootcamp", "dates", "upcoming"]
+      },
+      {
+        "anchor": "#register",
+        "heading": "Register for Training",
+        "description": "Registration form for training events. Open to researchers, stewards, and technical staff.",
+        "keywords": ["register", "registration", "sign up", "apply", "enroll"]
+      }
+    ]
+  },
+  {
+    "page": "resources.html",
+    "title": "Resources",
+    "sections": [
+      {
+        "anchor": "",
+        "heading": "Documentation & Resources",
+        "description": "Guides, templates, tools, and publications for the SYNAPSIS platform.",
+        "keywords": ["documentation", "resources", "guides", "help", "support"]
+      },
+      {
+        "anchor": "#documentation",
+        "heading": "Documentation",
+        "description": "Getting started guide, face masking methods, voice anonymization, pose data extraction, FAIR archiving, and API reference.",
+        "keywords": ["getting started", "guide", "face masking", "voice anonymization", "pose data", "FAIR", "API reference"]
+      },
+      {
+        "anchor": "#templates",
+        "heading": "Templates & Forms",
+        "description": "Informed consent templates (Dutch/English), data management plan, metadata schema, and masking report template.",
+        "keywords": ["templates", "forms", "consent", "DMP", "data management plan", "metadata", "schema", "masking report", "download"]
+      },
+      {
+        "anchor": "",
+        "heading": "Code & Tools",
+        "description": "MaskAnyone repository, MaskBench evaluation suite, and Docker images.",
+        "keywords": ["code", "tools", "MaskAnyone", "MaskBench", "Docker", "GitHub", "repository", "open source"]
+      },
+      {
+        "anchor": "#publications",
+        "heading": "Publications",
+        "description": "Research papers on face de-identification, voice anonymization, and behavioral data from 2022-2025.",
+        "keywords": ["publications", "papers", "research", "academic", "citations"]
+      },
+      {
+        "anchor": "#faq",
+        "heading": "Frequently Asked Questions",
+        "description": "Answers about video formats, processing time, security, licensing, citations, and support.",
+        "keywords": ["FAQ", "questions", "answers", "help", "formats", "processing time", "security", "license"]
+      }
+    ]
+  },
+  {
+    "page": "network.html",
+    "title": "Network",
+    "sections": [
+      {
+        "anchor": "",
+        "heading": "Stakeholder Network",
+        "description": "Interactive visualization of the SYNAPSIS partner and stakeholder network.",
+        "keywords": ["network", "stakeholders", "visualization", "interactive", "graph", "map"]
+      },
+      {
+        "anchor": "",
+        "heading": "Core Partners",
+        "description": "Radboud University, VU Amsterdam, University of Amsterdam, and Erasmus University Rotterdam.",
+        "keywords": ["core partners", "Radboud", "VU Amsterdam", "UvA", "Erasmus", "universities"]
+      },
+      {
+        "anchor": "",
+        "heading": "Infrastructure Partners",
+        "description": "SURF, DANS, ODISSEI, and Hasso Plattner Institute providing cloud and data infrastructure.",
+        "keywords": ["infrastructure", "SURF", "DANS", "ODISSEI", "Hasso Plattner", "HPI", "cloud", "data"]
+      },
+      {
+        "anchor": "",
+        "heading": "Join the Network",
+        "description": "Become a pilot site or partner institution in the SYNAPSIS network.",
+        "keywords": ["join", "pilot site", "partner", "collaborate", "participate"]
+      }
+    ]
+  },
+  {
+    "page": "press.html",
+    "title": "Press",
+    "sections": [
+      {
+        "anchor": "",
+        "heading": "Press & Announcements",
+        "description": "News coverage, press releases, and media resources about the SYNAPSIS project.",
+        "keywords": ["press", "news", "announcements", "media", "press release"]
+      },
+      {
+        "anchor": "",
+        "heading": "Radboud University launches SYNAPSIS",
+        "description": "Press release about the launch of SYNAPSIS platform and training programme for privacy-aware research.",
+        "keywords": ["launch", "Radboud", "press release", "February 2026", "announcement"]
+      },
+      {
+        "anchor": "",
+        "heading": "Media Resources",
+        "description": "Downloadable press materials, logos, and media assets.",
+        "keywords": ["media", "downloads", "logos", "press kit", "assets"]
+      }
+    ]
+  },
+  {
+    "page": "survey.html",
+    "title": "Survey",
+    "sections": [
+      {
+        "anchor": "",
+        "heading": "Help Shape SYNAPSIS",
+        "description": "Community survey to inform the design of the privacy-aware audiovisual data platform.",
+        "keywords": ["survey", "community", "feedback", "input", "questionnaire"]
+      },
+      {
+        "anchor": "#about",
+        "heading": "Why This Survey?",
+        "description": "Gather input from researchers, data stewards, and technical staff to prioritize features and training.",
+        "keywords": ["purpose", "why", "goals", "priorities", "needs assessment"]
+      },
+      {
+        "anchor": "",
+        "heading": "Privacy & Data Use",
+        "description": "Survey responses are anonymous and GDPR-compliant. No PII collected unless volunteered.",
+        "keywords": ["privacy", "anonymous", "GDPR", "data protection", "confidential"]
+      }
+    ]
+  }
+]
