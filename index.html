@@ -150,7 +150,9 @@
         (function() {
             const canvas = document.getElementById('networkCanvas');
             const ctx = canvas.getContext('2d');
+            const canvasDark = document.documentElement.classList.contains('dark');
             const colors = ['#0077B3','#BC0031','#00A651','#E30613','#EB6923','#00838F','#6A1B9A'];
+            const connColor = canvasDark ? '200,200,200' : '158,158,158';
             const nodeCount = 18;
             const connectionDist = 180;
             const mouseRadius = 200;
@@ -228,7 +230,7 @@
                             ctx.beginPath();
                             ctx.moveTo(nodes[i].x, nodes[i].y);
                             ctx.lineTo(nodes[j].x, nodes[j].y);
-                            ctx.strokeStyle = `rgba(158,158,158,${alpha * 0.4 + boost})`;
+                            ctx.strokeStyle = `rgba(${connColor},${alpha * 0.4 + boost})`;
                             ctx.lineWidth = 1;
                             ctx.stroke();
                         }

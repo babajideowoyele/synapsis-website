@@ -80,6 +80,14 @@ html.dark .hover\:bg-gray-100:hover {
     background-color: #262626 !important;
 }
 
+/* Dark mode: keep accent sections dark (prevent text-color inversion) */
+html.dark .bg-carbon-text {
+    background-color: #262626 !important;
+}
+html.dark .text-carbon-bg {
+    color: #161616 !important;
+}
+
 /* Dark mode header */
 html.dark header.bg-white {
     background-color: #161616 !important;

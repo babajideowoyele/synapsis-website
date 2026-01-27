@@ -98,6 +98,12 @@
             stroke: #525252;
             stroke-opacity: 0.8;
         }
+        html.dark .link {
+            stroke: #525252;
+        }
+        html.dark .link.strong {
+            stroke: #a8a8a8;
+        }
         .node-label {
             font-size: 11px;
             font-weight: 500;
@@ -120,6 +126,14 @@
             height: 14px;
             border-radius: 50%;
         }
+        .legend-dot-university { background: #525252; }
+        .legend-dot-infra { background: #78716c; }
+        .legend-dot-pilot { background: #a3a3a3; }
+        .legend-dot-user { background: #d4d4d4; }
+        html.dark .legend-dot-university { background: #a8a8a8; }
+        html.dark .legend-dot-infra { background: #8d8d8d; }
+        html.dark .legend-dot-pilot { background: #c6c6c6; }
+        html.dark .legend-dot-user { background: #e0e0e0; }
         .control-btn {
             background: var(--color-bg);
             border: 1px solid var(--color-border);
@@ -217,19 +231,19 @@
                             <span>Core</span>
                         </div>
                         <div class="legend-item">
-                            <div class="legend-dot" style="background: #525252;"></div>
+                            <div class="legend-dot legend-dot-university"></div>
                             <span>Universities</span>
                         </div>
                         <div class="legend-item">
-                            <div class="legend-dot" style="background: #78716c;"></div>
+                            <div class="legend-dot legend-dot-infra"></div>
                             <span>Infrastructure</span>
                         </div>
                         <div class="legend-item">
-                            <div class="legend-dot" style="background: #a3a3a3;"></div>
+                            <div class="legend-dot legend-dot-pilot"></div>
                             <span>Pilots</span>
                         </div>
                         <div class="legend-item">
-                            <div class="legend-dot" style="background: #d4d4d4;"></div>
+                            <div class="legend-dot legend-dot-user"></div>
                             <span>Users</span>
                         </div>
                     </div>
@@ -545,8 +559,16 @@
             }
         };
 
-        // Monochrome colors by type
-        const colors = {
+        // Monochrome colors by type (adapt to dark mode)
+        const isDark = document.documentElement.classList.contains('dark');
+        const colors = isDark ? {
+            core: '#f4f4f4',
+            university: '#a8a8a8',
+            infrastructure: '#8d8d8d',
+            user: '#e0e0e0',
+            funding: '#c6c6c6',
+            pilot: '#c6c6c6'
+        } : {
             core: '#161616',
             university: '#525252',
             infrastructure: '#78716c',
@@ -596,7 +618,7 @@
             .attr('class', 'node')
             .attr('r', d => d.size)
             .attr('fill', d => colors[d.type])
-            .attr('stroke', '#fff')
+            .attr('stroke', isDark ? '#161616' : '#fff')
             .attr('stroke-width', 2)
             .call(drag(simulation))
             .on('click', (event, d) => showNodeInfo(d));
@@ -608,7 +630,7 @@
             .join('text')
             .attr('class', 'node-label')
             .attr('dy', d => d.size + 18)
-            .attr('fill', '#161616')
+            .attr('fill', isDark ? '#f4f4f4' : '#161616')
             .selectAll('tspan')
             .data(d => d.label.split('\n'))
             .join('tspan')
