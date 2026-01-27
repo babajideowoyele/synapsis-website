@@ -162,6 +162,9 @@
     <main class="container mx-auto px-6 py-12 max-w-4xl">
         <!-- Section Header -->
         <div class="text-center mb-12">
+            <div class="inline-flex items-center justify-center w-14 h-14 rounded-full border border-carbon-border mb-6" style="color: var(--color-text-secondary);">
+                <i class="fas fa-tools text-2xl"></i>
+            </div>
             <h1 class="text-4xl font-light mb-4">Section 2: Current Practices & Challenges</h1>
             <div class="accent-line mb-6 max-w-md mx-auto"></div>
             <p class="text-gray-600 max-w-2xl mx-auto">
@@ -173,34 +176,34 @@
             <!-- Question 2.1 -->
             <div class="question-card">
                 <label class="block mb-4">
-                    <span class="text-lg font-semibold">2.1 What tools do you currently use for audiovisual data management?</span>
+                    <span class="text-lg font-semibold"><i class="fas fa-wrench mr-2 text-base" style="color: var(--color-text-secondary);"></i>2.1 What tools do you currently use for audiovisual data management?</span>
                     <span class="text-red-500">*</span>
                     <p class="text-sm text-gray-600 mt-1">Select all that apply</p>
                 </label>
                 <div class="space-y-3">
                     <label class="option-label">
                         <input type="checkbox" name="tools" value="elan" class="checkbox-custom">
-                        <span>ELAN (annotation software)</span>
+                        <span><i class="fas fa-closed-captioning mr-2 text-sm" style="color: var(--color-text-secondary);"></i>ELAN (annotation software)</span>
                     </label>
                     <label class="option-label">
                         <input type="checkbox" name="tools" value="praat" class="checkbox-custom">
-                        <span>Praat (phonetics analysis)</span>
+                        <span><i class="fas fa-wave-square mr-2 text-sm" style="color: var(--color-text-secondary);"></i>Praat (phonetics analysis)</span>
                     </label>
                     <label class="option-label">
                         <input type="checkbox" name="tools" value="qualitative" class="checkbox-custom">
-                        <span>MAXQDA / NVivo (qualitative analysis)</span>
+                        <span><i class="fas fa-search-plus mr-2 text-sm" style="color: var(--color-text-secondary);"></i>MAXQDA / NVivo (qualitative analysis)</span>
                     </label>
                     <label class="option-label">
                         <input type="checkbox" name="tools" value="scripting" class="checkbox-custom">
-                        <span>Custom scripts/programming (Python, R, etc.)</span>
+                        <span><i class="fas fa-code mr-2 text-sm" style="color: var(--color-text-secondary);"></i>Custom scripts/programming (Python, R, etc.)</span>
                     </label>
                     <label class="option-label">
                         <input type="checkbox" name="tools" value="manual" class="checkbox-custom">
-                        <span>Manual anonymization (blurring, pixelation)</span>
+                        <span><i class="fas fa-hand-paper mr-2 text-sm" style="color: var(--color-text-secondary);"></i>Manual anonymization (blurring, pixelation)</span>
                     </label>
                     <label class="option-label">
                         <input type="checkbox" name="tools" value="commercial" class="checkbox-custom">
-                        <span>Commercial video editing software</span>
+                        <span><i class="fas fa-film mr-2 text-sm" style="color: var(--color-text-secondary);"></i>Commercial video editing software</span>
                     </label>
                     <label class="option-label">
                         <input type="checkbox" name="tools" value="adhoc" class="checkbox-custom">
@@ -223,7 +226,7 @@
             <!-- Question 2.2 -->
             <div class="question-card">
                 <label class="block mb-4">
-                    <span class="text-lg font-semibold">2.2 What are your THREE biggest challenges in managing audiovisual data?</span>
+                    <span class="text-lg font-semibold"><i class="fas fa-exclamation-triangle mr-2 text-base" style="color: var(--color-text-secondary);"></i>2.2 What are your THREE biggest challenges in managing audiovisual data?</span>
                     <span class="text-red-500">*</span>
                     <p class="text-sm text-gray-600 mt-1">Click to rank your top 3 challenges (1 = biggest challenge)</p>
                 </label>
@@ -235,62 +238,62 @@
                 <div class="space-y-3" id="challengesContainer">
                     <label class="option-label" data-challenge="privacy">
                         <input type="checkbox" name="challenges" value="privacy" class="checkbox-custom">
-                        <span>Privacy and GDPR compliance</span>
+                        <span><i class="fas fa-shield-alt mr-2 text-sm" style="color: var(--color-text-secondary);"></i>Privacy and GDPR compliance</span>
                         <span class="rank-badge hidden">1</span>
                     </label>
                     <label class="option-label" data-challenge="consent">
                         <input type="checkbox" name="challenges" value="consent" class="checkbox-custom">
-                        <span>Informed consent complexity</span>
+                        <span><i class="fas fa-file-signature mr-2 text-sm" style="color: var(--color-text-secondary);"></i>Informed consent complexity</span>
                         <span class="rank-badge hidden">1</span>
                     </label>
                     <label class="option-label" data-challenge="storage">
                         <input type="checkbox" name="challenges" value="storage" class="checkbox-custom">
-                        <span>Secure file storage and management</span>
+                        <span><i class="fas fa-hdd mr-2 text-sm" style="color: var(--color-text-secondary);"></i>Secure file storage and management</span>
                         <span class="rank-badge hidden">1</span>
                     </label>
                     <label class="option-label" data-challenge="sharing">
                         <input type="checkbox" name="challenges" value="sharing" class="checkbox-custom">
-                        <span>Data sharing restrictions</span>
+                        <span><i class="fas fa-share-alt mr-2 text-sm" style="color: var(--color-text-secondary);"></i>Data sharing restrictions</span>
                         <span class="rank-badge hidden">1</span>
                     </label>
                     <label class="option-label" data-challenge="skills">
                         <input type="checkbox" name="challenges" value="skills" class="checkbox-custom">
-                        <span>Lack of technical skills/training</span>
+                        <span><i class="fas fa-graduation-cap mr-2 text-sm" style="color: var(--color-text-secondary);"></i>Lack of technical skills/training</span>
                         <span class="rank-badge hidden">1</span>
                     </label>
                     <label class="option-label" data-challenge="time">
                         <input type="checkbox" name="challenges" value="time" class="checkbox-custom">
-                        <span>Time-consuming processing</span>
+                        <span><i class="fas fa-clock mr-2 text-sm" style="color: var(--color-text-secondary);"></i>Time-consuming processing</span>
                         <span class="rank-badge hidden">1</span>
                     </label>
                     <label class="option-label" data-challenge="support">
                         <input type="checkbox" name="challenges" value="support" class="checkbox-custom">
-                        <span>Lack of institutional support</span>
+                        <span><i class="fas fa-building mr-2 text-sm" style="color: var(--color-text-secondary);"></i>Lack of institutional support</span>
                         <span class="rank-badge hidden">1</span>
                     </label>
                     <label class="option-label" data-challenge="metadata">
                         <input type="checkbox" name="challenges" value="metadata" class="checkbox-custom">
-                        <span>Creating proper metadata</span>
+                        <span><i class="fas fa-tags mr-2 text-sm" style="color: var(--color-text-secondary);"></i>Creating proper metadata</span>
                         <span class="rank-badge hidden">1</span>
                     </label>
                     <label class="option-label" data-challenge="archiving">
                         <input type="checkbox" name="challenges" value="archiving" class="checkbox-custom">
-                        <span>Long-term archiving solutions</span>
+                        <span><i class="fas fa-archive mr-2 text-sm" style="color: var(--color-text-secondary);"></i>Long-term archiving solutions</span>
                         <span class="rank-badge hidden">1</span>
                     </label>
                     <label class="option-label" data-challenge="tools">
                         <input type="checkbox" name="challenges" value="tools" class="checkbox-custom">
-                        <span>Finding and using appropriate tools</span>
+                        <span><i class="fas fa-wrench mr-2 text-sm" style="color: var(--color-text-secondary);"></i>Finding and using appropriate tools</span>
                         <span class="rank-badge hidden">1</span>
                     </label>
                     <label class="option-label" data-challenge="compute">
                         <input type="checkbox" name="challenges" value="compute" class="checkbox-custom">
-                        <span>Computational resource limitations</span>
+                        <span><i class="fas fa-microchip mr-2 text-sm" style="color: var(--color-text-secondary);"></i>Computational resource limitations</span>
                         <span class="rank-badge hidden">1</span>
                     </label>
                     <label class="option-label" data-challenge="cost">
                         <input type="checkbox" name="challenges" value="cost" class="checkbox-custom">
-                        <span>Cost of software/infrastructure</span>
+                        <span><i class="fas fa-euro-sign mr-2 text-sm" style="color: var(--color-text-secondary);"></i>Cost of software/infrastructure</span>
                         <span class="rank-badge hidden">1</span>
                     </label>
                     <label class="option-label" data-challenge="other">
@@ -307,7 +310,7 @@
             <!-- Question 2.3 -->
             <div class="question-card">
                 <label class="block mb-4">
-                    <span class="text-lg font-semibold">2.3 How concerned are you about privacy when sharing audiovisual data?</span>
+                    <span class="text-lg font-semibold"><i class="fas fa-shield-alt mr-2 text-base" style="color: var(--color-text-secondary);"></i>2.3 How concerned are you about privacy when sharing audiovisual data?</span>
                     <span class="text-red-500">*</span>
                 </label>
                 <div class="space-y-3">
@@ -337,7 +340,7 @@
             <!-- Question 2.4 -->
             <div class="question-card">
                 <label class="block mb-4">
-                    <span class="text-lg font-semibold">2.4 How often do you archive or share audiovisual research data?</span>
+                    <span class="text-lg font-semibold"><i class="fas fa-share-alt mr-2 text-base" style="color: var(--color-text-secondary);"></i>2.4 How often do you archive or share audiovisual research data?</span>
                     <span class="text-red-500">*</span>
                 </label>
                 <div class="space-y-3">
@@ -370,38 +373,38 @@
             <!-- Question 2.5 -->
             <div class="question-card">
                 <label class="block mb-4">
-                    <span class="text-lg font-semibold">2.5 What prevents you from sharing audiovisual data?</span>
+                    <span class="text-lg font-semibold"><i class="fas fa-ban mr-2 text-base" style="color: var(--color-text-secondary);"></i>2.5 What prevents you from sharing audiovisual data?</span>
                     <span class="text-red-500">*</span>
                     <p class="text-sm text-gray-600 mt-1">Select all that apply</p>
                 </label>
                 <div class="space-y-3">
                     <label class="option-label">
                         <input type="checkbox" name="barriers" value="privacy" class="checkbox-custom">
-                        <span>Privacy concerns / lack of consent for sharing</span>
+                        <span><i class="fas fa-user-shield mr-2 text-sm" style="color: var(--color-text-secondary);"></i>Privacy concerns / lack of consent for sharing</span>
                     </label>
                     <label class="option-label">
                         <input type="checkbox" name="barriers" value="policies" class="checkbox-custom">
-                        <span>Institutional policies</span>
+                        <span><i class="fas fa-university mr-2 text-sm" style="color: var(--color-text-secondary);"></i>Institutional policies</span>
                     </label>
                     <label class="option-label">
                         <input type="checkbox" name="barriers" value="deidentification" class="checkbox-custom">
-                        <span>Lack of technical solutions for de-identification</span>
+                        <span><i class="fas fa-tools mr-2 text-sm" style="color: var(--color-text-secondary);"></i>Lack of technical solutions for de-identification</span>
                     </label>
                     <label class="option-label">
                         <input type="checkbox" name="barriers" value="timeconsuming" class="checkbox-custom">
-                        <span>Too time-consuming</span>
+                        <span><i class="fas fa-hourglass-half mr-2 text-sm" style="color: var(--color-text-secondary);"></i>Too time-consuming</span>
                     </label>
                     <label class="option-label">
                         <input type="checkbox" name="barriers" value="infrastructure" class="checkbox-custom">
-                        <span>Insufficient storage infrastructure</span>
+                        <span><i class="fas fa-database mr-2 text-sm" style="color: var(--color-text-secondary);"></i>Insufficient storage infrastructure</span>
                     </label>
                     <label class="option-label">
                         <input type="checkbox" name="barriers" value="misuse" class="checkbox-custom">
-                        <span>Concerns about data misuse</span>
+                        <span><i class="fas fa-exclamation-triangle mr-2 text-sm" style="color: var(--color-text-secondary);"></i>Concerns about data misuse</span>
                     </label>
                     <label class="option-label">
                         <input type="checkbox" name="barriers" value="knowledge" class="checkbox-custom">
-                        <span>Lack of knowledge about how to share properly</span>
+                        <span><i class="fas fa-question-circle mr-2 text-sm" style="color: var(--color-text-secondary);"></i>Lack of knowledge about how to share properly</span>
                     </label>
                     <label class="option-label">
                         <input type="checkbox" name="barriers" value="notrequired" class="checkbox-custom">

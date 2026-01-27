@@ -104,6 +104,9 @@
     <main class="container mx-auto px-6 py-12 max-w-4xl">
         <!-- Section Header -->
         <div class="text-center mb-12">
+            <div class="inline-flex items-center justify-center w-14 h-14 rounded-full border border-carbon-border mb-6" style="color: var(--color-text-secondary);">
+                <i class="fas fa-graduation-cap text-2xl"></i>
+            </div>
             <h1 class="text-4xl font-light mb-4">Section 6: Training & Support Needs</h1>
             <div class="accent-line mb-6 max-w-md mx-auto"></div>
             <p class="text-gray-600 max-w-2xl mx-auto">
@@ -144,7 +147,7 @@
             <!-- Question 6.1 -->
             <div class="question-card">
                 <label class="block mb-4">
-                    <span class="text-lg font-semibold">6.1 What training format would be most valuable to you?</span>
+                    <span class="text-lg font-semibold"><i class="fas fa-chalkboard-teacher mr-2 text-base" style="color: var(--color-text-secondary);"></i>6.1 What training format would be most valuable to you?</span>
                     <span class="text-red-500">*</span>
                     <p class="text-sm text-gray-600 mt-1">Rank your top 3 preferences</p>
                 </label>
@@ -156,47 +159,47 @@
                 <div class="space-y-3" id="trainingFormatsContainer">
                     <label class="option-label" data-format="short_videos">
                         <input type="checkbox" name="training_format" value="short_videos" class="checkbox-custom">
-                        <span>Short online video tutorials (&lt; 15 min)</span>
+                        <span><i class="fas fa-play-circle mr-2 text-sm" style="color: var(--color-text-secondary);"></i>Short online video tutorials (&lt; 15 min)</span>
                         <span class="rank-badge hidden">1</span>
                     </label>
                     <label class="option-label" data-format="workshops">
                         <input type="checkbox" name="training_format" value="workshops" class="checkbox-custom">
-                        <span>Hands-on workshops (half-day, 3-4 hours)</span>
+                        <span><i class="fas fa-hands mr-2 text-sm" style="color: var(--color-text-secondary);"></i>Hands-on workshops (half-day, 3-4 hours)</span>
                         <span class="rank-badge hidden">1</span>
                     </label>
                     <label class="option-label" data-format="intensive">
                         <input type="checkbox" name="training_format" value="intensive" class="checkbox-custom">
-                        <span>Intensive courses (2-3 days)</span>
+                        <span><i class="fas fa-calendar-week mr-2 text-sm" style="color: var(--color-text-secondary);"></i>Intensive courses (2-3 days)</span>
                         <span class="rank-badge hidden">1</span>
                     </label>
                     <label class="option-label" data-format="self_paced">
                         <input type="checkbox" name="training_format" value="self_paced" class="checkbox-custom">
-                        <span>Online self-paced modules</span>
+                        <span><i class="fas fa-laptop mr-2 text-sm" style="color: var(--color-text-secondary);"></i>Online self-paced modules</span>
                         <span class="rank-badge hidden">1</span>
                     </label>
                     <label class="option-label" data-format="consultation">
                         <input type="checkbox" name="training_format" value="consultation" class="checkbox-custom">
-                        <span>One-on-one consultation</span>
+                        <span><i class="fas fa-user-friends mr-2 text-sm" style="color: var(--color-text-secondary);"></i>One-on-one consultation</span>
                         <span class="rank-badge hidden">1</span>
                     </label>
                     <label class="option-label" data-format="documentation">
                         <input type="checkbox" name="training_format" value="documentation" class="checkbox-custom">
-                        <span>Written documentation/guides</span>
+                        <span><i class="fas fa-book mr-2 text-sm" style="color: var(--color-text-secondary);"></i>Written documentation/guides</span>
                         <span class="rank-badge hidden">1</span>
                     </label>
                     <label class="option-label" data-format="webinars">
                         <input type="checkbox" name="training_format" value="webinars" class="checkbox-custom">
-                        <span>Webinars with Q&amp;A sessions</span>
+                        <span><i class="fas fa-video mr-2 text-sm" style="color: var(--color-text-secondary);"></i>Webinars with Q&amp;A sessions</span>
                         <span class="rank-badge hidden">1</span>
                     </label>
                     <label class="option-label" data-format="peer_learning">
                         <input type="checkbox" name="training_format" value="peer_learning" class="checkbox-custom">
-                        <span>Peer learning groups</span>
+                        <span><i class="fas fa-users mr-2 text-sm" style="color: var(--color-text-secondary);"></i>Peer learning groups</span>
                         <span class="rank-badge hidden">1</span>
                     </label>
                     <label class="option-label" data-format="integration">
                         <input type="checkbox" name="training_format" value="integration" class="checkbox-custom">
-                        <span>Integration into existing courses</span>
+                        <span><i class="fas fa-puzzle-piece mr-2 text-sm" style="color: var(--color-text-secondary);"></i>Integration into existing courses</span>
                         <span class="rank-badge hidden">1</span>
                     </label>
                 </div>
@@ -205,54 +208,54 @@
             <!-- Question 6.2 -->
             <div class="question-card">
                 <label class="block mb-4">
-                    <span class="text-lg font-semibold">6.2 What topics would you most like training on?</span>
+                    <span class="text-lg font-semibold"><i class="fas fa-list mr-2 text-base" style="color: var(--color-text-secondary);"></i>6.2 What topics would you most like training on?</span>
                     <span class="text-red-500">*</span>
                     <p class="text-sm text-gray-600 mt-1">Select all that apply</p>
                 </label>
                 <div class="space-y-3">
                     <label class="option-label">
                         <input type="checkbox" name="training_topics" value="basics" class="checkbox-custom">
-                        <span>Basic principles of audiovisual data de-identification</span>
+                        <span><i class="fas fa-book-open mr-2 text-sm" style="color: var(--color-text-secondary);"></i>Basic principles of audiovisual data de-identification</span>
                     </label>
                     <label class="option-label">
                         <input type="checkbox" name="training_topics" value="tools" class="checkbox-custom">
-                        <span>Using specific masking tools (MaskAnyone, etc.)</span>
+                        <span><i class="fas fa-tools mr-2 text-sm" style="color: var(--color-text-secondary);"></i>Using specific masking tools (MaskAnyone, etc.)</span>
                     </label>
                     <label class="option-label">
                         <input type="checkbox" name="training_topics" value="gdpr" class="checkbox-custom">
-                        <span>GDPR compliance for audiovisual data</span>
+                        <span><i class="fas fa-shield-alt mr-2 text-sm" style="color: var(--color-text-secondary);"></i>GDPR compliance for audiovisual data</span>
                     </label>
                     <label class="option-label">
                         <input type="checkbox" name="training_topics" value="consent" class="checkbox-custom">
-                        <span>Creating informed consent protocols</span>
+                        <span><i class="fas fa-file-signature mr-2 text-sm" style="color: var(--color-text-secondary);"></i>Creating informed consent protocols</span>
                     </label>
                     <label class="option-label">
                         <input type="checkbox" name="training_topics" value="metadata" class="checkbox-custom">
-                        <span>Metadata creation and management</span>
+                        <span><i class="fas fa-tags mr-2 text-sm" style="color: var(--color-text-secondary);"></i>Metadata creation and management</span>
                     </label>
                     <label class="option-label">
                         <input type="checkbox" name="training_topics" value="archiving" class="checkbox-custom">
-                        <span>Data archiving workflows</span>
+                        <span><i class="fas fa-archive mr-2 text-sm" style="color: var(--color-text-secondary);"></i>Data archiving workflows</span>
                     </label>
                     <label class="option-label">
                         <input type="checkbox" name="training_topics" value="multimodal" class="checkbox-custom">
-                        <span>Multimodal data analysis techniques</span>
+                        <span><i class="fas fa-chart-bar mr-2 text-sm" style="color: var(--color-text-secondary);"></i>Multimodal data analysis techniques</span>
                     </label>
                     <label class="option-label">
                         <input type="checkbox" name="training_topics" value="annotation" class="checkbox-custom">
-                        <span>Gesture and prosody annotation</span>
+                        <span><i class="fas fa-hand-paper mr-2 text-sm" style="color: var(--color-text-secondary);"></i>Gesture and prosody annotation</span>
                     </label>
                     <label class="option-label">
                         <input type="checkbox" name="training_topics" value="automation" class="checkbox-custom">
-                        <span>Scripting/automation for batch processing</span>
+                        <span><i class="fas fa-code mr-2 text-sm" style="color: var(--color-text-secondary);"></i>Scripting/automation for batch processing</span>
                     </label>
                     <label class="option-label">
                         <input type="checkbox" name="training_topics" value="ethics" class="checkbox-custom">
-                        <span>Ethical considerations in data sharing</span>
+                        <span><i class="fas fa-balance-scale mr-2 text-sm" style="color: var(--color-text-secondary);"></i>Ethical considerations in data sharing</span>
                     </label>
                     <label class="option-label">
                         <input type="checkbox" name="training_topics" value="quality" class="checkbox-custom">
-                        <span>Quality assessment of masked data</span>
+                        <span><i class="fas fa-check-double mr-2 text-sm" style="color: var(--color-text-secondary);"></i>Quality assessment of masked data</span>
                     </label>
                     <label class="option-label">
                         <input type="checkbox" name="training_topics" value="other" class="checkbox-custom">
@@ -267,7 +270,7 @@
             <!-- Question 6.3 -->
             <div class="question-card">
                 <label class="block mb-4">
-                    <span class="text-lg font-semibold">6.3 How much time could you realistically commit to training?</span>
+                    <span class="text-lg font-semibold"><i class="fas fa-clock mr-2 text-base" style="color: var(--color-text-secondary);"></i>6.3 How much time could you realistically commit to training?</span>
                     <span class="text-red-500">*</span>
                 </label>
                 <div class="space-y-3">
@@ -297,7 +300,7 @@
             <!-- Question 6.4 -->
             <div class="question-card">
                 <label class="block mb-4">
-                    <span class="text-lg font-semibold">6.4 Would you be interested in becoming a "local champion" or trainer for others at your institution?</span>
+                    <span class="text-lg font-semibold"><i class="fas fa-award mr-2 text-base" style="color: var(--color-text-secondary);"></i>6.4 Would you be interested in becoming a "local champion" or trainer for others at your institution?</span>
                     <span class="text-red-500">*</span>
                     <p class="text-sm text-gray-600 mt-1">This could help build sustainable capacity within your organization</p>
                 </label>
@@ -333,7 +336,7 @@
             <!-- Question 6.5 -->
             <div class="question-card">
                 <label class="block mb-4">
-                    <span class="text-lg font-semibold">6.5 What support mechanisms are most important to you?</span>
+                    <span class="text-lg font-semibold"><i class="fas fa-life-ring mr-2 text-base" style="color: var(--color-text-secondary);"></i>6.5 What support mechanisms are most important to you?</span>
                     <span class="text-red-500">*</span>
                     <p class="text-sm text-gray-600 mt-1">Select your top 3 priorities</p>
                 </label>
@@ -345,47 +348,47 @@
                 <div class="space-y-3" id="supportContainer">
                     <label class="option-label" data-support="documentation">
                         <input type="checkbox" name="support" value="documentation" class="checkbox-custom">
-                        <span>Comprehensive online documentation</span>
+                        <span><i class="fas fa-book mr-2 text-sm" style="color: var(--color-text-secondary);"></i>Comprehensive online documentation</span>
                         <span class="rank-badge hidden">1</span>
                     </label>
                     <label class="option-label" data-support="video_library">
                         <input type="checkbox" name="support" value="video_library" class="checkbox-custom">
-                        <span>Video tutorial library</span>
+                        <span><i class="fas fa-play-circle mr-2 text-sm" style="color: var(--color-text-secondary);"></i>Video tutorial library</span>
                         <span class="rank-badge hidden">1</span>
                     </label>
                     <label class="option-label" data-support="email">
                         <input type="checkbox" name="support" value="email" class="checkbox-custom">
-                        <span>Email support</span>
+                        <span><i class="fas fa-envelope mr-2 text-sm" style="color: var(--color-text-secondary);"></i>Email support</span>
                         <span class="rank-badge hidden">1</span>
                     </label>
                     <label class="option-label" data-support="live_chat">
                         <input type="checkbox" name="support" value="live_chat" class="checkbox-custom">
-                        <span>Live chat/helpdesk</span>
+                        <span><i class="fas fa-comments mr-2 text-sm" style="color: var(--color-text-secondary);"></i>Live chat/helpdesk</span>
                         <span class="rank-badge hidden">1</span>
                     </label>
                     <label class="option-label" data-support="forum">
                         <input type="checkbox" name="support" value="forum" class="checkbox-custom">
-                        <span>User community forum</span>
+                        <span><i class="fas fa-users mr-2 text-sm" style="color: var(--color-text-secondary);"></i>User community forum</span>
                         <span class="rank-badge hidden">1</span>
                     </label>
                     <label class="option-label" data-support="office_hours">
                         <input type="checkbox" name="support" value="office_hours" class="checkbox-custom">
-                        <span>Regular office hours</span>
+                        <span><i class="fas fa-clock mr-2 text-sm" style="color: var(--color-text-secondary);"></i>Regular office hours</span>
                         <span class="rank-badge hidden">1</span>
                     </label>
                     <label class="option-label" data-support="contact_person">
                         <input type="checkbox" name="support" value="contact_person" class="checkbox-custom">
-                        <span>Dedicated institutional contact person</span>
+                        <span><i class="fas fa-user-tie mr-2 text-sm" style="color: var(--color-text-secondary);"></i>Dedicated institutional contact person</span>
                         <span class="rank-badge hidden">1</span>
                     </label>
                     <label class="option-label" data-support="troubleshooting">
                         <input type="checkbox" name="support" value="troubleshooting" class="checkbox-custom">
-                        <span>Troubleshooting guides</span>
+                        <span><i class="fas fa-wrench mr-2 text-sm" style="color: var(--color-text-secondary);"></i>Troubleshooting guides</span>
                         <span class="rank-badge hidden">1</span>
                     </label>
                     <label class="option-label" data-support="use_cases">
                         <input type="checkbox" name="support" value="use_cases" class="checkbox-custom">
-                        <span>Example workflows/use cases</span>
+                        <span><i class="fas fa-route mr-2 text-sm" style="color: var(--color-text-secondary);"></i>Example workflows/use cases</span>
                         <span class="rank-badge hidden">1</span>
                     </label>
                 </div>

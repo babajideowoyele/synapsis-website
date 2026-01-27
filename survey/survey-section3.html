@@ -160,6 +160,9 @@
     <main class="container mx-auto px-6 py-12 max-w-4xl">
         <!-- Section Header -->
         <div class="text-center mb-12">
+            <div class="inline-flex items-center justify-center w-14 h-14 rounded-full border border-carbon-border mb-6" style="color: var(--color-text-secondary);">
+                <i class="fas fa-mask text-2xl"></i>
+            </div>
             <h1 class="text-4xl font-light mb-4">Section 3: Masking & De-identification</h1>
             <div class="accent-line mb-6 max-w-md mx-auto"></div>
             <p class="text-gray-600 max-w-2xl mx-auto">
@@ -186,7 +189,7 @@
             <!-- Question 3.1 -->
             <div class="question-card">
                 <label class="block mb-4">
-                    <span class="text-lg font-semibold">3.1 Have you used any de-identification or masking techniques for audiovisual data?</span>
+                    <span class="text-lg font-semibold"><i class="fas fa-mask mr-2 text-base" style="color: var(--color-text-secondary);"></i>3.1 Have you used any de-identification or masking techniques for audiovisual data?</span>
                     <span class="text-red-500">*</span>
                 </label>
                 <div class="space-y-3">
@@ -212,7 +215,7 @@
             <!-- Question 3.2 -->
             <div class="question-card">
                 <label class="block mb-4">
-                    <span class="text-lg font-semibold">3.2 Which masking/de-identification methods have you used or would be interested in?</span>
+                    <span class="text-lg font-semibold"><i class="fas fa-magic mr-2 text-base" style="color: var(--color-text-secondary);"></i>3.2 Which masking/de-identification methods have you used or would be interested in?</span>
                     <span class="text-red-500">*</span>
                     <p class="text-sm text-gray-600 mt-1">Select all that apply</p>
                 </label>
@@ -243,35 +246,35 @@
                 <div class="space-y-3">
                     <label class="option-label">
                         <input type="checkbox" name="methods" value="face_blur" class="checkbox-custom">
-                        <span>Face blurring/pixelation</span>
+                        <span><i class="fas fa-user-slash mr-2 text-sm" style="color: var(--color-text-secondary);"></i>Face blurring/pixelation</span>
                     </label>
                     <label class="option-label">
                         <input type="checkbox" name="methods" value="face_swap" class="checkbox-custom">
-                        <span>Face replacement/swapping</span>
+                        <span><i class="fas fa-exchange-alt mr-2 text-sm" style="color: var(--color-text-secondary);"></i>Face replacement/swapping</span>
                     </label>
                     <label class="option-label">
                         <input type="checkbox" name="methods" value="voice" class="checkbox-custom">
-                        <span>Voice alteration/pitch shifting</span>
+                        <span><i class="fas fa-microphone-alt mr-2 text-sm" style="color: var(--color-text-secondary);"></i>Voice alteration/pitch shifting</span>
                     </label>
                     <label class="option-label">
                         <input type="checkbox" name="methods" value="background" class="checkbox-custom">
-                        <span>Background removal/blurring</span>
+                        <span><i class="fas fa-image mr-2 text-sm" style="color: var(--color-text-secondary);"></i>Background removal/blurring</span>
                     </label>
                     <label class="option-label">
                         <input type="checkbox" name="methods" value="pose" class="checkbox-custom">
-                        <span>Body pose estimation (skeleton extraction)</span>
+                        <span><i class="fas fa-walking mr-2 text-sm" style="color: var(--color-text-secondary);"></i>Body pose estimation (skeleton extraction)</span>
                     </label>
                     <label class="option-label">
                         <input type="checkbox" name="methods" value="objects" class="checkbox-custom">
-                        <span>Removing identifiable objects (logos, signs, etc.)</span>
+                        <span><i class="fas fa-eraser mr-2 text-sm" style="color: var(--color-text-secondary);"></i>Removing identifiable objects (logos, signs, etc.)</span>
                     </label>
                     <label class="option-label">
                         <input type="checkbox" name="methods" value="transcription" class="checkbox-custom">
-                        <span>Audio transcription with speaker de-identification</span>
+                        <span><i class="fas fa-file-audio mr-2 text-sm" style="color: var(--color-text-secondary);"></i>Audio transcription with speaker de-identification</span>
                     </label>
                     <label class="option-label">
                         <input type="checkbox" name="methods" value="gesture" class="checkbox-custom">
-                        <span>Gesture/movement tracking</span>
+                        <span><i class="fas fa-hand-paper mr-2 text-sm" style="color: var(--color-text-secondary);"></i>Gesture/movement tracking</span>
                     </label>
                     <label class="option-label">
                         <input type="checkbox" name="methods" value="not_familiar" class="checkbox-custom">
@@ -290,7 +293,7 @@
             <!-- Question 3.3 -->
             <div class="question-card">
                 <label class="block mb-4">
-                    <span class="text-lg font-semibold">3.3 What level of de-identification do you typically need?</span>
+                    <span class="text-lg font-semibold"><i class="fas fa-layer-group mr-2 text-base" style="color: var(--color-text-secondary);"></i>3.3 What level of de-identification do you typically need?</span>
                     <span class="text-red-500">*</span>
                 </label>
                 <div class="space-y-3">
@@ -332,7 +335,7 @@
             <!-- Question 3.4 -->
             <div class="question-card">
                 <label class="block mb-4">
-                    <span class="text-lg font-semibold">3.4 How important is it to preserve NON-identifying data features while masking?</span>
+                    <span class="text-lg font-semibold"><i class="fas fa-hand-paper mr-2 text-base" style="color: var(--color-text-secondary);"></i>3.4 How important is it to preserve NON-identifying data features while masking?</span>
                     <span class="text-red-500">*</span>
                     <p class="text-sm text-gray-600 mt-1">e.g., body movements, gestures, prosody, interaction patterns</p>
                 </label>
@@ -378,50 +381,50 @@
             <!-- Question 3.5 -->
             <div class="question-card">
                 <label class="block mb-4">
-                    <span class="text-lg font-semibold">3.5 What concerns do you have about using automated masking tools?</span>
+                    <span class="text-lg font-semibold"><i class="fas fa-exclamation-circle mr-2 text-base" style="color: var(--color-text-secondary);"></i>3.5 What concerns do you have about using automated masking tools?</span>
                     <span class="text-red-500">*</span>
                     <p class="text-sm text-gray-600 mt-1">Select all that apply</p>
                 </label>
                 <div class="space-y-3">
                     <label class="option-label">
                         <input type="checkbox" name="concerns" value="accuracy" class="checkbox-custom">
-                        <span>Accuracy/reliability of the technology</span>
+                        <span><i class="fas fa-crosshairs mr-2 text-sm" style="color: var(--color-text-secondary);"></i>Accuracy/reliability of the technology</span>
                     </label>
                     <label class="option-label">
                         <input type="checkbox" name="concerns" value="privacy_risk" class="checkbox-custom">
-                        <span>Privacy risks if masking fails</span>
+                        <span><i class="fas fa-shield-alt mr-2 text-sm" style="color: var(--color-text-secondary);"></i>Privacy risks if masking fails</span>
                     </label>
                     <label class="option-label">
                         <input type="checkbox" name="concerns" value="data_loss" class="checkbox-custom">
-                        <span>Loss of important data features</span>
+                        <span><i class="fas fa-exclamation-triangle mr-2 text-sm" style="color: var(--color-text-secondary);"></i>Loss of important data features</span>
                     </label>
                     <label class="option-label">
                         <input type="checkbox" name="concerns" value="complexity" class="checkbox-custom">
-                        <span>Technical complexity / steep learning curve</span>
+                        <span><i class="fas fa-cogs mr-2 text-sm" style="color: var(--color-text-secondary);"></i>Technical complexity / steep learning curve</span>
                     </label>
                     <label class="option-label">
                         <input type="checkbox" name="concerns" value="resources" class="checkbox-custom">
-                        <span>Computational resource requirements</span>
+                        <span><i class="fas fa-microchip mr-2 text-sm" style="color: var(--color-text-secondary);"></i>Computational resource requirements</span>
                     </label>
                     <label class="option-label">
                         <input type="checkbox" name="concerns" value="cost" class="checkbox-custom">
-                        <span>Cost</span>
+                        <span><i class="fas fa-euro-sign mr-2 text-sm" style="color: var(--color-text-secondary);"></i>Cost</span>
                     </label>
                     <label class="option-label">
                         <input type="checkbox" name="concerns" value="control" class="checkbox-custom">
-                        <span>Lack of control over the process</span>
+                        <span><i class="fas fa-sliders-h mr-2 text-sm" style="color: var(--color-text-secondary);"></i>Lack of control over the process</span>
                     </label>
                     <label class="option-label">
                         <input type="checkbox" name="concerns" value="legal" class="checkbox-custom">
-                        <span>Legal/ethical uncertainties</span>
+                        <span><i class="fas fa-gavel mr-2 text-sm" style="color: var(--color-text-secondary);"></i>Legal/ethical uncertainties</span>
                     </label>
                     <label class="option-label">
                         <input type="checkbox" name="concerns" value="integration" class="checkbox-custom">
-                        <span>Integration with existing workflows</span>
+                        <span><i class="fas fa-puzzle-piece mr-2 text-sm" style="color: var(--color-text-secondary);"></i>Integration with existing workflows</span>
                     </label>
                     <label class="option-label">
                         <input type="checkbox" name="concerns" value="quality" class="checkbox-custom">
-                        <span>Quality assessment of masked output</span>
+                        <span><i class="fas fa-check-double mr-2 text-sm" style="color: var(--color-text-secondary);"></i>Quality assessment of masked output</span>
                     </label>
                     <label class="option-label">
                         <input type="checkbox" name="concerns" value="no_concerns" class="checkbox-custom">

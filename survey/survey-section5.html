@@ -101,6 +101,9 @@
     <main class="container mx-auto px-6 py-12 max-w-4xl">
         <!-- Section Header -->
         <div class="text-center mb-12">
+            <div class="inline-flex items-center justify-center w-14 h-14 rounded-full border border-carbon-border mb-6" style="color: var(--color-text-secondary);">
+                <i class="fas fa-archive text-2xl"></i>
+            </div>
             <h1 class="text-4xl font-light mb-4">Section 5: Data Archiving & FAIR Principles</h1>
             <div class="accent-line mb-6 max-w-md mx-auto"></div>
             <p class="text-gray-600 max-w-2xl mx-auto">
@@ -148,7 +151,7 @@
             <!-- Question 5.1 -->
             <div class="question-card">
                 <label class="block mb-4">
-                    <span class="text-lg font-semibold">5.1 Are you familiar with FAIR principles (Findable, Accessible, Interoperable, Reusable)?</span>
+                    <span class="text-lg font-semibold"><i class="fas fa-book-open mr-2 text-base" style="color: var(--color-text-secondary);"></i>5.1 Are you familiar with FAIR principles (Findable, Accessible, Interoperable, Reusable)?</span>
                     <span class="text-red-500">*</span>
                 </label>
                 <div class="space-y-3">
@@ -183,7 +186,7 @@
             <!-- Question 5.2 -->
             <div class="question-card">
                 <label class="block mb-4">
-                    <span class="text-lg font-semibold">5.2 Where do you currently archive or plan to archive your audiovisual data?</span>
+                    <span class="text-lg font-semibold"><i class="fas fa-archive mr-2 text-base" style="color: var(--color-text-secondary);"></i>5.2 Where do you currently archive or plan to archive your audiovisual data?</span>
                     <span class="text-red-500">*</span>
                     <p class="text-sm text-gray-600 mt-1">Select all that apply</p>
                 </label>
@@ -191,42 +194,42 @@
                     <label class="option-label">
                         <input type="checkbox" name="archive_location" value="dans" class="checkbox-custom">
                         <div>
-                            <div class="font-medium">DANS (Data Archiving and Networked Services)</div>
+                            <div class="font-medium"><i class="fas fa-database mr-2 text-sm" style="color: var(--color-text-secondary);"></i>DANS (Data Archiving and Networked Services)</div>
                             <div class="text-sm text-gray-600">Dutch national research data repository</div>
                         </div>
                     </label>
                     <label class="option-label">
                         <input type="checkbox" name="archive_location" value="institutional" class="checkbox-custom">
                         <div>
-                            <div class="font-medium">Institutional repository</div>
+                            <div class="font-medium"><i class="fas fa-university mr-2 text-sm" style="color: var(--color-text-secondary);"></i>Institutional repository</div>
                             <div class="text-sm text-gray-600">My university's data archive</div>
                         </div>
                     </label>
                     <label class="option-label">
                         <input type="checkbox" name="archive_location" value="clariah" class="checkbox-custom">
                         <div>
-                            <div class="font-medium">CLARIN/CLARIAH</div>
+                            <div class="font-medium"><i class="fas fa-project-diagram mr-2 text-sm" style="color: var(--color-text-secondary);"></i>CLARIN/CLARIAH</div>
                             <div class="text-sm text-gray-600">Infrastructure for humanities and social sciences</div>
                         </div>
                     </label>
                     <label class="option-label">
                         <input type="checkbox" name="archive_location" value="odissei" class="checkbox-custom">
                         <div>
-                            <div class="font-medium">ODISSEI</div>
+                            <div class="font-medium"><i class="fas fa-sitemap mr-2 text-sm" style="color: var(--color-text-secondary);"></i>ODISSEI</div>
                             <div class="text-sm text-gray-600">Open Data Infrastructure for Social Science</div>
                         </div>
                     </label>
                     <label class="option-label">
                         <input type="checkbox" name="archive_location" value="tla" class="checkbox-custom">
                         <div>
-                            <div class="font-medium">TLA (The Language Archive)</div>
+                            <div class="font-medium"><i class="fas fa-language mr-2 text-sm" style="color: var(--color-text-secondary);"></i>TLA (The Language Archive)</div>
                             <div class="text-sm text-gray-600">Max Planck Institute archive</div>
                         </div>
                     </label>
                     <label class="option-label">
                         <input type="checkbox" name="archive_location" value="commercial" class="checkbox-custom">
                         <div>
-                            <div class="font-medium">Commercial cloud storage</div>
+                            <div class="font-medium"><i class="fas fa-cloud mr-2 text-sm" style="color: var(--color-text-secondary);"></i>Commercial cloud storage</div>
                             <div class="text-sm text-gray-600">Dropbox, Google Drive, OneDrive, etc.</div>
                         </div>
                     </label>
@@ -255,7 +258,7 @@
             <!-- Question 5.3 -->
             <div class="question-card">
                 <label class="block mb-4">
-                    <span class="text-lg font-semibold">5.3 What metadata standards do you use or are you aware of?</span>
+                    <span class="text-lg font-semibold"><i class="fas fa-tags mr-2 text-base" style="color: var(--color-text-secondary);"></i>5.3 What metadata standards do you use or are you aware of?</span>
                     <span class="text-red-500">*</span>
                     <p class="text-sm text-gray-600 mt-1">Select all that apply</p>
                 </label>
@@ -309,7 +312,7 @@
             <!-- Question 5.4 -->
             <div class="question-card">
                 <label class="block mb-4">
-                    <span class="text-lg font-semibold">5.4 How important is it that the platform automatically generates appropriate metadata?</span>
+                    <span class="text-lg font-semibold"><i class="fas fa-magic mr-2 text-base" style="color: var(--color-text-secondary);"></i>5.4 How important is it that the platform automatically generates appropriate metadata?</span>
                     <span class="text-red-500">*</span>
                 </label>
                 <div class="space-y-3">
@@ -348,7 +351,7 @@
             <!-- Question 5.5 -->
             <div class="question-card">
                 <label class="block mb-4">
-                    <span class="text-lg font-semibold">5.5 What access control levels do you need for archived data?</span>
+                    <span class="text-lg font-semibold"><i class="fas fa-lock mr-2 text-base" style="color: var(--color-text-secondary);"></i>5.5 What access control levels do you need for archived data?</span>
                     <span class="text-red-500">*</span>
                     <p class="text-sm text-gray-600 mt-1">Select all that apply</p>
                 </label>
@@ -356,35 +359,35 @@
                     <label class="option-label">
                         <input type="checkbox" name="access_control" value="open" class="checkbox-custom">
                         <div>
-                            <div class="font-medium">Open access (public)</div>
+                            <div class="font-medium"><i class="fas fa-globe mr-2 text-sm" style="color: var(--color-text-secondary);"></i>Open access (public)</div>
                             <div class="text-sm text-gray-600">Anyone can access without restrictions</div>
                         </div>
                     </label>
                     <label class="option-label">
                         <input type="checkbox" name="access_control" value="restricted" class="checkbox-custom">
                         <div>
-                            <div class="font-medium">Restricted access</div>
+                            <div class="font-medium"><i class="fas fa-user-lock mr-2 text-sm" style="color: var(--color-text-secondary);"></i>Restricted access</div>
                             <div class="text-sm text-gray-600">Registered researchers only</div>
                         </div>
                     </label>
                     <label class="option-label">
                         <input type="checkbox" name="access_control" value="request" class="checkbox-custom">
                         <div>
-                            <div class="font-medium">Access upon request</div>
+                            <div class="font-medium"><i class="fas fa-hand-paper mr-2 text-sm" style="color: var(--color-text-secondary);"></i>Access upon request</div>
                             <div class="text-sm text-gray-600">Manual approval by data owner</div>
                         </div>
                     </label>
                     <label class="option-label">
                         <input type="checkbox" name="access_control" value="embargoed" class="checkbox-custom">
                         <div>
-                            <div class="font-medium">Time-embargoed access</div>
+                            <div class="font-medium"><i class="fas fa-clock mr-2 text-sm" style="color: var(--color-text-secondary);"></i>Time-embargoed access</div>
                             <div class="text-sm text-gray-600">Public after a specified period</div>
                         </div>
                     </label>
                     <label class="option-label">
                         <input type="checkbox" name="access_control" value="tiered" class="checkbox-custom">
                         <div>
-                            <div class="font-medium">Tiered access</div>
+                            <div class="font-medium"><i class="fas fa-layer-group mr-2 text-sm" style="color: var(--color-text-secondary);"></i>Tiered access</div>
                             <div class="text-sm text-gray-600">Different versions for different user groups</div>
                         </div>
                     </label>
