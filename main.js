@@ -73,7 +73,7 @@ document.addEventListener('DOMContentLoaded', function () {
     top.style.cssText = 'display:flex;justify-content:space-between;align-items:center;margin-bottom:2.5rem;';
     top.innerHTML =
         '<a href="index.html" style="display:flex;align-items:center;gap:0.5rem;font-size:1.25rem;font-weight:600;letter-spacing:-0.025em;color:var(--color-text);text-decoration:none;">' +
-        '<img src="logo-mark.svg" alt="" style="height:1.75rem;width:auto;"> SYNAPSIS</a>' +
+        '<img src="logo-mark.svg" alt="SYNAPSIS" style="height:1.75rem;width:auto;"> SYNAPSIS</a>' +
         '<button style="font-size:1.5rem;background:none;border:none;color:var(--color-text);cursor:pointer;" aria-label="Close menu">' +
         '<i class="fas fa-times"></i></button>';
     overlay.appendChild(top);
