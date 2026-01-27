@@ -1,0 +1,25 @@
+{
+  "name": "synapsis-website",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "build": "npx @11ty/eleventy",
+    "serve": "npx @11ty/eleventy --serve"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/babajideowoyele/synapsis-website.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/babajideowoyele/synapsis-website/issues"
+  },
+  "homepage": "https://github.com/babajideowoyele/synapsis-website#readme",
+  "dependencies": {
+    "@11ty/eleventy": "^3.1.2"
+  }
+}

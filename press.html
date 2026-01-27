@@ -1,142 +1,31 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SYNAPSIS Press</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="stylesheet" href="theme.css">
-    <script src="theme.js"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        'sans': ['IBM Plex Sans', 'sans-serif'],
-                        'mono': ['IBM Plex Mono', 'monospace'],
-                    },
-                    colors: {
-                        'carbon': {
-                            'bg': 'var(--color-bg)',
-                            'bg-hover': 'var(--color-bg-hover)',
-                            'border': 'var(--color-border)',
-                            'text': 'var(--color-text)',
-                            'text-secondary': 'var(--color-text-secondary)',
-                        }
-                    }
-                }
-            }
-        }
-    </script>
-    <style>
-        body {
-            font-family: 'IBM Plex Sans', sans-serif;
-            background-color: var(--color-bg);
-            color: var(--color-text);
-        }
-        .accent-bar {
-            height: 3px;
-            background: var(--color-accent);
-        }
-        .card {
-            border: 1px solid var(--color-border);
-            transition: all 0.15s ease;
-        }
-        .card:hover {
-            border-color: var(--color-text);
-            box-shadow: 0 4px 14px rgba(0,0,0,0.1);
-        }
-        .btn-primary {
-            background: var(--color-accent);
-            color: var(--color-inverse);
-            transition: all 0.15s ease;
-        }
-        .btn-primary:hover {
-            background: var(--color-accent-hover);
-        }
-        .btn-secondary {
-            background: var(--color-bg);
-            color: var(--color-text);
-            border: 1px solid var(--color-accent);
-            transition: all 0.15s ease;
-        }
-        .btn-secondary:hover {
-            background: var(--color-bg-hover);
-        }
-        .nav-link {
-            position: relative;
-            padding-bottom: 4px;
-        }
-        .nav-link::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: var(--color-accent);
-            transition: width 0.2s ease;
-        }
-        .nav-link:hover::after {
-            width: 100%;
-        }
-        .prose h3 {
-            font-size: 1.25rem;
-            font-weight: 600;
-            margin-top: 2rem;
-            margin-bottom: 0.75rem;
-        }
-        .prose p {
-            margin-bottom: 1rem;
-            line-height: 1.75;
-            color: var(--color-text-secondary);
-        }
-        .prose blockquote {
-            border-left: 4px solid var(--color-accent);
-            padding-left: 1.5rem;
-            margin: 1.5rem 0;
-            font-style: italic;
-        }
-        .prose blockquote p {
-            color: var(--color-text);
-        }
-    </style>
-</head>
-<body class="min-h-screen">
-    <!-- Header -->
-    <header class="border-b border-carbon-border sticky top-0 z-50 bg-white">
-        <div class="accent-bar"></div>
-        <nav class="container mx-auto px-6 py-4">
-            <div class="flex justify-between items-center">
-                <a href="index.html" class="flex items-center gap-2 text-xl font-semibold tracking-tight">
-                    <img src="logo-mark.svg" alt="SYNAPSIS" class="h-7 w-auto">
-                    SYNAPSIS
-                </a>
-                <div class="hidden md:flex items-center space-x-8">
-                    <a href="index.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Home</a>
-                    <a href="platform.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Platform</a>
-                    <a href="demo.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Demo</a>
-                    <a href="training.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Training</a>
-                    <a href="resources.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Resources</a>
-                    <a href="network.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Network</a>
-                    <a href="press.html" class="text-sm font-medium border-b-2 border-carbon-text pb-1">Press</a>
-                </div>
-                <div class="flex items-center gap-3">
-                    <button class="md:hidden" aria-label="Menu">
-                        <i class="fas fa-bars text-xl"></i>
-                    </button>
-                    <button onclick="openSearch()" class="search-btn" title="Search (Ctrl+K)" aria-label="Search">
-                        <i class="fas fa-search"></i>
-                    </button>
-                    <button onclick="toggleTheme()" class="theme-toggle" title="Toggle dark mode" aria-label="Toggle dark mode">
-                        <i class="fas fa-moon"></i><i class="fas fa-sun"></i>
-                    </button>
-                </div>
-            </div>
-        </nav>
-    </header>
+---
+layout: base.njk
+title: SYNAPSIS Press
+activeNav: Press
+---
+
+<style>
+    .prose h3 {
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin-top: 2rem;
+        margin-bottom: 0.75rem;
+    }
+    .prose p {
+        margin-bottom: 1rem;
+        line-height: 1.75;
+        color: var(--color-text-secondary);
+    }
+    .prose blockquote {
+        border-left: 4px solid var(--color-accent);
+        padding-left: 1.5rem;
+        margin: 1.5rem 0;
+        font-style: italic;
+    }
+    .prose blockquote p {
+        color: var(--color-text);
+    }
+</style>
 
     <main>
         <!-- Hero -->
@@ -298,30 +187,3 @@
             </div>
         </section>
     </main>
-
-    <!-- Footer -->
-    <footer class="border-t border-carbon-border py-12 px-6">
-        <div class="container mx-auto max-w-5xl">
-            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-8">
-                <div>
-                    <div class="font-semibold text-lg mb-2">SYNAPSIS</div>
-                    <div class="text-sm text-carbon-text-secondary">
-                        Funded by NWO TDCC-SSH
-                    </div>
-                </div>
-                <div class="flex gap-8">
-                    <a href="index.html" class="text-sm text-carbon-text-secondary hover:text-carbon-text">Home</a>
-                    <a href="platform.html" class="text-sm text-carbon-text-secondary hover:text-carbon-text">Platform</a>
-                    <a href="resources.html" class="text-sm text-carbon-text-secondary hover:text-carbon-text">Resources</a>
-                    <a href="https://github.com/MaskAnyone/MaskAnyone" class="text-sm text-carbon-text-secondary hover:text-carbon-text">GitHub</a>
-                </div>
-            </div>
-            <div class="mt-8 pt-8 border-t border-carbon-border text-sm text-carbon-text-secondary">
-                &copy; 2026 SYNAPSIS Project. Radboud University.
-            </div>
-        </div>
-    </footer>
-<script src="main.js"></script>
-<script src="search.js"></script>
-</body>
-</html>

@@ -1,109 +1,37 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SYNAPSIS Platform Survey - Welcome</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="stylesheet" href="../theme.css">
-    <script src="../theme.js"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        'sans': ['IBM Plex Sans', 'sans-serif'],
-                        'mono': ['IBM Plex Mono', 'monospace'],
-                    },
-                    colors: {
-                        'carbon': {
-                            'bg': 'var(--color-bg)',
-                            'bg-hover': 'var(--color-bg-hover)',
-                            'border': 'var(--color-border)',
-                            'text': 'var(--color-text)',
-                            'text-secondary': 'var(--color-text-secondary)',
-                        }
-                    }
-                }
-            }
-        }
-    </script>
-    <style>
-        body {
-            font-family: 'IBM Plex Sans', sans-serif;
-            background-color: var(--color-bg);
-            color: var(--color-text);
-        }
-        .accent-bar { height: 3px; background: var(--color-accent); }
-        .accent-line { height: 2px; background: linear-gradient(90deg, var(--color-accent) 0%, transparent 100%); }
-        .nav-link { position: relative; padding-bottom: 4px; }
-        .nav-link::after { content: ''; position: absolute; bottom: 0; left: 0; width: 0; height: 2px; background: var(--color-accent); transition: width 0.2s ease; }
-        .nav-link:hover::after { width: 100%; }
-        .btn-start {
-            background: var(--color-accent); color: var(--color-inverse);
-            border: 1px solid var(--color-accent); padding: 16px 48px;
-            font-weight: 600; cursor: pointer; transition: all 0.15s ease; font-size: 18px;
-            display: inline-block; text-decoration: none;
-        }
-        .btn-start:hover { background: var(--color-accent-hover); }
-        .feature-card {
-            background: var(--color-bg); border: 1px solid var(--color-border);
-            padding: 24px; transition: all 0.15s ease;
-        }
-        .feature-card:hover { border-color: var(--color-text); }
-        .feature-icon { font-size: 48px; margin-bottom: 16px; }
-        .info-box {
-            background: var(--color-bg-hover); border-left: 4px solid var(--color-accent);
-            padding: 20px; margin: 24px 0;
-        }
-        .timeline-item { display: flex; gap: 16px; margin-bottom: 24px; }
-        .timeline-dot {
-            width: 40px; height: 40px; background: var(--color-accent); color: var(--color-inverse);
-            border-radius: 50%; display: flex; align-items: center; justify-content: center;
-            font-weight: bold; flex-shrink: 0; font-family: 'IBM Plex Mono', monospace;
-        }
-        .stat-card {
-            text-align: center; padding: 20px;
-            background: var(--color-bg-hover); border: 1px solid var(--color-border);
-        }
-        .stat-number { font-size: 36px; font-weight: 300; font-family: 'IBM Plex Mono', monospace; }
-    </style>
-</head>
-<body class="min-h-screen">
-    <!-- Header -->
-    <header class="border-b border-carbon-border sticky top-0 z-50 bg-white">
-        <div class="accent-bar"></div>
-        <nav class="container mx-auto px-6 py-4">
-            <div class="flex justify-between items-center">
-                <a href="../index.html" class="flex items-center gap-2 text-xl font-semibold tracking-tight">
-                    <img src="../logo-mark.svg" alt="SYNAPSIS" class="h-7 w-auto header-logo">
-                    SYNAPSIS
-                </a>
-                <div class="hidden md:flex items-center space-x-8">
-                    <a href="../index.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Home</a>
-                    <a href="../platform.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Platform</a>
-                    <a href="../demo.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Demo</a>
-                    <a href="../training.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Training</a>
-                    <a href="../resources.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Resources</a>
-                    <a href="../network.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Network</a>
-                    <a href="../press.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Press</a>
-                </div>
-                <div class="flex items-center gap-2">
-                    <button onclick="openSearch()" class="search-btn" title="Search (Ctrl+K)" aria-label="Search">
-                        <i class="fas fa-search"></i>
-                    </button>
-                    <button onclick="toggleTheme()" class="theme-toggle" title="Toggle dark mode" aria-label="Toggle dark mode">
-                        <i class="fas fa-moon"></i><i class="fas fa-sun"></i>
-                    </button>
-                    <button class="md:hidden p-2" aria-label="Open menu">
-                        <i class="fas fa-bars"></i>
-                    </button>
-                </div>
-            </div>
-        </nav>
-    </header>
+---
+layout: survey.njk
+title: SYNAPSIS Platform Survey - Welcome
+---
+
+<style>
+    .btn-start {
+        background: var(--color-accent); color: var(--color-inverse);
+        border: 1px solid var(--color-accent); padding: 16px 48px;
+        font-weight: 600; cursor: pointer; transition: all 0.15s ease; font-size: 18px;
+        display: inline-block; text-decoration: none;
+    }
+    .btn-start:hover { background: var(--color-accent-hover); }
+    .feature-card {
+        background: var(--color-bg); border: 1px solid var(--color-border);
+        padding: 24px; transition: all 0.15s ease;
+    }
+    .feature-card:hover { border-color: var(--color-text); }
+    .feature-icon { font-size: 48px; margin-bottom: 16px; }
+    .info-box {
+        padding: 20px; margin: 24px 0;
+    }
+    .timeline-item { display: flex; gap: 16px; margin-bottom: 24px; }
+    .timeline-dot {
+        width: 40px; height: 40px; background: var(--color-accent); color: var(--color-inverse);
+        border-radius: 50%; display: flex; align-items: center; justify-content: center;
+        font-weight: bold; flex-shrink: 0; font-family: 'IBM Plex Mono', monospace;
+    }
+    .stat-card {
+        text-align: center; padding: 20px;
+        background: var(--color-bg-hover); border: 1px solid var(--color-border);
+    }
+    .stat-number { font-size: 36px; font-weight: 300; font-family: 'IBM Plex Mono', monospace; }
+</style>
 
     <!-- Hero Section -->
     <section class="py-20 px-6">
@@ -445,28 +373,3 @@
             </p>
         </div>
     </section>
-
-    <!-- Footer -->
-    <footer class="border-t border-carbon-border py-12 px-6">
-        <div class="container mx-auto max-w-5xl">
-            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-8">
-                <div>
-                    <div class="font-semibold text-lg mb-2">SYNAPSIS</div>
-                    <div class="text-sm text-carbon-text-secondary">Funded by NWO TDCC-SSH</div>
-                </div>
-                <div class="flex gap-8">
-                    <a href="../index.html" class="text-sm text-carbon-text-secondary hover:text-carbon-text">Home</a>
-                    <a href="../platform.html" class="text-sm text-carbon-text-secondary hover:text-carbon-text">Platform</a>
-                    <a href="../training.html" class="text-sm text-carbon-text-secondary hover:text-carbon-text">Training</a>
-                    <a href="../resources.html" class="text-sm text-carbon-text-secondary hover:text-carbon-text">Resources</a>
-                </div>
-            </div>
-            <div class="mt-8 pt-8 border-t border-carbon-border text-sm text-carbon-text-secondary">
-                © 2026 SYNAPSIS Project. Radboud University.
-            </div>
-        </div>
-    </footer>
-    <script src="../main.js"></script>
-    <script src="../search.js"></script>
-</body>
-</html>
