@@ -4,8 +4,8 @@
 
 | Name | Role | Photo Source |
 |------|------|--------------|
-| Mark Dingemanse | Lead Applicant | [Radboud Profile](https://www.ru.nl/personen/dingemanse-m) |
-| Babajide Owoyele | Co-Lead | [EUR Profile](https://www.eur.nl/people/babajide-owoyele) / [HPI Profile](https://hpi.de/en/research/knowledge-graph-and-nlp/team/babajide-owoyele.html) |
+| Mark Dingemanse | Co-Pilot | [Radboud Profile](https://www.ru.nl/personen/dingemanse-m) |
+| Babajide Owoyele | Co-Pilot | [EUR Profile](https://www.eur.nl/people/babajide-owoyele) / [HPI Profile](https://hpi.de/en/research/knowledge-graph-and-nlp/team/babajide-owoyele.html) |
 | Wim Pouw | Co-Pilot | [Radboud/Donders Profile](https://www.ru.nl/personen/pouw-w) / [Tilburg Profile](https://www.tilburguniversity.edu/staff/w-pouw) |
 | Bogdana Huma | Co-Pilot | [VU Profile](https://research.vu.nl/en/persons/bogdana-huma) |
 | Henk van de Heuvel | Co-Pilot | [Radboud Profile](https://www.ru.nl/personen/heuvel-h-van-de) |
