@@ -187,24 +187,24 @@
                     <p class="text-carbon-text-secondary mt-2">Compare original footage with de-identified output</p>
                 </div>
 
-                <!-- Demo 1: Sample Video -->
+                <!-- Demo 1: Sample Recording -->
                 <div class="demo-card bg-white p-8 mb-8">
                     <h3 class="font-semibold text-lg mb-4 flex items-center">
                         <i class="fas fa-video mr-3 text-carbon-text-secondary"></i>
-                        Sample Recording - Face Masking Method
+                        Sample Recording - Face Masking
                     </h3>
                     <div class="grid md:grid-cols-2 gap-6">
                         <div class="video-container">
                             <div class="video-label"><i class="fas fa-eye mr-2"></i>Original</div>
-                            <video controls poster="demos/poster-original.jpg">
-                                <source src="demos/sample_original.mp4" type="video/mp4">
+                            <video controls>
+                                <source src="assets/Input_Videos/sample.mp4" type="video/mp4">
                                 Your browser does not support video playback.
                             </video>
                         </div>
                         <div class="video-container">
                             <div class="video-label video-label-masked"><i class="fas fa-mask mr-2"></i>Masked</div>
-                            <video controls poster="demos/poster-masked.jpg">
-                                <source src="demos/sample_masked.mp4" type="video/mp4">
+                            <video controls>
+                                <source src="assets/Output_MaskedVideos/sample.mp4" type="video/mp4">
                                 Your browser does not support video playback.
                             </video>
                         </div>
@@ -215,34 +215,30 @@
                             <span>Method: Face Masking (DeepPrivacy2)</span>
                         </div>
                         <div class="flex items-center gap-2 text-sm text-carbon-text-secondary">
-                            <i class="fas fa-clock"></i>
-                            <span>Processing: ~2 min</span>
-                        </div>
-                        <div class="flex items-center gap-2 text-sm text-carbon-text-secondary">
                             <i class="fas fa-check-circle text-green-600"></i>
                             <span>Expression preserved</span>
                         </div>
                     </div>
                 </div>
 
-                <!-- Demo 2: Classroom -->
+                <!-- Demo 2: TED Talk -->
                 <div class="demo-card bg-white p-8 mb-8">
                     <h3 class="font-semibold text-lg mb-4 flex items-center">
                         <i class="fas fa-chalkboard-teacher mr-3 text-carbon-text-secondary"></i>
-                        Classroom Recording - Selective Masking
+                        Presentation Recording - Speaker Masking
                     </h3>
                     <div class="grid md:grid-cols-2 gap-6">
                         <div class="video-container">
                             <div class="video-label"><i class="fas fa-eye mr-2"></i>Original</div>
                             <video controls>
-                                <source src="demos/classroom_original.mp4" type="video/mp4">
+                                <source src="assets/Input_Videos/ted_kid.mp4" type="video/mp4">
                                 Your browser does not support video playback.
                             </video>
                         </div>
                         <div class="video-container">
-                            <div class="video-label video-label-masked"><i class="fas fa-mask mr-2"></i>Students Masked</div>
+                            <div class="video-label video-label-masked"><i class="fas fa-mask mr-2"></i>Masked</div>
                             <video controls>
-                                <source src="demos/classroom_masked.mp4" type="video/mp4">
+                                <source src="assets/Output_MaskedVideos/ted_kid.mp4" type="video/mp4">
                                 Your browser does not support video playback.
                             </video>
                         </div>
@@ -250,7 +246,7 @@
                     <div class="mt-6 flex flex-wrap gap-4">
                         <div class="flex items-center gap-2 text-sm text-carbon-text-secondary">
                             <i class="fas fa-cog"></i>
-                            <span>Method: Selective (teacher visible, students masked)</span>
+                            <span>Method: Face Masking (DeepPrivacy2)</span>
                         </div>
                         <div class="flex items-center gap-2 text-sm text-carbon-text-secondary">
                             <i class="fas fa-users"></i>
@@ -259,14 +255,38 @@
                     </div>
                 </div>
 
-                <!-- Placeholder for more demos -->
-                <div class="border border-dashed border-carbon-border p-8 text-center">
-                    <i class="fas fa-film text-4xl text-carbon-text-secondary mb-4"></i>
-                    <h3 class="font-semibold mb-2">More Demos Coming Soon</h3>
-                    <p class="text-sm text-carbon-text-secondary mb-4">Voice anonymization, pose extraction, and batch processing examples</p>
-                    <a href="survey.html" class="btn-secondary px-4 py-2 text-sm inline-block">
-                        Request specific demo <i class="fas fa-arrow-right ml-2"></i>
-                    </a>
+                <!-- Demo 3: Research Recording -->
+                <div class="demo-card bg-white p-8 mb-8">
+                    <h3 class="font-semibold text-lg mb-4 flex items-center">
+                        <i class="fas fa-flask mr-3 text-carbon-text-secondary"></i>
+                        Research Recording - Participant Masking
+                    </h3>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div class="video-container">
+                            <div class="video-label"><i class="fas fa-eye mr-2"></i>Original</div>
+                            <video controls>
+                                <source src="assets/Input_Videos/1413451-11105600-11163240_1a1_1.mp4" type="video/mp4">
+                                Your browser does not support video playback.
+                            </video>
+                        </div>
+                        <div class="video-container">
+                            <div class="video-label video-label-masked"><i class="fas fa-mask mr-2"></i>Masked</div>
+                            <video controls>
+                                <source src="assets/Output_MaskedVideos/1413451-11105600-11163240_1a1_1.mp4" type="video/mp4">
+                                Your browser does not support video playback.
+                            </video>
+                        </div>
+                    </div>
+                    <div class="mt-6 flex flex-wrap gap-4">
+                        <div class="flex items-center gap-2 text-sm text-carbon-text-secondary">
+                            <i class="fas fa-cog"></i>
+                            <span>Method: Face Masking (DeepPrivacy2)</span>
+                        </div>
+                        <div class="flex items-center gap-2 text-sm text-carbon-text-secondary">
+                            <i class="fas fa-check-circle text-green-600"></i>
+                            <span>Expression preserved</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
