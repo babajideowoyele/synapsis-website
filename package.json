@@ -5,7 +5,8 @@
   "main": "main.js",
   "scripts": {
     "build": "npx @11ty/eleventy",
-    "serve": "npx @11ty/eleventy --serve"
+    "serve": "npx @11ty/eleventy --serve",
+    "deploy:codeberg": "bash deploy-codeberg.sh"
   },
   "repository": {
     "type": "git",

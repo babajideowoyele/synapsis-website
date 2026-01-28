@@ -19,6 +19,7 @@ module.exports = function (eleventyConfig) {
   eleventyConfig.ignores.add("downloads/**");
   eleventyConfig.ignores.add("assets/**");
   eleventyConfig.ignores.add("README.md");
+  eleventyConfig.ignores.add("deploy-codeberg.sh");
 
   return {
     dir: {
