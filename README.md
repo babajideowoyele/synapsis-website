@@ -2,7 +2,8 @@
 
 Public website for the **SYNAPSIS** project — a privacy-aware audiovisual data platform for SSH (Social Sciences & Humanities) research, funded by NWO Thematic Digital Competence Centers (TDCC-SSH-C2024-011).
 
-**Live site:** https://babajideowoyele.github.io/synapsis-website/
+**Live site:** [babajideowoyele.codeberg.page/synapsis-website](https://babajideowoyele.codeberg.page/synapsis-website/)
+**Mirror:** [babajideowoyele.github.io/synapsis-website](https://babajideowoyele.github.io/synapsis-website/)
 
 ## Quick Start
 
@@ -19,7 +20,7 @@ Opens at `http://localhost:8080`. Changes auto-reload.
 npm run build
 ```
 
-Output goes to `_site/`. This is what GitHub Actions deploys.
+Output goes to `_site/`.
 
 ## Project Structure
 
@@ -105,12 +106,15 @@ activeNav: Demo
 
 ## Deployment
 
-Deploys automatically to GitHub Pages on every push to `main` via `.github/workflows/deploy-pages.yml`. The workflow:
+**Codeberg Pages** (primary):
 
-1. Checks out the repo
-2. Installs Node.js 20 + dependencies
-3. Builds with Eleventy (`npx @11ty/eleventy`)
-4. Uploads `_site/` to GitHub Pages
+```bash
+npm run deploy:codeberg
+```
+
+Builds the site and pushes `_site/` to the `pages` branch on Codeberg.
+
+**GitHub Pages** (mirror): deploys automatically on every push to `main` via GitHub Actions.
 
 ## Partners
 
