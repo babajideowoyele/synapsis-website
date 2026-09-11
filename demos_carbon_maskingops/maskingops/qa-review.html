@@ -1,0 +1,768 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MaskingOPS - Utility Review</title>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+
+    :root {
+      --carbon-bg: #ffffff;
+      --carbon-bg-hover: #f4f4f4;
+      --carbon-bg-dark: #f5f5f5;
+      --carbon-border: #e0e0e0;
+      --carbon-text: #161616;
+      --carbon-text-secondary: #393939;
+      --carbon-focus: #0f62fe;
+      --carbon-success: #198038;
+      --carbon-success-light: #defbe6;
+      --carbon-warning: #f1c21b;
+      --carbon-warning-light: #fff8e1;
+      --carbon-error: #da1e28;
+      --carbon-error-light: #fff1f1;
+      --carbon-info: #0f62fe;
+      --carbon-info-light: #edf5ff;
+    }
+
+    body {
+      font-family: 'IBM Plex Sans', sans-serif;
+      background: var(--carbon-bg-dark);
+      color: var(--carbon-text);
+      line-height: 1.5;
+      overflow: hidden;
+    }
+
+    *:focus-visible { outline: 2px solid var(--carbon-focus); outline-offset: 2px; }
+
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      gap: 8px; min-height: 40px; padding: 8px 20px;
+      font-family: inherit; font-size: 13px; font-weight: 500;
+      cursor: pointer; transition: all 0.15s; border: none; text-decoration: none;
+    }
+    .btn-primary { background: var(--carbon-text); color: #fff; }
+    .btn-primary:hover { background: #393939; }
+    .btn-success { background: var(--carbon-success); color: #fff; }
+    .btn-success:hover { background: #0e6027; }
+    .btn-secondary { background: #fff; color: var(--carbon-text); border: 1px solid var(--carbon-text); }
+    .btn-secondary:hover { background: var(--carbon-bg-hover); }
+    .btn-ghost { background: transparent; color: var(--carbon-text-secondary); }
+    .btn-ghost:hover { background: var(--carbon-bg-hover); color: var(--carbon-text); }
+    .btn-danger { background: #fff; color: var(--carbon-error); border: 1px solid var(--carbon-error); }
+    .btn-danger:hover { background: var(--carbon-error); color: #fff; }
+    .btn-sm { min-height: 32px; padding: 4px 12px; font-size: 12px; }
+    .btn-icon { width: 36px; height: 36px; padding: 0; }
+
+    .tag {
+      display: inline-flex; align-items: center; gap: 4px;
+      padding: 2px 10px; font-size: 11px; font-weight: 500;
+    }
+    .tag-success { background: var(--carbon-success-light); color: var(--carbon-success); }
+    .tag-warning { background: var(--carbon-warning-light); color: #735f00; }
+    .tag-error { background: var(--carbon-error-light); color: var(--carbon-error); }
+    .tag-info { background: var(--carbon-info-light); color: var(--carbon-info); }
+    .tag-default { background: var(--carbon-bg-hover); color: var(--carbon-text-secondary); }
+
+    /* ── App chrome ── */
+    .app-frame { height: 100vh; display: flex; flex-direction: column; }
+    .app-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 24px; height: 48px;
+      background: var(--carbon-text); color: #f4f4f4; flex-shrink: 0;
+    }
+    .app-logo {
+      font-size: 14px; font-weight: 600; display: flex; align-items: center;
+      gap: 10px; letter-spacing: 0.5px; color: #f4f4f4; text-decoration: none;
+    }
+    .header-nav { display: flex; align-items: center; gap: 0; height: 100%; }
+    .header-nav a {
+      display: flex; align-items: center; gap: 6px; height: 100%;
+      padding: 0 16px; font-size: 13px; font-weight: 400;
+      color: #c6c6c6; text-decoration: none; transition: all 0.15s;
+      border-bottom: 2px solid transparent;
+    }
+    .header-nav a:hover { color: #fff; background: rgba(255,255,255,0.08); }
+    .header-nav a.active { color: #fff; border-bottom-color: #fff; font-weight: 500; }
+    .header-actions { display: flex; align-items: center; gap: 8px; }
+    .header-actions button {
+      width: 36px; height: 36px; background: transparent; border: none;
+      color: #c6c6c6; cursor: pointer; display: flex; align-items: center;
+      justify-content: center; transition: all 0.15s;
+    }
+    .header-actions button:hover { color: #fff; background: rgba(255,255,255,0.08); }
+
+    .app-body { display: flex; flex: 1; overflow: hidden; }
+    .main-content { flex: 1; overflow-y: auto; padding: 24px 32px; }
+
+    .page-label {
+      font-family: 'IBM Plex Mono', monospace; font-size: 11px;
+      letter-spacing: 1.5px; text-transform: uppercase;
+      color: var(--carbon-text-secondary); margin-bottom: 4px;
+    }
+    .page-title { font-size: 28px; font-weight: 300; }
+    .page-title strong { font-weight: 600; }
+
+    /* ── Review layout: side-by-side ── */
+    .review-layout {
+      display: grid;
+      grid-template-columns: 1fr 360px;
+      gap: 24px;
+      margin-top: 24px;
+    }
+
+    /* ── Video comparison ── */
+    .video-compare {
+      background: #fff;
+      border: 1px solid var(--carbon-border);
+    }
+    .video-compare-header {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 12px 16px; border-bottom: 1px solid var(--carbon-border);
+    }
+    .video-compare-body {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 0;
+    }
+    .video-pane {
+      border-right: 1px solid var(--carbon-border);
+    }
+    .video-pane:last-child { border-right: none; }
+    .video-pane-label {
+      padding: 8px 12px;
+      font-size: 11px; font-weight: 600; text-transform: uppercase;
+      letter-spacing: 0.5px; color: var(--carbon-text-secondary);
+      background: var(--carbon-bg-hover);
+      border-bottom: 1px solid var(--carbon-border);
+    }
+    .video-canvas {
+      background: #1a1a1a;
+      aspect-ratio: 16/9;
+      display: flex; align-items: center; justify-content: center;
+      position: relative;
+    }
+    .video-canvas i { font-size: 36px; color: #666; }
+    .video-overlay-badge {
+      position: absolute; bottom: 8px; left: 8px;
+      background: rgba(0,0,0,0.7); color: #fff;
+      padding: 2px 8px; font-size: 10px; font-family: 'IBM Plex Mono', monospace;
+    }
+    .video-controls {
+      display: flex; align-items: center; gap: 8px;
+      padding: 12px 16px; border-top: 1px solid var(--carbon-border);
+    }
+    .video-controls button {
+      width: 32px; height: 32px; background: transparent; border: none;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      color: var(--carbon-text-secondary); transition: all 0.15s;
+    }
+    .video-controls button:hover { background: var(--carbon-bg-hover); color: var(--carbon-text); }
+    .video-time {
+      font-family: 'IBM Plex Mono', monospace; font-size: 12px;
+      color: var(--carbon-text-secondary); margin-left: auto;
+    }
+    .scrubber {
+      flex: 1; height: 4px; background: var(--carbon-border);
+      position: relative; cursor: pointer; margin: 0 8px;
+    }
+    .scrubber-fill {
+      position: absolute; left: 0; top: 0; height: 100%;
+      background: var(--carbon-text); width: 35%;
+    }
+    .scrubber-handle {
+      position: absolute; top: -4px; width: 12px; height: 12px;
+      background: var(--carbon-text); left: 35%; transform: translateX(-50%);
+    }
+
+    /* ── QA detail panel ── */
+    .qa-panel {
+      background: #fff;
+      border: 1px solid var(--carbon-border);
+      display: flex; flex-direction: column;
+      max-height: calc(100vh - 160px);
+    }
+    .qa-panel-header {
+      padding: 16px 20px; border-bottom: 1px solid var(--carbon-border);
+      flex-shrink: 0;
+    }
+    .qa-panel-body {
+      flex: 1; overflow-y: auto; padding: 20px;
+    }
+    .qa-panel-footer {
+      padding: 16px 20px; border-top: 1px solid var(--carbon-border);
+      display: flex; gap: 8px; flex-shrink: 0;
+    }
+
+    /* ── Score card ── */
+    .score-card {
+      text-align: center; padding: 20px;
+      background: var(--carbon-bg-hover); margin-bottom: 20px;
+    }
+    .score-value {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 48px; font-weight: 600; line-height: 1;
+    }
+    .score-value.pass { color: var(--carbon-success); }
+    .score-value.warn { color: #735f00; }
+    .score-value.fail { color: var(--carbon-error); }
+    .score-label {
+      font-size: 12px; color: var(--carbon-text-secondary); margin-top: 4px;
+    }
+    .score-threshold {
+      font-size: 11px; color: var(--carbon-text-secondary); margin-top: 8px;
+      padding-top: 8px; border-top: 1px solid var(--carbon-border);
+    }
+
+    /* ── Metric rows ── */
+    .metric-row {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 10px 0; border-bottom: 1px solid var(--carbon-border);
+    }
+    .metric-row:last-child { border-bottom: none; }
+    .metric-name { font-size: 13px; font-weight: 500; }
+    .metric-val {
+      font-family: 'IBM Plex Mono', monospace; font-size: 13px; font-weight: 600;
+    }
+
+    /* ── Decision section ── */
+    .decision-section { margin-top: 20px; }
+    .decision-label {
+      font-family: 'IBM Plex Mono', monospace; font-size: 10px;
+      font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px;
+      color: var(--carbon-text-secondary); margin-bottom: 10px;
+    }
+    .decision-option {
+      display: flex; align-items: center; gap: 12px;
+      padding: 14px 16px; border: 1px solid var(--carbon-border);
+      margin-bottom: -1px; cursor: pointer; transition: all 0.15s;
+    }
+    .decision-option:hover { background: var(--carbon-bg-hover); }
+    .decision-option.selected {
+      border-color: var(--carbon-text); background: var(--carbon-bg-hover);
+      position: relative; z-index: 1;
+    }
+    .decision-option input[type="radio"] {
+      width: 16px; height: 16px; accent-color: var(--carbon-text);
+    }
+    .decision-text { font-size: 13px; font-weight: 500; }
+    .decision-desc { font-size: 11px; color: var(--carbon-text-secondary); }
+
+    /* ── Notes ── */
+    .qa-notes {
+      width: 100%; min-height: 80px; padding: 10px 12px;
+      font-family: inherit; font-size: 13px;
+      border: 1px solid var(--carbon-border); resize: vertical;
+      margin-top: 12px;
+    }
+    .qa-notes:focus { outline: none; border-color: var(--carbon-text); }
+
+    /* ── Issue flags ── */
+    .issue-list { margin-top: 16px; }
+    .issue-item {
+      display: flex; align-items: flex-start; gap: 10px;
+      padding: 10px 12px; background: var(--carbon-error-light);
+      border-left: 3px solid var(--carbon-error);
+      margin-bottom: 8px;
+    }
+    .issue-item.warning {
+      background: var(--carbon-warning-light);
+      border-left-color: var(--carbon-warning);
+    }
+    .issue-item i { margin-top: 2px; flex-shrink: 0; }
+    .issue-text { font-size: 12px; line-height: 1.4; }
+
+    .mono { font-family: 'IBM Plex Mono', monospace; }
+    .text-secondary { color: var(--carbon-text-secondary); }
+    .text-xs { font-size: 11px; }
+
+    /* ── Animations ── */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes slideInRight {
+      from { opacity: 0; transform: translateX(16px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.15); }
+    }
+    @keyframes scoreReveal {
+      from { opacity: 0; transform: scale(0.8); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .video-compare {
+      animation: fadeInUp 0.5s ease-out both;
+    }
+    .qa-panel {
+      animation: slideInRight 0.5s ease-out 0.15s both;
+    }
+    .score-value {
+      animation: scoreReveal 0.6s ease-out 0.3s both;
+    }
+    .issue-item {
+      animation: fadeInUp 0.4s ease-out both;
+    }
+    .issue-item:nth-child(1) { animation-delay: 0.2s; }
+    .issue-item:nth-child(2) { animation-delay: 0.35s; }
+    .issue-item:nth-child(3) { animation-delay: 0.5s; }
+
+    .decision-option {
+      transition: all 0.15s ease, transform 0.2s ease;
+    }
+    .decision-option:hover {
+      transform: translateX(4px);
+    }
+    .decision-option.selected {
+      border-left: 3px solid var(--carbon-text);
+    }
+
+    .metric-row {
+      transition: background 0.15s ease;
+      padding-left: 8px;
+      padding-right: 8px;
+      margin-left: -8px;
+      margin-right: -8px;
+    }
+    .metric-row:hover {
+      background: var(--carbon-bg-hover);
+    }
+
+    .score-card {
+      transition: box-shadow 0.2s ease;
+    }
+    .score-card:hover {
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+
+    .video-controls button {
+      transition: all 0.15s ease, transform 0.1s ease;
+    }
+    .video-controls button:hover {
+      transform: scale(1.1);
+    }
+
+    .scrubber-handle {
+      transition: left 0.1s ease;
+    }
+
+    .notif-badge {
+      position: absolute;
+      top: 4px; right: 4px;
+      width: 8px; height: 8px;
+      background: var(--carbon-error);
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-frame">
+    <div class="app-header">
+      <a href="dashboard.html" class="app-logo">
+        <i class="fas fa-shield-halved" aria-hidden="true"></i> MASKINGOPS
+      </a>
+      <nav class="header-nav" aria-label="Main navigation">
+        <a href="dashboard.html"><i class="fas fa-th-large" aria-hidden="true"></i> Dashboard</a>
+        <a href="../maskanyone/upload.html"><i class="fas fa-mask" aria-hidden="true"></i> MaskAnyone</a>
+        <a href="benchmark.html"><i class="fas fa-chart-bar" aria-hidden="true"></i> MaskBench</a>
+        <a href="qa-review.html" class="active"><i class="fas fa-check-double" aria-hidden="true"></i> Utility Review</a>
+        <a href="archive.html"><i class="fas fa-box-archive" aria-hidden="true"></i> Archive</a>
+      </nav>
+      <div class="header-actions">
+        <button title="Notifications" style="position:relative;"><i class="fas fa-bell"></i><span class="notif-badge"></span></button>
+        <button title="Settings"><i class="fas fa-cog"></i></button>
+        <button title="Help"><i class="fas fa-circle-question"></i></button>
+      </div>
+    </div>
+
+    <div class="app-body">
+      <main class="main-content">
+        <!-- Page header -->
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:8px;">
+          <div>
+            <p class="page-label">Utility Review</p>
+            <h1 class="page-title">Review: <strong>Interview_P002.mp4</strong></h1>
+            <div style="display:flex; gap:8px; margin-top:8px;">
+              <span class="tag tag-default">Blur</span>
+              <span class="tag tag-info">YOLOv11-Pose</span>
+              <span class="tag tag-warning"><i class="fas fa-clipboard-check"></i> Pending Review</span>
+            </div>
+          </div>
+          <div style="display:flex; gap:8px;">
+            <button class="btn btn-ghost btn-sm"><i class="fas fa-chevron-left"></i> Previous</button>
+            <button class="btn btn-ghost btn-sm">Next <i class="fas fa-chevron-right"></i></button>
+          </div>
+        </div>
+
+        <div class="review-layout">
+          <!-- Left: Video comparison -->
+          <div>
+            <div class="video-compare">
+              <div class="video-compare-header">
+                <span style="font-size:13px; font-weight:600;"><i class="fas fa-video" aria-hidden="true" style="margin-right:6px;"></i>Side-by-Side Comparison</span>
+                <div style="display:flex; gap:8px;">
+                  <button class="btn btn-ghost btn-sm">
+                    <i class="fas fa-columns"></i> Split
+                  </button>
+                  <button class="btn btn-ghost btn-sm">
+                    <i class="fas fa-layer-group"></i> Overlay
+                  </button>
+                  <button class="btn btn-ghost btn-sm">
+                    <i class="fas fa-exchange-alt"></i> Diff
+                  </button>
+                </div>
+              </div>
+              <div class="video-compare-body">
+                <div class="video-pane">
+                  <div class="video-pane-label">Original (Raw)</div>
+                  <div class="video-canvas">
+                    <i class="fas fa-circle-play"></i>
+                    <span class="video-overlay-badge">RAW</span>
+                  </div>
+                </div>
+                <div class="video-pane">
+                  <div class="video-pane-label">Masked (Blur) + Pose Overlay</div>
+                  <div class="video-canvas">
+                    <i class="fas fa-circle-play"></i>
+                    <span class="video-overlay-badge">BLUR + YOLOv11</span>
+                  </div>
+                </div>
+              </div>
+              <div class="video-controls">
+                <button title="Previous frame"><i class="fas fa-step-backward"></i></button>
+                <button title="Frame back"><i class="fas fa-chevron-left"></i></button>
+                <button title="Play" style="background:var(--carbon-text); color:#fff; width:36px; height:36px;">
+                  <i class="fas fa-play"></i>
+                </button>
+                <button title="Frame forward"><i class="fas fa-chevron-right"></i></button>
+                <button title="Next frame"><i class="fas fa-step-forward"></i></button>
+                <div class="scrubber">
+                  <div class="scrubber-fill"></div>
+                  <div class="scrubber-handle"></div>
+                </div>
+                <span class="video-time">02:55 / 08:21</span>
+              </div>
+            </div>
+
+            <!-- Flagged issues -->
+            <div class="decision-label" style="margin-top:20px;"><i class="fas fa-flag"></i> Flagged Issues</div>
+            <div class="issue-list">
+              <div class="issue-item">
+                <i class="fas fa-triangle-exclamation" style="color: var(--carbon-error);"></i>
+                <div>
+                  <div class="issue-text">
+                    <strong>Frame 2,340&ndash;2,412:</strong> Left wrist keypoint jumps 45px between frames.
+                    Likely tracking error from hand occlusion behind desk.
+                  </div>
+                </div>
+              </div>
+              <div class="issue-item warning">
+                <i class="fas fa-exclamation-circle" style="color: #735f00;"></i>
+                <div>
+                  <div class="issue-text">
+                    <strong>Frame 4,100&ndash;4,180:</strong> Person 2 partially out of frame.
+                    Right shoulder/elbow keypoints have low confidence (&lt;0.3).
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right: QA panel -->
+          <div class="qa-panel">
+            <div class="qa-panel-header">
+              <div style="font-size:14px; font-weight:600;"><i class="fas fa-microscope" style="margin-right:6px;"></i>Quality Assessment</div>
+              <div class="text-xs text-secondary" style="margin-top:2px;">Benchmark run: Feb 3, 2026 14:22</div>
+            </div>
+
+            <div class="qa-panel-body">
+              <!-- Overall score -->
+              <div class="score-card">
+                <div class="score-value pass">87%</div>
+                <div class="score-label"><i class="fas fa-star" aria-hidden="true"></i> Overall Quality Score</div>
+                <div class="score-threshold">
+                  Threshold: <strong>70%</strong> &middot;
+                  <span style="color: var(--carbon-success);"><i class="fas fa-circle-check"></i> PASS</span>
+                </div>
+              </div>
+
+              <!-- Metric breakdown -->
+              <div class="decision-label"><i class="fas fa-chart-line" aria-hidden="true"></i> Metric Breakdown</div>
+              <div class="metric-row">
+                <span class="metric-name"><i class="fas fa-bullseye" style="margin-right:6px; color:var(--carbon-text-secondary);"></i>PCK (t=0.2)</span>
+                <span class="metric-val" style="color: var(--carbon-success);">0.87</span>
+              </div>
+              <div class="metric-row">
+                <span class="metric-name"><i class="fas fa-ruler" style="margin-right:6px; color:var(--carbon-text-secondary);"></i>RMSE</span>
+                <span class="metric-val">11.24</span>
+              </div>
+              <div class="metric-row">
+                <span class="metric-name"><i class="fas fa-tachometer-alt" style="margin-right:6px; color:var(--carbon-text-secondary);"></i>Velocity</span>
+                <span class="metric-val">3.20 px/f</span>
+              </div>
+              <div class="metric-row">
+                <span class="metric-name"><i class="fas fa-forward" style="margin-right:6px; color:var(--carbon-text-secondary);"></i>Acceleration</span>
+                <span class="metric-val">4.52 px/f&sup2;</span>
+              </div>
+              <div class="metric-row">
+                <span class="metric-name"><i class="fas fa-wave-square" style="margin-right:6px; color:var(--carbon-text-secondary);"></i>Jerk</span>
+                <span class="metric-val">2.34 px/f&sup3;</span>
+              </div>
+              <div class="metric-row">
+                <span class="metric-name"><i class="fas fa-robot" style="margin-right:6px; color:var(--carbon-text-secondary);"></i>Estimator</span>
+                <span class="metric-val text-secondary" style="font-weight:400;">YOLOv11-L</span>
+              </div>
+              <div class="metric-row">
+                <span class="metric-name"><i class="fas fa-eye-slash" style="margin-right:6px; color:var(--carbon-text-secondary);"></i>Masking</span>
+                <span class="metric-val text-secondary" style="font-weight:400;">Blur</span>
+              </div>
+
+              <!-- Decision -->
+              <div class="decision-section">
+                <div class="decision-label"><i class="fas fa-gavel" aria-hidden="true"></i> Reviewer Decision</div>
+                <div class="decision-option selected" onclick="selectDecision(this)">
+                  <input type="radio" name="decision" checked>
+                  <div>
+                    <div class="decision-text" style="color: var(--carbon-success);">
+                      <i class="fas fa-circle-check"></i> Approve
+                    </div>
+                    <div class="decision-desc">Quality meets threshold. Ready for archiving.</div>
+                  </div>
+                </div>
+                <div class="decision-option" onclick="selectDecision(this)">
+                  <input type="radio" name="decision">
+                  <div>
+                    <div class="decision-text" style="color: #735f00;">
+                      <i class="fas fa-redo"></i> Re-mask
+                    </div>
+                    <div class="decision-desc">Quality insufficient. Return to MaskAnyone with different strategy.</div>
+                  </div>
+                </div>
+                <div class="decision-option" onclick="selectDecision(this)">
+                  <input type="radio" name="decision">
+                  <div>
+                    <div class="decision-text" style="color: var(--carbon-error);">
+                      <i class="fas fa-times-circle"></i> Reject
+                    </div>
+                    <div class="decision-desc">Video cannot be adequately masked. Exclude from dataset.</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Notes -->
+              <div class="decision-label" style="margin-top:20px;"><i class="fas fa-sticky-note" aria-hidden="true"></i> Reviewer Notes</div>
+              <textarea class="qa-notes" placeholder="Add reviewer notes (optional)...">Blur preserves gesture dynamics well. Minor tracking issue in frames 2340-2412 is acceptable for our use case (not analyzing hand gestures at that point).</textarea>
+            </div>
+
+            <div class="qa-panel-footer">
+              <button class="btn btn-success" style="flex:1;">
+                <i class="fas fa-check"></i> Submit Review
+              </button>
+              <button class="btn btn-ghost btn-sm">
+                <i class="fas fa-save"></i> Save Draft
+              </button>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script>
+    /* ── Decision selection + footer sync ── */
+    function selectDecision(el) {
+      document.querySelectorAll('.decision-option').forEach(d => {
+        d.classList.remove('selected');
+        d.querySelector('input').checked = false;
+      });
+      el.classList.add('selected');
+      el.querySelector('input').checked = true;
+
+      // Sync footer button with selected decision
+      const submitBtn = document.querySelector('.qa-panel-footer .btn-success, .qa-panel-footer .btn-primary, .qa-panel-footer .btn-danger');
+      if (!submitBtn) return;
+      const decisionText = el.querySelector('.decision-text').textContent.trim();
+
+      // Reset classes
+      submitBtn.className = 'btn';
+      submitBtn.style.flex = '1';
+
+      if (decisionText.includes('Approve')) {
+        submitBtn.classList.add('btn-success');
+        submitBtn.innerHTML = '<i class="fas fa-check"></i> Submit: Approve';
+      } else if (decisionText.includes('Re-mask')) {
+        submitBtn.classList.add('btn-primary');
+        submitBtn.innerHTML = '<i class="fas fa-redo"></i> Submit: Re-mask';
+        submitBtn.style.background = '#735f00';
+      } else if (decisionText.includes('Reject')) {
+        submitBtn.classList.add('btn-danger');
+        submitBtn.innerHTML = '<i class="fas fa-xmark"></i> Submit: Reject';
+      }
+    }
+
+    /* ── Scrubber interaction ── */
+    const totalFrames = 14958; // 8:21 at 29.97fps
+    const totalSeconds = 501;  // 8*60+21
+    let currentFrame = 5235;   // start at ~35%
+
+    function updateScrubber(pct) {
+      pct = Math.max(0, Math.min(1, pct));
+      currentFrame = Math.round(pct * totalFrames);
+      const fill = document.querySelector('.scrubber-fill');
+      const handle = document.querySelector('.scrubber-handle');
+      const timeDisplay = document.querySelector('.video-time');
+      if (fill) fill.style.width = (pct * 100) + '%';
+      if (handle) handle.style.left = (pct * 100) + '%';
+      if (timeDisplay) {
+        const currentSec = Math.round(pct * totalSeconds);
+        const curMin = Math.floor(currentSec / 60);
+        const curSec = currentSec % 60;
+        timeDisplay.textContent =
+          String(curMin).padStart(2, '0') + ':' + String(curSec).padStart(2, '0') +
+          ' / 08:21  [F' + currentFrame + ']';
+      }
+    }
+
+    const scrubber = document.querySelector('.scrubber');
+    if (scrubber) {
+      scrubber.addEventListener('click', function(e) {
+        const rect = scrubber.getBoundingClientRect();
+        const pct = (e.clientX - rect.left) / rect.width;
+        updateScrubber(pct);
+      });
+
+      let dragging = false;
+      scrubber.addEventListener('mousedown', function(e) {
+        dragging = true;
+        const rect = scrubber.getBoundingClientRect();
+        updateScrubber((e.clientX - rect.left) / rect.width);
+      });
+      document.addEventListener('mousemove', function(e) {
+        if (!dragging) return;
+        const rect = scrubber.getBoundingClientRect();
+        updateScrubber((e.clientX - rect.left) / rect.width);
+      });
+      document.addEventListener('mouseup', function() { dragging = false; });
+    }
+
+    /* ── Frame navigation buttons ── */
+    const controls = document.querySelectorAll('.video-controls button');
+    if (controls.length >= 5) {
+      // Previous frame (step backward)
+      controls[0].addEventListener('click', function() {
+        updateScrubber((currentFrame - 30) / totalFrames);
+      });
+      // Frame back
+      controls[1].addEventListener('click', function() {
+        updateScrubber((currentFrame - 1) / totalFrames);
+      });
+      // Play/pause toggle
+      let playing = false;
+      let playInterval = null;
+      controls[2].addEventListener('click', function() {
+        playing = !playing;
+        const icon = this.querySelector('i');
+        if (playing) {
+          icon.className = 'fas fa-pause';
+          playInterval = setInterval(function() {
+            if (currentFrame >= totalFrames) {
+              playing = false;
+              clearInterval(playInterval);
+              controls[2].querySelector('i').className = 'fas fa-play';
+              return;
+            }
+            updateScrubber((currentFrame + 1) / totalFrames);
+          }, 33);
+        } else {
+          icon.className = 'fas fa-play';
+          clearInterval(playInterval);
+        }
+      });
+      // Frame forward
+      controls[3].addEventListener('click', function() {
+        updateScrubber((currentFrame + 1) / totalFrames);
+      });
+      // Next frame (step forward)
+      controls[4].addEventListener('click', function() {
+        updateScrubber((currentFrame + 30) / totalFrames);
+      });
+    }
+
+    /* ── Score count-up animation ── */
+    (function animateScore() {
+      const scoreEl = document.querySelector('.score-value');
+      if (!scoreEl) return;
+      const target = 87;
+      let current = 0;
+      const duration = 1200; // ms
+      const startTime = performance.now();
+
+      function step(now) {
+        const elapsed = now - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        // Ease-out cubic
+        const eased = 1 - Math.pow(1 - progress, 3);
+        current = Math.round(eased * target);
+        scoreEl.textContent = current + '%';
+        if (progress < 1) {
+          requestAnimationFrame(step);
+        }
+      }
+      // Delay to let CSS scoreReveal animation start first
+      setTimeout(function() { requestAnimationFrame(step); }, 350);
+    })();
+
+    /* ── Keyboard shortcuts ── */
+    const tooltipEl = document.createElement('div');
+    tooltipEl.style.cssText =
+      'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);' +
+      'background:var(--carbon-text);color:#fff;padding:6px 16px;font-size:12px;' +
+      'font-family:"IBM Plex Mono",monospace;opacity:0;transition:opacity 0.2s;' +
+      'pointer-events:none;z-index:9999;';
+    document.body.appendChild(tooltipEl);
+
+    function showTooltip(msg) {
+      tooltipEl.textContent = msg;
+      tooltipEl.style.opacity = '1';
+      setTimeout(function() { tooltipEl.style.opacity = '0'; }, 1200);
+    }
+
+    document.addEventListener('keydown', function(e) {
+      // Don't capture if user is typing in textarea
+      if (e.target.tagName === 'TEXTAREA' || e.target.tagName === 'INPUT') return;
+
+      if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        updateScrubber((currentFrame - 1) / totalFrames);
+        showTooltip('\u2190 Frame ' + currentFrame);
+      } else if (e.key === 'ArrowRight') {
+        e.preventDefault();
+        updateScrubber((currentFrame + 1) / totalFrames);
+        showTooltip('\u2192 Frame ' + currentFrame);
+      } else if (e.key === ' ') {
+        e.preventDefault();
+        if (controls.length >= 5) {
+          controls[2].click();
+          const isPlaying = controls[2].querySelector('i').classList.contains('fa-pause');
+          showTooltip(isPlaying ? '\u25B6 Playing' : '\u23F8 Paused');
+        }
+      }
+    });
+
+    // Initialize frame display on load
+    updateScrubber(currentFrame / totalFrames);
+  </script>
+<script src="../demo.js"></script>
+</body>
+</html>

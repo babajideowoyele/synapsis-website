@@ -1,0 +1,170 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deep dive · Installation — SYNAPSIS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link rel="stylesheet" href="../../theme.css">
+    <script src="../../theme.js"></script>
+    <script>
+        tailwind.config = { theme: { extend: {
+            fontFamily: { 'sans': ['IBM Plex Sans', 'sans-serif'], 'mono': ['IBM Plex Mono', 'monospace'] },
+            colors: { 'carbon': {
+                'bg': 'var(--color-bg)', 'bg-hover': 'var(--color-bg-hover)',
+                'border': 'var(--color-border)', 'text': 'var(--color-text)',
+                'text-secondary': 'var(--color-text-secondary)', 'interactive': '#0f62fe',
+            }}
+        }}}
+    </script>
+    <style>
+        body { font-family: 'IBM Plex Sans', sans-serif; background-color: var(--color-bg); color: var(--color-text); line-height: 1.6; }
+        .accent-bar { height: 3px; background: var(--color-accent); width: 48px; margin-bottom: 14px; }
+        .badge { display: inline-block; padding: 3px 10px; font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: .04em; text-transform: uppercase; }
+        .badge-draft { background: var(--color-bg-hover); color: var(--color-text-secondary); border: 1px solid var(--color-border); }
+        .badge-deepdive { background: var(--color-bg-hover); color: var(--color-text); border: 1px solid var(--color-border); }
+        .video-placeholder { background: var(--color-bg-hover); border: 1px solid var(--color-border); aspect-ratio: 16 / 9; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 12px; color: var(--color-text-secondary); }
+        .video-placeholder i { font-size: 48px; }
+        .transcript h3 { font-size: 1.25rem; font-weight: 600; margin-top: 2.5rem; margin-bottom: 0.75rem; }
+        .transcript p { margin-bottom: 1.25rem; color: var(--color-text); }
+        .transcript p.lede { font-size: 1.1rem; }
+        .transcript strong { color: var(--color-text); font-weight: 600; }
+        .transcript blockquote { border-left: 3px solid var(--color-accent); padding-left: 1rem; margin: 1.5rem 0; color: var(--color-text-secondary); font-style: italic; }
+        .transcript code { font-family: 'IBM Plex Mono', monospace; font-size: .9em; background: var(--color-bg-hover); padding: 2px 6px; }
+        .transcript pre { font-family: 'IBM Plex Mono', monospace; font-size: .85em; background: var(--color-bg-hover); padding: 12px 16px; border-left: 3px solid var(--color-text-secondary); margin: 1rem 0; overflow-x: auto; }
+        .meta-row { font-size: 13px; color: var(--color-text-secondary); font-family: 'IBM Plex Mono', monospace; }
+        .meta-row a { color: var(--color-text); text-decoration: underline; text-underline-offset: 3px; }
+        .sidebar-section { border: 1px solid var(--color-border); padding: 18px 20px; margin-bottom: 16px; }
+        .sidebar-section h4 { font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--color-text-secondary); margin-bottom: 10px; }
+        .sidebar-section ul { list-style: none; padding: 0; margin: 0; font-size: 14px; }
+        .sidebar-section li { padding: 6px 0; border-bottom: 1px solid var(--color-border); }
+        .sidebar-section li:last-child { border-bottom: none; }
+        .sidebar-section a { color: var(--color-text); text-decoration: none; }
+        .sidebar-section a:hover { text-decoration: underline; }
+        .nav-pager { display: flex; justify-content: space-between; gap: 24px; margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--color-border); }
+        .nav-pager a { flex: 1; padding: 18px 22px; border: 1px solid var(--color-border); text-decoration: none; color: var(--color-text); transition: all .15s; }
+        .nav-pager a:hover { border-color: var(--color-text); }
+        .nav-pager .label { font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: .04em; text-transform: uppercase; color: var(--color-text-secondary); margin-bottom: 4px; display: block; }
+        .nav-pager .title { font-weight: 600; }
+        .nav-pager .next { text-align: right; }
+    </style>
+</head>
+<body>
+    <header class="border-b border-carbon-border sticky top-0 z-50" style="background: var(--color-bg);">
+        <div class="container mx-auto max-w-5xl px-6 py-4 flex items-center justify-between">
+            <a href="../../index.html" class="flex items-center gap-2 text-xl font-semibold tracking-tight"><span>SYNAPSIS</span></a>
+            <nav class="hidden md:flex gap-6">
+                <a href="../../index.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Home</a>
+                <a href="../../platform.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Platform</a>
+                <a href="../../training.html" class="text-sm font-medium border-b-2 border-carbon-text pb-1">Training</a>
+                <a href="../../resources.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Resources</a>
+                <a href="../../network.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Network</a>
+                <a href="../../press.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Press</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container mx-auto max-w-5xl px-6 py-12">
+        <div class="meta-row mb-6"><a href="index.html">Tutorials</a> &nbsp;/&nbsp; <span>Deep dive · Installation</span></div>
+        <div class="flex items-center gap-3 mb-4">
+            <span class="badge badge-deepdive">Deep dive</span>
+            <span class="badge badge-draft">Script drafted</span>
+            <span class="meta-row"><i class="fa fa-clock mr-1"></i> ~5 min</span>
+            <span class="meta-row">Companion to <a href="02-maskanyone.html">02 · MaskAnyone</a></span>
+        </div>
+        <span class="accent-bar"></span>
+        <h1 class="text-4xl font-semibold mb-4 leading-tight">Installation &amp; setup</h1>
+        <p class="text-lg text-carbon-text-secondary max-w-3xl">
+            Docker, GPU support, starting the MaskAnyone stack, and recognising a healthy install.
+        </p>
+
+        <div class="video-placeholder mt-10">
+            <i class="fa fa-circle-play"></i>
+            <div class="text-sm font-mono uppercase tracking-widest">Video coming soon</div>
+            <div class="text-xs">Script drafted · Recording scheduled in batch 2 production (≈ 2027)</div>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-12 mt-12">
+            <article class="md:col-span-2 transcript">
+                <h2 class="text-2xl font-semibold mb-2">Learning goal</h2>
+                <p class="lede">After watching, you can install Docker, start the MaskAnyone stack, and reach the web interface on your own machine. You know how to recognise a successful install and where to look when things break.</p>
+
+                <h2 class="text-2xl font-semibold mt-12 mb-2">Transcript</h2>
+
+                <h3>Cold open</h3>
+                <p>Five minutes from now, you'll have MaskAnyone running on your own machine. Let's go.</p>
+
+                <h3>Check your hardware</h3>
+                <p>Two checkpoints before you start. <strong>Minimum</strong>: 16 GB RAM, modern multi-core CPU, 50 GB free disk. <strong>Recommended for serious work</strong>: 32 GB RAM, an NVIDIA GPU with 8 GB or more of VRAM, an SSD. CPU-only works — it's just slow.</p>
+                <p>No GPU at home? You have options. Cloud compute by the hour. Your university's HPC. Or just team up with someone who has the hardware. Later tutorial.</p>
+
+                <h3>Install Docker</h3>
+                <p>Step one — install Docker Desktop. Go to <code>docker.com/products/docker-desktop</code>, download for your operating system, run the installer.</p>
+                <p>On Windows, enable WSL 2 when prompted, then restart. On Mac, drag Docker into Applications and grant the permissions it asks for. On Linux, install via your package manager.</p>
+                <p>Verify with the version check and a test container:</p>
+                <pre>docker --version
+docker run hello-world</pre>
+                <p>If you see "Hello from Docker", you're done with step one.</p>
+
+                <h3>GPU support — optional</h3>
+                <p>If you don't have an NVIDIA GPU, skip this section. Everyone else, this is where you wire your GPU into Docker.</p>
+                <p>On Linux, four commands install the NVIDIA Container Toolkit and configure Docker to use it. On Windows with WSL 2, GPU access is automatic if your NVIDIA drivers are current.</p>
+                <pre>docker run --rm --gpus all nvidia/cuda:11.0-base nvidia-smi</pre>
+                <p>If that command returns a GPU table, you're set.</p>
+
+                <h3>Start MaskAnyone</h3>
+                <p>Step two — clone the infrastructure repo. One git command, one <code>cd</code>, one <code>docker-compose up -d</code>. That's it.</p>
+                <pre>git clone https://github.com/MaskAnyone/MaskAnyoneProdInfrastructure.git
+cd MaskAnyoneProdInfrastructure
+docker-compose up -d</pre>
+                <p><strong>Heads-up</strong>: first start downloads roughly 15 GB of machine-learning models. Plan for 10 to 30 minutes depending on your internet. After this, future starts take seconds.</p>
+                <p>Once it's done, <code>docker-compose ps</code> should show five containers up and healthy: frontend, backend, sam2, openpose, db. If any say "restarting" or "exited", you have a problem — see the <a href="deepdive-troubleshooting.html">troubleshooting deep-dive</a>.</p>
+
+                <h3>Open the interface</h3>
+                <p>Open <code>localhost:8080</code> in your browser. You should see the MaskAnyone dashboard. Upload area in the middle, project list below. <strong>You're done.</strong></p>
+
+                <h3>Recap</h3>
+                <p>Three things to remember. <strong>One</strong>: Docker is the foundation — install it first, run hello-world, prove it works. <strong>Two</strong>: <code>docker-compose up -d</code> from the MaskAnyone infrastructure repo brings the whole stack up. <strong>Three</strong>: first run is slow, every run after is fast.</p>
+                <blockquote>If anything failed — port collision, memory error, GPU not detected — the <a href="deepdive-troubleshooting.html">troubleshooting deep-dive</a> walks through every common installation problem we've seen.</blockquote>
+            </article>
+
+            <aside>
+                <div class="sidebar-section">
+                    <h4>Details</h4>
+                    <ul>
+                        <li><span class="meta-row">Duration target</span><br>~5 min</li>
+                        <li><span class="meta-row">Audience</span><br>Basic command-line comfort</li>
+                        <li><span class="meta-row">Prereqs</span><br><a href="01-what-is-masking.html">01 · Concepts</a></li>
+                    </ul>
+                </div>
+                <div class="sidebar-section">
+                    <h4>Companion to</h4>
+                    <ul>
+                        <li><a href="02-maskanyone.html">→ 02 · MaskAnyone</a></li>
+                    </ul>
+                </div>
+                <div class="sidebar-section">
+                    <h4>Related deep dives</h4>
+                    <ul>
+                        <li><a href="deepdive-first-masking-job.html">→ Your first masking job</a></li>
+                        <li><a href="deepdive-troubleshooting.html">→ When something goes wrong</a></li>
+                    </ul>
+                </div>
+                <div class="sidebar-section">
+                    <h4>Source</h4>
+                    <ul>
+                        <li><a href="../../../manuscripts/temp_maskanything/tutorial_maskanything.pdf"><i class="fa fa-file-pdf mr-2"></i>tutorial §5.1, §5.2</a></li>
+                    </ul>
+                </div>
+            </aside>
+        </div>
+
+        <nav class="nav-pager">
+            <a href="02-maskanyone.html"><span class="label">↑ Pipeline page</span><span class="title">02 · MaskAnyone</span></a>
+            <a href="deepdive-first-masking-job.html" class="next"><span class="label">Next deep dive →</span><span class="title">Your first masking job</span></a>
+        </nav>
+    </main>
+</body>
+</html>

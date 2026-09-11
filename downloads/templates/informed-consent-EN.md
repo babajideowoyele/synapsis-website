@@ -39,7 +39,7 @@ Your audiovisual data will be processed using the SYNAPSIS platform (https://syn
 
 ### Face De-identification
 - [ ] **Face blurring**: Faces will be blurred to prevent identification
-- [ ] **Face masking**: Faces will be replaced with synthetic faces while preserving expressions
+- [ ] **Face swapping**: Faces will be replaced with synthetic faces while preserving expressions
 - [ ] **Pixelation**: Facial regions will be pixelated
 - [ ] **Other**: [specify method]
 

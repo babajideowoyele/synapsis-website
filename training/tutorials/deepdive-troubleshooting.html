@@ -1,0 +1,192 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deep dive · Troubleshooting — SYNAPSIS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link rel="stylesheet" href="../../theme.css">
+    <script src="../../theme.js"></script>
+    <script>
+        tailwind.config = { theme: { extend: {
+            fontFamily: { 'sans': ['IBM Plex Sans', 'sans-serif'], 'mono': ['IBM Plex Mono', 'monospace'] },
+            colors: { 'carbon': {
+                'bg': 'var(--color-bg)', 'bg-hover': 'var(--color-bg-hover)',
+                'border': 'var(--color-border)', 'text': 'var(--color-text)',
+                'text-secondary': 'var(--color-text-secondary)', 'interactive': '#0f62fe',
+            }}
+        }}}
+    </script>
+    <style>
+        body { font-family: 'IBM Plex Sans', sans-serif; background-color: var(--color-bg); color: var(--color-text); line-height: 1.6; }
+        .accent-bar { height: 3px; background: var(--color-accent); width: 48px; margin-bottom: 14px; }
+        .badge { display: inline-block; padding: 3px 10px; font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: .04em; text-transform: uppercase; }
+        .badge-draft { background: var(--color-bg-hover); color: var(--color-text-secondary); border: 1px solid var(--color-border); }
+        .badge-deepdive { background: var(--color-bg-hover); color: var(--color-text); border: 1px solid var(--color-border); }
+        .video-placeholder { background: var(--color-bg-hover); border: 1px solid var(--color-border); aspect-ratio: 16 / 9; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 12px; color: var(--color-text-secondary); }
+        .video-placeholder i { font-size: 48px; }
+        .transcript h3 { font-size: 1.25rem; font-weight: 600; margin-top: 2.5rem; margin-bottom: 0.75rem; }
+        .transcript p { margin-bottom: 1.25rem; color: var(--color-text); }
+        .transcript p.lede { font-size: 1.1rem; }
+        .transcript strong { color: var(--color-text); font-weight: 600; }
+        .transcript blockquote { border-left: 3px solid var(--color-accent); padding-left: 1rem; margin: 1.5rem 0; color: var(--color-text-secondary); font-style: italic; }
+        .transcript code { font-family: 'IBM Plex Mono', monospace; font-size: .9em; background: var(--color-bg-hover); padding: 2px 6px; }
+        .transcript pre { font-family: 'IBM Plex Mono', monospace; font-size: .85em; background: var(--color-bg-hover); padding: 12px 16px; border-left: 3px solid var(--color-text-secondary); margin: 1rem 0; overflow-x: auto; }
+        .meta-row { font-size: 13px; color: var(--color-text-secondary); font-family: 'IBM Plex Mono', monospace; }
+        .meta-row a { color: var(--color-text); text-decoration: underline; text-underline-offset: 3px; }
+        .sidebar-section { border: 1px solid var(--color-border); padding: 18px 20px; margin-bottom: 16px; }
+        .sidebar-section h4 { font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--color-text-secondary); margin-bottom: 10px; }
+        .sidebar-section ul { list-style: none; padding: 0; margin: 0; font-size: 14px; }
+        .sidebar-section li { padding: 6px 0; border-bottom: 1px solid var(--color-border); }
+        .sidebar-section li:last-child { border-bottom: none; }
+        .sidebar-section a { color: var(--color-text); text-decoration: none; }
+        .sidebar-section a:hover { text-decoration: underline; }
+        .nav-pager { display: flex; justify-content: space-between; gap: 24px; margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--color-border); }
+        .nav-pager a { flex: 1; padding: 18px 22px; border: 1px solid var(--color-border); text-decoration: none; color: var(--color-text); transition: all .15s; }
+        .nav-pager a:hover { border-color: var(--color-text); }
+        .nav-pager .label { font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: .04em; text-transform: uppercase; color: var(--color-text-secondary); margin-bottom: 4px; display: block; }
+        .nav-pager .title { font-weight: 600; }
+        .nav-pager .next { text-align: right; }
+        .toc { background: var(--color-bg-hover); border: 1px solid var(--color-border); padding: 16px 20px; margin: 1rem 0 2rem; }
+        .toc h4 { font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--color-text-secondary); margin-bottom: 10px; }
+        .toc ul { list-style: none; padding: 0; margin: 0; }
+        .toc li { padding: 4px 0; font-size: 14px; }
+        .toc a { color: var(--color-text); text-decoration: none; }
+        .toc a:hover { text-decoration: underline; }
+        .toc .num { display: inline-block; min-width: 22px; font-family: 'IBM Plex Mono', monospace; color: var(--color-text-secondary); }
+    </style>
+</head>
+<body>
+    <header class="border-b border-carbon-border sticky top-0 z-50" style="background: var(--color-bg);">
+        <div class="container mx-auto max-w-5xl px-6 py-4 flex items-center justify-between">
+            <a href="../../index.html" class="flex items-center gap-2 text-xl font-semibold tracking-tight"><span>SYNAPSIS</span></a>
+            <nav class="hidden md:flex gap-6">
+                <a href="../../index.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Home</a>
+                <a href="../../platform.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Platform</a>
+                <a href="../../training.html" class="text-sm font-medium border-b-2 border-carbon-text pb-1">Training</a>
+                <a href="../../resources.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Resources</a>
+                <a href="../../network.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Network</a>
+                <a href="../../press.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Press</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container mx-auto max-w-5xl px-6 py-12">
+        <div class="meta-row mb-6"><a href="index.html">Tutorials</a> &nbsp;/&nbsp; <span>Deep dive · Troubleshooting</span></div>
+        <div class="flex items-center gap-3 mb-4">
+            <span class="badge badge-deepdive">Deep dive</span>
+            <span class="badge badge-draft">Script drafted</span>
+            <span class="meta-row"><i class="fa fa-clock mr-1"></i> ~5 min</span>
+            <span class="meta-row">Companion to <a href="02-maskanyone.html">02 · MaskAnyone</a></span>
+        </div>
+        <span class="accent-bar"></span>
+        <h1 class="text-4xl font-semibold mb-4 leading-tight">When something goes wrong</h1>
+        <p class="text-lg text-carbon-text-secondary max-w-3xl">
+            Six common MaskAnyone failure modes — install errors, container crashes, memory limits, detection failures, tracking loss, missing GPU — diagnosed and fixed.
+        </p>
+
+        <div class="video-placeholder mt-10">
+            <i class="fa fa-circle-play"></i>
+            <div class="text-sm font-mono uppercase tracking-widest">Video coming soon</div>
+            <div class="text-xs">Script drafted · Recording scheduled in batch 2 production (≈ 2027)</div>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-12 mt-12">
+            <article class="md:col-span-2 transcript">
+                <h2 class="text-2xl font-semibold mb-2">Learning goal</h2>
+                <p class="lede">After watching, you can diagnose the six most common MaskAnyone failure modes — install errors, container crashes, memory limits, detection failures, tracking loss, segmentation glitches — and apply the right fix without needing developer help.</p>
+
+                <div class="toc">
+                    <h4>Jump to a symptom</h4>
+                    <ul>
+                        <li><span class="num">1.</span> <a href="#daemon">"Cannot connect to Docker daemon"</a></li>
+                        <li><span class="num">2.</span> <a href="#port">"Port already in use"</a></li>
+                        <li><span class="num">3.</span> <a href="#restart">Containers keep restarting</a></li>
+                        <li><span class="num">4.</span> <a href="#oom">"Out of memory" during processing</a></li>
+                        <li><span class="num">5.</span> <a href="#detection">Detection / tracking failures</a></li>
+                        <li><span class="num">6.</span> <a href="#segmentation">Sloppy mask boundaries</a></li>
+                        <li><span class="num">7.</span> <a href="#gpu">GPU isn't being used</a></li>
+                    </ul>
+                </div>
+
+                <h2 class="text-2xl font-semibold mt-12 mb-2">Transcript</h2>
+
+                <h3>Cold open</h3>
+                <p>Something broke. Container won't start, mask jumps off the body, GPU isn't being used. <strong>Six fixes, five minutes.</strong> Find your symptom, jump to the timecode, you're back in business.</p>
+
+                <h3 id="daemon">1. "Cannot connect to Docker daemon"</h3>
+                <p>If you see this error, Docker isn't running.</p>
+                <p>On Mac and Windows: launch Docker Desktop. Wait 30 seconds for it to come up — the whale icon in the menu bar should stop animating. On Linux:</p>
+                <pre>sudo systemctl start docker</pre>
+                <p>If it still won't connect on Linux, check <code>systemctl status docker</code> to see what the service is complaining about.</p>
+
+                <h3 id="port">2. "Port already in use"</h3>
+                <p>If you see "address already in use" on port 8080 or 443, something else is using that port.</p>
+                <p>Two fixes. Either stop whatever's already on that port — <code>lsof -i :8080</code> will tell you what — or edit <code>docker-compose.yml</code> and map MaskAnyone to a different port like 8081.</p>
+
+                <h3 id="restart">3. Containers keep restarting</h3>
+                <p>If a container keeps cycling — restarting, exiting, restarting again — look at its logs. That's where the real error is.</p>
+                <pre>docker-compose logs maskanyone-backend</pre>
+                <p>Nine times out of ten on Mac or Windows: Docker doesn't have enough RAM. Open Docker Desktop → Settings → Resources → Memory. Bump it to at least 8 GB. 16 GB if you can.</p>
+
+                <h3 id="oom">4. "Out of memory" during processing</h3>
+                <p>Different from the install-time OOM. This one hits mid-job, usually on a long high-resolution video.</p>
+                <p>Three fixes. <strong>One</strong>: split the video into shorter segments and process them separately. <strong>Two</strong>: re-encode to a lower resolution if your analysis tolerates it. <strong>Three</strong>: move that specific video to a beefier machine — cloud GPU by the hour is roughly the cost of a coffee.</p>
+
+                <h3 id="detection">5. Detection / tracking failures</h3>
+                <p><strong>Detection failure</strong>: the model didn't notice someone in the frame. Common with small distant figures, dim lighting, weird camera angles. Add them by hand. Click on the person in their first visible frame — the manual prompt becomes the seed for tracking the rest of the video.</p>
+                <p><strong>Tracking loss / identity swap</strong>: the model loses someone behind an obstacle and reassigns the wrong colour when they reappear. Re-identify them in the frame they reappear. Click; the colour locks back on. Then re-process only the affected segment.</p>
+
+                <h3 id="segmentation">6. Sloppy mask boundaries</h3>
+                <p><strong>Segmentation glitch</strong>: the mask boundary is wrong — chops off a hand, leaks past the body, misses a piece of clothing. Click on the boundary and drag. Then re-process. If a specific <em>type</em> of glitch keeps recurring — same kind of clothing, same camera angle — that's a sign your source video quality is the bottleneck, not the model.</p>
+
+                <h3 id="gpu">7. GPU isn't being used</h3>
+                <p>If your processing speed is way below what your hardware can do, you probably installed MaskAnyone but the GPU isn't wired into Docker.</p>
+                <p>Test it:</p>
+                <pre>docker run --rm --gpus all nvidia/cuda:11.0-base nvidia-smi</pre>
+                <p>If this command fails, your container can't see the GPU. Go back to the <a href="deepdive-installation.html">installation deep dive</a>, section on the NVIDIA Container Toolkit.</p>
+
+                <h3>Recap</h3>
+                <p>Six symptoms. Docker daemon — start Docker. Port collision — stop the conflict or remap. Container restart loop — read the logs, probably memory. Mid-job OOM — segment, downsize, or move to bigger hardware. Detection or tracking failure — click to fix in the editor. GPU missing — verify with nvidia-smi inside Docker.</p>
+                <blockquote>If your problem isn't one of these six, open an issue on the MaskAnyone GitHub repo. Paste the relevant chunk of <code>docker-compose logs</code> — that's the fastest way to get help.</blockquote>
+            </article>
+
+            <aside>
+                <div class="sidebar-section">
+                    <h4>Details</h4>
+                    <ul>
+                        <li><span class="meta-row">Duration target</span><br>~5 min</li>
+                        <li><span class="meta-row">Audience</span><br>Anyone whose stack just broke</li>
+                        <li><span class="meta-row">Prereqs</span><br><a href="deepdive-installation.html">Installation</a><br><a href="deepdive-first-masking-job.html">First masking job</a></li>
+                    </ul>
+                </div>
+                <div class="sidebar-section">
+                    <h4>Companion to</h4>
+                    <ul>
+                        <li><a href="02-maskanyone.html">→ 02 · MaskAnyone</a></li>
+                    </ul>
+                </div>
+                <div class="sidebar-section">
+                    <h4>Related</h4>
+                    <ul>
+                        <li><a href="deepdive-quality-check.html">→ Quality check</a></li>
+                    </ul>
+                </div>
+                <div class="sidebar-section">
+                    <h4>Source</h4>
+                    <ul>
+                        <li><a href="../../../manuscripts/temp_maskanything/tutorial_maskanything.pdf"><i class="fa fa-file-pdf mr-2"></i>tutorial §5.2, §7</a></li>
+                    </ul>
+                </div>
+            </aside>
+        </div>
+
+        <nav class="nav-pager">
+            <a href="deepdive-quality-check.html"><span class="label">← Previous deep dive</span><span class="title">Quality check</span></a>
+            <a href="index.html" class="next"><span class="label">End of deep dives →</span><span class="title">All tutorials</span></a>
+        </nav>
+    </main>
+</body>
+</html>

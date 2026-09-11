@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>The Masking Lab Deck — SYNAPSIS</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Serif:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="stylesheet" href="../../../theme.css">
+<script src="../../../theme.js"></script>
+<style>
+  body {
+    font-family: 'IBM Plex Sans', sans-serif;
+    background-color: var(--color-bg);
+    color: var(--color-text);
+  }
+  .label-mono {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--color-text-secondary);
+  }
+  .accent-bar { height: 3px; background: var(--color-accent); }
+
+  /* Suit palette tokens */
+  :root {
+    --suit-past:    #8a6a3a;   /* warm sepia */
+    --suit-present: var(--color-text);
+    --suit-future:  #0f62fe;   /* carbon blue */
+  }
+  html.dark {
+    --suit-past:    #d4a86a;
+    --suit-present: var(--color-text);
+    --suit-future:  #4589ff;
+  }
+
+  /* Filter bar */
+  .filter-btn {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 6px 12px;
+    border: 1px solid var(--color-border);
+    color: var(--color-text-secondary);
+    background: var(--color-bg);
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .filter-btn:hover { color: var(--color-text); border-color: var(--color-text); }
+  .filter-btn.active {
+    background: var(--color-text);
+    color: var(--color-inverse);
+    border-color: var(--color-text);
+  }
+
+  /* Card */
+  .card-deck {
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    aspect-ratio: 2.5 / 3.5;       /* playing-card ratio */
+    display: grid;
+    grid-template-rows: 36px 1fr auto auto 28px;
+    padding: 14px 14px 10px;
+    position: relative;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+  }
+  .card-deck:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 32px rgba(0,0,0,0.12);
+    border-color: var(--color-text);
+  }
+
+  /* Suit accent bar at the very top */
+  .card-deck::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+  }
+  .card-deck.past::before    { background: var(--suit-past); }
+  .card-deck.present::before { background: var(--suit-present); }
+  .card-deck.future::before  { background: var(--suit-future); }
+
+  .card-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    color: var(--color-text-secondary);
+  }
+  .card-num { font-family: 'IBM Plex Serif', serif; font-weight: 500; font-size: 13px; letter-spacing: 0; color: var(--color-text); }
+  .card-type-icon {
+    width: 22px; height: 22px;
+    border: 1px solid var(--color-border);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    color: var(--color-text-secondary);
+  }
+
+  .card-illustration {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px dashed var(--color-border);
+    background: var(--color-bg-hover);
+    margin: 8px 0 12px;
+    position: relative;
+    overflow: hidden;
+  }
+  .card-illustration .placeholder-icon {
+    font-size: 44px;
+    color: var(--color-text-secondary);
+    opacity: 0.7;
+  }
+  .card-illustration .placeholder-label {
+    position: absolute;
+    bottom: 4px;
+    left: 6px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 0.1em;
+    color: var(--color-text-secondary);
+    opacity: 0.6;
+  }
+
+  .card-name {
+    font-family: 'IBM Plex Serif', serif;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 1.2;
+    text-align: center;
+    margin-bottom: 6px;
+    color: var(--color-text);
+  }
+  .card-reading {
+    font-size: 11px;
+    line-height: 1.45;
+    color: var(--color-text-secondary);
+    text-align: center;
+    padding: 0 2px;
+  }
+
+  .card-foot {
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    padding-top: 8px;
+    border-top: 1px solid var(--color-border);
+    margin-top: 8px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-text-secondary);
+  }
+  .card-foot .suit-tag.past    { color: var(--suit-past); }
+  .card-foot .suit-tag.present { color: var(--suit-present); }
+  .card-foot .suit-tag.future  { color: var(--suit-future); }
+
+  /* Modal — enlarged card view */
+  .modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 50;
+    padding: 24px;
+  }
+  .modal-backdrop.open { display: flex; }
+  .modal-card {
+    width: min(100%, 360px);
+    aspect-ratio: 2.5 / 3.5;
+    background: var(--color-bg);
+  }
+
+  /* Print: card-cutting layout, 4 cards per A4 page */
+  @media print {
+    body { background: white; }
+    header, .filter-bar, footer, .stealth-banner, .intro, .image-cue, #resources { display: none !important; }
+    .deck-grid {
+      display: grid !important;
+      grid-template-columns: repeat(3, 63mm) !important;
+      gap: 4mm !important;
+      padding: 8mm !important;
+    }
+    .card-deck {
+      width: 63mm;
+      aspect-ratio: 2.5 / 3.5;
+      page-break-inside: avoid;
+      box-shadow: none !important;
+      border: 1px solid #000 !important;
+    }
+    .card-deck:hover { transform: none; box-shadow: none; }
+  }
+
+  .stealth-banner {
+    background: var(--color-bg-hover);
+    border-bottom: 1px solid var(--color-border);
+    font-size: 11px;
+    color: var(--color-text-secondary);
+  }
+</style>
+</head>
+<body class="min-h-screen">
+
+<!-- Stealth banner -->
+<div class="stealth-banner">
+  <div class="container mx-auto px-6 py-2 flex justify-between items-center">
+    <span><i class="fas fa-eye-slash mr-2"></i> Private preview — illustrations forthcoming</span>
+    <button onclick="toggleTheme()" class="theme-toggle" title="Toggle dark mode" style="width:24px;height:24px;">
+      <i class="fas fa-moon" style="font-size:11px;"></i><i class="fas fa-sun" style="font-size:11px;"></i>
+    </button>
+  </div>
+</div>
+
+<!-- Header -->
+<header class="border-b border-carbon-border bg-white">
+  <div class="accent-bar"></div>
+  <div class="container mx-auto px-6 py-5">
+    <div class="flex justify-between items-center">
+      <a href="../" class="flex items-center gap-2 text-lg font-semibold tracking-tight">
+        <img src="../../../logo-mark.svg" alt="" class="h-6 w-auto">
+        SYNAPSIS
+      </a>
+      <span class="label-mono">Masking Lab · The Deck</span>
+    </div>
+  </div>
+</header>
+
+<!-- Intro -->
+<section class="container mx-auto px-6 py-12 max-w-4xl intro">
+  <span class="label-mono">SYNAPSIS · WP2 · WORKING DECK</span>
+  <h1 class="text-4xl md:text-5xl font-semibold tracking-tight mt-3 mb-5" style="font-family:'IBM Plex Serif',serif;">The Masking Lab Deck</h1>
+  <p class="text-lg text-carbon-text-secondary leading-relaxed mb-4">
+    Thirty cards across three suits — <span style="color:var(--suit-past); font-weight:500;">Past</span>, <span style="font-weight:500;">Present</span>, <span style="color:var(--suit-future); font-weight:500;">Future</span>. Within each suit, a mix of <strong class="text-carbon-text">metaphors</strong> (image-driven framings), <strong class="text-carbon-text">questions</strong> (open prompts), and <strong class="text-carbon-text">keywords</strong> (single concepts).
+  </p>
+  <p class="text-sm text-carbon-text-secondary leading-relaxed">
+    <strong class="text-carbon-text">In the room:</strong> participants pull one Past, one Present, one Future card at the start of each parallel session — the cards seed the 4-quadrant grid. Metaphors point to paradoxes; questions surface challenges; keywords name opportunities.
+  </p>
+  <p class="text-sm text-carbon-text-secondary leading-relaxed mt-3">
+    <strong class="text-carbon-text">For the artist:</strong> the dashed-border area on each card is the illustration slot. A placeholder pictogram sits there for now; an *image cue* line in the source markdown suggests a visual hook. See <a href="../../../../card-decks/masking-lab-deck/deck-cards.md" class="underline">deck-cards.md</a> for the working copy.
+  </p>
+</section>
+
+<!-- Filter bar -->
+<section class="container mx-auto px-6 mb-10 filter-bar">
+  <div class="flex flex-wrap gap-3 items-center">
+    <span class="label-mono mr-2">Suit</span>
+    <button class="filter-btn active" data-filter-suit="all">All</button>
+    <button class="filter-btn" data-filter-suit="past">Past</button>
+    <button class="filter-btn" data-filter-suit="present">Present</button>
+    <button class="filter-btn" data-filter-suit="future">Future</button>
+    <span class="label-mono ml-6 mr-2">Type</span>
+    <button class="filter-btn active" data-filter-type="all">All</button>
+    <button class="filter-btn" data-filter-type="metaphor">Metaphor</button>
+    <button class="filter-btn" data-filter-type="question">Question</button>
+    <button class="filter-btn" data-filter-type="keyword">Keyword</button>
+    <span class="ml-auto label-mono">
+      <i class="fas fa-print mr-1"></i>
+      <a href="javascript:window.print()" class="hover:text-carbon-text">Print proof sheet</a>
+    </span>
+  </div>
+</section>
+
+<!-- Deck -->
+<main class="container mx-auto px-6 pb-20">
+  <div class="deck-grid grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5" id="deck"></div>
+</main>
+
+<!-- Modal -->
+<div class="modal-backdrop" id="modal" onclick="closeModal(event)">
+  <div class="modal-card" id="modal-card-holder"></div>
+</div>
+
+<!-- Resources & Links -->
+<section class="container mx-auto px-6 pb-20 max-w-5xl" id="resources">
+  <div class="accent-bar mb-8" style="max-width:48px;"></div>
+  <span class="label-mono">Resources &amp; Links</span>
+  <h2 class="text-2xl md:text-3xl font-semibold tracking-tight mt-2 mb-2" style="font-family:'IBM Plex Serif',serif;">Take it further</h2>
+  <p class="text-sm text-carbon-text-secondary leading-relaxed mb-8 max-w-2xl">
+    Standards and tools that sit around the Masking Lab — for archiving and good practice, and the SYNAPSIS toolchain for working with sensitive audiovisual data.
+  </p>
+
+  <div class="mb-8">
+    <span class="label-mono">Archiving, standards &amp; good practice</span>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-3">
+      <a href="https://dans.knaw.nl/en/" target="_blank" rel="noopener" class="flex items-start gap-3 p-4 border border-carbon-border hover:border-carbon-text transition-colors">
+        <i class="fas fa-database mt-1 text-carbon-text-secondary"></i>
+        <div>
+          <div class="font-medium text-carbon-text">DANS <i class="fas fa-arrow-up-right-from-square text-[10px] opacity-50 ml-0.5"></i></div>
+          <div class="text-xs text-carbon-text-secondary leading-snug mt-1">Long-term archiving &amp; FAIR data deposit for the social sciences and humanities (KNAW).</div>
+        </div>
+      </a>
+      <a href="https://scienceeurope.org/our-resources/practical-guide-to-the-international-alignment-of-research-data-management/" target="_blank" rel="noopener" class="flex items-start gap-3 p-4 border border-carbon-border hover:border-carbon-text transition-colors">
+        <i class="fas fa-file-lines mt-1 text-carbon-text-secondary"></i>
+        <div>
+          <div class="font-medium text-carbon-text">DMP templates <i class="fas fa-arrow-up-right-from-square text-[10px] opacity-50 ml-0.5"></i></div>
+          <div class="text-xs text-carbon-text-secondary leading-snug mt-1">Science Europe core requirements &amp; adaptable data-management-plan templates.</div>
+        </div>
+      </a>
+      <a href="https://book.the-turing-way.org/" target="_blank" rel="noopener" class="flex items-start gap-3 p-4 border border-carbon-border hover:border-carbon-text transition-colors">
+        <i class="fas fa-book mt-1 text-carbon-text-secondary"></i>
+        <div>
+          <div class="font-medium text-carbon-text">The Turing Way <i class="fas fa-arrow-up-right-from-square text-[10px] opacity-50 ml-0.5"></i></div>
+          <div class="text-xs text-carbon-text-secondary leading-snug mt-1">A handbook for reproducible, ethical, and collaborative research.</div>
+        </div>
+      </a>
+    </div>
+  </div>
+
+  <div>
+    <span class="label-mono">SYNAPSIS toolchain</span>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-3">
+      <a href="https://github.com/MaskAnyone/MaskAnyone" target="_blank" rel="noopener" class="flex items-start gap-3 p-4 border border-carbon-border hover:border-carbon-text transition-colors">
+        <i class="fas fa-mask mt-1 text-carbon-text-secondary"></i>
+        <div>
+          <div class="font-medium text-carbon-text">MaskAnyone <i class="fas fa-arrow-up-right-from-square text-[10px] opacity-50 ml-0.5"></i></div>
+          <div class="text-xs text-carbon-text-secondary leading-snug mt-1">De-identify faces and bodies in video while preserving behavioural signal.</div>
+        </div>
+      </a>
+      <a href="https://github.com/maskbench/maskbench" target="_blank" rel="noopener" class="flex items-start gap-3 p-4 border border-carbon-border hover:border-carbon-text transition-colors">
+        <i class="fas fa-chart-bar mt-1 text-carbon-text-secondary"></i>
+        <div>
+          <div class="font-medium text-carbon-text">MaskBench <i class="fas fa-arrow-up-right-from-square text-[10px] opacity-50 ml-0.5"></i></div>
+          <div class="text-xs text-carbon-text-secondary leading-snug mt-1">Benchmark masking quality against pose estimators to verify de-identification.</div>
+        </div>
+      </a>
+      <a href="https://envisionbox.org/" target="_blank" rel="noopener" class="flex items-start gap-3 p-4 border border-carbon-border hover:border-carbon-text transition-colors">
+        <i class="fas fa-cube mt-1 text-carbon-text-secondary"></i>
+        <div>
+          <div class="font-medium text-carbon-text">EnvisionBOX <i class="fas fa-arrow-up-right-from-square text-[10px] opacity-50 ml-0.5"></i></div>
+          <div class="text-xs text-carbon-text-secondary leading-snug mt-1">Multimodal annotation and analysis resources for behavioural research.</div>
+        </div>
+      </a>
+      <a href="https://github.com/babajideowoyele/videodrop" target="_blank" rel="noopener" class="flex items-start gap-3 p-4 border border-carbon-border hover:border-carbon-text transition-colors">
+        <i class="fas fa-film mt-1 text-carbon-text-secondary"></i>
+        <div>
+          <div class="font-medium text-carbon-text">VideoDrop <i class="fas fa-arrow-up-right-from-square text-[10px] opacity-50 ml-0.5"></i></div>
+          <div class="text-xs text-carbon-text-secondary leading-snug mt-1">Download, trim, and chunk source video locally — quality/fps, subtitles, batch queue.</div>
+        </div>
+      </a>
+      <a href="https://github.com/babajideowoyele/mediaprep" target="_blank" rel="noopener" class="flex items-start gap-3 p-4 border border-carbon-border hover:border-carbon-text transition-colors">
+        <i class="fas fa-clapperboard mt-1 text-carbon-text-secondary"></i>
+        <div>
+          <div class="font-medium text-carbon-text">MediaPrep <i class="fas fa-arrow-up-right-from-square text-[10px] opacity-50 ml-0.5"></i></div>
+          <div class="text-xs text-carbon-text-secondary leading-snug mt-1">Transcribe (Whisper → ELAN), check formats against DANS, and scrub EXIF/GPS — all local.</div>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer class="border-t border-carbon-border bg-carbon-bg-hover">
+  <div class="container mx-auto px-6 py-8 flex justify-between items-center text-xs text-carbon-text-secondary">
+    <div class="flex items-center gap-2 text-carbon-text">
+      <img src="../../../logo-mark.svg" alt="" class="h-5 w-auto">
+      <span class="font-semibold">SYNAPSIS</span>
+    </div>
+    <span class="label-mono">30 cards · drafted 2026-05-20 · illustrations TBD</span>
+  </div>
+  <div class="container mx-auto px-6 pb-6 -mt-4 text-xs text-carbon-text-secondary">
+    <span class="label-mono" style="font-size:10px;">Card content © SYNAPSIS, <a class="underline" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> · Placeholder icons: <a class="underline" href="https://fontawesome.com/">Font Awesome</a> Free (CC BY 4.0) · Typeface: IBM Plex (OFL)</span>
+  </div>
+</footer>
+
+<script>
+const cards = [
+  // ── SUIT I — PAST ─────────────────────────────────────────
+  { n:'I',     name:'The Drawer',                  suit:'past', type:'metaphor', icon:'fa-folder-closed',     reading:'Where good data goes to be forgotten. The locked cabinet, the corrupted backup — too sensitive to share, too valuable to delete.' },
+  { n:'II',    name:'The Index Card',              suit:'past', type:'metaphor', icon:'fa-file-signature',   reading:'A consent form, photocopied, folded, faded. What was agreed once on paper, governing what is asked of the data today.' },
+  { n:'III',   name:'The Stranger in the Background', suit:'past', type:'metaphor', icon:'fa-person-walking', reading:'The bystander who walked through the frame — never asked, never told, captured anyway. Every old video has them.' },
+  { n:'IV',    name:'The Tape',                    suit:'past', type:'metaphor', icon:'fa-compact-disc',     reading:'What we recorded before we knew what consent meant. Magnetic, degrading, irreplaceable.' },
+  { n:'V',     name:'The First Promise',           suit:'past', type:'question', icon:'fa-handshake',         reading:'What did you promise the person on camera in 1995?' },
+  { n:'VI',    name:'The Unnamed Face',            suit:'past', type:'question', icon:'fa-user-secret',       reading:'Whose face do you carry that never gave you their name?' },
+  { n:'VII',   name:'The Protocol',                suit:'past', type:'question', icon:'fa-stamp',             reading:'What did your ethics protocol assume about the world — that is no longer true?' },
+  { n:'VIII',  name:'Origin',                      suit:'past', type:'keyword',  icon:'fa-seedling',          reading:'Where the dataset began. The lab, the field site, the broadcast tape, the donated archive. Provenance starts here.' },
+  { n:'IX',    name:'Permission',                  suit:'past', type:'keyword',  icon:'fa-key',               reading:'What was given — and the silence around what was not. The original contract you are now expected to honour at scale.' },
+  { n:'X',     name:'Loss',                        suit:'past', type:'keyword',  icon:'fa-ghost',             reading:'What we cannot recover. The wiped tape, the unsought consent. Masking exists because some things should have been done and were not.' },
+
+  // ── SUIT II — PRESENT ─────────────────────────────────────
+  { n:'XI',    name:'The Mask',                    suit:'present', type:'metaphor', icon:'fa-mask',           reading:'What you wear so others can be themselves. A covering that reveals as much as it hides.' },
+  { n:'XII',   name:'The Two-Way Mirror',          suit:'present', type:'metaphor', icon:'fa-eye',            reading:'Visible to research, invisible to subject. The asymmetry that makes social-science AV both powerful and uncomfortable.' },
+  { n:'XIII',  name:"The Surgeon's Hand",          suit:'present', type:'metaphor', icon:'fa-hand-holding-medical', reading:'Precision over erasure. A scalpel that removes only what must be removed, and preserves what the science needs.' },
+  { n:'XIV',   name:'The Photocopy',               suit:'present', type:'metaphor', icon:'fa-copy',           reading:'Every duplication is a new privacy decision. The dataset that lives in seven places now lives in seven jurisdictions.' },
+  { n:'XV',    name:'The Steward at the Door',     suit:'present', type:'question', icon:'fa-door-open',      reading:'What does your data steward say when you ask "can I share this?"' },
+  { n:'XVI',   name:'What Stays',                  suit:'present', type:'question', icon:'fa-circle-half-stroke', reading:'If you mask a face, what stays? The expression, the gesture, the gaze, the silence?' },
+  { n:'XVII',  name:'The Resting Place',           suit:'present', type:'question', icon:'fa-hard-drive',     reading:'Where does your dataset live when it is not being used?' },
+  { n:'XVIII', name:'Provenance',                  suit:'present', type:'keyword',  icon:'fa-link',           reading:'The trail of what was done — to what, by whom, with which tool. Without it, "masked" is a claim no one can audit.' },
+  { n:'XIX',   name:'Trust',                       suit:'present', type:'keyword',  icon:'fa-scale-balanced', reading:'The currency that masking spends. Subjects trust the researcher. Researchers trust the toolchain. Every link can fail.' },
+  { n:'XX',    name:'Friction',                    suit:'present', type:'keyword',  icon:'fa-arrow-trend-up', reading:'Every extra step that pushes the researcher toward "I’ll just keep the raw video on my laptop." The cost of doing the right thing.' },
+
+  // ── SUIT III — FUTURE ─────────────────────────────────────
+  { n:'XXI',    name:'The Atlas',                       suit:'future', type:'metaphor', icon:'fa-book-atlas',       reading:'A catalogue of every masked corpus, browsable, citable, findable. The library of what was hidden, made discoverable.' },
+  { n:'XXII',   name:'The Library that Cannot Be Visited', suit:'future', type:'metaphor', icon:'fa-building-columns', reading:'Data that is found but never moved. The model travels to the data, not the data to the model.' },
+  { n:'XXIII',  name:'The Translator',                  suit:'future', type:'metaphor', icon:'fa-language',         reading:'A model that speaks for the masked subject — preserving meaning while withholding identity. Faithful to signal, blind to person.' },
+  { n:'XXIV',   name:'The Re-Identifier',               suit:'future', type:'metaphor', icon:'fa-magnifying-glass', reading:'The future adversary who undoes what we did. The card you do not want to draw — but must keep in the deck.' },
+  { n:'XXV',    name:'The Future Citation',             suit:'future', type:'question', icon:'fa-quote-right',      reading:'What does a citation to a masked dataset look like in 2040?' },
+  { n:'XXVI',   name:'The Next Steward',                suit:'future', type:'question', icon:'fa-chalkboard-user',  reading:'Who teaches the next generation of data stewards — and what does the curriculum say about masking?' },
+  { n:'XXVII',  name:'The Unseen Training Set',         suit:'future', type:'question', icon:'fa-bullseye',         reading:"What would you let a model train on if you couldn't see who was in it?" },
+  { n:'XXVIII', name:'Federation',                      suit:'future', type:'keyword',  icon:'fa-circle-nodes',     reading:'Data stays where it is. Computation visits. The privacy posture by structure, not by promise.' },
+  { n:'XXIX',   name:'Sustainability',                  suit:'future', type:'keyword',  icon:'fa-recycle',          reading:'The question that outlives the grant. Who runs the toolchain in year five? Who pays the GPU bill?' },
+  { n:'XXX',    name:'Consent.Future',                  suit:'future', type:'keyword',  icon:'fa-signature',        reading:'What we did not ask but should have. The form we have not yet written.' },
+];
+
+const typeIconMap = {
+  metaphor: 'fa-feather',
+  question: 'fa-circle-question',
+  keyword:  'fa-tag',
+};
+
+function renderCard(c) {
+  const typeIcon = typeIconMap[c.type] || 'fa-circle';
+  return `
+    <div class="card-deck ${c.suit}" data-suit="${c.suit}" data-type="${c.type}" onclick="openModal('${c.n}')">
+      <div class="card-head">
+        <span class="card-num">${c.n}</span>
+        <span class="card-type-icon" title="${c.type}"><i class="fas ${typeIcon}"></i></span>
+      </div>
+      <div class="card-illustration">
+        <i class="fas ${c.icon} placeholder-icon"></i>
+        <span class="placeholder-label">illustration</span>
+      </div>
+      <div class="card-name">${c.name}</div>
+      <div class="card-reading">${c.reading}</div>
+      <div class="card-foot">
+        <span class="suit-tag ${c.suit}">${c.suit}</span>
+        <span>ML · ${c.type}</span>
+      </div>
+    </div>
+  `;
+}
+
+function render() {
+  const deck = document.getElementById('deck');
+  deck.innerHTML = cards.map(renderCard).join('');
+  applyFilters();
+}
+
+let activeSuit = 'all';
+let activeType = 'all';
+
+function applyFilters() {
+  document.querySelectorAll('.card-deck').forEach(el => {
+    const matchSuit = activeSuit === 'all' || el.dataset.suit === activeSuit;
+    const matchType = activeType === 'all' || el.dataset.type === activeType;
+    el.style.display = (matchSuit && matchType) ? '' : 'none';
+  });
+}
+
+document.querySelectorAll('[data-filter-suit]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('[data-filter-suit]').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    activeSuit = btn.dataset.filterSuit;
+    applyFilters();
+  });
+});
+document.querySelectorAll('[data-filter-type]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('[data-filter-type]').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    activeType = btn.dataset.filterType;
+    applyFilters();
+  });
+});
+
+function openModal(num) {
+  const c = cards.find(x => x.n === num);
+  if (!c) return;
+  document.getElementById('modal-card-holder').innerHTML = renderCard(c);
+  document.getElementById('modal').classList.add('open');
+}
+function closeModal(e) {
+  if (e.target.id === 'modal' || e.target.classList.contains('modal-backdrop')) {
+    document.getElementById('modal').classList.remove('open');
+  }
+}
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') document.getElementById('modal').classList.remove('open');
+});
+
+render();
+</script>
+
+</body>
+</html>

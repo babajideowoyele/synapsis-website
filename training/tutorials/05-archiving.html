@@ -1,0 +1,161 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tutorial 05 · Archiving — SYNAPSIS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link rel="stylesheet" href="../../theme.css">
+    <script src="../../theme.js"></script>
+    <script>
+        tailwind.config = { theme: { extend: {
+            fontFamily: { 'sans': ['IBM Plex Sans', 'sans-serif'], 'mono': ['IBM Plex Mono', 'monospace'] },
+            colors: { 'carbon': {
+                'bg': 'var(--color-bg)', 'bg-hover': 'var(--color-bg-hover)',
+                'border': 'var(--color-border)', 'text': 'var(--color-text)',
+                'text-secondary': 'var(--color-text-secondary)', 'interactive': '#0f62fe',
+            }}
+        }}}
+    </script>
+    <style>
+        body { font-family: 'IBM Plex Sans', sans-serif; background-color: var(--color-bg); color: var(--color-text); line-height: 1.6; }
+        .accent-bar { height: 3px; background: var(--color-accent); width: 48px; margin-bottom: 14px; }
+        .badge { display: inline-block; padding: 3px 10px; font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: .04em; text-transform: uppercase; }
+        .badge-draft { background: var(--color-bg-hover); color: var(--color-text-secondary); border: 1px solid var(--color-border); }
+        .badge-pipeline { background: var(--color-text); color: var(--color-inverse); }
+        .video-placeholder { background: var(--color-bg-hover); border: 1px solid var(--color-border); aspect-ratio: 16 / 9; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 12px; color: var(--color-text-secondary); }
+        .video-placeholder i { font-size: 48px; }
+        .transcript h3 { font-size: 1.25rem; font-weight: 600; margin-top: 2.5rem; margin-bottom: 0.75rem; }
+        .transcript p { margin-bottom: 1.25rem; color: var(--color-text); }
+        .transcript p.lede { font-size: 1.1rem; }
+        .transcript strong { color: var(--color-text); font-weight: 600; }
+        .transcript blockquote { border-left: 3px solid var(--color-accent); padding-left: 1rem; margin: 1.5rem 0; color: var(--color-text-secondary); font-style: italic; }
+        .meta-row { font-size: 13px; color: var(--color-text-secondary); font-family: 'IBM Plex Mono', monospace; }
+        .meta-row a { color: var(--color-text); text-decoration: underline; text-underline-offset: 3px; }
+        .sidebar-section { border: 1px solid var(--color-border); padding: 18px 20px; margin-bottom: 16px; }
+        .sidebar-section h4 { font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--color-text-secondary); margin-bottom: 10px; }
+        .sidebar-section ul { list-style: none; padding: 0; margin: 0; font-size: 14px; }
+        .sidebar-section li { padding: 6px 0; border-bottom: 1px solid var(--color-border); }
+        .sidebar-section li:last-child { border-bottom: none; }
+        .sidebar-section a { color: var(--color-text); text-decoration: none; }
+        .sidebar-section a:hover { text-decoration: underline; }
+        .nav-pager { display: flex; justify-content: space-between; gap: 24px; margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--color-border); }
+        .nav-pager a { flex: 1; padding: 18px 22px; border: 1px solid var(--color-border); text-decoration: none; color: var(--color-text); transition: all .15s; }
+        .nav-pager a:hover { border-color: var(--color-text); }
+        .nav-pager .label { font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: .04em; text-transform: uppercase; color: var(--color-text-secondary); margin-bottom: 4px; display: block; }
+        .nav-pager .title { font-weight: 600; }
+        .nav-pager .next { text-align: right; }
+    </style>
+</head>
+<body>
+    <header class="border-b border-carbon-border sticky top-0 z-50" style="background: var(--color-bg);">
+        <div class="container mx-auto max-w-5xl px-6 py-4 flex items-center justify-between">
+            <a href="../../index.html" class="flex items-center gap-2 text-xl font-semibold tracking-tight"><span>SYNAPSIS</span></a>
+            <nav class="hidden md:flex gap-6">
+                <a href="../../index.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Home</a>
+                <a href="../../platform.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Platform</a>
+                <a href="../../training.html" class="text-sm font-medium border-b-2 border-carbon-text pb-1">Training</a>
+                <a href="../../resources.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Resources</a>
+                <a href="../../network.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Network</a>
+                <a href="../../press.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Press</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container mx-auto max-w-5xl px-6 py-12">
+        <div class="meta-row mb-6"><a href="index.html">Tutorials</a> &nbsp;/&nbsp; <span>05 · Stage 4</span></div>
+        <div class="flex items-center gap-3 mb-4">
+            <span class="badge badge-pipeline">05 · Stage 4</span>
+            <span class="badge badge-draft">Script drafted</span>
+            <span class="meta-row"><i class="fa fa-clock mr-1"></i> ~6 min</span>
+        </div>
+        <span class="accent-bar"></span>
+        <h1 class="text-4xl font-semibold mb-4 leading-tight">Archiving — FAIR sharing and DANS deposit</h1>
+        <p class="text-lg text-carbon-text-secondary max-w-3xl">
+            Packaging masked outputs with FAIR metadata, choosing an access tier, and depositing into DANS Data Station SSH.
+        </p>
+
+        <div class="video-placeholder mt-10">
+            <i class="fa fa-circle-play"></i>
+            <div class="text-sm font-mono uppercase tracking-widest">Video coming soon</div>
+            <div class="text-xs">Script drafted · Recording scheduled in batch 1 production</div>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-12 mt-12">
+            <article class="md:col-span-2 transcript">
+                <h2 class="text-2xl font-semibold mb-2">Learning goal</h2>
+                <p class="lede">After watching, you can take an approved masked output from MaskingOps and package it for long-term archival with FAIR-compliant metadata. You know what gets archived openly, what stays restricted, and what paperwork the repository will require.</p>
+
+                <h2 class="text-2xl font-semibold mt-12 mb-2">Transcript</h2>
+
+                <h3>Cold open</h3>
+                <p>End of the pipeline. The masked video has been benchmarked, reviewed, and approved. What stops it from sitting on a shared drive forever is <strong>this step</strong> — packaging it so someone else can actually find, access, and reuse it.</p>
+
+                <h3>What FAIR actually demands</h3>
+                <p>FAIR is four letters. Each one is a question your archive needs to answer with evidence — not adjectives.</p>
+                <p><strong>Findable.</strong> Does it have a persistent identifier — a DOI from DANS, DataverseNL, or Zenodo? If your only identifier is a folder path on a server, that's not findable.</p>
+                <p><strong>Accessible.</strong> What can people get, and how? Three common settings — fully open, controlled access for authorised researchers, or metadata-only with the data restricted.</p>
+                <p><strong>Interoperable.</strong> Is the metadata written in a standard schema — Dublin Core, DDI — so other systems can read it, not just yours?</p>
+                <p><strong>Reusable.</strong> Clear licence. Documented provenance. The next researcher can take this and use it without writing to you to ask what the masking method was.</p>
+
+                <h3>What goes in the deposit package</h3>
+                <p>Four things in the package, plus the videos themselves.</p>
+                <p><strong>1. The masked videos.</strong> From MaskingOps, signed off. Original videos do <strong>not</strong> go in this package — they stay restricted in your secure institutional storage.</p>
+                <p><strong>2. A metadata file</strong> (Dublin Core / DDI). Use the SYNAPSIS metadata schema template — it covers what behavioural-AV datasets need: title, creators, masking method, software version, body regions masked.</p>
+                <p><strong>3. A masking report.</strong> The processing parameters, the QA log from MaskingOps, the sampling protocol. This is what makes the masking reproducible. Template available in the SYNAPSIS downloads folder.</p>
+                <p><strong>4. Data-sharing decision-tree result.</strong> The output showing why this dataset is being shared at this access level — open, controlled, or metadata-only. The tree itself is in the same downloads folder.</p>
+
+                <h3>Choosing the access level</h3>
+                <p>Three access tiers. Pick the one that matches your data sensitivity and consent.</p>
+                <p><strong>Open.</strong> Anyone with the DOI can download. Reserved for fully-masked data with broad participant consent and low residual identification risk. Think: skeleton-only outputs of public-figure recordings.</p>
+                <p><strong>Controlled access.</strong> Researchers apply, sign a data-use agreement, get authorised. The DANS Data Station SSH supports this directly. This is the realistic default for most behavioural AV data.</p>
+                <p><strong>Metadata-only.</strong> The metadata record is public — title, abstract, methods. The data itself stays restricted to the original team. Still FAIR-findable. Still cite-able. Still useful for meta-analysis at the description level.</p>
+
+                <h3>The DANS deposit, step by step</h3>
+                <p>For Dutch SSH research, DANS Data Station SSH is the default destination. Other options — DataverseNL, Zenodo — work too; the workflow is similar.</p>
+                <p><strong>Step 1.</strong> Reserve a DOI before your paper goes out. Include it in the manuscript so the reference resolves the day the paper is published.</p>
+                <p><strong>Step 2.</strong> Fill in the metadata form using the SYNAPSIS schema template as a checklist. The repository's fields map to Dublin Core / DDI; the SYNAPSIS template tells you what to put in each.</p>
+                <p><strong>Step 3.</strong> Upload the deposit package — masked videos, masking report, decision-tree result. Set the access tier you chose.</p>
+                <p><strong>Step 4.</strong> Submit. The repository reviews the deposit — they check the metadata is complete, not the science. Typically a few days to two weeks.</p>
+
+                <h3>Recap</h3>
+                <p>Archiving is the four FAIR letters answered with evidence. Findable — DOI. Accessible — pick a tier. Interoperable — Dublin Core or DDI. Reusable — licence, provenance, masking report.</p>
+                <blockquote>That's the full SYNAPSIS pipeline. MaskAnyone, MaskBench, MaskingOps, Archiving. From sensitive recording to citeable FAIR dataset. For the mechanics — installation, hands-on first job, quality assessment in detail, troubleshooting — see the <a href="index.html">deep-dive companion tutorials</a>.</blockquote>
+            </article>
+
+            <aside>
+                <div class="sidebar-section">
+                    <h4>Details</h4>
+                    <ul>
+                        <li><span class="meta-row">Duration target</span><br>~6 min</li>
+                        <li><span class="meta-row">Audience</span><br>Researchers preparing to deposit</li>
+                        <li><span class="meta-row">Prereqs</span><br><a href="04-maskingops.html">04 · MaskingOps</a></li>
+                    </ul>
+                </div>
+                <div class="sidebar-section">
+                    <h4>Source / templates</h4>
+                    <ul>
+                        <li><a href="../../downloads/templates/fair-assessment-audiovisual.md"><i class="fa fa-file-lines mr-2"></i>FAIR self-assessment</a></li>
+                        <li><a href="../../downloads/templates/metadata-schema.json"><i class="fa fa-file-code mr-2"></i>Metadata schema</a></li>
+                        <li><a href="../../downloads/templates/data-sharing-decision-tree.md"><i class="fa fa-file-lines mr-2"></i>Decision tree</a></li>
+                        <li><a href="../../downloads/templates/masking-report.md"><i class="fa fa-file-lines mr-2"></i>Masking report template</a></li>
+                    </ul>
+                </div>
+                <div class="sidebar-section">
+                    <h4>End of series</h4>
+                    <ul>
+                        <li><a href="index.html">→ All tutorials</a></li>
+                    </ul>
+                </div>
+            </aside>
+        </div>
+
+        <nav class="nav-pager">
+            <a href="04-maskingops.html"><span class="label">← Previous</span><span class="title">04 · MaskingOps</span></a>
+            <a href="index.html" class="next"><span class="label">End of series →</span><span class="title">All tutorials</span></a>
+        </nav>
+    </main>
+</body>
+</html>

@@ -1,10 +1,84 @@
----
-layout: base.njk
-title: SYNAPSIS Network
-activeNav: Network
----
-<script src="https://d3js.org/d3.v7.min.js"></script>
-<style>
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon-180x180.png">
+    <title>SYNAPSIS Network</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link rel="stylesheet" href="theme.css">
+    <script src="theme.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'sans': ['IBM Plex Sans', 'sans-serif'],
+                        'mono': ['IBM Plex Mono', 'monospace'],
+                    },
+                    colors: {
+                        'carbon': {
+                            'bg': 'var(--color-bg)',
+                            'bg-hover': 'var(--color-bg-hover)',
+                            'border': 'var(--color-border)',
+                            'text': 'var(--color-text)',
+                            'text-secondary': 'var(--color-text-secondary)',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'IBM Plex Sans', sans-serif;
+            background-color: var(--color-bg);
+            color: var(--color-text);
+        }
+        .accent-bar {
+            height: 3px;
+            background: var(--color-accent);
+        }
+        .nav-link {
+            position: relative;
+            padding-bottom: 4px;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--color-accent);
+            transition: width 0.2s ease;
+        }
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        .btn-primary {
+            background: var(--color-accent);
+            color: var(--color-inverse);
+            transition: all 0.15s ease;
+        }
+        .btn-primary:hover {
+            background: var(--color-accent-hover);
+        }
+        .btn-secondary {
+            background: var(--color-bg);
+            color: var(--color-text);
+            border: 1px solid var(--color-accent);
+            transition: all 0.15s ease;
+        }
+        .btn-secondary:hover {
+            background: var(--color-bg-hover);
+        }
         #network {
             background: var(--color-bg-hover);
             border: 1px solid var(--color-border);
@@ -28,12 +102,6 @@ activeNav: Network
             stroke: #525252;
             stroke-opacity: 0.8;
         }
-        html.dark .link {
-            stroke: #525252;
-        }
-        html.dark .link.strong {
-            stroke: #a8a8a8;
-        }
         .node-label {
             font-size: 11px;
             font-weight: 500;
@@ -56,14 +124,6 @@ activeNav: Network
             height: 14px;
             border-radius: 50%;
         }
-        .legend-dot-university { background: #525252; }
-        .legend-dot-infra { background: #78716c; }
-        .legend-dot-pilot { background: #a3a3a3; }
-        .legend-dot-user { background: #d4d4d4; }
-        html.dark .legend-dot-university { background: #a8a8a8; }
-        html.dark .legend-dot-infra { background: #8d8d8d; }
-        html.dark .legend-dot-pilot { background: #c6c6c6; }
-        html.dark .legend-dot-user { background: #e0e0e0; }
         .control-btn {
             background: var(--color-bg);
             border: 1px solid var(--color-border);
@@ -75,12 +135,12 @@ activeNav: Network
         }
         .control-btn:hover {
             background: var(--color-accent);
-            color: var(--color-inverse);
+            color: white;
             border-color: var(--color-text);
         }
         .control-btn.active {
             background: var(--color-accent);
-            color: var(--color-inverse);
+            color: white;
             border-color: var(--color-text);
         }
         .info-panel {
@@ -90,7 +150,46 @@ activeNav: Network
             max-height: 600px;
             overflow-y: auto;
         }
-</style>
+    </style>
+</head>
+<body class="min-h-screen">
+    <!-- Header -->
+    <header class="border-b border-carbon-border sticky top-0 z-50 bg-white">
+        <div class="accent-bar"></div>
+        <nav class="container mx-auto px-6 py-4">
+            <div class="flex justify-between items-center">
+                <a href="index.html" class="flex items-center gap-2 text-xl font-semibold tracking-tight">
+                    <img src="logo-mark-mono.svg" alt="" class="h-20 w-auto">
+                    SYNAPSIS
+                </a>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="index.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Home</a>
+                    <a href="platform.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Platform</a>
+                    <a href="demo.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Demo</a>
+                    <a href="training.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Training</a>
+                    <a href="resources.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Resources</a>
+                    <a href="network.html" class="text-sm font-medium border-b-2 border-carbon-text pb-1">Network</a>
+                    <a href="press.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">News</a>
+                </div>
+                <button class="md:hidden p-2 -mr-2" onclick="toggleMobileMenu()" aria-label="Toggle navigation menu">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+                <button onclick="toggleTheme()" class="theme-toggle" title="Toggle dark mode">
+                    <i class="fas fa-moon"></i><i class="fas fa-sun"></i>
+                </button>
+            </div>
+        </nav>
+        <!-- Mobile menu -->
+        <div id="mobile-menu" class="hidden md:hidden border-t border-carbon-border">
+            <a href="index.html" class="block px-6 py-3 text-sm font-medium text-carbon-text-secondary hover:text-carbon-text hover:bg-carbon-bg-hover">Home</a>
+            <a href="platform.html" class="block px-6 py-3 text-sm font-medium text-carbon-text-secondary hover:text-carbon-text hover:bg-carbon-bg-hover">Platform</a>
+            <a href="demo.html" class="block px-6 py-3 text-sm font-medium text-carbon-text-secondary hover:text-carbon-text hover:bg-carbon-bg-hover">Demo</a>
+            <a href="training.html" class="block px-6 py-3 text-sm font-medium text-carbon-text-secondary hover:text-carbon-text hover:bg-carbon-bg-hover">Training</a>
+            <a href="resources.html" class="block px-6 py-3 text-sm font-medium text-carbon-text-secondary hover:text-carbon-text hover:bg-carbon-bg-hover">Resources</a>
+            <a href="network.html" class="block px-6 py-3 text-sm font-medium bg-carbon-bg-hover border-l-2 border-carbon-text">Network</a>
+            <a href="press.html" class="block px-6 py-3 text-sm font-medium text-carbon-text-secondary hover:text-carbon-text hover:bg-carbon-bg-hover">News</a>
+        </div>
+    </header>
 
     <main>
         <!-- Hero -->
@@ -115,10 +214,10 @@ activeNav: Network
                 <div class="flex flex-wrap gap-4 items-center justify-between mb-6">
                     <div class="flex flex-wrap gap-2">
                         <button class="control-btn" onclick="resetZoom()">
-                            <i class="fas fa-search-minus mr-2"></i>Reset View
+                            <i class="fas fa-magnifying-glass-minus mr-2"></i>Reset View
                         </button>
                         <button class="control-btn" onclick="centerNetwork()">
-                            <i class="fas fa-compress-arrows-alt mr-2"></i>Center
+                            <i class="fas fa-minimize mr-2"></i>Center
                         </button>
                         <button class="control-btn active" id="physicsBtn" onclick="togglePhysics()">
                             <i class="fas fa-pause mr-2"></i>Pause
@@ -130,19 +229,19 @@ activeNav: Network
                             <span>Core</span>
                         </div>
                         <div class="legend-item">
-                            <div class="legend-dot legend-dot-university"></div>
+                            <div class="legend-dot" style="background: #525252;"></div>
                             <span>Universities</span>
                         </div>
                         <div class="legend-item">
-                            <div class="legend-dot legend-dot-infra"></div>
+                            <div class="legend-dot" style="background: #78716c;"></div>
                             <span>Infrastructure</span>
                         </div>
                         <div class="legend-item">
-                            <div class="legend-dot legend-dot-pilot"></div>
+                            <div class="legend-dot" style="background: #a3a3a3;"></div>
                             <span>Pilots</span>
                         </div>
                         <div class="legend-item">
-                            <div class="legend-dot legend-dot-user"></div>
+                            <div class="legend-dot" style="background: #d4d4d4;"></div>
                             <span>Users</span>
                         </div>
                     </div>
@@ -225,10 +324,10 @@ activeNav: Network
                             <span class="text-xs px-2 py-1 bg-carbon-bg-hover">DOI</span>
                         </div>
                     </div>
-                    <!-- HPI and CLARIAH: potential future partners
+                    <!-- eScience Center and CLARIAH: potential future partners
                     <div class="border border-carbon-border p-6">
-                        <div class="font-semibold mb-2">HPI</div>
-                        <p class="text-sm text-carbon-text-secondary mb-4">Hasso Plattner Institute providing expertise in research software sustainability and best practices.</p>
+                        <div class="font-semibold mb-2">eScience Center</div>
+                        <p class="text-sm text-carbon-text-secondary mb-4">Netherlands eScience Center providing expertise in research software sustainability and best practices.</p>
                         <div class="flex flex-wrap gap-2">
                             <span class="text-xs px-2 py-1 bg-carbon-bg-hover">RSE</span>
                             <span class="text-xs px-2 py-1 bg-carbon-bg-hover">Sustainability</span>
@@ -279,6 +378,29 @@ activeNav: Network
             </div>
         </section>
     </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-carbon-border py-12 px-6">
+        <div class="container mx-auto max-w-5xl">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-8">
+                <div>
+                    <div class="font-semibold text-lg mb-2">SYNAPSIS</div>
+                    <div class="text-sm text-carbon-text-secondary">
+                        Funded by NWO TDCC-SSH
+                    </div>
+                </div>
+                <div class="flex gap-8">
+                    <a href="index.html" class="text-sm text-carbon-text-secondary hover:text-carbon-text">Home</a>
+                    <a href="platform.html" class="text-sm text-carbon-text-secondary hover:text-carbon-text">Platform</a>
+                    <a href="training.html" class="text-sm text-carbon-text-secondary hover:text-carbon-text">Training</a>
+                    <a href="resources.html" class="text-sm text-carbon-text-secondary hover:text-carbon-text">Resources</a>
+                </div>
+            </div>
+            <div class="mt-8 pt-8 border-t border-carbon-border text-sm text-carbon-text-secondary">
+                © 2026 SYNAPSIS Project. Radboud University.
+            </div>
+        </div>
+    </footer>
 
     <script>
         // Network data - monochrome color scheme
@@ -341,7 +463,7 @@ activeNav: Network
                 title: 'Radboud University',
                 role: 'Lead Institution',
                 description: 'Project coordination, Humanities Lab hosting, and technical platform development.',
-                details: ['Co-Pilot', 'Technical development', 'Summer/Winter School', 'Pilot implementation']
+                details: ['Project lead', 'Technical development', 'Summer/Winter School', 'Pilot implementation']
             },
             vu: {
                 title: 'VU Amsterdam',
@@ -359,7 +481,7 @@ activeNav: Network
                 title: 'Erasmus University Rotterdam',
                 role: 'Partner University',
                 description: 'Design science methodology and responsible innovation through DRIFT institute.',
-                details: ['Co-Pilot', 'DRIFT institute', 'Ethics research', 'Policy development']
+                details: ['Co-lead', 'DRIFT institute', 'Ethics research', 'Policy development']
             },
             hpi: {
                 title: 'Hasso Plattner Institute',
@@ -370,8 +492,8 @@ activeNav: Network
             rug: {
                 title: 'University of Groningen',
                 role: 'Pilot Institution',
-                description: 'Pilot testing with early career researchers in social science interview contexts.',
-                details: ['Interview data pilots', 'Early adopter feedback', 'Training participation']
+                description: 'MaskAnyone deployed in the RUG Virtual Research Environment (VRE). A dedicated extra-secured VRE is being provisioned for the pilot, with institutional MFA and DCC oversight. Pilot focuses on behavioural and classroom video masking.',
+                details: ['VRE deployment (active)', 'Extra-secured dedicated VRE (provisioning)', 'DCC privacy & data protection', 'Behavioural research pilots']
             },
             tilburg: {
                 title: 'Tilburg University',
@@ -435,16 +557,8 @@ activeNav: Network
             }
         };
 
-        // Monochrome colors by type (adapt to dark mode)
-        const isDark = document.documentElement.classList.contains('dark');
-        const colors = isDark ? {
-            core: '#f4f4f4',
-            university: '#a8a8a8',
-            infrastructure: '#8d8d8d',
-            user: '#e0e0e0',
-            funding: '#c6c6c6',
-            pilot: '#c6c6c6'
-        } : {
+        // Monochrome colors by type
+        const colors = {
             core: '#161616',
             university: '#525252',
             infrastructure: '#78716c',
@@ -494,7 +608,7 @@ activeNav: Network
             .attr('class', 'node')
             .attr('r', d => d.size)
             .attr('fill', d => colors[d.type])
-            .attr('stroke', isDark ? '#161616' : '#fff')
+            .attr('stroke', '#fff')
             .attr('stroke-width', 2)
             .call(drag(simulation))
             .on('click', (event, d) => showNodeInfo(d));
@@ -506,7 +620,7 @@ activeNav: Network
             .join('text')
             .attr('class', 'node-label')
             .attr('dy', d => d.size + 18)
-            .attr('fill', isDark ? '#f4f4f4' : '#161616')
+            .attr('fill', '#161616')
             .selectAll('tspan')
             .data(d => d.label.split('\n'))
             .join('tspan')
@@ -629,3 +743,5 @@ activeNav: Network
         // Initial center after short delay
         setTimeout(centerNetwork, 500);
     </script>
+</body>
+</html>

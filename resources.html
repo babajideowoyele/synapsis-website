@@ -1,28 +1,152 @@
----
-layout: base.njk
-title: SYNAPSIS Resources
-activeNav: Resources
----
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon-180x180.png">
+    <title>SYNAPSIS Resources</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link rel="stylesheet" href="theme.css">
+    <script src="theme.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'sans': ['IBM Plex Sans', 'sans-serif'],
+                        'mono': ['IBM Plex Mono', 'monospace'],
+                    },
+                    colors: {
+                        'carbon': {
+                            'bg': 'var(--color-bg)',
+                            'bg-hover': 'var(--color-bg-hover)',
+                            'border': 'var(--color-border)',
+                            'text': 'var(--color-text)',
+                            'text-secondary': 'var(--color-text-secondary)',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'IBM Plex Sans', sans-serif;
+            background-color: var(--color-bg);
+            color: var(--color-text);
+        }
+        .accent-bar {
+            height: 3px;
+            background: var(--color-accent);
+        }
+        .card {
+            border: 1px solid var(--color-border);
+            transition: all 0.15s ease;
+        }
+        .card:hover {
+            border-color: var(--color-text);
+            box-shadow: 0 4px 14px rgba(0,0,0,0.1);
+        }
+        .btn-primary {
+            background: var(--color-accent);
+            color: var(--color-inverse);
+            transition: all 0.15s ease;
+        }
+        .btn-primary:hover {
+            background: var(--color-accent-hover);
+        }
+        .btn-secondary {
+            background: var(--color-bg);
+            color: var(--color-text);
+            border: 1px solid var(--color-accent);
+            transition: all 0.15s ease;
+        }
+        .btn-secondary:hover {
+            background: var(--color-bg-hover);
+        }
+        .nav-link {
+            position: relative;
+            padding-bottom: 4px;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--color-accent);
+            transition: width 0.2s ease;
+        }
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        .resource-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            font-size: 11px;
+            font-family: 'IBM Plex Mono', monospace;
+            text-transform: uppercase;
+            background: var(--color-bg-hover);
+            border: 1px solid var(--color-border);
+        }
+        .resource-badge-doc { background: #dbeafe; border-color: #93c5fd; }
+        .resource-badge-code { background: #d1fae5; border-color: #6ee7b7; }
+        .resource-badge-video { background: #fce7f3; border-color: #f9a8d4; }
+        .resource-badge-template { background: #fef3c7; border-color: #fcd34d; }
+        .resource-badge-tool { background: #ede9fe; border-color: #a78bfa; }
+        .resource-badge-platform { background: #e0f2fe; border-color: #7dd3fc; }
 
-<style>
-    .resource-badge {
-        display: inline-block;
-        padding: 2px 8px;
-        font-size: 11px;
-        font-family: 'IBM Plex Mono', monospace;
-        text-transform: uppercase;
-        background: var(--color-bg-hover);
-        border: 1px solid var(--color-border);
-    }
-    .resource-badge-doc { background: #dbeafe; border-color: #93c5fd; }
-    .resource-badge-code { background: #d1fae5; border-color: #6ee7b7; }
-    .resource-badge-video { background: #fce7f3; border-color: #f9a8d4; }
-    .resource-badge-template { background: #fef3c7; border-color: #fcd34d; }
-    html.dark .resource-badge-doc { background: #1e2a3a; border-color: #2563eb; color: #93c5fd; }
-    html.dark .resource-badge-code { background: #132917; border-color: #16a34a; color: #6ee7b7; }
-    html.dark .resource-badge-video { background: #2a1525; border-color: #db2777; color: #f9a8d4; }
-    html.dark .resource-badge-template { background: #292211; border-color: #a68523; color: #fcd34d; }
-</style>
+        html.dark .resource-badge-doc      { background: #002b66 !important; border-color: #4589ff !important; color: #a6c8ff !important; }
+        html.dark .resource-badge-code     { background: #0a3a25 !important; border-color: #42be65 !important; color: #a7f0ba !important; }
+        html.dark .resource-badge-template { background: #3a3000 !important; border-color: #f1c21b !important; color: #f1c21b !important; }
+        html.dark .resource-badge-tool     { background: #2d1f72 !important; border-color: #be95ff !important; color: #be95ff !important; }
+        html.dark .resource-badge-platform { background: #00253c !important; border-color: #82cfff !important; color: #82cfff !important; }
+    </style>
+</head>
+<body class="min-h-screen">
+    <!-- Header -->
+    <header class="border-b border-carbon-border sticky top-0 z-50 bg-white">
+        <div class="accent-bar"></div>
+        <nav class="container mx-auto px-6 py-4">
+            <div class="flex justify-between items-center">
+                <a href="index.html" class="flex items-center gap-2 text-xl font-semibold tracking-tight">
+                    <img src="logo-mark.svg" alt="" class="h-20 w-auto">
+                    SYNAPSIS
+                </a>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="index.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Home</a>
+                    <a href="platform.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Platform</a>
+                    <a href="demo.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Demo</a>
+                    <a href="training.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Training</a>
+                    <a href="resources.html" class="text-sm font-medium border-b-2 border-carbon-text pb-1">Resources</a>
+                    <a href="network.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Network</a>
+                    <a href="press.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">News</a>
+                </div>
+                <button class="md:hidden p-2 -mr-2" onclick="toggleMobileMenu()" aria-label="Toggle navigation menu">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+                <button onclick="toggleTheme()" class="theme-toggle" title="Toggle dark mode">
+                    <i class="fas fa-moon"></i><i class="fas fa-sun"></i>
+                </button>
+            </div>
+        </nav>
+        <!-- Mobile menu -->
+        <div id="mobile-menu" class="hidden md:hidden border-t border-carbon-border">
+            <a href="index.html" class="block px-6 py-3 text-sm font-medium text-carbon-text-secondary hover:text-carbon-text hover:bg-carbon-bg-hover">Home</a>
+            <a href="platform.html" class="block px-6 py-3 text-sm font-medium text-carbon-text-secondary hover:text-carbon-text hover:bg-carbon-bg-hover">Platform</a>
+            <a href="demo.html" class="block px-6 py-3 text-sm font-medium text-carbon-text-secondary hover:text-carbon-text hover:bg-carbon-bg-hover">Demo</a>
+            <a href="training.html" class="block px-6 py-3 text-sm font-medium text-carbon-text-secondary hover:text-carbon-text hover:bg-carbon-bg-hover">Training</a>
+            <a href="resources.html" class="block px-6 py-3 text-sm font-medium bg-carbon-bg-hover border-l-2 border-carbon-text">Resources</a>
+            <a href="network.html" class="block px-6 py-3 text-sm font-medium text-carbon-text-secondary hover:text-carbon-text hover:bg-carbon-bg-hover">Network</a>
+            <a href="press.html" class="block px-6 py-3 text-sm font-medium text-carbon-text-secondary hover:text-carbon-text hover:bg-carbon-bg-hover">News</a>
+        </div>
+    </header>
 
     <main>
         <!-- Hero -->
@@ -51,7 +175,7 @@ activeNav: Resources
         <!-- Quick Links -->
         <section class="py-12 px-6 bg-carbon-bg-hover border-y border-carbon-border">
             <div class="container mx-auto max-w-5xl">
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
                     <a href="#documentation" class="border border-carbon-border bg-white p-4 text-center hover:border-carbon-text transition-colors">
                         <i class="fas fa-book text-2xl mb-2"></i>
                         <div class="font-medium text-sm">Documentation</div>
@@ -60,12 +184,16 @@ activeNav: Resources
                         <i class="fas fa-file-alt text-2xl mb-2"></i>
                         <div class="font-medium text-sm">Templates</div>
                     </a>
+                    <a href="#ecosystem" class="border border-carbon-border bg-white p-4 text-center hover:border-carbon-text transition-colors">
+                        <i class="fas fa-puzzle-piece text-2xl mb-2"></i>
+                        <div class="font-medium text-sm">Ecosystem</div>
+                    </a>
                     <a href="#publications" class="border border-carbon-border bg-white p-4 text-center hover:border-carbon-text transition-colors">
                         <i class="fas fa-newspaper text-2xl mb-2"></i>
                         <div class="font-medium text-sm">Publications</div>
                     </a>
                     <a href="#faq" class="border border-carbon-border bg-white p-4 text-center hover:border-carbon-text transition-colors">
-                        <i class="fas fa-question-circle text-2xl mb-2"></i>
+                        <i class="fas fa-circle-question text-2xl mb-2"></i>
                         <div class="font-medium text-sm">FAQ</div>
                     </a>
                 </div>
@@ -80,7 +208,7 @@ activeNav: Resources
                     <h2 class="text-3xl font-semibold mt-4">Documentation</h2>
                 </div>
                 <p class="text-sm text-carbon-text-secondary mb-8 bg-yellow-50 border border-yellow-200 p-4">
-                    <i class="fas fa-info-circle mr-2"></i>Documentation is being developed as part of the SYNAPSIS project. Guides will be published here as they become available.
+                    <i class="fas fa-circle-info mr-2"></i>Documentation is being developed as part of the SYNAPSIS project. Guides will be published here as they become available.
                 </p>
                 <div class="grid md:grid-cols-3 gap-6">
                     <!-- Getting Started -->
@@ -100,7 +228,7 @@ activeNav: Resources
                         <span class="resource-badge resource-badge-doc mb-4 inline-block">Guide</span>
                         <span class="text-xs bg-yellow-100 px-2 py-1 ml-2">Coming Soon</span>
                         <h3 class="font-semibold mb-2 mt-3">Face Masking Methods</h3>
-                        <p class="text-sm text-carbon-text-secondary mb-4">Detailed comparison of face de-identification techniques: blur, pixelation, face masking, and neural methods.</p>
+                        <p class="text-sm text-carbon-text-secondary mb-4">Detailed comparison of face de-identification techniques: blur, pixelation, face swap, and neural methods.</p>
                         <div class="flex items-center gap-4 text-xs text-carbon-text-secondary mb-4">
                             <span><i class="fas fa-clock mr-1"></i> 25 min read</span>
                             <span><i class="fas fa-signal mr-1"></i> Intermediate</span>
@@ -246,6 +374,165 @@ activeNav: Resources
                             </div>
                         </div>
                     </div>
+                    <!-- FAIR Assessment -->
+                    <div class="border border-carbon-border bg-white p-6">
+                        <div class="flex items-start gap-4">
+                            <div class="w-12 h-12 border border-carbon-border flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-check-double text-xl"></i>
+                            </div>
+                            <div class="flex-1">
+                                <span class="resource-badge resource-badge-template mb-2 inline-block">Assessment</span>
+                                <h3 class="font-semibold mb-2">FAIR Self-Assessment for Audiovisual Data</h3>
+                                <p class="text-sm text-carbon-text-secondary mb-4">Evaluate how Findable, Accessible, Interoperable, and Reusable your masked dataset is. Adapted from the ARDC tool with audiovisual-specific guidance.</p>
+                                <div class="flex flex-wrap gap-2 mb-4">
+                                    <span class="text-xs px-2 py-1 bg-carbon-bg-hover">FAIR</span>
+                                    <span class="text-xs px-2 py-1 bg-carbon-bg-hover">DANS</span>
+                                    <span class="text-xs px-2 py-1 bg-carbon-bg-hover">CESSDA</span>
+                                </div>
+                                <a href="downloads/templates/fair-assessment-audiovisual.md" class="btn-primary px-4 py-2 text-sm inline-block" download><i class="fas fa-download mr-2"></i>Download</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- DPIA Screening -->
+                    <div class="border border-carbon-border bg-white p-6">
+                        <div class="flex items-start gap-4">
+                            <div class="w-12 h-12 border border-carbon-border flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-shield-halved text-xl"></i>
+                            </div>
+                            <div class="flex-1">
+                                <span class="resource-badge resource-badge-template mb-2 inline-block">Checklist</span>
+                                <h3 class="font-semibold mb-2">DPIA Screening for Audiovisual Research</h3>
+                                <p class="text-sm text-carbon-text-secondary mb-4">Determine if a full DPIA is needed and document key privacy considerations. Based on Dutch DPA guidance, Utrecht University handbook, and ICT Institute template.</p>
+                                <div class="flex flex-wrap gap-2 mb-4">
+                                    <span class="text-xs px-2 py-1 bg-carbon-bg-hover">GDPR</span>
+                                    <span class="text-xs px-2 py-1 bg-carbon-bg-hover">Privacy</span>
+                                    <span class="text-xs px-2 py-1 bg-carbon-bg-hover">Ethics</span>
+                                </div>
+                                <a href="downloads/templates/dpia-screening-audiovisual.md" class="btn-primary px-4 py-2 text-sm inline-block" download><i class="fas fa-download mr-2"></i>Download</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Software Management Plan -->
+                    <div class="border border-carbon-border bg-white p-6">
+                        <div class="flex items-start gap-4">
+                            <div class="w-12 h-12 border border-carbon-border flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-code-branch text-xl"></i>
+                            </div>
+                            <div class="flex-1">
+                                <span class="resource-badge resource-badge-template mb-2 inline-block">Template</span>
+                                <h3 class="font-semibold mb-2">Software Management Plan</h3>
+                                <p class="text-sm text-carbon-text-secondary mb-4">Plan the development, maintenance, and sustainability of research video processing software. Based on the Netherlands eScience Center SMP guide and NWO requirements.</p>
+                                <div class="flex flex-wrap gap-2 mb-4">
+                                    <span class="text-xs px-2 py-1 bg-carbon-bg-hover">eScience</span>
+                                    <span class="text-xs px-2 py-1 bg-carbon-bg-hover">NWO</span>
+                                    <span class="text-xs px-2 py-1 bg-carbon-bg-hover">FAIR Software</span>
+                                </div>
+                                <a href="downloads/templates/software-management-plan.md" class="btn-primary px-4 py-2 text-sm inline-block" download><i class="fas fa-download mr-2"></i>Download</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Data Sharing Decision Tree -->
+                    <div class="border border-carbon-border bg-white p-6">
+                        <div class="flex items-start gap-4">
+                            <div class="w-12 h-12 border border-carbon-border flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-sitemap text-xl"></i>
+                            </div>
+                            <div class="flex-1">
+                                <span class="resource-badge resource-badge-template mb-2 inline-block">Guide</span>
+                                <h3 class="font-semibold mb-2">Data Sharing Decision Tree</h3>
+                                <p class="text-sm text-carbon-text-secondary mb-4">Determine the right sharing strategy for your audiovisual data. Covers open, tiered, controlled access, and metadata-only paths. Based on RDNL, CESSDA, and ODISSEI guidance.</p>
+                                <div class="flex flex-wrap gap-2 mb-4">
+                                    <span class="text-xs px-2 py-1 bg-carbon-bg-hover">RDNL</span>
+                                    <span class="text-xs px-2 py-1 bg-carbon-bg-hover">DANS</span>
+                                    <span class="text-xs px-2 py-1 bg-carbon-bg-hover">NWO</span>
+                                </div>
+                                <a href="downloads/templates/data-sharing-decision-tree.md" class="btn-primary px-4 py-2 text-sm inline-block" download><i class="fas fa-download mr-2"></i>Download</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Deployment Checklist -->
+                    <div class="border border-carbon-border bg-white p-6">
+                        <div class="flex items-start gap-4">
+                            <div class="w-12 h-12 border border-carbon-border flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-server text-xl"></i>
+                            </div>
+                            <div class="flex-1">
+                                <span class="resource-badge resource-badge-template mb-2 inline-block">Checklist</span>
+                                <h3 class="font-semibold mb-2">Deployment Checklist</h3>
+                                <p class="text-sm text-carbon-text-secondary mb-4">Step-by-step checklist for deploying MaskAnyone on university HPC clusters or local infrastructure. Covers hardware, security, networking, and verification.</p>
+                                <div class="flex flex-wrap gap-2 mb-4">
+                                    <span class="text-xs px-2 py-1 bg-carbon-bg-hover">Docker</span>
+                                    <span class="text-xs px-2 py-1 bg-carbon-bg-hover">GPU</span>
+                                    <span class="text-xs px-2 py-1 bg-carbon-bg-hover">Markdown</span>
+                                </div>
+                                <a href="downloads/templates/deployment-checklist.md" class="btn-primary px-4 py-2 text-sm inline-block" download><i class="fas fa-download mr-2"></i>Download</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pilot Planning Template -->
+                    <div class="border border-carbon-border bg-white p-6">
+                        <div class="flex items-start gap-4">
+                            <div class="w-12 h-12 border border-carbon-border flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-flask text-xl"></i>
+                            </div>
+                            <div class="flex-1">
+                                <span class="resource-badge resource-badge-template mb-2 inline-block">Template</span>
+                                <h3 class="font-semibold mb-2">Pilot Planning Template</h3>
+                                <p class="text-sm text-carbon-text-secondary mb-4">Plan an institutional pilot deployment of MaskAnyone. Covers use case definition, stakeholders, compliance, technical setup, and evaluation criteria.</p>
+                                <div class="flex flex-wrap gap-2 mb-4">
+                                    <span class="text-xs px-2 py-1 bg-carbon-bg-hover">GDPR</span>
+                                    <span class="text-xs px-2 py-1 bg-carbon-bg-hover">Pilot</span>
+                                    <span class="text-xs px-2 py-1 bg-carbon-bg-hover">Markdown</span>
+                                </div>
+                                <a href="downloads/templates/pilot-planning-template.md" class="btn-primary px-4 py-2 text-sm inline-block" download><i class="fas fa-download mr-2"></i>Download</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Workshop Checklist -->
+                    <div class="border border-carbon-border bg-white p-6">
+                        <div class="flex items-start gap-4">
+                            <div class="w-12 h-12 border border-carbon-border flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-chalkboard-user text-xl"></i>
+                            </div>
+                            <div class="flex-1">
+                                <span class="resource-badge resource-badge-template mb-2 inline-block">Checklist</span>
+                                <h3 class="font-semibold mb-2">Workshop Planning Checklist</h3>
+                                <p class="text-sm text-carbon-text-secondary mb-4">Timeline-based checklist for organizing masking workshops. Includes formats for 1.5h intro, 4h course, and 3-day summer school.</p>
+                                <div class="flex flex-wrap gap-2 mb-4">
+                                    <span class="text-xs px-2 py-1 bg-carbon-bg-hover">Training</span>
+                                    <span class="text-xs px-2 py-1 bg-carbon-bg-hover">Events</span>
+                                    <span class="text-xs px-2 py-1 bg-carbon-bg-hover">Markdown</span>
+                                </div>
+                                <a href="downloads/templates/workshop-checklist.md" class="btn-primary px-4 py-2 text-sm inline-block" download><i class="fas fa-download mr-2"></i>Download</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Masking Strategy Card Deck -->
+                    <div class="border border-carbon-border bg-white p-6 opacity-75">
+                        <div class="flex items-start gap-4">
+                            <div class="w-12 h-12 border border-carbon-border flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-layer-group text-xl"></i>
+                            </div>
+                            <div class="flex-1">
+                                <span class="resource-badge resource-badge-template mb-2 inline-block">Card Deck</span>
+                                <h3 class="font-semibold mb-2">Masking Strategy Card Deck</h3>
+                                <p class="text-sm text-carbon-text-secondary mb-4">A hands-on decision tool for researchers and data stewards. Cards guide you through masking strategy selection based on your research context, data type, and privacy requirements.</p>
+                                <div class="flex flex-wrap gap-2 mb-4">
+                                    <span class="text-xs px-2 py-1 bg-carbon-bg-hover">Workshop</span>
+                                    <span class="text-xs px-2 py-1 bg-carbon-bg-hover">Decision Support</span>
+                                    <span class="text-xs px-2 py-1 bg-carbon-bg-hover">Print-ready</span>
+                                </div>
+                                <span class="text-xs font-mono uppercase tracking-widest text-carbon-text-secondary">Coming soon</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -292,6 +579,262 @@ activeNav: Resources
                         </div>
                         <a href="https://github.com/MaskAnyone/MaskAnyone#docker" class="btn-secondary px-4 py-2 text-sm inline-block">
                             <i class="fab fa-github mr-2"></i>Setup Guide
+                        </a>
+                    </div>
+                    <div class="card bg-white p-6 opacity-75">
+                        <span class="resource-badge resource-badge-code mb-4 inline-block">Guide</span>
+                        <h3 class="font-semibold mb-2">Ansible Deployment Guide</h3>
+                        <p class="text-sm text-carbon-text-secondary mb-4">Step-by-step guide for deploying MaskAnyone on institutional servers using Ansible. Covers inventory setup, environment configuration, and Apache proxy.</p>
+                        <div class="flex items-center gap-2 mb-4">
+                            <i class="fas fa-server text-carbon-text-secondary"></i>
+                        </div>
+                        <span class="text-xs font-mono uppercase tracking-widest text-carbon-text-secondary">Coming soon</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Ecosystem -->
+        <section id="ecosystem" class="py-20 px-6 bg-carbon-bg-hover border-y border-carbon-border">
+            <div class="container mx-auto max-w-5xl">
+                <div class="mb-12">
+                    <span class="text-xs font-mono uppercase tracking-widest text-carbon-text-secondary">Community Tools</span>
+                    <h2 class="text-3xl font-semibold mt-4">Ecosystem</h2>
+                    <p class="text-carbon-text-secondary mt-4 max-w-2xl">Open-source tools and research infrastructures that complement the SYNAPSIS platform.</p>
+                </div>
+
+                <!-- Privacy & Anonymization -->
+                <h3 class="text-xl font-semibold mb-6">Privacy & Anonymization</h3>
+                <div class="grid md:grid-cols-3 gap-6 mb-12">
+                    <div class="card bg-white p-6">
+                        <span class="resource-badge resource-badge-tool mb-4 inline-block">Tool</span>
+                        <h3 class="font-semibold mb-2">Amnesia</h3>
+                        <p class="text-sm text-carbon-text-secondary mb-4">Tabular & text anonymization by OpenAIRE.</p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="text-xs px-2 py-1 bg-carbon-bg-hover">Privacy</span>
+                            <span class="text-xs px-2 py-1 bg-carbon-bg-hover">Tabular Data</span>
+                        </div>
+                        <a href="https://amnesia.openaire.eu/" class="btn-secondary px-4 py-2 text-sm inline-block">
+                            <i class="fas fa-arrow-up-right-from-square mr-2"></i>Visit
+                        </a>
+                    </div>
+                    <div class="card bg-white p-6">
+                        <span class="resource-badge resource-badge-tool mb-4 inline-block">Tool</span>
+                        <h3 class="font-semibold mb-2">ARX</h3>
+                        <p class="text-sm text-carbon-text-secondary mb-4">K-anonymity, l-diversity, differential privacy.</p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="text-xs px-2 py-1 bg-carbon-bg-hover">Privacy</span>
+                            <span class="text-xs px-2 py-1 bg-carbon-bg-hover">Statistical</span>
+                        </div>
+                        <a href="https://arx.deidentifier.org/" class="btn-secondary px-4 py-2 text-sm inline-block">
+                            <i class="fas fa-arrow-up-right-from-square mr-2"></i>Visit
+                        </a>
+                    </div>
+                    <div class="card bg-white p-6">
+                        <span class="resource-badge resource-badge-code mb-4 inline-block">Repository</span>
+                        <h3 class="font-semibold mb-2">DeepPrivacy2</h3>
+                        <p class="text-sm text-carbon-text-secondary mb-4">GAN-based face anonymization.</p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="text-xs px-2 py-1 bg-carbon-bg-hover">Python</span>
+                            <span class="text-xs px-2 py-1 bg-carbon-bg-hover">Computer Vision</span>
+                        </div>
+                        <a href="https://github.com/hukkelas/deep_privacy2" class="btn-secondary px-4 py-2 text-sm inline-block">
+                            <i class="fab fa-github mr-2"></i>View on GitHub
+                        </a>
+                    </div>
+                    <div class="card bg-white p-6">
+                        <span class="resource-badge resource-badge-code mb-4 inline-block">Repository</span>
+                        <h3 class="font-semibold mb-2">Cleanvision</h3>
+                        <p class="text-sm text-carbon-text-secondary mb-4">Automated image quality auditing for ML pipelines.</p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="text-xs px-2 py-1 bg-carbon-bg-hover">Python</span>
+                            <span class="text-xs px-2 py-1 bg-carbon-bg-hover">Quality Assurance</span>
+                        </div>
+                        <a href="https://github.com/cleanlab/cleanvision" class="btn-secondary px-4 py-2 text-sm inline-block">
+                            <i class="fab fa-github mr-2"></i>View on GitHub
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Data Management & Archiving -->
+                <h3 class="text-xl font-semibold mb-6">Data Management & Archiving</h3>
+                <div class="grid md:grid-cols-3 gap-6 mb-12">
+                    <div class="card bg-white p-6">
+                        <span class="resource-badge resource-badge-tool mb-4 inline-block">Tool</span>
+                        <h3 class="font-semibold mb-2">DMPonline</h3>
+                        <p class="text-sm text-carbon-text-secondary mb-4">DMP authoring tool (DCC/DANS).</p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="text-xs px-2 py-1 bg-carbon-bg-hover">FAIR</span>
+                            <span class="text-xs px-2 py-1 bg-carbon-bg-hover">DMP</span>
+                        </div>
+                        <a href="https://dmponline.dcc.ac.uk/" class="btn-secondary px-4 py-2 text-sm inline-block">
+                            <i class="fas fa-arrow-up-right-from-square mr-2"></i>Visit
+                        </a>
+                    </div>
+                    <div class="card bg-white p-6">
+                        <span class="resource-badge resource-badge-code mb-4 inline-block">Repository</span>
+                        <h3 class="font-semibold mb-2">RIVM DMP Dashboard</h3>
+                        <p class="text-sm text-carbon-text-secondary mb-4">DMP tracking & compliance monitoring.</p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="text-xs px-2 py-1 bg-carbon-bg-hover">R</span>
+                            <span class="text-xs px-2 py-1 bg-carbon-bg-hover">Dashboard</span>
+                        </div>
+                        <a href="https://github.com/rivm-syso/dmp-dashboard" class="btn-secondary px-4 py-2 text-sm inline-block">
+                            <i class="fab fa-github mr-2"></i>View on GitHub
+                        </a>
+                    </div>
+                    <div class="card bg-white p-6">
+                        <span class="resource-badge resource-badge-platform mb-4 inline-block">Platform</span>
+                        <h3 class="font-semibold mb-2">DataverseNL</h3>
+                        <p class="text-sm text-carbon-text-secondary mb-4">Dutch research data repository.</p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="text-xs px-2 py-1 bg-carbon-bg-hover">FAIR</span>
+                            <span class="text-xs px-2 py-1 bg-carbon-bg-hover">Repository</span>
+                        </div>
+                        <a href="https://dataverse.nl/" class="btn-secondary px-4 py-2 text-sm inline-block">
+                            <i class="fas fa-arrow-up-right-from-square mr-2"></i>Visit
+                        </a>
+                    </div>
+                    <div class="card bg-white p-6">
+                        <span class="resource-badge resource-badge-platform mb-4 inline-block">Platform</span>
+                        <h3 class="font-semibold mb-2">DANS</h3>
+                        <p class="text-sm text-carbon-text-secondary mb-4">Data Archiving and Networked Services.</p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="text-xs px-2 py-1 bg-carbon-bg-hover">FAIR</span>
+                            <span class="text-xs px-2 py-1 bg-carbon-bg-hover">Archiving</span>
+                        </div>
+                        <a href="https://dans.knaw.nl/" class="btn-secondary px-4 py-2 text-sm inline-block">
+                            <i class="fas fa-arrow-up-right-from-square mr-2"></i>Visit
+                        </a>
+                    </div>
+                    <div class="card bg-white p-6">
+                        <span class="resource-badge resource-badge-tool mb-4 inline-block">Tool</span>
+                        <h3 class="font-semibold mb-2">FAIRsharing</h3>
+                        <p class="text-sm text-carbon-text-secondary mb-4">Standards & repository registry.</p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="text-xs px-2 py-1 bg-carbon-bg-hover">FAIR</span>
+                            <span class="text-xs px-2 py-1 bg-carbon-bg-hover">Standards</span>
+                        </div>
+                        <a href="https://fairsharing.org/" class="btn-secondary px-4 py-2 text-sm inline-block">
+                            <i class="fas fa-arrow-up-right-from-square mr-2"></i>Visit
+                        </a>
+                    </div>
+                    <div class="card bg-white p-6">
+                        <span class="resource-badge resource-badge-platform mb-4 inline-block">Platform</span>
+                        <h3 class="font-semibold mb-2">YODA</h3>
+                        <p class="text-sm text-carbon-text-secondary mb-4">Research data management platform (Utrecht University).</p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="text-xs px-2 py-1 bg-carbon-bg-hover">FAIR</span>
+                            <span class="text-xs px-2 py-1 bg-carbon-bg-hover">RDM</span>
+                        </div>
+                        <a href="https://yoda.uu.nl/" class="btn-secondary px-4 py-2 text-sm inline-block">
+                            <i class="fas fa-arrow-up-right-from-square mr-2"></i>Visit
+                        </a>
+                    </div>
+                    <div class="card bg-white p-6">
+                        <span class="resource-badge resource-badge-platform mb-4 inline-block">Platform</span>
+                        <h3 class="font-semibold mb-2">ODISSEI Portal</h3>
+                        <p class="text-sm text-carbon-text-secondary mb-4">SSH data discovery and access infrastructure.</p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="text-xs px-2 py-1 bg-carbon-bg-hover">SSH</span>
+                            <span class="text-xs px-2 py-1 bg-carbon-bg-hover">Discovery</span>
+                        </div>
+                        <a href="https://portal.odissei.nl/" class="btn-secondary px-4 py-2 text-sm inline-block">
+                            <i class="fas fa-arrow-up-right-from-square mr-2"></i>Visit
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Multimedia Research Tools -->
+                <h3 class="text-xl font-semibold mb-6">Multimedia Research Tools</h3>
+                <div class="grid md:grid-cols-3 gap-6">
+                    <div class="card bg-white p-6">
+                        <span class="resource-badge resource-badge-tool mb-4 inline-block">Tool</span>
+                        <h3 class="font-semibold mb-2">ELAN</h3>
+                        <p class="text-sm text-carbon-text-secondary mb-4">Multimedia annotation (Max Planck).</p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="text-xs px-2 py-1 bg-carbon-bg-hover">Annotation</span>
+                            <span class="text-xs px-2 py-1 bg-carbon-bg-hover">Video</span>
+                        </div>
+                        <a href="https://archive.mpi.nl/tla/elan" class="btn-secondary px-4 py-2 text-sm inline-block">
+                            <i class="fas fa-arrow-up-right-from-square mr-2"></i>Visit
+                        </a>
+                    </div>
+                    <div class="card bg-white p-6">
+                        <span class="resource-badge resource-badge-tool mb-4 inline-block">Tool</span>
+                        <h3 class="font-semibold mb-2">Label Studio</h3>
+                        <p class="text-sm text-carbon-text-secondary mb-4">Multi-modal data labeling.</p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="text-xs px-2 py-1 bg-carbon-bg-hover">Annotation</span>
+                            <span class="text-xs px-2 py-1 bg-carbon-bg-hover">Open Source</span>
+                        </div>
+                        <a href="https://labelstud.io/" class="btn-secondary px-4 py-2 text-sm inline-block">
+                            <i class="fas fa-arrow-up-right-from-square mr-2"></i>Visit
+                        </a>
+                    </div>
+                    <div class="card bg-white p-6">
+                        <span class="resource-badge resource-badge-platform mb-4 inline-block">Platform</span>
+                        <h3 class="font-semibold mb-2">CLARIAH Tools</h3>
+                        <p class="text-sm text-carbon-text-secondary mb-4">NLP, multimedia, linked data for humanities.</p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="text-xs px-2 py-1 bg-carbon-bg-hover">SSH</span>
+                            <span class="text-xs px-2 py-1 bg-carbon-bg-hover">Netherlands</span>
+                        </div>
+                        <a href="https://tools.clariah.nl/" class="btn-secondary px-4 py-2 text-sm inline-block">
+                            <i class="fas fa-arrow-up-right-from-square mr-2"></i>Visit
+                        </a>
+                    </div>
+                    <div class="card bg-white p-6">
+                        <span class="resource-badge resource-badge-tool mb-4 inline-block">Tool</span>
+                        <h3 class="font-semibold mb-2">VIA (VGG Annotator)</h3>
+                        <p class="text-sm text-carbon-text-secondary mb-4">Lightweight browser-based image and video annotation.</p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="text-xs px-2 py-1 bg-carbon-bg-hover">Annotation</span>
+                            <span class="text-xs px-2 py-1 bg-carbon-bg-hover">Browser</span>
+                        </div>
+                        <a href="https://www.robots.ox.ac.uk/~vgg/software/via/" class="btn-secondary px-4 py-2 text-sm inline-block">
+                            <i class="fas fa-arrow-up-right-from-square mr-2"></i>Visit
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Infrastructure & Ethics -->
+                <h3 class="text-xl font-semibold mb-6 mt-12">Infrastructure & Ethics</h3>
+                <div class="grid md:grid-cols-3 gap-6">
+                    <div class="card bg-white p-6">
+                        <span class="resource-badge resource-badge-platform mb-4 inline-block">Platform</span>
+                        <h3 class="font-semibold mb-2">SURF SANE</h3>
+                        <p class="text-sm text-carbon-text-secondary mb-4">Secure Analysis Environment for sensitive research data.</p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="text-xs px-2 py-1 bg-carbon-bg-hover">Security</span>
+                            <span class="text-xs px-2 py-1 bg-carbon-bg-hover">Cloud</span>
+                        </div>
+                        <a href="https://www.surf.nl/en/surf-sane" class="btn-secondary px-4 py-2 text-sm inline-block">
+                            <i class="fas fa-arrow-up-right-from-square mr-2"></i>Visit
+                        </a>
+                    </div>
+                    <div class="card bg-white p-6">
+                        <span class="resource-badge resource-badge-platform mb-4 inline-block">Platform</span>
+                        <h3 class="font-semibold mb-2">Netherlands eScience Center</h3>
+                        <p class="text-sm text-carbon-text-secondary mb-4">Reusable research software and digital skills training.</p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="text-xs px-2 py-1 bg-carbon-bg-hover">Research Software</span>
+                            <span class="text-xs px-2 py-1 bg-carbon-bg-hover">Training</span>
+                        </div>
+                        <a href="https://www.esciencecenter.nl/" class="btn-secondary px-4 py-2 text-sm inline-block">
+                            <i class="fas fa-arrow-up-right-from-square mr-2"></i>Visit
+                        </a>
+                    </div>
+                    <div class="card bg-white p-6">
+                        <span class="resource-badge resource-badge-doc mb-4 inline-block">Guide</span>
+                        <h3 class="font-semibold mb-2">DPIA Template (Dutch DPA)</h3>
+                        <p class="text-sm text-carbon-text-secondary mb-4">Official Data Protection Impact Assessment template from the Autoriteit Persoonsgegevens.</p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="text-xs px-2 py-1 bg-carbon-bg-hover">GDPR</span>
+                            <span class="text-xs px-2 py-1 bg-carbon-bg-hover">Ethics</span>
+                        </div>
+                        <a href="https://www.autoriteitpersoonsgegevens.nl/themas/basis-avg/praktisch-avg/data-protection-impact-assessment-dpia" class="btn-secondary px-4 py-2 text-sm inline-block">
+                            <i class="fas fa-arrow-up-right-from-square mr-2"></i>Visit
                         </a>
                     </div>
                 </div>
@@ -345,10 +888,25 @@ activeNav: Resources
                             <div>
                                 <h3 class="font-semibold mb-1">MaskBench: Benchmarking Pose Estimation Under Privacy-Preserving Masking Conditions</h3>
                                 <p class="text-sm text-carbon-text-secondary mb-2">Pouw, W., Owoyele, B., et al.</p>
-                                <p class="text-xs text-carbon-text-secondary mb-4">Behavior Research Methods (Preprint)</p>
+                                <p class="text-xs text-carbon-text-secondary mb-4">Preprint</p>
                                 <div class="flex gap-2">
                                     <a href="https://maskbench.github.io/maskbench/" class="text-xs btn-secondary px-3 py-1">Preprint</a>
                                     <a href="https://github.com/maskbench/maskbench" class="text-xs btn-secondary px-3 py-1">Code</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="border border-carbon-border bg-white p-6">
+                        <div class="flex items-start gap-4">
+                            <div class="w-10 h-10 bg-carbon-text text-white flex items-center justify-center flex-shrink-0 font-mono text-sm">
+                                2025
+                            </div>
+                            <div>
+                                <h3 class="font-semibold mb-1">MaskingOPS: A Tutorial for End-to-End Privacy-Preserving Video De-identification and Quality Assurance in Behavioral Research</h3>
+                                <p class="text-sm text-carbon-text-secondary mb-2">Owoyele, B.A., Schilling, M., Riedel, T., Shaik, S., Zafari, Z., Pouw, W., &amp; de Melo, G.</p>
+                                <p class="text-xs text-carbon-text-secondary mb-4">Under review — Behavior Research Methods</p>
+                                <div class="flex gap-2">
+                                    <a href="maskingops.html" class="text-xs btn-secondary px-3 py-1">Overview</a>
                                 </div>
                             </div>
                         </div>
@@ -393,7 +951,7 @@ activeNav: Resources
                             <i class="fas fa-chevron-down transition-transform"></i>
                         </summary>
                         <div class="px-6 pb-6 text-sm text-carbon-text-secondary">
-                            Processing time varies by video length and masking method. For standard face masking, expect approximately 5 minutes per minute of video. Advanced methods like face maskingping may take longer. You'll receive an email notification when processing completes.
+                            Processing time varies by video length and masking method. For standard face masking, expect approximately 5 minutes per minute of video. Advanced methods like face swapping may take longer. You'll receive an email notification when processing completes.
                         </div>
                     </details>
                     <details class="border border-carbon-border bg-white">
@@ -456,6 +1014,29 @@ activeNav: Resources
         </section>
     </main>
 
+    <!-- Footer -->
+    <footer class="border-t border-carbon-border py-12 px-6">
+        <div class="container mx-auto max-w-5xl">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-8">
+                <div>
+                    <div class="font-semibold text-lg mb-2">SYNAPSIS</div>
+                    <div class="text-sm text-carbon-text-secondary">
+                        Funded by NWO TDCC-SSH
+                    </div>
+                </div>
+                <div class="flex gap-8">
+                    <a href="index.html" class="text-sm text-carbon-text-secondary hover:text-carbon-text">Home</a>
+                    <a href="platform.html" class="text-sm text-carbon-text-secondary hover:text-carbon-text">Platform</a>
+                    <a href="training.html" class="text-sm text-carbon-text-secondary hover:text-carbon-text">Training</a>
+                    <a href="https://github.com/MaskAnyone/MaskAnyone" class="text-sm text-carbon-text-secondary hover:text-carbon-text">GitHub</a>
+                </div>
+            </div>
+            <div class="mt-8 pt-8 border-t border-carbon-border text-sm text-carbon-text-secondary">
+                © 2026 SYNAPSIS Project. Radboud University.
+            </div>
+        </div>
+    </footer>
+
     <script>
         // Smooth scroll
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -469,3 +1050,5 @@ activeNav: Resources
             });
         });
     </script>
+</body>
+</html>

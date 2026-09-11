@@ -1,0 +1,191 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tutorial 01 · What is video masking — SYNAPSIS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link rel="stylesheet" href="../../theme.css">
+    <script src="../../theme.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { 'sans': ['IBM Plex Sans', 'sans-serif'], 'mono': ['IBM Plex Mono', 'monospace'] },
+                    colors: {
+                        'carbon': {
+                            'bg': 'var(--color-bg)', 'bg-hover': 'var(--color-bg-hover)',
+                            'border': 'var(--color-border)', 'text': 'var(--color-text)',
+                            'text-secondary': 'var(--color-text-secondary)',
+                            'interactive': '#0f62fe',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'IBM Plex Sans', sans-serif; background-color: var(--color-bg); color: var(--color-text); line-height: 1.6; }
+        .accent-bar { height: 3px; background: var(--color-accent); width: 48px; margin-bottom: 14px; }
+        .badge { display: inline-block; padding: 3px 10px; font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: .04em; text-transform: uppercase; }
+        .badge-draft { background: var(--color-bg-hover); color: var(--color-text-secondary); border: 1px solid var(--color-border); }
+        .badge-pipeline { background: var(--color-text); color: var(--color-inverse); }
+        .video-placeholder {
+            background: var(--color-bg-hover);
+            border: 1px solid var(--color-border);
+            aspect-ratio: 16 / 9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 12px;
+            color: var(--color-text-secondary);
+        }
+        .video-placeholder i { font-size: 48px; }
+        .transcript h3 { font-size: 1.25rem; font-weight: 600; margin-top: 2.5rem; margin-bottom: 0.75rem; }
+        .transcript p { margin-bottom: 1.25rem; color: var(--color-text); }
+        .transcript p.lede { font-size: 1.1rem; }
+        .transcript strong { color: var(--color-text); font-weight: 600; }
+        .transcript blockquote { border-left: 3px solid var(--color-accent); padding-left: 1rem; margin: 1.5rem 0; color: var(--color-text-secondary); font-style: italic; }
+        .meta-row { font-size: 13px; color: var(--color-text-secondary); font-family: 'IBM Plex Mono', monospace; }
+        .meta-row a { color: var(--color-text); text-decoration: underline; text-underline-offset: 3px; }
+        .sidebar-section { border: 1px solid var(--color-border); padding: 18px 20px; margin-bottom: 16px; }
+        .sidebar-section h4 { font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--color-text-secondary); margin-bottom: 10px; }
+        .sidebar-section ul { list-style: none; padding: 0; margin: 0; font-size: 14px; }
+        .sidebar-section li { padding: 6px 0; border-bottom: 1px solid var(--color-border); }
+        .sidebar-section li:last-child { border-bottom: none; }
+        .sidebar-section a { color: var(--color-text); text-decoration: none; }
+        .sidebar-section a:hover { text-decoration: underline; }
+        .nav-pager { display: flex; justify-content: space-between; gap: 24px; margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--color-border); }
+        .nav-pager a { flex: 1; padding: 18px 22px; border: 1px solid var(--color-border); text-decoration: none; color: var(--color-text); transition: all .15s; }
+        .nav-pager a:hover { border-color: var(--color-text); }
+        .nav-pager .label { font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: .04em; text-transform: uppercase; color: var(--color-text-secondary); margin-bottom: 4px; display: block; }
+        .nav-pager .title { font-weight: 600; }
+        .nav-pager .next { text-align: right; }
+    </style>
+</head>
+<body>
+    <header class="border-b border-carbon-border sticky top-0 z-50" style="background: var(--color-bg);">
+        <div class="container mx-auto max-w-5xl px-6 py-4 flex items-center justify-between">
+            <a href="../../index.html" class="flex items-center gap-2 text-xl font-semibold tracking-tight"><span>SYNAPSIS</span></a>
+            <nav class="hidden md:flex gap-6">
+                <a href="../../index.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Home</a>
+                <a href="../../platform.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Platform</a>
+                <a href="../../training.html" class="text-sm font-medium border-b-2 border-carbon-text pb-1">Training</a>
+                <a href="../../resources.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Resources</a>
+                <a href="../../network.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Network</a>
+                <a href="../../press.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Press</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container mx-auto max-w-5xl px-6 py-12">
+        <!-- Breadcrumb -->
+        <div class="meta-row mb-6">
+            <a href="index.html">Tutorials</a> &nbsp;/&nbsp; <span>01 · Concepts</span>
+        </div>
+
+        <!-- Hero -->
+        <div class="flex items-center gap-3 mb-4">
+            <span class="badge badge-pipeline">01 · Concepts</span>
+            <span class="badge badge-draft">Script drafted</span>
+            <span class="meta-row"><i class="fa fa-clock mr-1"></i> ~7 min</span>
+        </div>
+        <span class="accent-bar"></span>
+        <h1 class="text-4xl font-semibold mb-4 leading-tight">What is video masking, and why you need it</h1>
+        <p class="text-lg text-carbon-text-secondary max-w-3xl">
+            Privacy–utility trade-offs, the five types of identifying information, and a checklist for deciding whether masking is worth your time.
+        </p>
+
+        <!-- Video player -->
+        <div class="video-placeholder mt-10">
+            <i class="fa fa-circle-play"></i>
+            <div class="text-sm font-mono uppercase tracking-widest">Video coming soon</div>
+            <div class="text-xs">Script drafted · Recording scheduled in batch 1 production</div>
+        </div>
+
+        <!-- Two-column body -->
+        <div class="grid md:grid-cols-3 gap-12 mt-12">
+            <article class="md:col-span-2 transcript">
+                <h2 class="text-2xl font-semibold mb-2">Learning goal</h2>
+                <p class="lede">After watching, you can explain the privacy–utility trade-off in your own research data, name the main types of identifying information in a video, and decide whether masking is relevant for your next study.</p>
+
+                <h2 class="text-2xl font-semibold mt-12 mb-2">Transcript</h2>
+
+                <h3>Cold open</h3>
+                <p>A developmental psychologist sits on hundreds of hours of parent–child interactions. The data is gold. The data is also locked in a drawer. Nobody else gets to look at it. It can't be replicated, archived, or reused. <strong>This happens everywhere.</strong> And it's the problem video masking exists to fix.</p>
+
+                <h3>The privacy–sharing tension</h3>
+                <p>Every privacy decision in video research is a trade. The things that identify a person — face, voice, gait — overlap with the things you want to measure: emotion, attention, gesture, posture. You can't strip one without hurting the other.</p>
+                <p>There's no single answer. Heavy blur protects privacy but kills gaze tracking. A silhouette preserves movement but loses facial expression. A skeleton overlay strips almost everything visual but keeps body kinematics. The right choice depends on <strong>your</strong> research question.</p>
+                <p>Meanwhile, the rules are tightening. GDPR. Ethics boards. Funder data-sharing mandates. The push to share is colliding with the push to protect. Masking is what lets you say yes to both.</p>
+
+                <h3>Five types of identifying information</h3>
+                <p>When people think privacy in video, they think faces. But there are five buckets, not one.</p>
+                <p><strong>Faces</strong> — the obvious one. Structure, expressions, distinctive features. Even partial visibility leaks information.</p>
+                <p><strong>Body characteristics</strong> — height, gait, posture. Gait alone can identify someone almost as reliably as a face. Clothing too, especially anything distinctive — a uniform, a piece of jewellery.</p>
+                <p><strong>Behavioural patterns</strong> — gesture style, speech rhythm, how someone interacts. These persist even when the visual is gone. Voice on its own is identifying.</p>
+                <p><strong>Context</strong> — the background. Buildings, posters, clocks, other people who walk through frame. Anything that could be cross-referenced.</p>
+                <p><strong>Temporal patterns</strong> — when the recording was made, the EXIF metadata, seasonal cues, recurring schedules across sessions.</p>
+                <p>Real masking addresses all five. Not just the face.</p>
+
+                <h3>When masking is worth your time</h3>
+                <p>You should consider masking your video data if any of these are true:</p>
+                <ul class="list-disc pl-6 mb-6 space-y-2">
+                    <li>You're sharing with collaborators — even ones at your own institution.</li>
+                    <li>Your institution or funder requires a privacy plan.</li>
+                    <li>You want to archive the data for future researchers.</li>
+                    <li>You want the data to be useful for secondary analyses you haven't thought of yet.</li>
+                    <li>You're building or using machine-learning models, and need the data outside a locked environment.</li>
+                    <li>You've already hit a wall: someone said no, the data sits unused, you don't know where to go.</li>
+                </ul>
+                <p>If any of these are true, the rest of this tutorial series is for you.</p>
+
+                <h3>Recap</h3>
+                <p>Three things to remember. <strong>One</strong>: every masking choice is a privacy–utility trade. There's no free option. <strong>Two</strong>: identifying information is five buckets — face, body, behaviour, context, time — and good masking touches all of them. <strong>Three</strong>: if you're sitting on data you can't share, masking isn't a luxury, it's the unlock.</p>
+                <blockquote>Next up: getting the tool installed. We'll get MaskAnyone running on your machine in under five minutes.</blockquote>
+            </article>
+
+            <aside>
+                <div class="sidebar-section">
+                    <h4>Details</h4>
+                    <ul>
+                        <li><span class="meta-row">Duration target</span><br>~7 min</li>
+                        <li><span class="meta-row">Audience</span><br>Researchers new to video privacy</li>
+                        <li><span class="meta-row">Prereqs</span><br>None — entry point</li>
+                    </ul>
+                </div>
+
+                <div class="sidebar-section">
+                    <h4>Source</h4>
+                    <ul>
+                        <li><a href="../../../manuscripts/temp_maskanything/tutorial_maskanything.pdf"><i class="fa fa-file-pdf mr-2"></i>tutorial_maskanything.pdf §1, §2</a></li>
+                    </ul>
+                </div>
+
+                <div class="sidebar-section">
+                    <h4>Related</h4>
+                    <ul>
+                        <li><a href="02-maskanyone.html">→ 02 · MaskAnyone</a></li>
+                        <li><a href="03-maskbench.html">→ 03 · MaskBench</a></li>
+                    </ul>
+                </div>
+            </aside>
+        </div>
+
+        <!-- Pager -->
+        <nav class="nav-pager">
+            <a href="index.html">
+                <span class="label">↑ Series</span>
+                <span class="title">All tutorials</span>
+            </a>
+            <a href="02-maskanyone.html" class="next">
+                <span class="label">Next →</span>
+                <span class="title">02 · MaskAnyone</span>
+            </a>
+        </nav>
+    </main>
+</body>
+</html>

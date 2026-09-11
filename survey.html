@@ -1,18 +1,136 @@
----
-layout: base.njk
-title: SYNAPSIS Community Survey
-activeNav: ""
----
-
-<style>
-    .section-card {
-        background: var(--color-bg);
-    }
-    .section-number {
-        background: var(--color-accent);
-        color: var(--color-inverse);
-    }
-</style>
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon-180x180.png">
+    <title>SYNAPSIS Community Survey</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link rel="stylesheet" href="theme.css">
+    <script src="theme.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'sans': ['IBM Plex Sans', 'sans-serif'],
+                        'mono': ['IBM Plex Mono', 'monospace'],
+                    },
+                    colors: {
+                        'carbon': {
+                            'bg': 'var(--color-bg)',
+                            'bg-hover': 'var(--color-bg-hover)',
+                            'border': 'var(--color-border)',
+                            'text': 'var(--color-text)',
+                            'text-secondary': 'var(--color-text-secondary)',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'IBM Plex Sans', sans-serif;
+            background-color: var(--color-bg);
+            color: var(--color-text);
+        }
+        .accent-bar {
+            height: 3px;
+            background: var(--color-accent);
+        }
+        .card {
+            border: 1px solid var(--color-border);
+            transition: all 0.15s ease;
+        }
+        .card:hover {
+            border-color: var(--color-text);
+            box-shadow: 0 4px 14px rgba(0,0,0,0.1);
+        }
+        .btn-primary {
+            background: var(--color-accent);
+            color: var(--color-inverse);
+            transition: all 0.15s ease;
+        }
+        .btn-primary:hover {
+            background: var(--color-accent-hover);
+        }
+        .btn-secondary {
+            background: var(--color-bg);
+            color: var(--color-text);
+            border: 1px solid var(--color-accent);
+            transition: all 0.15s ease;
+        }
+        .btn-secondary:hover {
+            background: var(--color-bg-hover);
+        }
+        .nav-link {
+            position: relative;
+            padding-bottom: 4px;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--color-accent);
+            transition: width 0.2s ease;
+        }
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        .section-card {
+            position: relative;
+            padding-left: 60px;
+        }
+        .section-number {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 40px;
+            height: 40px;
+            background: var(--color-accent);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'IBM Plex Mono', monospace;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <!-- Header -->
+    <header class="border-b border-carbon-border sticky top-0 z-50 bg-white">
+        <div class="accent-bar"></div>
+        <nav class="container mx-auto px-6 py-4">
+            <div class="flex justify-between items-center">
+                <a href="index.html" class="flex items-center gap-2 text-xl font-semibold tracking-tight">
+                    <img src="logo-mark.svg" alt="" class="h-20 w-auto">
+                    SYNAPSIS
+                </a>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="index.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Home</a>
+                    <a href="platform.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Platform</a>
+                    <a href="demo.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Demo</a>
+                    <a href="training.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Training</a>
+                    <a href="resources.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Resources</a>
+                    <a href="network.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Network</a>
+                    <a href="press.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">News</a>
+                </div>
+                <button onclick="toggleTheme()" class="theme-toggle" title="Toggle dark mode">
+                    <i class="fas fa-moon"></i><i class="fas fa-sun"></i>
+                </button>
+            </div>
+        </nav>
+    </header>
 
     <main>
         <!-- Hero -->
@@ -114,7 +232,7 @@ activeNav: ""
                             </div>
                             <div class="flex items-start gap-4">
                                 <div class="w-10 h-10 border border-carbon-border flex items-center justify-center flex-shrink-0">
-                                    <i class="fas fa-balance-scale"></i>
+                                    <i class="fas fa-scale-balanced"></i>
                                 </div>
                                 <div>
                                     <h3 class="font-medium">Ethics Officers</h3>
@@ -135,75 +253,55 @@ activeNav: ""
                     <h2 class="text-3xl font-semibold mt-4">Survey Sections</h2>
                 </div>
                 <div class="grid md:grid-cols-2 gap-6">
-                    <div class="section-card border border-carbon-border p-6 flex gap-4 items-start">
-                        <div class="section-number w-10 h-10 flex-shrink-0 flex items-center justify-center font-mono font-semibold">1</div>
-                        <div>
-                            <h3 class="font-semibold mb-2">Respondent Background</h3>
-                            <p class="text-sm text-carbon-text-secondary">Your role, discipline, and experience with audiovisual data</p>
-                        </div>
+                    <div class="section-card border border-carbon-border bg-white p-6">
+                        <div class="section-number">1</div>
+                        <h3 class="font-semibold mb-2">Respondent Background</h3>
+                        <p class="text-sm text-carbon-text-secondary">Your role, discipline, and experience with audiovisual data</p>
                     </div>
-                    <div class="section-card border border-carbon-border p-6 flex gap-4 items-start">
-                        <div class="section-number w-10 h-10 flex-shrink-0 flex items-center justify-center font-mono font-semibold">2</div>
-                        <div>
-                            <h3 class="font-semibold mb-2">Current Practices & Challenges</h3>
-                            <p class="text-sm text-carbon-text-secondary">Tools you use and barriers you face</p>
-                        </div>
+                    <div class="section-card border border-carbon-border bg-white p-6">
+                        <div class="section-number">2</div>
+                        <h3 class="font-semibold mb-2">Current Practices & Challenges</h3>
+                        <p class="text-sm text-carbon-text-secondary">Tools you use and barriers you face</p>
                     </div>
-                    <div class="section-card border border-carbon-border p-6 flex gap-4 items-start">
-                        <div class="section-number w-10 h-10 flex-shrink-0 flex items-center justify-center font-mono font-semibold">3</div>
-                        <div>
-                            <h3 class="font-semibold mb-2">Privacy & Ethics</h3>
-                            <p class="text-sm text-carbon-text-secondary">GDPR compliance, consent, and ethical considerations</p>
-                        </div>
+                    <div class="section-card border border-carbon-border bg-white p-6">
+                        <div class="section-number">3</div>
+                        <h3 class="font-semibold mb-2">Privacy & Ethics</h3>
+                        <p class="text-sm text-carbon-text-secondary">GDPR compliance, consent, and ethical considerations</p>
                     </div>
-                    <div class="section-card border border-carbon-border p-6 flex gap-4 items-start">
-                        <div class="section-number w-10 h-10 flex-shrink-0 flex items-center justify-center font-mono font-semibold">4</div>
-                        <div>
-                            <h3 class="font-semibold mb-2">Masking Requirements</h3>
-                            <p class="text-sm text-carbon-text-secondary">Face, voice, and body de-identification needs</p>
-                        </div>
+                    <div class="section-card border border-carbon-border bg-white p-6">
+                        <div class="section-number">4</div>
+                        <h3 class="font-semibold mb-2">Masking Requirements</h3>
+                        <p class="text-sm text-carbon-text-secondary">Face, voice, and body de-identification needs</p>
                     </div>
-                    <div class="section-card border border-carbon-border p-6 flex gap-4 items-start">
-                        <div class="section-number w-10 h-10 flex-shrink-0 flex items-center justify-center font-mono font-semibold">5</div>
-                        <div>
-                            <h3 class="font-semibold mb-2">Data Sharing & Archiving</h3>
-                            <p class="text-sm text-carbon-text-secondary">Reuse, FAIR principles, and long-term preservation</p>
-                        </div>
+                    <div class="section-card border border-carbon-border bg-white p-6">
+                        <div class="section-number">5</div>
+                        <h3 class="font-semibold mb-2">Data Sharing & Archiving</h3>
+                        <p class="text-sm text-carbon-text-secondary">Reuse, FAIR principles, and long-term preservation</p>
                     </div>
-                    <div class="section-card border border-carbon-border p-6 flex gap-4 items-start">
-                        <div class="section-number w-10 h-10 flex-shrink-0 flex items-center justify-center font-mono font-semibold">6</div>
-                        <div>
-                            <h3 class="font-semibold mb-2">Platform Features</h3>
-                            <p class="text-sm text-carbon-text-secondary">Desired functionality and user interface preferences</p>
-                        </div>
+                    <div class="section-card border border-carbon-border bg-white p-6">
+                        <div class="section-number">6</div>
+                        <h3 class="font-semibold mb-2">Platform Features</h3>
+                        <p class="text-sm text-carbon-text-secondary">Desired functionality and user interface preferences</p>
                     </div>
-                    <div class="section-card border border-carbon-border p-6 flex gap-4 items-start">
-                        <div class="section-number w-10 h-10 flex-shrink-0 flex items-center justify-center font-mono font-semibold">7</div>
-                        <div>
-                            <h3 class="font-semibold mb-2">Training Needs</h3>
-                            <p class="text-sm text-carbon-text-secondary">Skill gaps and preferred learning formats</p>
-                        </div>
+                    <div class="section-card border border-carbon-border bg-white p-6">
+                        <div class="section-number">7</div>
+                        <h3 class="font-semibold mb-2">Training Needs</h3>
+                        <p class="text-sm text-carbon-text-secondary">Skill gaps and preferred learning formats</p>
                     </div>
-                    <div class="section-card border border-carbon-border p-6 flex gap-4 items-start">
-                        <div class="section-number w-10 h-10 flex-shrink-0 flex items-center justify-center font-mono font-semibold">8</div>
-                        <div>
-                            <h3 class="font-semibold mb-2">Infrastructure</h3>
-                            <p class="text-sm text-carbon-text-secondary">Cloud vs local, storage, and computing needs</p>
-                        </div>
+                    <div class="section-card border border-carbon-border bg-white p-6">
+                        <div class="section-number">8</div>
+                        <h3 class="font-semibold mb-2">Infrastructure</h3>
+                        <p class="text-sm text-carbon-text-secondary">Cloud vs local, storage, and computing needs</p>
                     </div>
-                    <div class="section-card border border-carbon-border p-6 flex gap-4 items-start">
-                        <div class="section-number w-10 h-10 flex-shrink-0 flex items-center justify-center font-mono font-semibold">9</div>
-                        <div>
-                            <h3 class="font-semibold mb-2">Community Engagement</h3>
-                            <p class="text-sm text-carbon-text-secondary">Interest in workshops, events, and collaboration</p>
-                        </div>
+                    <div class="section-card border border-carbon-border bg-white p-6">
+                        <div class="section-number">9</div>
+                        <h3 class="font-semibold mb-2">Community Engagement</h3>
+                        <p class="text-sm text-carbon-text-secondary">Interest in workshops, events, and collaboration</p>
                     </div>
-                    <div class="section-card border border-carbon-border p-6 flex gap-4 items-start">
-                        <div class="section-number w-10 h-10 flex-shrink-0 flex items-center justify-center font-mono font-semibold">10</div>
-                        <div>
-                            <h3 class="font-semibold mb-2">Additional Input</h3>
-                            <p class="text-sm text-carbon-text-secondary">Open feedback and follow-up interest</p>
-                        </div>
+                    <div class="section-card border border-carbon-border bg-white p-6">
+                        <div class="section-number">10</div>
+                        <h3 class="font-semibold mb-2">Additional Input</h3>
+                        <p class="text-sm text-carbon-text-secondary">Open feedback and follow-up interest</p>
                     </div>
                 </div>
             </div>
@@ -215,7 +313,7 @@ activeNav: ""
                 <div class="border border-carbon-border p-8">
                     <div class="flex items-start gap-4 mb-6">
                         <div class="w-12 h-12 bg-carbon-text text-white flex items-center justify-center flex-shrink-0">
-                            <i class="fas fa-shield-alt text-xl"></i>
+                            <i class="fas fa-shield-halved text-xl"></i>
                         </div>
                         <div>
                             <h3 class="text-xl font-semibold mb-2">Privacy & Data Use</h3>
@@ -255,3 +353,28 @@ activeNav: ""
             </div>
         </section>
     </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-carbon-border py-12 px-6">
+        <div class="container mx-auto max-w-5xl">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-8">
+                <div>
+                    <div class="font-semibold text-lg mb-2">SYNAPSIS</div>
+                    <div class="text-sm text-carbon-text-secondary">
+                        Funded by NWO TDCC-SSH
+                    </div>
+                </div>
+                <div class="flex gap-8">
+                    <a href="index.html" class="text-sm text-carbon-text-secondary hover:text-carbon-text">Home</a>
+                    <a href="platform.html" class="text-sm text-carbon-text-secondary hover:text-carbon-text">Platform</a>
+                    <a href="training.html" class="text-sm text-carbon-text-secondary hover:text-carbon-text">Training</a>
+                    <a href="resources.html" class="text-sm text-carbon-text-secondary hover:text-carbon-text">Resources</a>
+                </div>
+            </div>
+            <div class="mt-8 pt-8 border-t border-carbon-border text-sm text-carbon-text-secondary">
+                © 2026 SYNAPSIS Project. Radboud University.
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

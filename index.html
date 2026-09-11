@@ -1,20 +1,143 @@
----
-layout: base.njk
-title: SYNAPSIS - Privacy-Aware Audiovisual Data Platform
-activeNav: Home
----
-<style>
-    .stat-number {
-        font-family: 'IBM Plex Mono', monospace;
-    }
-    #networkCanvas {
-        opacity: 0.15;
-    }
-</style>
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon-180x180.png">
+    <title>SYNAPSIS - Privacy-Aware Audiovisual Data Platform</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link rel="stylesheet" href="theme.css">
+    <script src="theme.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'sans': ['IBM Plex Sans', 'sans-serif'],
+                        'mono': ['IBM Plex Mono', 'monospace'],
+                    },
+                    colors: {
+                        'carbon': {
+                            'bg': 'var(--color-bg)',
+                            'bg-hover': 'var(--color-bg-hover)',
+                            'border': 'var(--color-border)',
+                            'text': 'var(--color-text)',
+                            'text-secondary': 'var(--color-text-secondary)',
+                            'interactive': '#0f62fe',
+                            'support-error': '#da1e28',
+                            'support-success': '#198038',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'IBM Plex Sans', sans-serif;
+            background-color: var(--color-bg);
+            color: var(--color-text);
+        }
+        .accent-bar {
+            height: 3px;
+            background: var(--color-accent);
+        }
+        .card {
+            border: 1px solid var(--color-border);
+            transition: all 0.15s ease;
+        }
+        .card:hover {
+            border-color: var(--color-text);
+            box-shadow: 0 4px 14px rgba(0,0,0,0.1);
+        }
+        .btn-primary {
+            background: var(--color-accent);
+            color: var(--color-inverse);
+            transition: all 0.15s ease;
+        }
+        .btn-primary:hover {
+            background: var(--color-accent-hover);
+        }
+        .btn-secondary {
+            background: var(--color-bg);
+            color: var(--color-text);
+            border: 1px solid var(--color-accent);
+            transition: all 0.15s ease;
+        }
+        .btn-secondary:hover {
+            background: var(--color-bg-hover);
+        }
+        .nav-link {
+            position: relative;
+            padding-bottom: 4px;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--color-accent);
+            transition: width 0.2s ease;
+        }
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        .stat-number {
+            font-family: 'IBM Plex Mono', monospace;
+        }
+    </style>
+</head>
+<body class="min-h-screen has-hero">
+    <!-- Header -->
+    <header class="border-b border-carbon-border sticky top-0 z-50 bg-white">
+        <div class="accent-bar"></div>
+        <nav class="container mx-auto px-6 py-4">
+            <div class="flex justify-between items-center">
+                <a href="index.html" class="flex items-center gap-2 text-xl font-semibold tracking-tight">
+                    <img src="logo-mark.svg" alt="" class="h-20 w-auto">
+                    SYNAPSIS
+                </a>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="index.html" class="text-sm font-medium border-b-2 border-carbon-text pb-1">Home</a>
+                    <a href="platform.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Platform</a>
+                    <a href="demo.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Demo</a>
+                    <a href="training.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Training</a>
+                    <a href="resources.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Resources</a>
+                    <a href="network.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Network</a>
+                    <a href="press.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">News</a>
+                </div>
+                <button class="md:hidden p-2 -mr-2" onclick="toggleMobileMenu()" aria-label="Toggle navigation menu">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+                <button onclick="toggleTheme()" class="theme-toggle" title="Toggle dark mode">
+                    <i class="fas fa-moon"></i><i class="fas fa-sun"></i>
+                </button>
+            </div>
+        </nav>
+        <!-- Mobile menu (visible only when toggled, hidden on md+) -->
+        <div id="mobile-menu" class="hidden md:hidden border-t border-carbon-border">
+            <a href="index.html" class="block px-6 py-3 text-sm font-medium bg-carbon-bg-hover border-l-2 border-carbon-text">Home</a>
+            <a href="platform.html" class="block px-6 py-3 text-sm font-medium text-carbon-text-secondary hover:text-carbon-text hover:bg-carbon-bg-hover">Platform</a>
+            <a href="demo.html" class="block px-6 py-3 text-sm font-medium text-carbon-text-secondary hover:text-carbon-text hover:bg-carbon-bg-hover">Demo</a>
+            <a href="training.html" class="block px-6 py-3 text-sm font-medium text-carbon-text-secondary hover:text-carbon-text hover:bg-carbon-bg-hover">Training</a>
+            <a href="resources.html" class="block px-6 py-3 text-sm font-medium text-carbon-text-secondary hover:text-carbon-text hover:bg-carbon-bg-hover">Resources</a>
+            <a href="network.html" class="block px-6 py-3 text-sm font-medium text-carbon-text-secondary hover:text-carbon-text hover:bg-carbon-bg-hover">Network</a>
+            <a href="press.html" class="block px-6 py-3 text-sm font-medium text-carbon-text-secondary hover:text-carbon-text hover:bg-carbon-bg-hover">News</a>
+        </div>
+    </header>
 
     <!-- Hero Section -->
     <section class="py-24 px-6 relative overflow-hidden">
-        <canvas id="networkCanvas" class="absolute inset-0 w-full h-full pointer-events-none"></canvas>
+        <div class="hero-network-bg" aria-hidden="true">
+            <img src="logo-mark.svg" alt="" class="w-full h-full">
+        </div>
         <div class="container mx-auto max-w-5xl relative z-10">
             <div class="mb-4">
                 <span class="text-xs font-mono uppercase tracking-widest text-carbon-text-secondary">NWO TDCC-SSH Project</span>
@@ -34,157 +157,26 @@ activeNav: Home
                 </a>
             </div>
         </div>
-        <script>
-        (function() {
-            const canvas = document.getElementById('networkCanvas');
-            const ctx = canvas.getContext('2d');
-            const canvasDark = document.documentElement.classList.contains('dark');
-            const colors = ['#0077B3','#BC0031','#00A651','#E30613','#EB6923','#00838F','#6A1B9A'];
-            const connColor = canvasDark ? '200,200,200' : '158,158,158';
-            const nodeCount = 18;
-            const connectionDist = 180;
-            const mouseRadius = 200;
-            let mouse = { x: -1000, y: -1000 };
-            let nodes = [];
-            let animId;
-
-            function resize() {
-                const rect = canvas.parentElement.getBoundingClientRect();
-                canvas.width = rect.width;
-                canvas.height = rect.height;
-            }
-
-            function initNodes() {
-                nodes = [];
-                for (let i = 0; i < nodeCount; i++) {
-                    nodes.push({
-                        x: Math.random() * canvas.width,
-                        y: Math.random() * canvas.height,
-                        baseX: 0, baseY: 0,
-                        vx: (Math.random() - 0.5) * 0.3,
-                        vy: (Math.random() - 0.5) * 0.3,
-                        r: 3 + Math.random() * 5,
-                        color: colors[i % colors.length]
-                    });
-                }
-                nodes.forEach(n => { n.baseX = n.x; n.baseY = n.y; });
-            }
-
-            canvas.parentElement.addEventListener('mousemove', function(e) {
-                const rect = canvas.parentElement.getBoundingClientRect();
-                mouse.x = e.clientX - rect.left;
-                mouse.y = e.clientY - rect.top;
-            });
-            canvas.parentElement.addEventListener('mouseleave', function() {
-                mouse.x = -1000; mouse.y = -1000;
-            });
-
-            function draw() {
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-                // Update positions
-                nodes.forEach(n => {
-                    n.x += n.vx;
-                    n.y += n.vy;
-
-                    // Gentle drift boundaries
-                    if (n.x < -20 || n.x > canvas.width + 20) n.vx *= -1;
-                    if (n.y < -20 || n.y > canvas.height + 20) n.vy *= -1;
-
-                    // Mouse repulsion
-                    const dx = n.x - mouse.x;
-                    const dy = n.y - mouse.y;
-                    const dist = Math.sqrt(dx * dx + dy * dy);
-                    if (dist < mouseRadius && dist > 0) {
-                        const force = (mouseRadius - dist) / mouseRadius;
-                        n.x += (dx / dist) * force * 2.5;
-                        n.y += (dy / dist) * force * 2.5;
-                    }
-                });
-
-                // Draw connections
-                for (let i = 0; i < nodes.length; i++) {
-                    for (let j = i + 1; j < nodes.length; j++) {
-                        const dx = nodes[i].x - nodes[j].x;
-                        const dy = nodes[i].y - nodes[j].y;
-                        const dist = Math.sqrt(dx * dx + dy * dy);
-                        if (dist < connectionDist) {
-                            const alpha = 1 - dist / connectionDist;
-                            // Brighten connections near mouse
-                            const mx = (nodes[i].x + nodes[j].x) / 2;
-                            const my = (nodes[i].y + nodes[j].y) / 2;
-                            const mDist = Math.sqrt((mx - mouse.x) ** 2 + (my - mouse.y) ** 2);
-                            const boost = mDist < mouseRadius ? (1 - mDist / mouseRadius) * 0.6 : 0;
-                            ctx.beginPath();
-                            ctx.moveTo(nodes[i].x, nodes[i].y);
-                            ctx.lineTo(nodes[j].x, nodes[j].y);
-                            ctx.strokeStyle = `rgba(${connColor},${alpha * 0.4 + boost})`;
-                            ctx.lineWidth = 1;
-                            ctx.stroke();
-                        }
-                    }
-                }
-
-                // Draw nodes
-                nodes.forEach(n => {
-                    const dx = n.x - mouse.x;
-                    const dy = n.y - mouse.y;
-                    const dist = Math.sqrt(dx * dx + dy * dy);
-                    const glow = dist < mouseRadius ? (1 - dist / mouseRadius) : 0;
-                    const r = n.r + glow * 3;
-
-                    if (glow > 0) {
-                        ctx.beginPath();
-                        ctx.arc(n.x, n.y, r + 4, 0, Math.PI * 2);
-                        ctx.fillStyle = n.color.replace(')', `,${glow * 0.2})`).replace('rgb', 'rgba').replace('#', '');
-                        // Use a simpler glow
-                        ctx.shadowColor = n.color;
-                        ctx.shadowBlur = glow * 15;
-                        ctx.fill();
-                        ctx.shadowBlur = 0;
-                    }
-
-                    ctx.beginPath();
-                    ctx.arc(n.x, n.y, r, 0, Math.PI * 2);
-                    ctx.fillStyle = n.color;
-                    ctx.fill();
-                });
-
-                animId = requestAnimationFrame(draw);
-            }
-
-            window.addEventListener('resize', function() { resize(); });
-            resize();
-            initNodes();
-            draw();
-
-            // Pause when not visible
-            document.addEventListener('visibilitychange', function() {
-                if (document.hidden) { cancelAnimationFrame(animId); }
-                else { draw(); }
-            });
-        })();
-        </script>
     </section>
 
     <!-- Stats Bar -->
-    <section class="border-y border-carbon-border bg-carbon-bg-hover py-8">
+    <section class="border-y border-carbon-border bg-carbon-bg-hover py-8 reveal">
         <div class="container mx-auto px-6">
             <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
                 <div class="text-center">
-                    <div class="stat-number text-3xl font-semibold">24</div>
+                    <div class="stat-number text-3xl font-semibold" data-count="24">24</div>
                     <div class="text-sm text-carbon-text-secondary mt-1">Months</div>
                 </div>
                 <div class="text-center">
-                    <div class="stat-number text-3xl font-semibold">€250K</div>
+                    <div class="stat-number text-3xl font-semibold" data-count="250" data-prefix="€" data-suffix="K">€250K</div>
                     <div class="text-sm text-carbon-text-secondary mt-1">Funding</div>
                 </div>
                 <div class="text-center">
-                    <div class="stat-number text-3xl font-semibold">7</div>
+                    <div class="stat-number text-3xl font-semibold" data-count="7">7</div>
                     <div class="text-sm text-carbon-text-secondary mt-1">Partners</div>
                 </div>
                 <div class="text-center">
-                    <div class="stat-number text-3xl font-semibold">100+</div>
+                    <div class="stat-number text-3xl font-semibold" data-count="100" data-suffix="+">100+</div>
                     <div class="text-sm text-carbon-text-secondary mt-1">Target Trainees</div>
                 </div>
             </div>
@@ -192,7 +184,7 @@ activeNav: Home
     </section>
 
     <!-- About Section -->
-    <section id="about" class="py-20 px-6">
+    <section id="about" class="py-20 px-6 reveal">
         <div class="container mx-auto max-w-5xl">
             <div class="grid md:grid-cols-2 gap-16">
                 <div>
@@ -222,11 +214,11 @@ activeNav: Home
     <!-- Features Grid -->
     <section class="py-20 px-6 bg-carbon-bg-hover border-y border-carbon-border">
         <div class="container mx-auto max-w-5xl">
-            <div class="mb-12">
+            <div class="mb-12 reveal">
                 <span class="text-xs font-mono uppercase tracking-widest text-carbon-text-secondary">Capabilities</span>
                 <h2 class="text-3xl font-semibold mt-4">What SYNAPSIS offers</h2>
             </div>
-            <div class="grid md:grid-cols-3 gap-6">
+            <div class="grid md:grid-cols-3 gap-6 reveal-stagger">
                 <div class="card bg-white p-6">
                     <div class="w-12 h-12 border border-carbon-border flex items-center justify-center mb-4">
                         <i class="fas fa-user-shield text-xl"></i>
@@ -243,7 +235,7 @@ activeNav: Home
                 </div>
                 <div class="card bg-white p-6">
                     <div class="w-12 h-12 border border-carbon-border flex items-center justify-center mb-4">
-                        <i class="fas fa-running text-xl"></i>
+                        <i class="fas fa-person-running text-xl"></i>
                     </div>
                     <h3 class="font-semibold mb-2">Body Kinematics</h3>
                     <p class="text-sm text-carbon-text-secondary">Extract pose data and movement analytics from masked videos.</p>
@@ -264,7 +256,7 @@ activeNav: Home
                 </div>
                 <div class="card bg-white p-6">
                     <div class="w-12 h-12 border border-carbon-border flex items-center justify-center mb-4">
-                        <i class="fas fa-balance-scale text-xl"></i>
+                        <i class="fas fa-scale-balanced text-xl"></i>
                     </div>
                     <h3 class="font-semibold mb-2">GDPR Compliance</h3>
                     <p class="text-sm text-carbon-text-secondary">Tools and guidelines for privacy-compliant data sharing.</p>
@@ -274,7 +266,7 @@ activeNav: Home
     </section>
 
     <!-- Work Packages -->
-    <section class="py-20 px-6">
+    <section class="py-20 px-6 reveal">
         <div class="container mx-auto max-w-5xl">
             <div class="mb-12">
                 <span class="text-xs font-mono uppercase tracking-widest text-carbon-text-secondary">Project Structure</span>
@@ -303,97 +295,106 @@ activeNav: Home
                     <p class="text-sm text-carbon-text-secondary">Months 18-24 | SURF deployment, Maskathon, sustainability planning</p>
                 </div>
             </div>
+            <p class="text-sm text-carbon-text-secondary mt-8 pl-0 leading-relaxed">
+                <strong class="text-carbon-text">Related projects:</strong> SMASHFIRE (NWO Impact Explorer, 2026) and REDES Surveillance Sandbox (TSHD, 2026) extend the MaskingOPS framework into safety-critical and surveillance contexts.
+            </p>
         </div>
     </section>
 
     <!-- Partners -->
-    <section class="py-20 px-6 bg-carbon-bg-hover border-y border-carbon-border">
+    <section class="py-20 px-6 bg-carbon-bg-hover border-y border-carbon-border reveal">
         <div class="container mx-auto max-w-5xl">
             <div class="mb-12">
                 <span class="text-xs font-mono uppercase tracking-widest text-carbon-text-secondary">Collaboration</span>
                 <h2 class="text-3xl font-semibold mt-4">Partners</h2>
             </div>
             <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
-                <a href="https://www.ru.nl/" target="_blank" rel="noopener" class="text-center py-6 border border-carbon-border bg-white hover:border-carbon-interactive transition-colors no-underline text-inherit">
+                <div class="text-center py-6 border border-carbon-border bg-white">
                     <div class="font-semibold">Radboud</div>
                     <div class="text-xs text-carbon-text-secondary">Lead Institution</div>
-                </a>
-                <a href="https://vu.nl/" target="_blank" rel="noopener" class="text-center py-6 border border-carbon-border bg-white hover:border-carbon-interactive transition-colors no-underline text-inherit">
+                </div>
+                <div class="text-center py-6 border border-carbon-border bg-white">
+                    <div class="font-semibold">Tilburg University</div>
+                    <div class="text-xs text-carbon-text-secondary">Body Kinematics</div>
+                </div>
+                <div class="text-center py-6 border border-carbon-border bg-white">
                     <div class="font-semibold">VU Amsterdam</div>
                     <div class="text-xs text-carbon-text-secondary">Masking Lab</div>
-                </a>
-                <a href="https://www.uva.nl/" target="_blank" rel="noopener" class="text-center py-6 border border-carbon-border bg-white hover:border-carbon-interactive transition-colors no-underline text-inherit">
+                </div>
+                <div class="text-center py-6 border border-carbon-border bg-white">
                     <div class="font-semibold">UvA</div>
                     <div class="text-xs text-carbon-text-secondary">Training</div>
-                </a>
-                <a href="https://www.eur.nl/" target="_blank" rel="noopener" class="text-center py-6 border border-carbon-border bg-white hover:border-carbon-interactive transition-colors no-underline text-inherit">
+                </div>
+                <div class="text-center py-6 border border-carbon-border bg-white">
                     <div class="font-semibold">EUR</div>
-                    <div class="text-xs text-carbon-text-secondary">Pilot</div>
-                </a>
-                <a href="https://www.rug.nl/" target="_blank" rel="noopener" class="text-center py-6 border border-carbon-border bg-white hover:border-carbon-interactive transition-colors no-underline text-inherit">
-                    <div class="font-semibold">Groningen</div>
-                    <div class="text-xs text-carbon-text-secondary">Pilot</div>
-                </a>
-                <a href="https://www.tilburguniversity.edu/" target="_blank" rel="noopener" class="text-center py-6 border border-carbon-border bg-white hover:border-carbon-interactive transition-colors no-underline text-inherit">
-                    <div class="font-semibold">Tilburg</div>
-                    <div class="text-xs text-carbon-text-secondary">Pilot</div>
-                </a>
-                <a href="https://www.surf.nl/" target="_blank" rel="noopener" class="text-center py-6 border border-carbon-border bg-white hover:border-carbon-interactive transition-colors no-underline text-inherit">
+                    <div class="text-xs text-carbon-text-secondary">Training</div>
+                </div>
+                <div class="text-center py-6 border border-carbon-border bg-white">
                     <div class="font-semibold">SURF</div>
                     <div class="text-xs text-carbon-text-secondary">Infrastructure</div>
-                </a>
-                <a href="https://dans.knaw.nl/nl/" target="_blank" rel="noopener" class="text-center py-6 border border-carbon-border bg-white hover:border-carbon-interactive transition-colors no-underline text-inherit">
+                </div>
+                <div class="text-center py-6 border border-carbon-border bg-white">
                     <div class="font-semibold">DANS</div>
                     <div class="text-xs text-carbon-text-secondary">Archiving</div>
-                </a>
-                <a href="https://hpi.de/" target="_blank" rel="noopener" class="text-center py-6 border border-carbon-border bg-white hover:border-carbon-interactive transition-colors no-underline text-inherit">
-                    <div class="font-semibold">HPI</div>
-                    <div class="text-xs text-carbon-text-secondary">Source Code</div>
-                </a>
-                <a href="https://www.dariah.eu/" target="_blank" rel="noopener" class="text-center py-6 border border-carbon-border bg-white hover:border-carbon-interactive transition-colors no-underline text-inherit">
-                    <div class="font-semibold">DARIAH</div>
+                </div>
+                <div class="text-center py-6 border border-carbon-border bg-white">
+                    <div class="font-semibold">eScience Center</div>
                     <div class="text-xs text-carbon-text-secondary">Sustainability</div>
-                </a>
-                <a href="https://www.clariah.nl/" target="_blank" rel="noopener" class="text-center py-6 border border-carbon-border bg-white hover:border-carbon-interactive transition-colors no-underline text-inherit">
+                </div>
+                <div class="text-center py-6 border border-carbon-border bg-white">
                     <div class="font-semibold">CLARIAH</div>
                     <div class="text-xs text-carbon-text-secondary">Advisory</div>
-                </a>
-                <div class="text-center py-6 border border-dashed border-carbon-border bg-white">
-                    <div class="font-semibold text-carbon-text-secondary">Org X</div>
-                    <div class="text-xs text-carbon-text-secondary">Pilot</div>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Team Section -->
-    <section class="py-20 px-6">
+    <section class="py-20 px-6 reveal">
         <div class="container mx-auto max-w-5xl">
             <div class="mb-12">
                 <span class="text-xs font-mono uppercase tracking-widest text-carbon-text-secondary">Who We Are</span>
-                <h2 class="text-3xl font-semibold mt-4">Team (Co-Pilots)</h2>
+                <h2 class="text-3xl font-semibold mt-4">Team</h2>
             </div>
 
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <div class="flex gap-4 items-start">
-                    <img src="https://ui-avatars.com/api/?name=Mark+Dingemanse&size=80&background=161616&color=fff" alt="Mark Dingemanse" class="w-14 h-14 rounded-full">
+                    <img src="https://ui-avatars.com/api/?name=Babajide+Owoyele&size=80&background=161616&color=fff" alt="Babajide Owoyele" class="w-14 h-14 rounded-full">
                     <div>
-                        <h4 class="font-semibold">Mark Dingemanse</h4>
-                        <p class="text-sm text-carbon-text-secondary">Radboud University</p>
+                        <h4 class="font-semibold">Babajide Owoyele</h4>
+                        <p class="text-sm text-carbon-text-secondary">Radboud University / HPI Potsdam</p>
                         <div class="flex gap-3 mt-2">
-                            <a href="https://www.ru.nl/en/people/dingemanse-m" class="text-xs text-carbon-interactive hover:underline">Radboud</a>
-                            <a href="https://markdingemanse.net" class="text-xs text-carbon-interactive hover:underline">Website</a>
+                            <a href="https://babajideowoyele.github.io/" class="text-xs text-carbon-interactive hover:underline">Website</a>
                         </div>
                     </div>
                 </div>
                 <div class="flex gap-4 items-start">
-                    <img src="https://ui-avatars.com/api/?name=Babajide+Owoyele&size=80&background=161616&color=fff" alt="Babajide Owoyele" class="w-14 h-14 rounded-full">
+                    <img src="https://ui-avatars.com/api/?name=Nthabiseng+Shongwe&size=80&background=161616&color=fff" alt="Nthabiseng Shongwe" class="w-14 h-14 rounded-full">
                     <div>
-                        <h4 class="font-semibold">Babajide Owoyele</h4>
-                        <p class="text-sm text-carbon-text-secondary">EUR DRIFT</p>
+                        <h4 class="font-semibold">Nthabiseng Shongwe</h4>
+                        <p class="text-sm text-carbon-text-secondary">Radboud University, ILS/DCC</p>
                         <div class="flex gap-3 mt-2">
-                            <a href="https://drift.eur.nl/nl/mensen/babajide-owoyele/" class="text-xs text-carbon-interactive hover:underline">DRIFT</a>
-                            <a href="https://babajideowoyele.github.io/" class="text-xs text-carbon-interactive hover:underline">Website</a>
+                            <a href="https://signopro.co/nthabiseng-shongwe/" class="text-xs text-carbon-interactive hover:underline">Website</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex gap-4 items-start">
+                    <img src="https://ui-avatars.com/api/?name=Bogdana+Huma&size=80&background=525252&color=fff" alt="Bogdana Huma" class="w-14 h-14 rounded-full">
+                    <div>
+                        <h4 class="font-semibold">Bogdana Huma</h4>
+                        <p class="text-sm text-carbon-text-secondary">VU Amsterdam</p>
+                        <div class="flex gap-3 mt-2">
+                            <a href="https://research.vu.nl/en/persons/bogdana-raluca-huma/" class="text-xs text-carbon-interactive hover:underline">VU Profile</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex gap-4 items-start">
+                    <img src="https://ui-avatars.com/api/?name=Inge+Slouwerhof&size=80&background=525252&color=fff" alt="Inge Slouwerhof" class="w-14 h-14 rounded-full">
+                    <div>
+                        <h4 class="font-semibold">Inge Slouwerhof</h4>
+                        <p class="text-sm text-carbon-text-secondary">Radboud University, RDM</p>
+                        <div class="flex gap-3 mt-2">
+                            <a href="https://www.ru.nl/en/people/slouwerhof-i" class="text-xs text-carbon-interactive hover:underline">Radboud</a>
                         </div>
                     </div>
                 </div>
@@ -409,12 +410,12 @@ activeNav: Home
                     </div>
                 </div>
                 <div class="flex gap-4 items-start">
-                    <img src="https://ui-avatars.com/api/?name=Bogdana+Huma&size=80&background=525252&color=fff" alt="Bogdana Huma" class="w-14 h-14 rounded-full">
+                    <img src="https://ui-avatars.com/api/?name=Wessel+Stoop&size=80&background=525252&color=fff" alt="Wessel Stoop" class="w-14 h-14 rounded-full">
                     <div>
-                        <h4 class="font-semibold">Bogdana Huma</h4>
-                        <p class="text-sm text-carbon-text-secondary">VU Amsterdam</p>
+                        <h4 class="font-semibold">Wessel Stoop</h4>
+                        <p class="text-sm text-carbon-text-secondary">Radboud University, Humanities Lab</p>
                         <div class="flex gap-3 mt-2">
-                            <a href="https://research.vu.nl/en/persons/bogdana-raluca-huma/" class="text-xs text-carbon-interactive hover:underline">VU Profile</a>
+                            <a href="https://www.ru.nl/en/people/stoop-w" class="text-xs text-carbon-interactive hover:underline">Radboud</a>
                         </div>
                     </div>
                 </div>
@@ -430,16 +431,6 @@ activeNav: Home
                     </div>
                 </div>
                 <div class="flex gap-4 items-start">
-                    <img src="https://ui-avatars.com/api/?name=Inge+Slouwerhof&size=80&background=525252&color=fff" alt="Inge Slouwerhof" class="w-14 h-14 rounded-full">
-                    <div>
-                        <h4 class="font-semibold">Inge Slouwerhof</h4>
-                        <p class="text-sm text-carbon-text-secondary">Radboud University, RDM</p>
-                        <div class="flex gap-3 mt-2">
-                            <a href="https://www.ru.nl/en/people/slouwerhof-i" class="text-xs text-carbon-interactive hover:underline">Radboud</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="flex gap-4 items-start">
                     <img src="https://ui-avatars.com/api/?name=James+Trujillo&size=80&background=525252&color=fff" alt="James Trujillo" class="w-14 h-14 rounded-full">
                     <div>
                         <h4 class="font-semibold">James Trujillo</h4>
@@ -447,6 +438,17 @@ activeNav: Home
                         <div class="flex gap-3 mt-2">
                             <a href="https://www.uva.nl/en/profile/t/r/j.p.trujillo/j.p.trujillo.html" class="text-xs text-carbon-interactive hover:underline">UvA</a>
                             <a href="https://jptrujillo.github.io/" class="text-xs text-carbon-interactive hover:underline">Website</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex gap-4 items-start">
+                    <img src="https://ui-avatars.com/api/?name=Mark+Dingemanse&size=80&background=525252&color=fff" alt="Mark Dingemanse" class="w-14 h-14 rounded-full">
+                    <div>
+                        <h4 class="font-semibold">Mark Dingemanse</h4>
+                        <p class="text-sm text-carbon-text-secondary">Radboud University</p>
+                        <div class="flex gap-3 mt-2">
+                            <a href="https://www.ru.nl/en/people/dingemanse-m" class="text-xs text-carbon-interactive hover:underline">Radboud</a>
+                            <a href="https://markdingemanse.net" class="text-xs text-carbon-interactive hover:underline">Website</a>
                         </div>
                     </div>
                 </div>
@@ -470,8 +472,8 @@ activeNav: Home
                                 <i class="fas fa-envelope"></i>
                             </div>
                             <div>
-                                <div class="text-sm text-carbon-text-secondary">Co-Pilot</div>
-                                <div class="font-medium">m.dingemanse@ru.nl</div>
+                                <div class="text-sm text-carbon-text-secondary">Lead</div>
+                                <div class="font-medium">babajide.owoyele@ru.nl</div>
                             </div>
                         </div>
                         <div class="flex items-center gap-4">
@@ -479,8 +481,8 @@ activeNav: Home
                                 <i class="fas fa-envelope"></i>
                             </div>
                             <div>
-                                <div class="text-sm text-carbon-text-secondary">Co-Pilot</div>
-                                <div class="font-medium">babajide.owoyele@ru.nl</div>
+                                <div class="text-sm text-carbon-text-secondary">Co-pilot</div>
+                                <div class="font-medium">m.dingemanse@ru.nl</div>
                             </div>
                         </div>
                         <div class="flex items-center gap-4">
@@ -496,15 +498,14 @@ activeNav: Home
                 </div>
                 <div class="bg-carbon-bg-hover border border-carbon-border p-8">
                     <h3 class="font-semibold mb-6">Stay Updated</h3>
-                    <form id="contactForm" class="space-y-4">
-                        <input type="text" name="_gotcha" title="Do not fill" class="hidden" tabindex="-1" autocomplete="off">
+                    <form class="space-y-4">
                         <div>
                             <label class="block text-sm text-carbon-text-secondary mb-2">Email</label>
-                            <input type="email" name="email" required class="form-input w-full border border-carbon-border px-4 py-3 focus:outline-none focus:border-carbon-text" placeholder="your@email.com">
+                            <input type="email" class="w-full border border-carbon-border px-4 py-3 focus:outline-none focus:border-carbon-text" placeholder="your@email.com">
                         </div>
                         <div>
                             <label class="block text-sm text-carbon-text-secondary mb-2">Interest</label>
-                            <select name="interest" class="form-input w-full border border-carbon-border px-4 py-3 focus:outline-none focus:border-carbon-text">
+                            <select class="w-full border border-carbon-border px-4 py-3 focus:outline-none focus:border-carbon-text bg-white">
                                 <option>Platform User</option>
                                 <option>Workshop Participant</option>
                                 <option>Pilot Site</option>
@@ -512,56 +513,43 @@ activeNav: Home
                                 <option>General Interest</option>
                             </select>
                         </div>
-                        <button type="submit" id="contactSubmitBtn" class="btn-primary w-full py-3 font-medium">
+                        <button type="submit" class="btn-primary w-full py-3 font-medium">
                             Subscribe to Updates
                         </button>
-                        <div id="contactFormStatus" class="hidden mt-3 p-3 text-sm" role="alert"></div>
                     </form>
                 </div>
             </div>
         </div>
     </section>
 
-<script>
-(function() {
-    var form = document.getElementById('contactForm');
-    if (!form) return;
-
-    form.addEventListener('submit', function(e) {
-        e.preventDefault();
-
-        var btn = document.getElementById('contactSubmitBtn');
-        var status = document.getElementById('contactFormStatus');
-        var originalText = btn.textContent;
-
-        btn.disabled = true;
-        btn.textContent = 'Sending\u2026';
-        status.className = 'hidden mt-3 p-3 text-sm';
-
-        fetch('https://formspree.io/f/{CONTACT_FORM_ID}', {
-            method: 'POST',
-            body: new FormData(form),
-            headers: { 'Accept': 'application/json' }
-        })
-        .then(function(response) {
-            if (response.ok) {
-                status.textContent = 'Thank you! You have been subscribed to updates.';
-                status.className = 'mt-3 p-3 text-sm border border-green-600 text-green-600';
-                form.reset();
-            } else {
-                return response.json().then(function(data) {
-                    throw new Error(data.errors ? data.errors.map(function(e) { return e.message; }).join(', ') : 'Submission failed');
-                });
-            }
-        })
-        .catch(function() {
-            status.textContent = 'Something went wrong. Please try again or email us directly.';
-            status.className = 'mt-3 p-3 text-sm border border-red-500 text-red-500';
-        })
-        .finally(function() {
-            btn.disabled = false;
-            btn.textContent = originalText;
-        });
-    });
-})();
-</script>
+    <!-- Footer -->
+    <footer class="border-t border-carbon-border py-12 px-6">
+        <div class="container mx-auto max-w-5xl">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-8">
+                <div>
+                    <div class="font-semibold text-lg mb-2">SYNAPSIS</div>
+                    <div class="text-sm text-carbon-text-secondary">
+                        Funded by NWO Thematic Digital Competence Centers<br>
+                        TDCC-SSH-C2024-011
+                    </div>
+                </div>
+                <div class="flex gap-8">
+                    <a href="#" class="text-sm text-carbon-text-secondary hover:text-carbon-text">Privacy</a>
+                    <a href="https://github.com/MaskAnyone/MaskAnyone" class="text-sm text-carbon-text-secondary hover:text-carbon-text">GitHub</a>
+                </div>
+            </div>
+            <div class="mt-8 pt-8 border-t border-carbon-border flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div class="text-sm text-carbon-text-secondary">
+                    © 2026 SYNAPSIS Project. Radboud University.<br>
+                    Implementation Partner: Hasso Plattner Institute
+                </div>
+                <div class="flex gap-4 text-xs text-carbon-text-secondary">
+                    <a href="https://www.nwo.nl/en/projects/zazlb40252" class="hover:text-carbon-text">NWO</a>
+                    <a href="https://tdcc.nl/tdcc-ssh-challenge-projects/synapsis/" class="hover:text-carbon-text">TDCC-SSH</a>
+                    <a href="https://zenodo.org/records/16996002" class="hover:text-carbon-text">Zenodo</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

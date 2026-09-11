@@ -1,0 +1,956 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Masking Lab 2026 — SYNAPSIS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link rel="stylesheet" href="../../theme.css">
+    <script src="../../theme.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'sans': ['IBM Plex Sans', 'sans-serif'],
+                        'mono': ['IBM Plex Mono', 'monospace'],
+                    },
+                    colors: {
+                        'carbon': {
+                            'bg': 'var(--color-bg)',
+                            'bg-hover': 'var(--color-bg-hover)',
+                            'border': 'var(--color-border)',
+                            'text': 'var(--color-text)',
+                            'text-secondary': 'var(--color-text-secondary)',
+                            'interactive': '#0f62fe',
+                            'support-success': '#198038',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'IBM Plex Sans', sans-serif;
+            background-color: var(--color-bg);
+            color: var(--color-text);
+        }
+        .accent-bar { height: 3px; background: var(--color-accent); }
+        .card {
+            border: 1px solid var(--color-border);
+            transition: all 0.15s ease;
+        }
+        .card:hover {
+            border-color: var(--color-text);
+            box-shadow: 0 4px 14px rgba(0,0,0,0.06);
+        }
+        .btn-primary {
+            background: var(--color-accent);
+            color: var(--color-inverse);
+            transition: all 0.15s ease;
+        }
+        .btn-primary:hover { background: var(--color-accent-hover); }
+        .btn-secondary {
+            background: var(--color-bg);
+            color: var(--color-text);
+            border: 1px solid var(--color-accent);
+            transition: all 0.15s ease;
+        }
+        .btn-secondary:hover { background: var(--color-bg-hover); }
+
+        /* Pictogram square — matches SYNAPSIS index */
+        .pictogram {
+            width: 48px;
+            height: 48px;
+            border: 1px solid var(--color-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .pictogram.lg {
+            width: 64px;
+            height: 64px;
+        }
+        .pictogram.sm {
+            width: 36px;
+            height: 36px;
+        }
+
+        /* Schedule row */
+        .schedule-row {
+            display: grid;
+            grid-template-columns: 40px 110px 1fr;
+            gap: 1rem;
+            align-items: start;
+            padding: 0.875rem 0;
+            border-bottom: 1px solid var(--color-border);
+        }
+        .schedule-row:last-child { border-bottom: 0; }
+        .schedule-row .time {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 12px;
+            color: var(--color-text-secondary);
+            padding-top: 8px;
+        }
+        .schedule-row .title { font-weight: 500; font-size: 14px; }
+        .schedule-row .meta {
+            font-size: 12px;
+            color: var(--color-text-secondary);
+            margin-top: 3px;
+        }
+        .schedule-row.is-break .title {
+            font-weight: 400;
+            color: var(--color-text-secondary);
+        }
+        .schedule-row .schedule-icon {
+            width: 32px;
+            height: 32px;
+            border: 1px solid var(--color-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: var(--color-text-secondary);
+        }
+        .schedule-row.is-keynote .schedule-icon {
+            border-color: var(--color-text);
+            color: var(--color-text);
+            background: var(--color-bg-hover);
+        }
+
+        /* Status chip */
+        .chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            padding: 2px 6px;
+            border: 1px solid var(--color-border);
+            color: var(--color-text-secondary);
+        }
+        .chip.confirmed {
+            border-color: #198038;
+            color: #198038;
+        }
+        html.dark .chip.confirmed {
+            border-color: #42be65;
+            color: #42be65;
+        }
+        .chip.tbc { font-style: italic; }
+
+        .label-mono {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: var(--color-text-secondary);
+        }
+
+        /* Speaker card */
+        .speaker {
+            display: flex;
+            gap: 0.875rem;
+            align-items: flex-start;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--color-border);
+        }
+        .speaker:last-child { border-bottom: 0; }
+        .speaker .avatar {
+            width: 56px;
+            height: 56px;
+            flex-shrink: 0;
+            border-radius: 9999px;
+        }
+        .speaker .avatar-placeholder {
+            width: 56px;
+            height: 56px;
+            border-radius: 9999px;
+            background: var(--color-bg-hover);
+            border: 1px dashed var(--color-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--color-text-secondary);
+            flex-shrink: 0;
+        }
+
+        @media (max-width: 640px) {
+            .schedule-row {
+                grid-template-columns: 32px 1fr;
+                gap: 0.75rem;
+            }
+            .schedule-row .time {
+                grid-column: 2;
+                padding-top: 0;
+                margin-bottom: 4px;
+            }
+            .schedule-row > div:last-child {
+                grid-column: 2;
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+
+    <!-- Header -->
+    <header class="border-b border-carbon-border bg-white">
+        <div class="accent-bar"></div>
+        <div class="container mx-auto px-6 py-5">
+            <div class="flex justify-between items-center">
+                <a href="../../index.html" class="flex items-center gap-2 text-lg font-semibold tracking-tight">
+                    <img src="../../logo-mark.svg" alt="" class="h-6 w-auto">
+                    SYNAPSIS
+                </a>
+                <div class="flex items-center gap-4">
+                    <span class="label-mono hidden sm:inline">Masking Lab 2026</span>
+                    <a href="https://docs.google.com/forms/d/e/1FAIpQLSedaarmiKs7WJ8x_LJA1yTYvkyMEIsyhBLgvQyPNX2r9vAgWA/viewform" target="_blank" rel="noopener" class="btn-primary px-4 py-2 font-medium text-sm inline-flex items-center">
+                        <i class="fas fa-pen-to-square mr-2"></i> Register
+                    </a>
+                    <button onclick="toggleTheme()" class="theme-toggle" title="Toggle dark mode">
+                        <i class="fas fa-moon"></i><i class="fas fa-sun"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero -->
+    <section class="container mx-auto px-6 py-16 md:py-24">
+        <div class="max-w-4xl mx-auto">
+            <span class="label-mono">SYNAPSIS · WP2 · CO-CREATION DAY</span>
+            <h1 class="text-4xl md:text-6xl font-semibold tracking-tight leading-tight mt-4 mb-6">
+                The Masking Lab
+            </h1>
+            <p class="text-xl md:text-2xl text-carbon-text-secondary leading-relaxed mb-10 max-w-3xl">
+                Privacy-preserving audiovisual research data — from anonymization to FAIR sharing. A working day to <em>co-create</em> the workflows the community will actually use.
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="card p-5 bg-white flex gap-4 items-start">
+                    <div class="pictogram"><i class="fas fa-calendar-day"></i></div>
+                    <div>
+                        <div class="label-mono mb-1">Date</div>
+                        <div class="font-medium text-sm">October 19, 2026</div>
+                        <div class="text-xs text-carbon-text-secondary mt-1">09:00 – 17:30</div>
+                    </div>
+                </div>
+                <div class="card p-5 bg-white flex gap-4 items-start">
+                    <div class="pictogram"><i class="fas fa-location-dot"></i></div>
+                    <div>
+                        <div class="label-mono mb-1">Venue</div>
+                        <div class="font-medium text-sm">VU Amsterdam</div>
+                        <div class="text-xs text-carbon-text-secondary mt-1">Nieuw Universiteitsgebouw (NU), 4th floor</div>
+                    </div>
+                </div>
+                <div class="card p-5 bg-white flex gap-4 items-start">
+                    <div class="pictogram"><i class="fas fa-users"></i></div>
+                    <div>
+                        <div class="label-mono mb-1">Capacity</div>
+                        <div class="font-medium text-sm">~50 participants</div>
+                        <div class="text-xs text-carbon-text-secondary mt-1">No fee · registration required</div>
+                    </div>
+                </div>
+            </div>
+            <div class="flex flex-col sm:flex-row sm:items-center gap-4 mt-8">
+                <a href="https://docs.google.com/forms/d/e/1FAIpQLSedaarmiKs7WJ8x_LJA1yTYvkyMEIsyhBLgvQyPNX2r9vAgWA/viewform" target="_blank" rel="noopener" class="btn-primary px-6 py-3 font-medium text-sm inline-flex items-center justify-center">
+                    <i class="fas fa-pen-to-square mr-2"></i> Register for the Masking Lab
+                </a>
+                <span class="text-sm text-carbon-text-secondary">A short form — you'll rank your two preferred parallel sessions.</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why / What / Output -->
+    <section class="border-y border-carbon-border bg-carbon-bg-hover py-20">
+        <div class="container mx-auto px-6 max-w-5xl">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="card p-6 bg-white">
+                    <div class="pictogram mb-4"><i class="fas fa-triangle-exclamation"></i></div>
+                    <h3 class="font-semibold mb-2 text-base">Hard-to-share data is normal data now</h3>
+                    <p class="text-sm text-carbon-text-secondary leading-relaxed">
+                        Video and audio of real people sit at the centre of communication research, qualitative social science, clinical work and humanities archives. The way we collect them outpaces the way we share them.
+                    </p>
+                </div>
+                <div class="card p-6 bg-white">
+                    <div class="pictogram mb-4"><i class="fas fa-screwdriver-wrench"></i></div>
+                    <h3 class="font-semibold mb-2 text-base">A working day, not a conference</h3>
+                    <p class="text-sm text-carbon-text-secondary leading-relaxed">
+                        Two keynotes anchor the day. The middle is co-creation: four parallel sessions where participants either <em>build a new workflow</em> with a domain expert, or audit and revise one they bring with them.
+                    </p>
+                </div>
+                <div class="card p-6 bg-white">
+                    <div class="pictogram mb-4"><i class="fas fa-file-export"></i></div>
+                    <h3 class="font-semibold mb-2 text-base">Things we leave with</h3>
+                    <p class="text-sm text-carbon-text-secondary leading-relaxed">
+                        Four workflow drafts from the parallel rooms. A community-built FAQ on video anonymization. A draft training pathway scoped with RDNL. Inputs to the SYNAPSIS policy paper.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Programme -->
+    <section class="bg-white">
+        <div class="container mx-auto px-6 py-20">
+            <div class="max-w-4xl mx-auto">
+                <div class="flex items-center gap-3 mb-3">
+                    <div class="pictogram sm"><i class="fas fa-calendar-days text-sm"></i></div>
+                    <span class="label-mono">Programme</span>
+                </div>
+                <h2 class="text-3xl font-semibold tracking-tight mb-2">A day at the Masking Lab</h2>
+                <p class="text-carbon-text-secondary mb-10 text-sm">09:00 – 17:30 · Draft 3.2 · Last updated 2026-06-18</p>
+
+                <div class="schedule-row">
+                    <div class="schedule-icon"><i class="fas fa-user-check"></i></div>
+                    <div class="time">09:00 – 09:30</div>
+                    <div>
+                        <div class="title">Registration & coffee</div>
+                        <div class="meta">Arrival, badges, networking</div>
+                    </div>
+                </div>
+
+                <div class="schedule-row">
+                    <div class="schedule-icon"><i class="fas fa-door-open"></i></div>
+                    <div class="time">09:30 – 09:45</div>
+                    <div>
+                        <div class="title">Welcome</div>
+                        <div class="meta">Bogdana Huma (VU Amsterdam) · Mark Dingemanse (Radboud)</div>
+                    </div>
+                </div>
+
+                <div class="schedule-row is-keynote">
+                    <div class="schedule-icon"><i class="fas fa-microphone"></i></div>
+                    <div class="time">09:45 – 10:30</div>
+                    <div>
+                        <div class="title">Keynote 1 — What becomes possible when sensitive video data can be responsibly used?</div>
+                        <div class="meta">Prof. Marie Rosenkrantz Lindegaard (VU Amsterdam) · <span class="chip confirmed"><i class="fas fa-check"></i> Confirmed</span></div>
+                    </div>
+                </div>
+
+                <div class="schedule-row">
+                    <div class="schedule-icon"><i class="fas fa-display"></i></div>
+                    <div class="time">10:30 – 10:50</div>
+                    <div>
+                        <div class="title">Platform Demo — MaskingOPS workflow</div>
+                        <div class="meta">Babajide Owoyele · Wessel Stoop</div>
+                    </div>
+                </div>
+
+                <div class="schedule-row">
+                    <div class="schedule-icon"><i class="fas fa-map"></i></div>
+                    <div class="time">10:50 – 11:00</div>
+                    <div>
+                        <div class="title">Intro to the afternoon format</div>
+                        <div class="meta">Nthabiseng Shongwe</div>
+                    </div>
+                </div>
+
+                <div class="schedule-row is-break">
+                    <div class="schedule-icon"><i class="fas fa-mug-hot"></i></div>
+                    <div class="time">11:00 – 11:15</div>
+                    <div><div class="title">Coffee break</div></div>
+                </div>
+
+                <div class="schedule-row">
+                    <div class="schedule-icon"><i class="fas fa-people-arrows"></i></div>
+                    <div class="time">11:15 – 12:00</div>
+                    <div>
+                        <div class="title">"Masking meets X" — Round 1</div>
+                        <div class="meta">Four parallel co-creation rooms; rank your first two choices when you <a href="#register" class="underline">register</a>. <a href="#sessions" class="underline">See below.</a></div>
+                    </div>
+                </div>
+
+                <div class="schedule-row is-break">
+                    <div class="schedule-icon"><i class="fas fa-utensils"></i></div>
+                    <div class="time">12:00 – 13:00</div>
+                    <div><div class="title">Lunch</div></div>
+                </div>
+
+                <div class="schedule-row">
+                    <div class="schedule-icon"><i class="fas fa-arrows-rotate"></i></div>
+                    <div class="time">13:00 – 13:45</div>
+                    <div>
+                        <div class="title">"Masking meets X" — Round 2</div>
+                        <div class="meta">Same four sessions repeat — attend a different one.</div>
+                    </div>
+                </div>
+
+                <div class="schedule-row is-break">
+                    <div class="schedule-icon"><i class="fas fa-mug-hot"></i></div>
+                    <div class="time">13:45 – 14:00</div>
+                    <div><div class="title">Transfer + coffee</div></div>
+                </div>
+
+                <div class="schedule-row">
+                    <div class="schedule-icon"><i class="fas fa-pen-ruler"></i></div>
+                    <div class="time">14:00 – 14:45</div>
+                    <div>
+                        <div class="title">Co-creation — "How to argue for (NOT) anonymizing your video data"</div>
+                        <div class="meta">Babajide Owoyele · Wim Pouw · James Trujillo</div>
+                    </div>
+                </div>
+
+                <div class="schedule-row is-keynote">
+                    <div class="schedule-icon"><i class="fas fa-microphone"></i></div>
+                    <div class="time">14:45 – 15:30</div>
+                    <div>
+                        <div class="title">Keynote 2 — AV Archives, Access & the CLARIAH Media Suite</div>
+                        <div class="meta">Roeland Ordelman (Sound & Vision / Univ. Twente) · Chair: Henk van den Heuvel · <span class="chip confirmed"><i class="fas fa-check"></i> Confirmed</span></div>
+                    </div>
+                </div>
+
+                <div class="schedule-row is-break">
+                    <div class="schedule-icon"><i class="fas fa-mug-hot"></i></div>
+                    <div class="time">15:30 – 15:45</div>
+                    <div><div class="title">Coffee break</div></div>
+                </div>
+
+                <div class="schedule-row">
+                    <div class="schedule-icon"><i class="fas fa-diagram-project"></i></div>
+                    <div class="time">15:45 – 16:00</div>
+                    <div>
+                        <div class="title">Synthesis & next steps</div>
+                        <div class="meta">Nthabiseng Shongwe · Inge Slouwerhof</div>
+                    </div>
+                </div>
+
+                <div class="schedule-row">
+                    <div class="schedule-icon"><i class="fas fa-flag-checkered"></i></div>
+                    <div class="time">16:00 – 16:15</div>
+                    <div>
+                        <div class="title">Closing</div>
+                        <div class="meta">Bogdana Huma · Mark Dingemanse</div>
+                    </div>
+                </div>
+
+                <div class="schedule-row is-break">
+                    <div class="schedule-icon"><i class="fas fa-wine-glass"></i></div>
+                    <div class="time">16:15 – 17:30</div>
+                    <div><div class="title">Drinks & networking (optional)</div></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Parallel sessions -->
+    <section id="sessions" class="border-y border-carbon-border bg-carbon-bg-hover py-20">
+        <div class="container mx-auto px-6 max-w-5xl">
+            <div class="flex items-center gap-3 mb-3">
+                <div class="pictogram sm"><i class="fas fa-people-arrows text-sm"></i></div>
+                <span class="label-mono">Parallel Co-Creation</span>
+            </div>
+            <h2 class="text-3xl font-semibold tracking-tight mb-3">"Masking meets X"</h2>
+            <p class="text-carbon-text-secondary mb-2 text-base max-w-3xl">
+                Four breakout rooms, each run twice (11:15 and 13:00). Every participant attends two.
+            </p>
+            <p class="text-carbon-text-secondary mb-8 text-sm max-w-3xl">
+                <strong class="text-carbon-text">Every session is a co-creation, not a panel.</strong> In each room the group either <em>builds a new workflow</em> with the facilitators, or <em>audits and revises a current one</em> a participant brings with them. The day's deliverable is the four workflow drafts that come out of these rooms.
+            </p>
+
+            <!-- 4-quadrant exploration grid template -->
+            <div class="card bg-white p-6 mb-10">
+                <div class="flex items-start gap-4 mb-4">
+                    <div class="pictogram"><i class="fas fa-table-cells-large"></i></div>
+                    <div>
+                        <div class="label-mono">Shared template — every room fills this</div>
+                        <h3 class="font-semibold text-base mt-1">The 4-quadrant exploration grid</h3>
+                        <p class="text-xs text-carbon-text-secondary mt-1 max-w-2xl leading-relaxed">Alongside the workflow draft, each session brings back a filled grid. Surfaces the parts the workflow alone won't capture.</p>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-0 border border-carbon-border">
+                    <div class="border-r border-b border-carbon-border p-4">
+                        <div class="flex items-center gap-2 mb-2">
+                            <i class="fas fa-lightbulb text-xs text-carbon-text-secondary"></i>
+                            <span class="label-mono">Opportunities</span>
+                        </div>
+                        <p class="text-xs text-carbon-text-secondary leading-relaxed">What this workflow newly enables — and for whom.</p>
+                    </div>
+                    <div class="border-b border-carbon-border p-4">
+                        <div class="flex items-center gap-2 mb-2">
+                            <i class="fas fa-bolt text-xs text-carbon-text-secondary"></i>
+                            <span class="label-mono">Tensions</span>
+                        </div>
+                        <p class="text-xs text-carbon-text-secondary leading-relaxed">Forces pulling against each other (e.g. openness vs. consent).</p>
+                    </div>
+                    <div class="border-r border-carbon-border p-4">
+                        <div class="flex items-center gap-2 mb-2">
+                            <i class="fas fa-infinity text-xs text-carbon-text-secondary"></i>
+                            <span class="label-mono">Paradoxes</span>
+                        </div>
+                        <p class="text-xs text-carbon-text-secondary leading-relaxed">Things that seem contradictory but are both true (e.g. more masking, less trust).</p>
+                    </div>
+                    <div class="p-4">
+                        <div class="flex items-center gap-2 mb-2">
+                            <i class="fas fa-mountain text-xs text-carbon-text-secondary"></i>
+                            <span class="label-mono">Challenges</span>
+                        </div>
+                        <p class="text-xs text-carbon-text-secondary leading-relaxed">Concrete blockers — technical, legal, organisational — to ship.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Session A -->
+                <div class="card p-6 bg-white">
+                    <div class="flex items-start gap-4 mb-4">
+                        <div class="pictogram lg"><i class="fas fa-share-nodes text-lg"></i></div>
+                        <div>
+                            <div class="label-mono">Session A · 45 min × 2</div>
+                            <h3 class="font-semibold text-lg mt-1">Masking meets FAIR Data & Metadata</h3>
+                        </div>
+                    </div>
+                    <p class="text-sm text-carbon-text-secondary mb-3 leading-relaxed">
+                        <strong class="text-carbon-text">Co-create</strong> a metadata extension for masked AV datasets — what fields describe the mask's provenance, what's needed for reuse, where DDI / Dublin Core falls short.
+                    </p>
+                    <p class="text-sm text-carbon-text-secondary mb-4 leading-relaxed">
+                        <strong class="text-carbon-text">Or revisit</strong> an existing FAIR deposit workflow (ODISSEI / DANS) and find where masked AV breaks it.
+                    </p>
+                    <div class="border-t border-carbon-border pt-3 flex items-start gap-3">
+                        <i class="fas fa-user-tie text-xs text-carbon-text-secondary mt-1"></i>
+                        <div class="text-xs text-carbon-text-secondary">
+                            <span class="label-mono">Facilitators (joint)</span><br>
+                            Angelica Maineri (ODISSEI) · Ricarda Braukmann (DANS)
+                        </div>
+                    </div>
+                    <div class="mt-3 flex items-start gap-3">
+                        <i class="fas fa-file-lines text-xs text-carbon-text-secondary mt-1"></i>
+                        <div class="text-xs text-carbon-text-secondary"><span class="label-mono">Outputs</span> &nbsp;Draft metadata schema + gap analysis · 4-quadrant grid</div>
+                    </div>
+                </div>
+
+                <!-- Session B -->
+                <div class="card p-6 bg-white">
+                    <div class="flex items-start gap-4 mb-4">
+                        <div class="pictogram lg"><i class="fas fa-book-open text-lg"></i></div>
+                        <div>
+                            <div class="label-mono">Session B · 45 min × 2</div>
+                            <h3 class="font-semibold text-lg mt-1">Masking meets Digital Humanities & Archives</h3>
+                        </div>
+                    </div>
+                    <p class="text-sm text-carbon-text-secondary mb-3 leading-relaxed">
+                        <strong class="text-carbon-text">Co-create</strong> an archive-ingest workflow for sensitive humanities AV — using Jetze's working dataset as the case. Consent and rights review → masking → CLARIAH-discoverable deposit.
+                    </p>
+                    <p class="text-sm text-carbon-text-secondary mb-4 leading-relaxed">
+                        <strong class="text-carbon-text">Or revisit</strong> the current CLARIAH ingest pipeline and flag where it assumes "shareable as-is."
+                    </p>
+                    <div class="border-t border-carbon-border pt-3 flex items-start gap-3">
+                        <i class="fas fa-user-tie text-xs text-carbon-text-secondary mt-1"></i>
+                        <div class="text-xs text-carbon-text-secondary">
+                            <span class="label-mono">Facilitators</span><br>
+                            Jetze Touber (DANS / CLARIAH) · plus-one <span class="chip tbc">TBC</span>
+                        </div>
+                    </div>
+                    <div class="mt-3 flex items-start gap-3">
+                        <i class="fas fa-file-lines text-xs text-carbon-text-secondary mt-1"></i>
+                        <div class="text-xs text-carbon-text-secondary"><span class="label-mono">Outputs</span> &nbsp;Workflow diagram + failure modes · 4-quadrant grid</div>
+                    </div>
+                </div>
+
+                <!-- Session C - training-led -->
+                <div class="card p-6 bg-white">
+                    <div class="flex items-start gap-4 mb-4">
+                        <div class="pictogram lg"><i class="fas fa-graduation-cap text-lg"></i></div>
+                        <div>
+                            <div class="label-mono">Session C · 45 min × 2 · Training-led</div>
+                            <h3 class="font-semibold text-lg mt-1">Masking meets Data Stewardship & GDPR</h3>
+                        </div>
+                    </div>
+                    <p class="text-sm text-carbon-text-secondary mb-3 leading-relaxed">
+                        <strong class="text-carbon-text">Training at the core.</strong> The room conceptualises <strong>new training pathways for data stewards on hard-to-share AV data</strong> — modules, sequencing, handoffs between institutional steward and researcher, what already exists in Essentials 4 Data Support / Beyond Personal Data that can extend.
+                    </p>
+                    <p class="text-sm text-carbon-text-secondary mb-4 leading-relaxed">
+                        <strong class="text-carbon-text">Or revisit</strong> the current data-steward intake when a project hits AV — where does the decision tree break?
+                    </p>
+                    <div class="border-t border-carbon-border pt-3 flex items-start gap-3">
+                        <i class="fas fa-user-tie text-xs text-carbon-text-secondary mt-1"></i>
+                        <div class="text-xs text-carbon-text-secondary">
+                            <span class="label-mono">Facilitators (paired)</span><br>
+                            Dorien Huijser (4TU.ResearchData / RDNL training) · Santosh Ilamparuthi (TU Delft data stewardship)
+                        </div>
+                    </div>
+                    <div class="mt-3 flex items-start gap-3">
+                        <i class="fas fa-file-lines text-xs text-carbon-text-secondary mt-1"></i>
+                        <div class="text-xs text-carbon-text-secondary"><span class="label-mono">Outputs</span> &nbsp;Training-pathway outline → feeds RDNL · 4-quadrant grid</div>
+                    </div>
+                </div>
+
+                <!-- Session D -->
+                <div class="card p-6 bg-white">
+                    <div class="flex items-start gap-4 mb-4">
+                        <div class="pictogram lg"><i class="fas fa-server text-lg"></i></div>
+                        <div>
+                            <div class="label-mono">Session D · 45 min × 2</div>
+                            <h3 class="font-semibold text-lg mt-1">Masking meets Compute Infrastructure</h3>
+                        </div>
+                    </div>
+                    <p class="text-sm text-carbon-text-secondary mb-3 leading-relaxed">
+                        <strong class="text-carbon-text">Co-create</strong> a reference deployment for masking-at-scale across SANE (Tinker & Blind), SURF Research Cloud, and Ponyland HPC — including a path for institutions without local GPU.
+                    </p>
+                    <p class="text-sm text-carbon-text-secondary mb-4 leading-relaxed">
+                        <strong class="text-carbon-text">Or revisit</strong> a pipeline a participant has running and pressure-test where it falls over under throughput or sensitivity.
+                    </p>
+                    <div class="border-t border-carbon-border pt-3 flex items-start gap-3">
+                        <i class="fas fa-user-tie text-xs text-carbon-text-secondary mt-1"></i>
+                        <div class="text-xs text-carbon-text-secondary">
+                            <span class="label-mono">Facilitators (paired)</span><br>
+                            Carsten Schelp (SURF) · Ahmad Hesam (SURF)
+                        </div>
+                    </div>
+                    <div class="mt-3 flex items-start gap-3">
+                        <i class="fas fa-file-lines text-xs text-carbon-text-secondary mt-1"></i>
+                        <div class="text-xs text-carbon-text-secondary"><span class="label-mono">Outputs</span> &nbsp;Deployment sketch + minimum viable masking setup · 4-quadrant grid</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Speakers & facilitators -->
+    <section class="bg-white">
+        <div class="container mx-auto px-6 py-20 max-w-5xl">
+            <div class="flex items-center gap-3 mb-3">
+                <div class="pictogram sm"><i class="fas fa-users text-sm"></i></div>
+                <span class="label-mono">Who is in the room</span>
+            </div>
+            <h2 class="text-3xl font-semibold tracking-tight mb-3">Speakers & facilitators</h2>
+            <p class="text-sm text-carbon-text-secondary mb-10 max-w-2xl">A small day. Roughly twenty named contributors across keynotes, demo, four parallel rooms, and synthesis. Avatars are placeholders until people send headshots.</p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-x-12">
+
+                <!-- Keynote 2 - confirmed -->
+                <div class="speaker">
+                    <img src="../../assets/team/ordelman.jpg" alt="Roeland Ordelman" class="avatar">
+                    <div class="flex-1">
+                        <div class="flex justify-between items-start gap-2">
+                            <h4 class="font-semibold">Roeland Ordelman</h4>
+                            <span class="chip confirmed"><i class="fas fa-check"></i> K2</span>
+                        </div>
+                        <p class="text-xs text-carbon-text-secondary mt-1">Netherlands Institute for Sound & Vision · University of Twente</p>
+                        <p class="text-xs text-carbon-text-secondary mt-2 leading-relaxed">Pioneer of CLARIAH Media Suite; long-running work on access to broadcast and research AV archives while protecting privacy.</p>
+                    </div>
+                </div>
+
+                <!-- Keynote 1 - confirmed -->
+                <div class="speaker">
+                    <img src="../../assets/team/lindegaard.jpg" alt="Marie Rosenkrantz Lindegaard" class="avatar">
+                    <div class="flex-1">
+                        <div class="flex justify-between items-start gap-2">
+                            <h4 class="font-semibold">Marie Rosenkrantz Lindegaard</h4>
+                            <span class="chip confirmed"><i class="fas fa-check"></i> K1</span>
+                        </div>
+                        <p class="text-xs text-carbon-text-secondary mt-1">VU Amsterdam · Professor of Sociology · Anthropologist & criminologist</p>
+                        <p class="text-xs text-carbon-text-secondary mt-2 leading-relaxed">PI of "The Collective Bystander" (ERC) and "De-Escalating" (ORC-NWA); uses video to understand human behaviour in high-stakes public settings. Member of the Scientific Advisory Board of the Dutch Police.</p>
+                    </div>
+                </div>
+
+                <!-- Hosts -->
+                <div class="speaker">
+                    <img src="../../assets/team/huma.jpg" alt="Bogdana Huma" class="avatar">
+                    <div class="flex-1">
+                        <h4 class="font-semibold">Bogdana Huma</h4>
+                        <p class="text-xs text-carbon-text-secondary mt-1">VU Amsterdam · Host</p>
+                        <p class="text-xs text-carbon-text-secondary mt-2 leading-relaxed">Conversation analyst at VU; SYNAPSIS partner lead at VU Amsterdam.</p>
+                    </div>
+                </div>
+
+                <div class="speaker">
+                    <img src="../../assets/team/dingemanse.jpg" alt="Mark Dingemanse" class="avatar">
+                    <div class="flex-1">
+                        <h4 class="font-semibold">Mark Dingemanse</h4>
+                        <p class="text-xs text-carbon-text-secondary mt-1">Radboud University · Co-host</p>
+                        <p class="text-xs text-carbon-text-secondary mt-2 leading-relaxed">SYNAPSIS project lead; language and interaction research at Radboud.</p>
+                    </div>
+                </div>
+
+                <!-- Demo -->
+                <div class="speaker">
+                    <img src="https://ui-avatars.com/api/?name=Babajide+Owoyele&size=112&background=525252&color=fff" alt="Babajide Owoyele" class="avatar">
+                    <div class="flex-1">
+                        <h4 class="font-semibold">Babajide Owoyele</h4>
+                        <p class="text-xs text-carbon-text-secondary mt-1">Radboud University · HPI Potsdam · Demo & Co-creation</p>
+                        <p class="text-xs text-carbon-text-secondary mt-2 leading-relaxed">SYNAPSIS postdoc; builds the MaskingOPS toolchain and runs Masking School / Lab co-creation formats.</p>
+                    </div>
+                </div>
+
+                <div class="speaker">
+                    <img src="../../assets/team/stoop.jpg" alt="Wessel Stoop" class="avatar">
+                    <div class="flex-1">
+                        <h4 class="font-semibold">Wessel Stoop</h4>
+                        <p class="text-xs text-carbon-text-secondary mt-1">Radboud Humanities Lab · Demo</p>
+                        <p class="text-xs text-carbon-text-secondary mt-2 leading-relaxed">Engineer behind the MaskAnyone and Masked-Piper tooling; Humanities Lab at Radboud.</p>
+                    </div>
+                </div>
+
+                <!-- Session A -->
+                <div class="speaker">
+                    <img src="../../assets/team/maineri.jpg" alt="Angelica Maineri" class="avatar">
+                    <div class="flex-1">
+                        <div class="flex justify-between items-start gap-2">
+                            <h4 class="font-semibold">Angelica Maineri</h4>
+                            <span class="chip">Session A</span>
+                        </div>
+                        <p class="text-xs text-carbon-text-secondary mt-1">ODISSEI</p>
+                        <p class="text-xs text-carbon-text-secondary mt-2 leading-relaxed">FAIR data and metadata at the Dutch social science infrastructure ODISSEI.</p>
+                    </div>
+                </div>
+
+                <div class="speaker">
+                    <img src="../../assets/team/braukmann.jpg" alt="Ricarda Braukmann" class="avatar">
+                    <div class="flex-1">
+                        <div class="flex justify-between items-start gap-2">
+                            <h4 class="font-semibold">Ricarda Braukmann</h4>
+                            <span class="chip">Session A</span>
+                        </div>
+                        <p class="text-xs text-carbon-text-secondary mt-1">DANS · paired with Angelica</p>
+                        <p class="text-xs text-carbon-text-secondary mt-2 leading-relaxed">Senior research data manager at DANS; SSH metadata, deposit workflows.</p>
+                    </div>
+                </div>
+
+                <!-- Session B -->
+                <div class="speaker">
+                    <img src="../../assets/team/touber.jpg" alt="Jetze Touber" class="avatar">
+                    <div class="flex-1">
+                        <div class="flex justify-between items-start gap-2">
+                            <h4 class="font-semibold">Jetze Touber</h4>
+                            <span class="chip">Session B</span>
+                        </div>
+                        <p class="text-xs text-carbon-text-secondary mt-1">DANS / CLARIAH</p>
+                        <p class="text-xs text-carbon-text-secondary mt-2 leading-relaxed">Brings the working humanities dataset for Session B; plus-one facilitator to be nominated.</p>
+                    </div>
+                </div>
+
+                <div class="speaker">
+                    <div class="avatar-placeholder"><i class="fas fa-user-plus"></i></div>
+                    <div class="flex-1">
+                        <div class="flex justify-between items-start gap-2">
+                            <h4 class="font-semibold text-carbon-text-secondary italic">Session B · plus-one</h4>
+                            <span class="chip tbc">TBC</span>
+                        </div>
+                        <p class="text-xs text-carbon-text-secondary mt-1">Nominated by Jetze</p>
+                    </div>
+                </div>
+
+                <!-- Session C - paired -->
+                <div class="speaker">
+                    <img src="../../assets/team/huijser.jpg" alt="Dorien Huijser" class="avatar">
+                    <div class="flex-1">
+                        <div class="flex justify-between items-start gap-2">
+                            <h4 class="font-semibold">Dorien Huijser</h4>
+                            <span class="chip">Session C</span>
+                        </div>
+                        <p class="text-xs text-carbon-text-secondary mt-1">4TU.ResearchData · Training Specialist · paired with Santosh</p>
+                        <p class="text-xs text-carbon-text-secondary mt-2 leading-relaxed">Training specialist at 4TU.ResearchData; bridges the 4TU consortium with national RDNL data-professional training.</p>
+                    </div>
+                </div>
+
+                <div class="speaker">
+                    <img src="../../assets/team/ilamparuthi.webp" alt="Santosh Ilamparuthi" class="avatar">
+                    <div class="flex-1">
+                        <div class="flex justify-between items-start gap-2">
+                            <h4 class="font-semibold">Santosh Ilamparuthi</h4>
+                            <span class="chip">Session C</span>
+                        </div>
+                        <p class="text-xs text-carbon-text-secondary mt-1">TU Delft · Data Steward · paired with Dorien</p>
+                        <p class="text-xs text-carbon-text-secondary mt-2 leading-relaxed">Faculty-embedded data steward at TU Delft; brings the institutional decision-tree perspective on sensitive research data.</p>
+                    </div>
+                </div>
+
+                <!-- Session D - paired -->
+                <div class="speaker">
+                    <img src="../../assets/team/schelp.jpg" alt="Carsten Schelp" class="avatar">
+                    <div class="flex-1">
+                        <div class="flex justify-between items-start gap-2">
+                            <h4 class="font-semibold">Carsten Schelp</h4>
+                            <span class="chip">Session D</span>
+                        </div>
+                        <p class="text-xs text-carbon-text-secondary mt-1">SURF · paired with Ahmad</p>
+                        <p class="text-xs text-carbon-text-secondary mt-2 leading-relaxed">SURF data infrastructure; SANE secure analysis environment.</p>
+                    </div>
+                </div>
+
+                <div class="speaker">
+                    <img src="https://ui-avatars.com/api/?name=Ahmad+Hesam&size=112&background=525252&color=fff" alt="Ahmad Hesam" class="avatar">
+                    <div class="flex-1">
+                        <div class="flex justify-between items-start gap-2">
+                            <h4 class="font-semibold">Ahmad Hesam</h4>
+                            <span class="chip">Session D</span>
+                        </div>
+                        <p class="text-xs text-carbon-text-secondary mt-1">SURF · paired with Carsten</p>
+                        <p class="text-xs text-carbon-text-secondary mt-2 leading-relaxed">SURF research engineer; compute orchestration for SSH and AV pipelines.</p>
+                    </div>
+                </div>
+
+                <!-- Co-creation -->
+                <div class="speaker">
+                    <img src="../../assets/team/pouw.png" alt="Wim Pouw" class="avatar">
+                    <div class="flex-1">
+                        <div class="flex justify-between items-start gap-2">
+                            <h4 class="font-semibold">Wim Pouw</h4>
+                            <span class="chip">Co-creation</span>
+                        </div>
+                        <p class="text-xs text-carbon-text-secondary mt-1">Tilburg University · Donders Institute</p>
+                        <p class="text-xs text-carbon-text-secondary mt-2 leading-relaxed">Multimodal communication researcher; SYNAPSIS pilot lead at Tilburg.</p>
+                    </div>
+                </div>
+
+                <div class="speaker">
+                    <img src="../../assets/team/trujillo.jpg" alt="James Trujillo" class="avatar">
+                    <div class="flex-1">
+                        <div class="flex justify-between items-start gap-2">
+                            <h4 class="font-semibold">James Trujillo</h4>
+                            <span class="chip">Co-creation</span>
+                        </div>
+                        <p class="text-xs text-carbon-text-secondary mt-1">UvA · ILLC</p>
+                        <p class="text-xs text-carbon-text-secondary mt-2 leading-relaxed">Gesture / kinematics researcher at UvA; SYNAPSIS co-creation lead.</p>
+                    </div>
+                </div>
+
+                <!-- Chair K2 -->
+                <div class="speaker">
+                    <img src="../../assets/team/vandenheuvel.jpg" alt="Henk van den Heuvel" class="avatar">
+                    <div class="flex-1">
+                        <div class="flex justify-between items-start gap-2">
+                            <h4 class="font-semibold">Henk van den Heuvel</h4>
+                            <span class="chip">Chair · K2</span>
+                        </div>
+                        <p class="text-xs text-carbon-text-secondary mt-1">Radboud University, CLST</p>
+                        <p class="text-xs text-carbon-text-secondary mt-2 leading-relaxed">CLARIN board, Radboud Centre for Language and Speech Technology; chairs Keynote 2.</p>
+                    </div>
+                </div>
+
+                <!-- Synthesis -->
+                <div class="speaker">
+                    <img src="https://ui-avatars.com/api/?name=Nthabiseng+Shongwe&size=112&background=525252&color=fff" alt="Nthabiseng Shongwe" class="avatar">
+                    <div class="flex-1">
+                        <div class="flex justify-between items-start gap-2">
+                            <h4 class="font-semibold">Nthabiseng Shongwe</h4>
+                            <span class="chip">Synthesis</span>
+                        </div>
+                        <p class="text-xs text-carbon-text-secondary mt-1">SYNAPSIS</p>
+                        <p class="text-xs text-carbon-text-secondary mt-2 leading-relaxed">Day-of facilitation, format intro, synthesis lead.</p>
+                    </div>
+                </div>
+
+                <div class="speaker">
+                    <img src="../../assets/team/slouwerhof.jpg" alt="Inge Slouwerhof" class="avatar">
+                    <div class="flex-1">
+                        <div class="flex justify-between items-start gap-2">
+                            <h4 class="font-semibold">Inge Slouwerhof</h4>
+                            <span class="chip">Synthesis</span>
+                        </div>
+                        <p class="text-xs text-carbon-text-secondary mt-1">Radboud University, RDM</p>
+                        <p class="text-xs text-carbon-text-secondary mt-2 leading-relaxed">Research data management at Radboud; synthesis co-lead, feeds into the SYNAPSIS policy paper.</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- RSVP -->
+    <section id="register" class="border-y border-carbon-border bg-carbon-bg-hover py-20">
+        <div class="container mx-auto px-6 max-w-3xl">
+            <div class="flex items-center gap-3 mb-3">
+                <div class="pictogram sm"><i class="fas fa-envelope-open-text text-sm"></i></div>
+                <span class="label-mono">RSVP</span>
+            </div>
+            <h2 class="text-3xl font-semibold tracking-tight mb-4">Register</h2>
+            <p class="text-carbon-text-secondary mb-8 leading-relaxed">
+                Places are capped at ~50, so register early — it helps us hold a seat for you and shape the parallel rooms around real use cases. The form asks for your affiliation and role, dietary needs, your first and second choice of parallel session, and whether you'll join the borrel.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-3">
+                <a href="https://docs.google.com/forms/d/e/1FAIpQLSedaarmiKs7WJ8x_LJA1yTYvkyMEIsyhBLgvQyPNX2r9vAgWA/viewform" target="_blank" rel="noopener" class="btn-primary px-6 py-3 font-medium text-sm inline-flex items-center justify-center">
+                    <i class="fas fa-pen-to-square mr-2"></i> Register via the form
+                </a>
+                <a href="mailto:babajide.owoyele@ru.nl?subject=Masking%20Lab%20%E2%80%94%20question" class="btn-secondary px-6 py-3 font-medium text-sm inline-flex items-center justify-center">
+                    <i class="fas fa-circle-question mr-2"></i> Ask a question first
+                </a>
+            </div>
+            <p class="text-sm text-carbon-text-secondary mt-6">
+                Can't open Google Forms? <a href="mailto:babajide.owoyele@ru.nl?subject=Masking%20Lab%202026%20%E2%80%94%20RSVP&body=Hi%20SYNAPSIS%20team%2C%0A%0AI%27d%20like%20to%20attend%20the%20Masking%20Lab%20on%2019%20October%202026.%0A%0AName%3A%0AAffiliation%3A%0ARole%3A%0AUse%20case%20I%27d%20bring%3A%0AWhich%20parallel%20sessions%20appeal%20most%20(A%2FB%2FC%2FD)%3A%0A%0AThanks%21" class="underline">RSVP by email instead</a>.
+            </p>
+            <p class="label-mono mt-4">babajide.owoyele@ru.nl</p>
+        </div>
+    </section>
+
+    <!-- Practical info -->
+    <section class="bg-white">
+        <div class="container mx-auto px-6 py-20 max-w-5xl">
+            <div class="flex items-center gap-3 mb-3">
+                <div class="pictogram sm"><i class="fas fa-circle-info text-sm"></i></div>
+                <span class="label-mono">Practical</span>
+            </div>
+            <h2 class="text-3xl font-semibold tracking-tight mb-10">What to know</h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="card p-6 bg-white">
+                    <div class="pictogram mb-4"><i class="fas fa-train"></i></div>
+                    <h3 class="font-semibold mb-2 text-base">Getting there</h3>
+                    <p class="text-sm text-carbon-text-secondary leading-relaxed">
+                        VU Amsterdam main campus, Nieuw Universiteitsgebouw (NU), 4th floor. Exact room numbers sent ~6 weeks before. Nearest stations: Amsterdam Zuid and De Boelelaan / VU.
+                    </p>
+                </div>
+                <div class="card p-6 bg-white">
+                    <div class="pictogram mb-4"><i class="fas fa-laptop"></i></div>
+                    <h3 class="font-semibold mb-2 text-base">What to bring</h3>
+                    <p class="text-sm text-carbon-text-secondary leading-relaxed">
+                        A laptop is useful for the demo and parallel rooms. If you have a small AV dataset or a concrete sharing dilemma you want to work on, flag it in the comments field of the <a href="#register" class="underline">registration form</a>.
+                    </p>
+                </div>
+                <div class="card p-6 bg-white">
+                    <div class="pictogram mb-4"><i class="fas fa-bowl-food"></i></div>
+                    <h3 class="font-semibold mb-2 text-base">Catering</h3>
+                    <p class="text-sm text-carbon-text-secondary leading-relaxed">
+                        Lunch, three coffee breaks, and optional drinks are included. The <a href="#register" class="underline">registration form</a> asks about dietary needs.
+                    </p>
+                </div>
+                <div class="card p-6 bg-white">
+                    <div class="pictogram mb-4"><i class="fas fa-handshake"></i></div>
+                    <h3 class="font-semibold mb-2 text-base">Code of conduct</h3>
+                    <p class="text-sm text-carbon-text-secondary leading-relaxed">
+                        SYNAPSIS events follow the host institution's code of conduct.
+                    </p>
+                </div>
+                <div class="card p-6 bg-white">
+                    <div class="pictogram mb-4"><i class="fas fa-arrows-spin"></i></div>
+                    <h3 class="font-semibold mb-2 text-base">Outputs you can use</h3>
+                    <p class="text-sm text-carbon-text-secondary leading-relaxed">
+                        Co-creation produces a living FAQ on Codeberg, openly licensed. Synthesis notes feed the SYNAPSIS policy paper; you'll be credited if you contribute (unless you'd rather not).
+                    </p>
+                </div>
+                <div class="card p-6 bg-white">
+                    <div class="pictogram mb-4"><i class="fas fa-plane"></i></div>
+                    <h3 class="font-semibold mb-2 text-base">Travel</h3>
+                    <p class="text-sm text-carbon-text-secondary leading-relaxed">
+                        Travel is at attendees' own cost.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="border-t border-carbon-border bg-carbon-bg-hover">
+        <div class="container mx-auto px-6 py-10">
+            <div class="flex flex-col md:flex-row justify-between gap-6 text-xs text-carbon-text-secondary">
+                <div class="flex items-center gap-2 text-carbon-text">
+                    <img src="../../logo-mark.svg" alt="" class="h-5 w-auto">
+                    <span class="font-semibold">SYNAPSIS</span>
+                </div>
+                <div class="flex flex-col md:items-end gap-2">
+                    <a href="../../index.html" class="hover:text-carbon-text inline-flex items-center gap-1"><i class="fas fa-arrow-left text-[10px]"></i> Back to SYNAPSIS</a>
+                    <span class="label-mono">Masking Lab · Draft 3.2 · 2026-06-18</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>

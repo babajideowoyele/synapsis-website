@@ -1,0 +1,170 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tutorial 03 · MaskBench — SYNAPSIS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link rel="stylesheet" href="../../theme.css">
+    <script src="../../theme.js"></script>
+    <script>
+        tailwind.config = { theme: { extend: {
+            fontFamily: { 'sans': ['IBM Plex Sans', 'sans-serif'], 'mono': ['IBM Plex Mono', 'monospace'] },
+            colors: { 'carbon': {
+                'bg': 'var(--color-bg)', 'bg-hover': 'var(--color-bg-hover)',
+                'border': 'var(--color-border)', 'text': 'var(--color-text)',
+                'text-secondary': 'var(--color-text-secondary)', 'interactive': '#0f62fe',
+            }}
+        }}}
+    </script>
+    <style>
+        body { font-family: 'IBM Plex Sans', sans-serif; background-color: var(--color-bg); color: var(--color-text); line-height: 1.6; }
+        .accent-bar { height: 3px; background: var(--color-accent); width: 48px; margin-bottom: 14px; }
+        .badge { display: inline-block; padding: 3px 10px; font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: .04em; text-transform: uppercase; }
+        .badge-draft { background: var(--color-bg-hover); color: var(--color-text-secondary); border: 1px solid var(--color-border); }
+        .badge-pipeline { background: var(--color-text); color: var(--color-inverse); }
+        .video-placeholder { background: var(--color-bg-hover); border: 1px solid var(--color-border); aspect-ratio: 16 / 9; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 12px; color: var(--color-text-secondary); }
+        .video-placeholder i { font-size: 48px; }
+        .transcript h3 { font-size: 1.25rem; font-weight: 600; margin-top: 2.5rem; margin-bottom: 0.75rem; }
+        .transcript p { margin-bottom: 1.25rem; color: var(--color-text); }
+        .transcript p.lede { font-size: 1.1rem; }
+        .transcript strong { color: var(--color-text); font-weight: 600; }
+        .transcript blockquote { border-left: 3px solid var(--color-accent); padding-left: 1rem; margin: 1.5rem 0; color: var(--color-text-secondary); font-style: italic; }
+        .meta-row { font-size: 13px; color: var(--color-text-secondary); font-family: 'IBM Plex Mono', monospace; }
+        .meta-row a { color: var(--color-text); text-decoration: underline; text-underline-offset: 3px; }
+        .sidebar-section { border: 1px solid var(--color-border); padding: 18px 20px; margin-bottom: 16px; }
+        .sidebar-section h4 { font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--color-text-secondary); margin-bottom: 10px; }
+        .sidebar-section ul { list-style: none; padding: 0; margin: 0; font-size: 14px; }
+        .sidebar-section li { padding: 6px 0; border-bottom: 1px solid var(--color-border); }
+        .sidebar-section li:last-child { border-bottom: none; }
+        .sidebar-section a { color: var(--color-text); text-decoration: none; }
+        .sidebar-section a:hover { text-decoration: underline; }
+        .nav-pager { display: flex; justify-content: space-between; gap: 24px; margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--color-border); }
+        .nav-pager a { flex: 1; padding: 18px 22px; border: 1px solid var(--color-border); text-decoration: none; color: var(--color-text); transition: all .15s; }
+        .nav-pager a:hover { border-color: var(--color-text); }
+        .nav-pager .label { font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: .04em; text-transform: uppercase; color: var(--color-text-secondary); margin-bottom: 4px; display: block; }
+        .nav-pager .title { font-weight: 600; }
+        .nav-pager .next { text-align: right; }
+    </style>
+</head>
+<body>
+    <header class="border-b border-carbon-border sticky top-0 z-50" style="background: var(--color-bg);">
+        <div class="container mx-auto max-w-5xl px-6 py-4 flex items-center justify-between">
+            <a href="../../index.html" class="flex items-center gap-2 text-xl font-semibold tracking-tight"><span>SYNAPSIS</span></a>
+            <nav class="hidden md:flex gap-6">
+                <a href="../../index.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Home</a>
+                <a href="../../platform.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Platform</a>
+                <a href="../../training.html" class="text-sm font-medium border-b-2 border-carbon-text pb-1">Training</a>
+                <a href="../../resources.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Resources</a>
+                <a href="../../network.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Network</a>
+                <a href="../../press.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Press</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container mx-auto max-w-5xl px-6 py-12">
+        <div class="meta-row mb-6"><a href="index.html">Tutorials</a> &nbsp;/&nbsp; <span>03 · Stage 2</span></div>
+        <div class="flex items-center gap-3 mb-4">
+            <span class="badge badge-pipeline">03 · Stage 2</span>
+            <span class="badge badge-draft">Script drafted</span>
+            <span class="meta-row"><i class="fa fa-clock mr-1"></i> ~8 min</span>
+        </div>
+        <span class="accent-bar"></span>
+        <h1 class="text-4xl font-semibold mb-4 leading-tight">MaskBench — proving the masking works</h1>
+        <p class="text-lg text-carbon-text-secondary max-w-3xl">
+            Pose accuracy and kinematic metrics — the numbers that let you defend masked outputs to a reviewer, a data steward, or an ethics board.
+        </p>
+
+        <div class="video-placeholder mt-10">
+            <i class="fa fa-circle-play"></i>
+            <div class="text-sm font-mono uppercase tracking-widest">Video coming soon</div>
+            <div class="text-xs">Script drafted · Recording scheduled in batch 1 production</div>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-12 mt-12">
+            <article class="md:col-span-2 transcript">
+                <h2 class="text-2xl font-semibold mb-2">Learning goal</h2>
+                <p class="lede">After watching, you understand what MaskBench measures (pose accuracy + kinematics) and why those measurements are the bridge between "I masked it" and "I can defend that the masked data is still useful." You know the high-level workflow and what a MaskBench run produces.</p>
+
+                <h2 class="text-2xl font-semibold mt-12 mb-2">Transcript</h2>
+
+                <h3>Cold open</h3>
+                <p>You masked the video. How do you <strong>prove</strong> it's still useful? That the gesture you care about is still trackable, that the kinematic signal didn't collapse in post-processing? That's what stage two is for.</p>
+
+                <h3>Why a separate benchmark tool</h3>
+                <p>"It looks fine to me" is not a measurement. Visual inspection finds obvious failures. It does not catch subtle degradation. A masked video can look perfect while the pose estimator behind it silently produces noisier kinematics — that's a problem you only see when you measure.</p>
+                <p>MaskBench answers the quantitative version of the question. Take your masked output. Run pose estimation on it. Compare against the original or against ground truth. Report numbers — accuracy and kinematics.</p>
+                <p>It also benchmarks pose estimators against each other. Seven models in the box: YOLOv11-Pose, MediaPipePose, OpenPose, and four variants including the MaskAnyone pipeline itself. One workflow, comparable numbers.</p>
+
+                <h3>What it measures</h3>
+                <p>MaskBench measures two things, and you need both.</p>
+                <p><strong>Accuracy.</strong> How close are the predicted keypoints to ground truth? Three core metrics. <strong>PCK</strong>, percentage of correct keypoints under a tolerance. <strong>RMSE</strong>, root-mean-square error across all frames. <strong>Euclidean distance</strong>, raw per-keypoint deviation. You need labelled ground-truth poses for these.</p>
+                <p><strong>Kinematics.</strong> The smoothness of the signal itself. <strong>Velocity</strong>, how fast each keypoint moves between frames. <strong>Acceleration</strong>, how that velocity changes. <strong>Jerk</strong>, the rate of change of acceleration — the noise-sensitive one. You can compute these without ground truth, just from the predicted poses.</p>
+                <p>When there are multiple people, MaskBench uses the Hungarian algorithm to align person-indices across frames and between prediction and ground truth — so the metric doesn't get confused when person A and person B swap places.</p>
+                <p>Every run produces four artefacts: a per-keypoint plot for spatial patterns, a distribution plot for the full spread, an inference-time plot for performance, and a results table for the headline numbers.</p>
+
+                <h3>The workflow — five steps</h3>
+                <p><strong>Step 1 — Dataset prep.</strong> Drop your videos in a <code>videos</code> folder. If you have ground-truth annotations, drop them in a <code>labels</code> folder, one JSON per video. That's the simple structure. Complex multi-level datasets are supported too.</p>
+                <p><strong>Step 2 — Configuration.</strong> A YAML file declares everything: which dataset, which pose estimators to run, which metrics to compute, where outputs go. Version-control the YAML; it's the reproducibility contract.</p>
+                <p><strong>Step 3 — Inference.</strong> Run the benchmark. MaskBench creates a timestamped checkpoint folder, runs every pose estimator on every video, and saves the JSON pose results. This is the slow step — overnight is normal.</p>
+                <p><strong>Step 4 — Evaluation.</strong> Metrics run across all pose estimators and all videos. Person matching happens automatically. Missing or unmatched people are tracked, not silently dropped.</p>
+                <p><strong>Step 5 — Visualisation.</strong> The framework produces the plots, the tables, and a folder of rendered videos showing each pose estimator's output overlaid on the original. The rendered videos are the qualitative companion to the numbers.</p>
+
+                <h3>Reading the output — a worked example</h3>
+                <p>A real example. A per-keypoint acceleration plot. Each column is a keypoint — nose, shoulders, hips, wrists. Each colour is a pose estimator. <strong>Tall bars mean noisy estimates.</strong></p>
+                <p>The wrists and ankles always show more noise — they move faster, they leave the frame more often, they get occluded. That's expected. The question is whether <strong>your</strong> pose estimator's wrist noise is comparable to the others or way above the line.</p>
+                <p>And inference time — how long each estimator took. Cheap-and-fast versus slow-but-accurate is a real trade-off. The plot makes it visible. MaskBench doesn't tell you which estimator to use. It gives you the data to defend the choice you make.</p>
+
+                <h3>When to run it</h3>
+                <p>Four scenarios where running MaskBench is worth your time:</p>
+                <ul class="list-disc pl-6 mb-6 space-y-2">
+                    <li><strong>Starting a new pilot.</strong> Benchmark a sample before you commit to processing the whole corpus.</li>
+                    <li><strong>Writing a methods paper.</strong> Reviewers will ask why you picked this estimator and not that one. Have the numbers.</li>
+                    <li><strong>Convincing a data steward</strong> that masked outputs preserve your analytical signal. The numbers move conversations the screenshots can't.</li>
+                    <li><strong>After a model update.</strong> A pose estimator released a new version. Re-run MaskBench on a reference subset — confirm the upgrade didn't quietly break your downstream analysis.</li>
+                </ul>
+
+                <h3>Recap</h3>
+                <p>MaskBench: two metric buckets — accuracy and kinematics. Five-step workflow — dataset prep, YAML config, inference, evaluation, visualisation. Output is plots, tables, and rendered overlay videos. Use it to defend your choices with numbers.</p>
+                <blockquote>Next stage of the pipeline — <a href="04-maskingops.html">MaskingOps</a>. When you're not running one video, you're running a thousand, and you need dashboards, queues, and QA review across the whole batch.</blockquote>
+            </article>
+
+            <aside>
+                <div class="sidebar-section">
+                    <h4>Details</h4>
+                    <ul>
+                        <li><span class="meta-row">Duration target</span><br>~8 min</li>
+                        <li><span class="meta-row">Audience</span><br>Researchers, data stewards</li>
+                        <li><span class="meta-row">Prereqs</span><br><a href="02-maskanyone.html">02 · MaskAnyone</a></li>
+                    </ul>
+                </div>
+                <div class="sidebar-section">
+                    <h4>Source</h4>
+                    <ul>
+                        <li><a href="../../../manuscripts/temp_maskbench/tutorial_maskbench.pdf"><i class="fa fa-file-pdf mr-2"></i>tutorial_maskbench.pdf §3, §4, §5</a></li>
+                    </ul>
+                </div>
+                <div class="sidebar-section">
+                    <h4>Companion deep dive</h4>
+                    <ul>
+                        <li><a href="deepdive-quality-check.html">→ Quality check (structured QA)</a></li>
+                    </ul>
+                </div>
+                <div class="sidebar-section">
+                    <h4>Up next</h4>
+                    <ul>
+                        <li><a href="04-maskingops.html">→ 04 · MaskingOps</a></li>
+                    </ul>
+                </div>
+            </aside>
+        </div>
+
+        <nav class="nav-pager">
+            <a href="02-maskanyone.html"><span class="label">← Previous</span><span class="title">02 · MaskAnyone</span></a>
+            <a href="04-maskingops.html" class="next"><span class="label">Next →</span><span class="title">04 · MaskingOps</span></a>
+        </nav>
+    </main>
+</body>
+</html>

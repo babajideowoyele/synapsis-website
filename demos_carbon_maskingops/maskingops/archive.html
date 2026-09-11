@@ -1,0 +1,707 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MaskingOPS - Archive &amp; Export</title>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+
+    :root {
+      --carbon-bg: #ffffff;
+      --carbon-bg-hover: #f4f4f4;
+      --carbon-bg-dark: #f5f5f5;
+      --carbon-border: #e0e0e0;
+      --carbon-text: #161616;
+      --carbon-text-secondary: #393939;
+      --carbon-focus: #0f62fe;
+      --carbon-success: #198038;
+      --carbon-success-light: #defbe6;
+      --carbon-warning: #f1c21b;
+      --carbon-warning-light: #fff8e1;
+      --carbon-error: #da1e28;
+      --carbon-error-light: #fff1f1;
+      --carbon-info: #0f62fe;
+      --carbon-info-light: #edf5ff;
+    }
+
+    body {
+      font-family: 'IBM Plex Sans', sans-serif;
+      background: var(--carbon-bg-dark);
+      color: var(--carbon-text);
+      line-height: 1.5;
+      overflow: hidden;
+    }
+
+    *:focus-visible { outline: 2px solid var(--carbon-focus); outline-offset: 2px; }
+
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      gap: 8px; min-height: 40px; padding: 8px 20px;
+      font-family: inherit; font-size: 13px; font-weight: 500;
+      cursor: pointer; transition: all 0.15s; border: none; text-decoration: none;
+    }
+    .btn-primary { background: var(--carbon-text); color: #fff; }
+    .btn-primary:hover { background: #393939; }
+    .btn-success { background: var(--carbon-success); color: #fff; }
+    .btn-success:hover { background: #0e6027; }
+    .btn-secondary { background: #fff; color: var(--carbon-text); border: 1px solid var(--carbon-text); }
+    .btn-secondary:hover { background: var(--carbon-bg-hover); }
+    .btn-ghost { background: transparent; color: var(--carbon-text-secondary); }
+    .btn-ghost:hover { background: var(--carbon-bg-hover); color: var(--carbon-text); }
+    .btn-sm { min-height: 32px; padding: 4px 12px; font-size: 12px; }
+    .btn-icon { width: 36px; height: 36px; padding: 0; }
+
+    .tag {
+      display: inline-flex; align-items: center; gap: 4px;
+      padding: 2px 10px; font-size: 11px; font-weight: 500;
+    }
+    .tag-success { background: var(--carbon-success-light); color: var(--carbon-success); }
+    .tag-warning { background: var(--carbon-warning-light); color: #735f00; }
+    .tag-error { background: var(--carbon-error-light); color: var(--carbon-error); }
+    .tag-info { background: var(--carbon-info-light); color: var(--carbon-info); }
+    .tag-default { background: var(--carbon-bg-hover); color: var(--carbon-text-secondary); }
+
+    /* ── App chrome ── */
+    .app-frame { height: 100vh; display: flex; flex-direction: column; }
+    .app-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 24px; height: 48px;
+      background: var(--carbon-text); color: #f4f4f4; flex-shrink: 0;
+    }
+    .app-logo {
+      font-size: 14px; font-weight: 600; display: flex; align-items: center;
+      gap: 10px; letter-spacing: 0.5px; color: #f4f4f4; text-decoration: none;
+    }
+    .header-nav { display: flex; align-items: center; gap: 0; height: 100%; }
+    .header-nav a {
+      display: flex; align-items: center; gap: 6px; height: 100%;
+      padding: 0 16px; font-size: 13px; font-weight: 400;
+      color: #c6c6c6; text-decoration: none; transition: all 0.15s;
+      border-bottom: 2px solid transparent;
+    }
+    .header-nav a:hover { color: #fff; background: rgba(255,255,255,0.08); }
+    .header-nav a.active { color: #fff; border-bottom-color: #fff; font-weight: 500; }
+    .header-actions { display: flex; align-items: center; gap: 8px; }
+    .header-actions button {
+      width: 36px; height: 36px; background: transparent; border: none;
+      color: #c6c6c6; cursor: pointer; display: flex; align-items: center;
+      justify-content: center; transition: all 0.15s;
+    }
+    .header-actions button:hover { color: #fff; background: rgba(255,255,255,0.08); }
+
+    .app-body { display: flex; flex: 1; overflow: hidden; }
+    .main-content { flex: 1; overflow-y: auto; padding: 24px 32px; }
+
+    .page-label {
+      font-family: 'IBM Plex Mono', monospace; font-size: 11px;
+      letter-spacing: 1.5px; text-transform: uppercase;
+      color: var(--carbon-text-secondary); margin-bottom: 4px;
+    }
+    .page-title { font-size: 28px; font-weight: 300; margin-bottom: 4px; }
+    .page-title strong { font-weight: 600; }
+
+    /* ── Panel ── */
+    .panel {
+      background: #fff; border: 1px solid var(--carbon-border); margin-bottom: 24px;
+    }
+    .panel-header {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 16px 20px; border-bottom: 1px solid var(--carbon-border);
+    }
+    .panel-title { font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 8px; }
+    .panel-body { padding: 20px; }
+
+    /* ── FAIR checklist ── */
+    .fair-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;
+      margin-bottom: 24px;
+    }
+    .fair-card {
+      border: 1px solid var(--carbon-border); padding: 16px; text-align: center;
+      transition: all 0.15s;
+    }
+    .fair-card.complete { border-color: var(--carbon-success); background: var(--carbon-success-light); }
+    .fair-card.incomplete { border-color: var(--carbon-warning); background: var(--carbon-warning-light); }
+    .fair-letter {
+      font-family: 'IBM Plex Mono', monospace; font-size: 28px;
+      font-weight: 700; line-height: 1;
+    }
+    .fair-card.complete .fair-letter { color: var(--carbon-success); }
+    .fair-card.incomplete .fair-letter { color: #735f00; }
+    .fair-label { font-size: 12px; font-weight: 500; margin-top: 4px; }
+    .fair-status { font-size: 10px; margin-top: 6px; }
+
+    /* ── Metadata form ── */
+    .meta-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+    }
+    .form-group { margin-bottom: 16px; }
+    .form-label { font-size: 12px; font-weight: 600; margin-bottom: 6px; display: block; }
+    .form-hint { font-size: 11px; color: var(--carbon-text-secondary); margin-bottom: 6px; }
+    .form-input, .form-select, .form-textarea {
+      width: 100%; padding: 10px 12px; font-family: inherit; font-size: 13px;
+      border: 1px solid var(--carbon-border); background: #fff;
+      color: var(--carbon-text); transition: border-color 0.15s;
+    }
+    .form-input:focus, .form-select:focus, .form-textarea:focus {
+      outline: none; border-color: var(--carbon-text);
+    }
+    .form-textarea { resize: vertical; min-height: 80px; }
+
+    /* ── Export files list ── */
+    .file-list { list-style: none; }
+    .file-item {
+      display: flex; align-items: center; gap: 12px;
+      padding: 12px 16px; border: 1px solid var(--carbon-border);
+      margin-bottom: -1px; transition: all 0.15s;
+    }
+    .file-item:hover { background: var(--carbon-bg-hover); }
+    .file-icon {
+      width: 36px; height: 36px; background: var(--carbon-bg-hover);
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .file-name { font-size: 13px; font-weight: 500; }
+    .file-size { font-size: 11px; color: var(--carbon-text-secondary); }
+    .file-actions { margin-left: auto; display: flex; gap: 4px; }
+
+    /* ── Repository selection ── */
+    .repo-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;
+    }
+    .repo-card {
+      border: 1px solid var(--carbon-border); padding: 20px;
+      cursor: pointer; transition: all 0.15s; text-align: center;
+    }
+    .repo-card:hover { border-color: var(--carbon-text); }
+    .repo-card.selected {
+      border-color: var(--carbon-text); background: var(--carbon-bg-hover);
+      position: relative;
+    }
+    .repo-card.selected::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0;
+      height: 3px; background: var(--carbon-text);
+    }
+    .repo-icon {
+      width: 48px; height: 48px; margin: 0 auto 12px;
+      background: var(--carbon-bg-hover); display: flex;
+      align-items: center; justify-content: center; font-size: 20px;
+    }
+    .repo-card.selected .repo-icon { background: var(--carbon-text); color: #fff; }
+    .repo-name { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+    .repo-desc { font-size: 12px; color: var(--carbon-text-secondary); line-height: 1.4; }
+
+    /* ── Provenance timeline ── */
+    .provenance-list { list-style: none; }
+    .provenance-item {
+      display: flex; gap: 16px; padding: 12px 0;
+      border-bottom: 1px solid var(--carbon-border);
+    }
+    .provenance-item:last-child { border-bottom: none; }
+    .provenance-step {
+      width: 28px; height: 28px; flex-shrink: 0;
+      background: var(--carbon-bg-hover); display: flex;
+      align-items: center; justify-content: center;
+      font-size: 12px; color: var(--carbon-text-secondary);
+    }
+    .provenance-item.done .provenance-step {
+      background: var(--carbon-success); color: #fff;
+    }
+    .provenance-text { font-size: 13px; }
+    .provenance-time {
+      font-family: 'IBM Plex Mono', monospace; font-size: 11px;
+      color: var(--carbon-text-secondary); margin-top: 2px;
+    }
+
+    .mono { font-family: 'IBM Plex Mono', monospace; }
+    .text-secondary { color: var(--carbon-text-secondary); }
+    .text-xs { font-size: 11px; }
+
+    /* ── Animations ── */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes scaleIn {
+      from { opacity: 0; transform: scale(0.9); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.15); }
+    }
+    @keyframes checkmark {
+      0% { opacity: 0; transform: scale(0); }
+      70% { opacity: 1; transform: scale(1.2); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+
+    /* Panel staggered fade-in */
+    .panel {
+      animation: fadeInUp 0.4s ease both;
+    }
+    .panel:nth-child(1) { animation-delay: 0.05s; }
+    .panel:nth-child(2) { animation-delay: 0.15s; }
+    .panel:nth-child(3) { animation-delay: 0.25s; }
+    .panel:nth-child(4) { animation-delay: 0.35s; }
+
+    /* FAIR card staggered scale-in */
+    .fair-card {
+      animation: scaleIn 0.35s ease both;
+    }
+    .fair-card:nth-child(1) { animation-delay: 0.1s; }
+    .fair-card:nth-child(2) { animation-delay: 0.2s; }
+    .fair-card:nth-child(3) { animation-delay: 0.3s; }
+    .fair-card:nth-child(4) { animation-delay: 0.4s; }
+
+    /* FAIR card hover */
+    .fair-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      cursor: pointer;
+    }
+    .fair-card.complete:hover {
+      box-shadow: 0 4px 16px rgba(25,128,56,0.15);
+    }
+
+    /* Repo card hover & selected */
+    .repo-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+    .repo-card.selected {
+      transform: scale(1.02);
+    }
+
+    /* File item hover */
+    .file-item:hover {
+      transform: translateX(4px);
+      transition: transform 0.2s ease, background 0.15s;
+    }
+
+    /* Provenance item staggered fade-in */
+    .provenance-item {
+      animation: fadeInUp 0.4s ease both;
+    }
+    .provenance-item:nth-child(1) { animation-delay: 0.05s; }
+    .provenance-item:nth-child(2) { animation-delay: 0.15s; }
+    .provenance-item:nth-child(3) { animation-delay: 0.25s; }
+    .provenance-item:nth-child(4) { animation-delay: 0.35s; }
+    .provenance-item:nth-child(5) { animation-delay: 0.45s; }
+
+    /* Provenance step hover */
+    .provenance-step {
+      transition: transform 0.2s ease;
+    }
+    .provenance-step:hover {
+      transform: scale(1.15);
+    }
+
+    /* Notification bell badge */
+    .notif-badge {
+      position: absolute;
+      top: 4px; right: 4px;
+      width: 8px; height: 8px;
+      background: var(--carbon-error);
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+
+    /* FAIR letter checkmark entrance */
+    .fair-letter.animate-in {
+      animation: checkmark 0.5s ease both;
+    }
+
+    /* Disabled button style */
+    .btn:disabled, .btn.disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+
+    /* Tooltip for FAIR cards */
+    .fair-tooltip {
+      position: absolute; bottom: -36px; left: 50%; transform: translateX(-50%);
+      background: var(--carbon-text); color: #fff; font-size: 11px;
+      padding: 4px 10px; white-space: nowrap; z-index: 10;
+      pointer-events: none; opacity: 0; transition: opacity 0.2s;
+    }
+    .fair-tooltip.show { opacity: 1; }
+    .fair-card { position: relative; overflow: visible; }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-frame">
+    <div class="app-header">
+      <a href="dashboard.html" class="app-logo">
+        <i class="fas fa-shield-halved" aria-hidden="true"></i> MASKINGOPS
+      </a>
+      <nav class="header-nav">
+        <a href="dashboard.html"><i class="fas fa-th-large"></i> Dashboard</a>
+        <a href="../maskanyone/upload.html"><i class="fas fa-mask"></i> MaskAnyone</a>
+        <a href="benchmark.html"><i class="fas fa-chart-bar"></i> MaskBench</a>
+        <a href="archive.html" class="active"><i class="fas fa-box-archive"></i> Archive</a>
+      </nav>
+      <div class="header-actions">
+        <button title="Notifications" style="position:relative;"><i class="fas fa-bell"></i><span class="notif-badge"></span></button>
+        <button title="Settings"><i class="fas fa-cog"></i></button>
+        <button title="Help"><i class="fas fa-circle-question"></i></button>
+      </div>
+    </div>
+
+    <div class="app-body">
+      <main class="main-content">
+        <!-- Page header -->
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:24px;">
+          <div>
+            <p class="page-label">Archive &amp; Export</p>
+            <h1 class="page-title">FAIR <strong>Data Package</strong></h1>
+            <p class="text-sm text-secondary" style="margin-top:4px;">
+              Prepare reviewed videos for archiving with full provenance metadata.
+            </p>
+          </div>
+          <button class="btn btn-primary" id="deposit-btn" disabled>
+            <i class="fas fa-cloud-upload-alt" aria-hidden="true"></i> Deposit to Repository
+          </button>
+        </div>
+
+        <!-- FAIR compliance cards -->
+        <div class="fair-grid">
+          <div class="fair-card complete" data-fair="F" data-tooltip="DOI has been assigned via DANS">
+            <div class="fair-letter">F</div>
+            <div class="fair-label">Findable</div>
+            <div class="fair-status"><i class="fas fa-circle-check"></i> DOI assigned</div>
+            <i class="fas fa-fingerprint" style="font-size:14px; margin-top:4px; opacity:0.5;"></i>
+            <div class="fair-tooltip"></div>
+          </div>
+          <div class="fair-card complete" data-fair="A" data-tooltip="Repository selected: DANS">
+            <div class="fair-letter">A</div>
+            <div class="fair-label">Accessible</div>
+            <div class="fair-status"><i class="fas fa-circle-check"></i> DANS selected</div>
+            <i class="fas fa-globe" style="font-size:14px; margin-top:4px; opacity:0.5;"></i>
+            <div class="fair-tooltip"></div>
+          </div>
+          <div class="fair-card complete" data-fair="I" data-tooltip="Using standard open formats (MP4, JSON, CSV)">
+            <div class="fair-letter">I</div>
+            <div class="fair-label">Interoperable</div>
+            <div class="fair-status"><i class="fas fa-circle-check"></i> Standard formats</div>
+            <i class="fas fa-exchange-alt" style="font-size:14px; margin-top:4px; opacity:0.5;"></i>
+            <div class="fair-tooltip"></div>
+          </div>
+          <div class="fair-card incomplete" data-fair="R" data-tooltip="Select a license to make data reusable">
+            <div class="fair-letter">R</div>
+            <div class="fair-label">Reusable</div>
+            <div class="fair-status"><i class="fas fa-exclamation-circle"></i> License needed</div>
+            <i class="fas fa-recycle" style="font-size:14px; margin-top:4px; opacity:0.5;"></i>
+            <div class="fair-tooltip"></div>
+          </div>
+        </div>
+
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:24px;">
+          <!-- Left column -->
+          <div>
+            <!-- Repository selection -->
+            <div class="panel">
+              <div class="panel-header">
+                <span class="panel-title"><i class="fas fa-database"></i> Target Repository</span>
+              </div>
+              <div class="panel-body">
+                <div class="repo-grid">
+                  <div class="repo-card selected" onclick="selectRepo(this)">
+                    <div class="repo-icon"><i class="fas fa-database"></i></div>
+                    <div class="repo-name">DANS</div>
+                    <div class="repo-desc">Dutch national data archive for SSH research</div>
+                    <div style="margin-top:8px;"><span class="tag tag-success" style="font-size:10px;"><i class="fas fa-shield-halved"></i> Trusted</span></div>
+                  </div>
+                  <div class="repo-card" onclick="selectRepo(this)">
+                    <div class="repo-icon"><i class="fas fa-building-columns"></i></div>
+                    <div class="repo-name">Institutional</div>
+                    <div class="repo-desc">EUR / Radboud repository</div>
+                    <div style="margin-top:8px;"><span class="tag tag-info" style="font-size:10px;"><i class="fas fa-building-columns"></i> Internal</span></div>
+                  </div>
+                  <div class="repo-card" onclick="selectRepo(this)">
+                    <div class="repo-icon"><i class="fas fa-folder-open"></i></div>
+                    <div class="repo-name">Local Export</div>
+                    <div class="repo-desc">Download package as ZIP</div>
+                    <div style="margin-top:8px;"><span class="tag tag-default" style="font-size:10px;"><i class="fas fa-download"></i> Offline</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Metadata -->
+            <div class="panel">
+              <div class="panel-header">
+                <span class="panel-title"><i class="fas fa-tags"></i> Dataset Metadata</span>
+              </div>
+              <div class="panel-body">
+                <div class="meta-grid">
+                  <div class="form-group">
+                    <label class="form-label"><i class="fas fa-heading" style="margin-right:4px; color:var(--carbon-text-secondary);"></i> Dataset Title</label>
+                    <input class="form-input" type="text" value="Clinical Study 2026 - Masked Interview Recordings">
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label"><i class="fas fa-user-tie" style="margin-right:4px; color:var(--carbon-text-secondary);"></i> Principal Investigator</label>
+                    <input class="form-input" type="text" value="B. A. Owoyele">
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label"><i class="fas fa-scale-balanced" style="margin-right:4px; color:var(--carbon-text-secondary);"></i> License</label>
+                    <select class="form-select" id="license-select">
+                      <option value="">Select a license...</option>
+                      <option value="cc-by">CC BY 4.0</option>
+                      <option value="cc-by-nc">CC BY-NC 4.0</option>
+                      <option value="cc-by-nc-sa">CC BY-NC-SA 4.0</option>
+                      <option value="restricted">Restricted Access</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label"><i class="fas fa-lock" style="margin-right:4px; color:var(--carbon-text-secondary);"></i> Access Level</label>
+                    <select class="form-select">
+                      <option value="open">Open Access</option>
+                      <option value="restricted" selected>Restricted</option>
+                      <option value="embargo">Under Embargo</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="form-label"><i class="fas fa-align-left" style="margin-right:4px; color:var(--carbon-text-secondary);"></i> Description</label>
+                  <textarea class="form-textarea">De-identified video recordings from clinical interview study. All participants masked using Gaussian blur via MaskAnyone (SAM2). Pose estimation quality verified via MaskBench (avg. PCK 0.87 with YOLOv11-Pose).</textarea>
+                </div>
+                <div class="form-group" style="margin-bottom:0;">
+                  <label class="form-label"><i class="fas fa-key" style="margin-right:4px; color:var(--carbon-text-secondary);"></i> Keywords</label>
+                  <input class="form-input" type="text" value="privacy, video, de-identification, clinical, interview, blur, pose estimation">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right column -->
+          <div>
+            <!-- Files in package -->
+            <div class="panel">
+              <div class="panel-header">
+                <span class="panel-title"><i class="fas fa-box-open"></i> Package Contents</span>
+                <span class="text-xs text-secondary"><i class="fas fa-hdd" style="margin-right:4px;"></i> 4 files &middot; 2.4 GB</span>
+              </div>
+              <div class="panel-body" style="padding:0;">
+                <ul class="file-list">
+                  <li class="file-item">
+                    <div class="file-icon"><i class="fas fa-video" style="color:var(--carbon-text-secondary);"></i></div>
+                    <div>
+                      <div class="file-name">Interview_P001_masked.mp4</div>
+                      <div class="file-size">1.2 GB &middot; Blur &middot; Utility: 91%</div>
+                    </div>
+                    <div class="file-actions">
+                      <span class="tag tag-success"><i class="fas fa-check"></i> Approved</span>
+                    </div>
+                  </li>
+                  <li class="file-item">
+                    <div class="file-icon"><i class="fas fa-file-code" style="color:var(--carbon-text-secondary);"></i></div>
+                    <div>
+                      <div class="file-name">Interview_P001_poses.json</div>
+                      <div class="file-size">4.8 MB &middot; YOLOv11-Pose &middot; 17 keypoints</div>
+                    </div>
+                    <div class="file-actions">
+                      <button class="btn btn-icon btn-ghost btn-sm" title="Preview"><i class="fas fa-eye"></i></button>
+                    </div>
+                  </li>
+                  <li class="file-item">
+                    <div class="file-icon"><i class="fas fa-chart-bar" style="color:var(--carbon-text-secondary);"></i></div>
+                    <div>
+                      <div class="file-name">Interview_P001_benchmark.csv</div>
+                      <div class="file-size">12 KB &middot; PCK, RMSE, Velocity, Acceleration, Jerk</div>
+                    </div>
+                    <div class="file-actions">
+                      <button class="btn btn-icon btn-ghost btn-sm" title="Preview"><i class="fas fa-eye"></i></button>
+                    </div>
+                  </li>
+                  <li class="file-item">
+                    <div class="file-icon"><i class="fas fa-file-alt" style="color:var(--carbon-text-secondary);"></i></div>
+                    <div>
+                      <div class="file-name">provenance_report.json</div>
+                      <div class="file-size">2 KB &middot; Processing metadata &amp; review records</div>
+                    </div>
+                    <div class="file-actions">
+                      <button class="btn btn-icon btn-ghost btn-sm" title="Preview"><i class="fas fa-eye"></i></button>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- Provenance -->
+            <div class="panel">
+              <div class="panel-header">
+                <span class="panel-title"><i class="fas fa-history"></i> Processing Provenance</span>
+              </div>
+              <div class="panel-body">
+                <ul class="provenance-list">
+                  <li class="provenance-item done">
+                    <div class="provenance-step"><i class="fas fa-check" style="font-size:10px;"></i></div>
+                    <div>
+                      <div class="provenance-text"><strong>Uploaded</strong> &mdash; Interview_P001.mp4 (raw)</div>
+                      <div class="provenance-time">2026-01-28 09:14 &middot; SHA256: a3f8c2...</div>
+                    </div>
+                  </li>
+                  <li class="provenance-item done">
+                    <div class="provenance-step"><i class="fas fa-check" style="font-size:10px;"></i></div>
+                    <div>
+                      <div class="provenance-text"><strong>De-identified</strong> &mdash; MaskAnyone v1.0, SAM2, Blur (sigma=15), 2 persons detected</div>
+                      <div class="provenance-time">2026-01-28 10:02 &middot; Config: preset_interview_blur.yml</div>
+                    </div>
+                  </li>
+                  <li class="provenance-item done">
+                    <div class="provenance-step"><i class="fas fa-check" style="font-size:10px;"></i></div>
+                    <div>
+                      <div class="provenance-text"><strong>Benchmarked</strong> &mdash; YOLOv11-Pose (L), PCK=0.91, RMSE=8.42</div>
+                      <div class="provenance-time">2026-01-28 10:45 &middot; MaskBench v0.2</div>
+                    </div>
+                  </li>
+                  <li class="provenance-item done">
+                    <div class="provenance-step"><i class="fas fa-check" style="font-size:10px;"></i></div>
+                    <div>
+                      <div class="provenance-text"><strong>Utility Approved</strong> &mdash; Score 91%, reviewer: B.A. Owoyele</div>
+                      <div class="provenance-time">2026-01-29 14:22</div>
+                    </div>
+                  </li>
+                  <li class="provenance-item">
+                    <div class="provenance-step">5</div>
+                    <div>
+                      <div class="provenance-text"><strong>Archive</strong> &mdash; Pending deposit to DANS</div>
+                      <div class="provenance-time">Awaiting license selection</div>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- GDPR notice -->
+            <div style="background: var(--carbon-info-light); border-left: 3px solid var(--carbon-info); padding: 16px 20px;">
+              <div style="font-size:13px; font-weight:600; display:flex; align-items:center; gap:8px; margin-bottom:8px;">
+                <i class="fas fa-shield-halved" style="color: var(--carbon-info);"></i>
+                GDPR Compliance Note
+              </div>
+              <p style="font-size:12px; color: var(--carbon-text-secondary); line-height:1.5;">
+                This dataset has been processed in accordance with GDPR Article 89 (scientific research).
+                All participants consented to data sharing in masked form.
+                De-identification method and quality metrics are documented in the provenance report.
+              </p>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script>
+    // ── Repository selection with scale animation ──
+    function selectRepo(el) {
+      document.querySelectorAll('.repo-card').forEach(c => c.classList.remove('selected'));
+      el.classList.add('selected');
+      // Brief scale animation on click
+      el.style.transform = 'scale(1.06)';
+      setTimeout(() => { el.style.transform = 'scale(1.02)'; }, 150);
+    }
+
+    // ── FAIR card click interaction ──
+    document.querySelectorAll('.fair-card').forEach(card => {
+      card.addEventListener('click', () => {
+        const tooltip = card.querySelector('.fair-tooltip');
+        const msg = card.dataset.tooltip || '';
+        if (card.classList.contains('incomplete')) {
+          tooltip.textContent = msg;
+          tooltip.classList.add('show');
+          setTimeout(() => tooltip.classList.remove('show'), 2200);
+        } else {
+          tooltip.textContent = msg;
+          tooltip.classList.add('show');
+          setTimeout(() => tooltip.classList.remove('show'), 1800);
+        }
+      });
+    });
+
+    // ── License selection updates R card and validates form ──
+    const licenseSelect = document.getElementById('license-select');
+    const depositBtn = document.getElementById('deposit-btn');
+    const rCard = document.querySelector('.fair-card[data-fair="R"]');
+
+    licenseSelect.addEventListener('change', function () {
+      if (this.value) {
+        // Mark R card as complete
+        rCard.classList.remove('incomplete');
+        rCard.classList.add('complete');
+        rCard.querySelector('.fair-status').innerHTML =
+          '<i class="fas fa-circle-check"></i> ' + this.options[this.selectedIndex].text;
+        rCard.querySelector('.fair-letter').classList.add('animate-in');
+        rCard.dataset.tooltip = 'License selected: ' + this.options[this.selectedIndex].text;
+      } else {
+        // Revert R card to incomplete
+        rCard.classList.remove('complete');
+        rCard.classList.add('incomplete');
+        rCard.querySelector('.fair-status').innerHTML =
+          '<i class="fas fa-exclamation-circle"></i> License needed';
+        rCard.querySelector('.fair-letter').classList.remove('animate-in');
+        rCard.dataset.tooltip = 'Select a license to make data reusable';
+      }
+      validateForm();
+    });
+
+    // ── Form validation ──
+    function validateForm() {
+      const title = document.querySelector('.form-input[type="text"]');
+      const license = licenseSelect.value;
+      const description = document.querySelector('.form-textarea');
+      const allFilled = title && title.value.trim() !== '' &&
+                        license !== '' &&
+                        description && description.value.trim() !== '';
+      depositBtn.disabled = !allFilled;
+    }
+
+    // Listen on all form inputs for real-time validation
+    document.querySelectorAll('.form-input, .form-textarea, .form-select').forEach(input => {
+      input.addEventListener('input', validateForm);
+      input.addEventListener('change', validateForm);
+    });
+
+    // ── Provenance step hover tooltip ──
+    document.querySelectorAll('.provenance-item').forEach(item => {
+      const step = item.querySelector('.provenance-step');
+      const textEl = item.querySelector('.provenance-text');
+      const originalText = textEl ? textEl.innerHTML : '';
+
+      step.addEventListener('mouseenter', () => {
+        step.title = item.classList.contains('done')
+          ? 'Completed'
+          : 'Pending';
+      });
+    });
+
+    // ── Animated FAIR letters on page load ──
+    document.addEventListener('DOMContentLoaded', () => {
+      const letters = document.querySelectorAll('.fair-letter');
+      letters.forEach((letter, i) => {
+        letter.style.opacity = '0';
+        letter.style.transform = 'scale(0)';
+        setTimeout(() => {
+          letter.classList.add('animate-in');
+          letter.style.opacity = '';
+          letter.style.transform = '';
+        }, 300 + i * 200);
+      });
+
+      // Run initial validation
+      validateForm();
+    });
+  </script>
+<script src="../demo.js"></script>
+</body>
+</html>

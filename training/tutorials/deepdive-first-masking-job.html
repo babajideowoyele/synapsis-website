@@ -1,0 +1,170 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deep dive · First masking job — SYNAPSIS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link rel="stylesheet" href="../../theme.css">
+    <script src="../../theme.js"></script>
+    <script>
+        tailwind.config = { theme: { extend: {
+            fontFamily: { 'sans': ['IBM Plex Sans', 'sans-serif'], 'mono': ['IBM Plex Mono', 'monospace'] },
+            colors: { 'carbon': {
+                'bg': 'var(--color-bg)', 'bg-hover': 'var(--color-bg-hover)',
+                'border': 'var(--color-border)', 'text': 'var(--color-text)',
+                'text-secondary': 'var(--color-text-secondary)', 'interactive': '#0f62fe',
+            }}
+        }}}
+    </script>
+    <style>
+        body { font-family: 'IBM Plex Sans', sans-serif; background-color: var(--color-bg); color: var(--color-text); line-height: 1.6; }
+        .accent-bar { height: 3px; background: var(--color-accent); width: 48px; margin-bottom: 14px; }
+        .badge { display: inline-block; padding: 3px 10px; font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: .04em; text-transform: uppercase; }
+        .badge-draft { background: var(--color-bg-hover); color: var(--color-text-secondary); border: 1px solid var(--color-border); }
+        .badge-deepdive { background: var(--color-bg-hover); color: var(--color-text); border: 1px solid var(--color-border); }
+        .video-placeholder { background: var(--color-bg-hover); border: 1px solid var(--color-border); aspect-ratio: 16 / 9; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 12px; color: var(--color-text-secondary); }
+        .video-placeholder i { font-size: 48px; }
+        .transcript h3 { font-size: 1.25rem; font-weight: 600; margin-top: 2.5rem; margin-bottom: 0.75rem; }
+        .transcript h4 { font-size: 1.05rem; font-weight: 600; margin-top: 1.5rem; margin-bottom: 0.5rem; }
+        .transcript p { margin-bottom: 1.25rem; color: var(--color-text); }
+        .transcript p.lede { font-size: 1.1rem; }
+        .transcript strong { color: var(--color-text); font-weight: 600; }
+        .transcript blockquote { border-left: 3px solid var(--color-accent); padding-left: 1rem; margin: 1.5rem 0; color: var(--color-text-secondary); font-style: italic; }
+        .transcript code { font-family: 'IBM Plex Mono', monospace; font-size: .9em; background: var(--color-bg-hover); padding: 2px 6px; }
+        .meta-row { font-size: 13px; color: var(--color-text-secondary); font-family: 'IBM Plex Mono', monospace; }
+        .meta-row a { color: var(--color-text); text-decoration: underline; text-underline-offset: 3px; }
+        .sidebar-section { border: 1px solid var(--color-border); padding: 18px 20px; margin-bottom: 16px; }
+        .sidebar-section h4 { font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--color-text-secondary); margin-bottom: 10px; }
+        .sidebar-section ul { list-style: none; padding: 0; margin: 0; font-size: 14px; }
+        .sidebar-section li { padding: 6px 0; border-bottom: 1px solid var(--color-border); }
+        .sidebar-section li:last-child { border-bottom: none; }
+        .sidebar-section a { color: var(--color-text); text-decoration: none; }
+        .sidebar-section a:hover { text-decoration: underline; }
+        .nav-pager { display: flex; justify-content: space-between; gap: 24px; margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--color-border); }
+        .nav-pager a { flex: 1; padding: 18px 22px; border: 1px solid var(--color-border); text-decoration: none; color: var(--color-text); transition: all .15s; }
+        .nav-pager a:hover { border-color: var(--color-text); }
+        .nav-pager .label { font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: .04em; text-transform: uppercase; color: var(--color-text-secondary); margin-bottom: 4px; display: block; }
+        .nav-pager .title { font-weight: 600; }
+        .nav-pager .next { text-align: right; }
+    </style>
+</head>
+<body>
+    <header class="border-b border-carbon-border sticky top-0 z-50" style="background: var(--color-bg);">
+        <div class="container mx-auto max-w-5xl px-6 py-4 flex items-center justify-between">
+            <a href="../../index.html" class="flex items-center gap-2 text-xl font-semibold tracking-tight"><span>SYNAPSIS</span></a>
+            <nav class="hidden md:flex gap-6">
+                <a href="../../index.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Home</a>
+                <a href="../../platform.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Platform</a>
+                <a href="../../training.html" class="text-sm font-medium border-b-2 border-carbon-text pb-1">Training</a>
+                <a href="../../resources.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Resources</a>
+                <a href="../../network.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Network</a>
+                <a href="../../press.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Press</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container mx-auto max-w-5xl px-6 py-12">
+        <div class="meta-row mb-6"><a href="index.html">Tutorials</a> &nbsp;/&nbsp; <span>Deep dive · First masking job</span></div>
+        <div class="flex items-center gap-3 mb-4">
+            <span class="badge badge-deepdive">Deep dive</span>
+            <span class="badge badge-draft">Script drafted</span>
+            <span class="meta-row"><i class="fa fa-clock mr-1"></i> ~10 min</span>
+            <span class="meta-row">Companion to <a href="02-maskanyone.html">02 · MaskAnyone</a></span>
+        </div>
+        <span class="accent-bar"></span>
+        <h1 class="text-4xl font-semibold mb-4 leading-tight">Your first masking job</h1>
+        <p class="text-lg text-carbon-text-secondary max-w-3xl">
+            Six steps from raw clip to a de-identified, downloadable file — uploaded, selected, masked, reviewed, refined, downloaded.
+        </p>
+
+        <div class="video-placeholder mt-10">
+            <i class="fa fa-circle-play"></i>
+            <div class="text-sm font-mono uppercase tracking-widest">Video coming soon</div>
+            <div class="text-xs">Script drafted · Recording scheduled in batch 2 production (≈ 2027)</div>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-12 mt-12">
+            <article class="md:col-span-2 transcript">
+                <h2 class="text-2xl font-semibold mb-2">Learning goal</h2>
+                <p class="lede">After watching, you can upload a video, select the people to de-identify, choose an appropriate masking style, run the job, monitor it to completion, and download the result.</p>
+
+                <h2 class="text-2xl font-semibold mt-12 mb-2">Transcript</h2>
+
+                <h3>Cold open</h3>
+                <p>From raw clip to a de-identified, downloadable file. Six steps. Let's do it together.</p>
+
+                <h4>Step 1 — Upload</h4>
+                <p>Open the MaskAnyone interface. Click <strong>New Project</strong>, or just drag a video file onto the upload area. We're using the sample gesture-study clip — about 30 seconds, one person, 720p. Plenty for a first job. Once the upload finishes, your video shows up in the project list with a thumbnail. Supported formats: MP4, AVI, MOV.</p>
+
+                <h4>Step 2 — Select people</h4>
+                <p>Click the video to open the editor. The first frame loads. Click on each person you want to mask. A green dot marks where you clicked. A coloured outline shows the model's first guess at the segmentation. Scrub through to a few keyframes to make sure the tracking stays on the right person. Tracking failures show up as the outline jumping to the wrong body — flag any frames where that happens for later refinement.</p>
+                <p>For videos with multiple people, select them all in the first frame. Each gets a different colour so the system can keep track of who's who.</p>
+
+                <h4>Step 3 — Pick masking style</h4>
+                <p>On the right, you'll see the settings panel. The big choice is your masking style. Four options, ordered from least to most aggressive.</p>
+                <p><strong>Blur</strong> keeps facial expressions roughly visible — good for emotion or gaze work. <strong>Solid mask</strong> is the workhorse for general behavioural research. <strong>Silhouette</strong> keeps the shape and movement but loses everything else. <strong>Skeleton only</strong> strips the person to a stick figure — maximum privacy, only kinematics survive.</p>
+                <p>Tick <strong>Extract pose data</strong> if you want a JSON file with skeleton coordinates for analysis — that's the file you'll feed into your statistics pipeline.</p>
+                <p>Leave output format on MP4 unless you have a specific reason not to — it's what every player and editor speaks.</p>
+
+                <h4>Step 4 — Run and monitor</h4>
+                <p>Click <strong>Start Processing</strong>. The card flips to show a progress bar and an estimated time remaining. Speed depends on hardware. With a GPU you'll see 5 to 10 frames per second — a one-minute video processes in 2 to 4 minutes. CPU-only is roughly ten times slower.</p>
+                <p>You can queue more videos and walk away. A batch of overnight processing is normal — set it up, leave it, come back to results in the morning.</p>
+
+                <h4>Step 5 — Review the result</h4>
+                <p>When the project flips to <strong>Complete</strong>, click it. You're in the result preview. Scrub the whole thing — don't just spot-check. Three places to look hard:</p>
+                <p><strong>Fast movement.</strong> That's where tracking tends to drop. If you see the mask jump off the body, mark it for refinement.</p>
+                <p><strong>When people overlap.</strong> Make sure the colours don't swap — that's identity confusion, and it's the most common subtle failure mode.</p>
+                <p><strong>Occlusions.</strong> When someone walks behind a chair, behind another person, behind anything — does the mask resume cleanly when they reappear?</p>
+                <p>Happy with it? Hit <strong>Download</strong>. You get three files: the masked MP4, the pose JSON if you ticked that box, and a processing log with the exact parameters you used. <strong>Keep the log</strong> — that's your reproducibility record.</p>
+
+                <h4>Step 6 — Refine if needed</h4>
+                <p>If something needs fixing, click <strong>Edit</strong>. The refinement tools let you patch problems without rerunning the whole video.</p>
+                <p>Three common moves: <strong>add</strong> a person who appears mid-video — click them in their first frame. <strong>Remove</strong> a background figure who got detected by mistake — right-click. <strong>Adjust</strong> a sloppy boundary — drag the mask edge with your mouse.</p>
+                <p>Hit <strong>Re-process</strong>. Only the affected frames re-run — it's fast, even on CPU. Then re-review.</p>
+
+                <h3>Recap</h3>
+                <p>Six steps. Upload. Click each person. Pick a masking style and tick pose if you want it. Run. Review — fast movement, overlaps, occlusions. Refine if needed.</p>
+                <blockquote>You've made a masked video. Next up: how to <strong>prove</strong> it's actually de-identified — visually and quantitatively. That's the <a href="deepdive-quality-check.html">Quality-check deep-dive</a>, or stay on the pipeline tour with <a href="03-maskbench.html">MaskBench</a>.</blockquote>
+            </article>
+
+            <aside>
+                <div class="sidebar-section">
+                    <h4>Details</h4>
+                    <ul>
+                        <li><span class="meta-row">Duration target</span><br>~10 min</li>
+                        <li><span class="meta-row">Audience</span><br>First-time MaskAnyone users</li>
+                        <li><span class="meta-row">Prereqs</span><br><a href="deepdive-installation.html">Installation deep dive</a></li>
+                    </ul>
+                </div>
+                <div class="sidebar-section">
+                    <h4>Companion to</h4>
+                    <ul>
+                        <li><a href="02-maskanyone.html">→ 02 · MaskAnyone</a></li>
+                    </ul>
+                </div>
+                <div class="sidebar-section">
+                    <h4>Related deep dives</h4>
+                    <ul>
+                        <li><a href="deepdive-quality-check.html">→ Quality check</a></li>
+                        <li><a href="deepdive-troubleshooting.html">→ Troubleshooting</a></li>
+                    </ul>
+                </div>
+                <div class="sidebar-section">
+                    <h4>Source</h4>
+                    <ul>
+                        <li><a href="../../../manuscripts/temp_maskanything/tutorial_maskanything.pdf"><i class="fa fa-file-pdf mr-2"></i>tutorial §5.3</a></li>
+                    </ul>
+                </div>
+            </aside>
+        </div>
+
+        <nav class="nav-pager">
+            <a href="deepdive-installation.html"><span class="label">← Previous deep dive</span><span class="title">Installation</span></a>
+            <a href="deepdive-quality-check.html" class="next"><span class="label">Next deep dive →</span><span class="title">Quality check</span></a>
+        </nav>
+    </main>
+</body>
+</html>

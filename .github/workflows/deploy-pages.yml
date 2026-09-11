@@ -1,5 +1,8 @@
 name: Deploy to GitHub Pages
 
+# Static site: website/ from synapsis_postdoc is published as-is, no build step.
+# Installed as .github/workflows/deploy-pages.yml by scripts/deploy_site.sh.
+
 on:
   push:
     branches: ["main"]
@@ -24,24 +27,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Build with Eleventy
-        run: npx @11ty/eleventy
-
       - name: Setup Pages
         uses: actions/configure-pages@v4
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: '_site'
+          path: '.'
 
       - name: Deploy to GitHub Pages
         id: deployment

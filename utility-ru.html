@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RU — Reflexive Utility · SYNAPSIS Utility Triad</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --cds-background:#ffffff;--cds-layer-01:#f4f4f4;--cds-border-subtle:#e0e0e0;
+  --cds-text-primary:#161616;--cds-text-secondary:#525252;--cds-text-placeholder:#a8a8a8;
+  --cds-shell-bg:#161616;--cds-shell-text:#c6c6c6;--cds-footer-bg:#262626;
+  --ru-core:#009d9a;--ru-dark:#005d5d;--ru-light:#9ef0f0;--ru-subtle:#d9fbfb;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'IBM Plex Sans',sans-serif;background:var(--cds-background);color:var(--cds-text-primary);font-size:14px;line-height:1.5;}
+.cds-header{background:var(--cds-shell-bg);height:48px;display:flex;align-items:center;padding:0 16px;position:sticky;top:0;z-index:200;border-bottom:1px solid #393939;}
+.cds-header-name{font-size:14px;font-weight:600;color:#fff;text-decoration:none;padding:0 16px;}
+.cds-header-name span{font-weight:300;color:var(--cds-shell-text);padding-left:4px;}
+.cds-breadcrumb{display:flex;align-items:center;gap:8px;margin-left:auto;padding-right:16px;}
+.cds-breadcrumb a{font-size:12px;font-family:'IBM Plex Mono',monospace;color:var(--cds-shell-text);text-decoration:none;letter-spacing:0.04em;}
+.cds-breadcrumb a:hover{color:#fff;}.cds-breadcrumb span{color:#525252;font-size:12px;}
+.hero{background:var(--ru-dark);color:#fff;padding:72px 0 56px;}
+.page-inner{max-width:1200px;margin:0 auto;padding:0 24px;}
+.hero-eyebrow{font-size:11px;font-family:'IBM Plex Mono',monospace;letter-spacing:0.14em;text-transform:uppercase;color:#3ddbd9;margin-bottom:16px;}
+.hero-picto{margin-bottom:24px;}
+.hero h1{font-size:clamp(32px,5vw,52px);font-weight:300;line-height:1.1;letter-spacing:-0.01em;margin-bottom:16px;}
+.hero h1 strong{font-weight:600;}
+.hero-def{font-size:16px;color:#c6c6c6;max-width:600px;line-height:1.65;margin-bottom:32px;}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(61,219,217,0.12);border:1px solid rgba(61,219,217,0.3);padding:8px 16px;font-size:13px;color:#3ddbd9;font-family:'IBM Plex Mono',monospace;letter-spacing:0.04em;}
+section.page-section{padding:56px 0;}
+.section-label{font-size:11px;font-family:'IBM Plex Mono',monospace;letter-spacing:0.14em;text-transform:uppercase;color:var(--cds-text-placeholder);margin-bottom:20px;padding-bottom:12px;border-bottom:1px solid var(--cds-border-subtle);}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:48px;}
+@media(max-width:800px){.two-col{grid-template-columns:1fr;}}
+.three-col{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--cds-border-subtle);border:1px solid var(--cds-border-subtle);}
+@media(max-width:700px){.three-col{grid-template-columns:1fr;}}
+.content-tile{background:var(--cds-background);padding:28px 24px;}
+.content-tile h3{font-size:16px;font-weight:500;margin-bottom:10px;}
+.content-tile p{font-size:13px;color:var(--cds-text-secondary);line-height:1.7;}
+.ru-tag{display:inline-flex;font-size:11px;font-family:'IBM Plex Mono',monospace;letter-spacing:0.04em;padding:3px 8px;background:var(--ru-light);color:var(--ru-dark);margin:3px 3px 0 0;}
+.maskbench-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--cds-border-subtle);border:1px solid var(--cds-border-subtle);margin-top:24px;}
+@media(max-width:700px){.maskbench-grid{grid-template-columns:1fr 1fr;}}
+.mb-cell{background:var(--cds-background);padding:20px 16px;}
+.mb-cell .pct{font-size:28px;font-weight:300;color:var(--ru-core);font-family:'IBM Plex Mono',monospace;line-height:1;}
+.mb-cell .mb-label{font-size:11px;color:var(--cds-text-secondary);margin-top:4px;line-height:1.4;}
+.mb-cell.high .pct{color:var(--ru-core);}
+.mb-cell.med .pct{color:#f1c21b;}
+.mb-cell.low .pct{color:#da1e28;}
+.workflow-steps{display:flex;flex-direction:column;gap:0;border:1px solid var(--cds-border-subtle);}
+.workflow-step{display:grid;grid-template-columns:48px 1fr;gap:0;border-bottom:1px solid var(--cds-border-subtle);}
+.workflow-step:last-child{border-bottom:none;}
+.step-num{background:var(--ru-core);color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-family:'IBM Plex Mono',monospace;font-weight:500;}
+.step-body{padding:16px 20px;background:var(--cds-background);}
+.step-body h4{font-size:13px;font-weight:600;margin-bottom:4px;}
+.step-body p{font-size:12px;color:var(--cds-text-secondary);line-height:1.6;}
+.nav-strip{background:var(--cds-layer-01);border-top:1px solid var(--cds-border-subtle);border-bottom:1px solid var(--cds-border-subtle);padding:20px 0;}
+.nav-strip-inner{max-width:1200px;margin:0 auto;padding:0 24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;}
+.nav-strip a{font-size:13px;color:var(--cds-text-secondary);text-decoration:none;display:flex;align-items:center;gap:6px;}
+.nav-strip a:hover{color:var(--cds-text-primary);}
+.theory-block{background:var(--cds-shell-bg);color:#fff;padding:48px 0;}
+.theory-block p{font-size:14px;color:#c6c6c6;line-height:1.75;margin-bottom:12px;}
+.theory-block strong{color:#fff;}
+footer{background:var(--cds-footer-bg);color:var(--cds-shell-text);font-size:12px;padding:20px 24px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+footer a{color:#78a9ff;text-decoration:none;}
+</style>
+</head>
+<body>
+<header class="cds-header">
+  <a class="cds-header-name" href="utility-triad.html">SYNAPSIS <span>/ Utility Triad</span></a>
+  <div class="cds-breadcrumb">
+    <a href="utility-triad.html">Triad</a>
+    <span>/</span>
+    <a href="utility-au.html">AU</a>
+    <span>/</span>
+    <a href="utility-ru.html" style="color:#3ddbd9;">RU — Reflexive Utility</a>
+    <span>·</span>
+    <a href="utility-gu.html">GU</a>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="page-inner">
+    <p class="hero-eyebrow">Utility Triad · Vertex 2 of 3 · Bottom-left</p>
+    <div class="hero-picto">
+      <svg width="80" height="80" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M16 2L3 7.5V16c0 8 5.5 14.5 13 16 7.5-1.5 13-8 13-16V7.5L16 2Z" fill="#009d9a" opacity="0.18"/>
+        <path d="M16 2L3 7.5V16c0 8 5.5 14.5 13 16 7.5-1.5 13-8 13-16V7.5L16 2Z" stroke="#3ddbd9" stroke-width="1.5" stroke-linejoin="round"/>
+        <line x1="9" y1="14" x2="23" y2="14" stroke="#3ddbd9" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="9" y1="18" x2="21" y2="18" stroke="#3ddbd9" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="9" y1="22" x2="17" y2="22" stroke="#3ddbd9" stroke-width="1.5" stroke-linecap="round"/>
+        <rect x="13" y="7" width="6" height="5" rx="1" stroke="#3ddbd9" stroke-width="1.25"/>
+        <path d="M15 8.5C15 7.5 17 7.5 17 8.5" stroke="#3ddbd9" stroke-width="1.25" fill="none"/>
+      </svg>
+    </div>
+    <h1><strong>RU</strong> — Reflexive Utility</h1>
+    <p class="hero-def">Privacy and de-identification made accessible to SSH early career researchers. The capacity to reason explicitly about what each masking choice costs in analytic quality — so researchers balance the two rather than treating privacy compliance as a binary gate.</p>
+    <div class="hero-badge">Enabling condition · bottom-left vertex</div>
+  </div>
+</section>
+
+<section class="page-section">
+  <div class="page-inner">
+    <p class="section-label">MaskBench — Operationalising reflexive utility</p>
+    <div class="two-col">
+      <div>
+        <h2 style="font-size:24px;font-weight:300;margin-bottom:16px;">Not compliance.<br><strong style="font-weight:600;">Principled balancing.</strong></h2>
+        <p style="font-size:14px;color:var(--cds-text-secondary);line-height:1.75;margin-bottom:14px;">Most discussions of privacy and research data treat de-identification as a prerequisite: first protect, then analyse. Reflexive utility reframes this: <em>what does this masking strategy cost this specific analysis pipeline?</em> That is an empirical question, and MaskBench provides the benchmark to answer it.</p>
+        <p style="font-size:14px;color:var(--cds-text-secondary);line-height:1.75;margin-bottom:14px;">A researcher with high RU can make statements like: "face-blur preserves 91% of MediaPipe pose quality but only 78% of ViTPose quality on this corpus." She can then choose the masking strategy appropriate to her estimator — not just to her institution's IRB template.</p>
+        <p style="font-size:14px;color:var(--cds-text-secondary);line-height:1.75;">This is especially important for <strong>SSH early career researchers</strong> who lack the computational background to independently assess masking costs — and who therefore tend to over-protect (blocking data sharing entirely) or under-protect (applying minimal masking without understanding the re-identification risk).</p>
+      </div>
+      <div>
+        <p style="font-size:12px;font-family:'IBM Plex Mono',monospace;color:var(--cds-text-placeholder);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:8px;">MaskBench · Pose quality preserved by masking strategy</p>
+        <div class="maskbench-grid">
+          <div class="mb-cell high"><div class="pct">88–95%</div><div class="mb-label">Face + body blur · MediaPipe</div></div>
+          <div class="mb-cell high"><div class="pct">91%</div><div class="mb-label">Face blur only · OpenPose</div></div>
+          <div class="mb-cell med"><div class="pct">72%</div><div class="mb-label">Pixelation · ViTPose</div></div>
+          <div class="mb-cell low"><div class="pct">58%</div><div class="mb-label">Solid fill · ViTPose</div></div>
+        </div>
+        <p style="font-size:11px;color:var(--cds-text-placeholder);margin-top:10px;font-family:'IBM Plex Mono',monospace;">Illustrative MaskBench results — full benchmark in MaskingOPS (Behavior Research Methods, under review)</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="page-section" style="background:var(--cds-layer-01);padding:56px 0;">
+  <div class="page-inner">
+    <p class="section-label">RU workflow for SSH early career researchers</p>
+    <div class="workflow-steps">
+      <div class="workflow-step"><div class="step-num">1</div><div class="step-body"><h4>Assess your data</h4><p>Identify what modalities you have (face, body, audio, transcript) and what your IRB or GDPR obligation requires. SMASH's Ingest module creates a provenance record at import.</p></div></div>
+      <div class="workflow-step"><div class="step-num">2</div><div class="step-body"><h4>Run MaskBench on a sample</h4><p>Select a representative 10-minute sample. Run MaskBench to get analytic utility scores for each masking strategy × each extractor you plan to use. Takes ~15 minutes on CPU.</p></div></div>
+      <div class="workflow-step"><div class="step-num">3</div><div class="step-body"><h4>Choose your masking strategy</h4><p>Select the strategy that preserves sufficient AU for your research question while meeting your institution's minimum requirement. SMASH records the choice as a typed event.</p></div></div>
+      <div class="workflow-step"><div class="step-num">4</div><div class="step-body"><h4>Apply masking with provenance</h4><p>SMASH runs the masking pipeline and logs every operation: which frame, which algorithm, which confidence threshold. The log is your IRB artifact.</p></div></div>
+      <div class="workflow-step"><div class="step-num">5</div><div class="step-body"><h4>Archive and deposit</h4><p>The masked corpus + event log constitute a FAIR-compliant deposit package. DANS / SURF / OSF accept the package. Future users know exactly what was applied.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="page-section">
+  <div class="page-inner">
+    <p class="section-label">What RU makes possible</p>
+    <div class="three-col">
+      <div class="content-tile">
+        <h3>Corpus sharing across institutions</h3>
+        <p>The event log's provenance chain gives receiving institutions the evidence they need to evaluate the dataset for their own IRB. A corpus with high RU documentation can be shared, re-used, and cited — one without it cannot.</p>
+        <div style="margin-top:16px;"><span class="ru-tag">FAIR</span><span class="ru-tag">DANS</span><span class="ru-tag">provenance chain</span></div>
+      </div>
+      <div class="content-tile">
+        <h3>Masking-aware analysis pipelines</h3>
+        <p>Because masking events appear in the same event log as extraction events, downstream analysis can be conditioned on masking type. A comparison of gesture detection across masked vs. unmasked recordings becomes a standard query, not a custom script.</p>
+        <div style="margin-top:16px;"><span class="ru-tag">conditional analysis</span><span class="ru-tag">event log query</span></div>
+      </div>
+      <div class="content-tile">
+        <h3>Ethics review board artifacts</h3>
+        <p>The audit log produced by SMASH — which frames, which algorithm, which parameters — is the material evidence that IRBs, data stewards, and journal data availability reviewers need. RU makes the evidence automatic.</p>
+        <div style="margin-top:16px;"><span class="ru-tag">IRB</span><span class="ru-tag">audit log</span><span class="ru-tag">data stewards</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="nav-strip">
+  <div class="nav-strip-inner">
+    <a href="utility-au.html">← AU — Analytic Utility</a>
+    <a href="utility-gu.html">Next: GU — Generative Utility →</a>
+  </div>
+</div>
+
+<section class="theory-block">
+  <div class="page-inner">
+    <p style="font-size:11px;font-family:'IBM Plex Mono',monospace;letter-spacing:0.14em;text-transform:uppercase;color:#3ddbd9;margin-bottom:12px;">Maass et al. 2018 — Challenge 4 · RU ↔ GU governance frontier</p>
+    <p>Maass et al.'s fourth challenge — <strong>sharing data and models across research teams</strong> — is where privacy intersects with infrastructure most directly in SSH contexts. Their framework, developed primarily for text and tabular data, treats sharing as a matter of format and access control. For video data, sharing requires prior transformation, and transformation has AU costs. RU addresses this gap: it makes the transformation auditable and the cost visible.</p>
+    <p>The RU/GU base of the utility triad is the governance frontier because as <strong>generative utility</strong> increases — as it becomes possible to synthesize new data from masked corpora — the reflexive layer becomes existentially important. Without RU, GU can generate synthetic data that traces back to ethically problematic source material without any record that it did so.</p>
+  </div>
+</section>
+
+<footer>
+  <span>SYNAPSIS · NWO TDCC-SSH · ICT.001.TDCC.013 · RU — Reflexive Utility</span>
+  <span><a href="utility-triad.html">Triad overview</a> · <a href="utility-au.html">AU</a> · <a href="utility-gu.html">GU</a></span>
+</footer>
+</body>
+</html>

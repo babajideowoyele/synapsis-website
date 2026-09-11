@@ -1,0 +1,305 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SYNAPSIS — Video Tutorials</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link rel="stylesheet" href="../../theme.css">
+    <script src="../../theme.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'sans': ['IBM Plex Sans', 'sans-serif'],
+                        'mono': ['IBM Plex Mono', 'monospace'],
+                    },
+                    colors: {
+                        'carbon': {
+                            'bg': 'var(--color-bg)',
+                            'bg-hover': 'var(--color-bg-hover)',
+                            'border': 'var(--color-border)',
+                            'text': 'var(--color-text)',
+                            'text-secondary': 'var(--color-text-secondary)',
+                            'interactive': '#0f62fe',
+                            'support-error': '#da1e28',
+                            'support-success': '#198038',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'IBM Plex Sans', sans-serif; background-color: var(--color-bg); color: var(--color-text); }
+        .accent-bar { height: 3px; background: var(--color-accent); width: 48px; margin-bottom: 14px; }
+        .tutorial-card {
+            border: 1px solid var(--color-border);
+            background: var(--color-bg);
+            transition: all 0.15s ease;
+            display: flex;
+            flex-direction: column;
+        }
+        .tutorial-card:hover { border-color: var(--color-text); box-shadow: 0 4px 14px rgba(0,0,0,0.08); }
+        .badge { display: inline-block; padding: 3px 10px; font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: .04em; text-transform: uppercase; }
+        .badge-draft { background: var(--color-bg-hover); color: var(--color-text-secondary); border: 1px solid var(--color-border); }
+        .badge-published { background: #198038; color: white; }
+        .badge-pipeline { background: var(--color-text); color: var(--color-inverse); }
+        .badge-deepdive { background: var(--color-bg-hover); color: var(--color-text); border: 1px solid var(--color-border); }
+        .pipeline-arc { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
+        .pipeline-step {
+            border: 1px solid var(--color-border);
+            padding: 14px 12px;
+            text-align: center;
+            position: relative;
+            background: var(--color-bg);
+        }
+        .pipeline-step .step-num {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 11px;
+            color: var(--color-text-secondary);
+            letter-spacing: .06em;
+        }
+        .pipeline-step .step-name { font-weight: 600; font-size: 14px; margin-top: 4px; }
+        .pipeline-step .step-desc { font-size: 11px; color: var(--color-text-secondary); margin-top: 4px; }
+        .pipeline-arrow {
+            position: absolute;
+            right: -14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--color-text-secondary);
+            font-size: 16px;
+            z-index: 2;
+        }
+        @media (max-width: 768px) {
+            .pipeline-arc { grid-template-columns: 1fr; }
+            .pipeline-arrow { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header (mirrors website/index.html nav) -->
+    <header class="border-b border-carbon-border sticky top-0 z-50" style="background: var(--color-bg);">
+        <div class="container mx-auto max-w-5xl px-6 py-4 flex items-center justify-between">
+            <a href="../../index.html" class="flex items-center gap-2 text-xl font-semibold tracking-tight">
+                <span>SYNAPSIS</span>
+            </a>
+            <nav class="hidden md:flex gap-6">
+                <a href="../../index.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Home</a>
+                <a href="../../platform.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Platform</a>
+                <a href="../../training.html" class="text-sm font-medium border-b-2 border-carbon-text pb-1">Training</a>
+                <a href="../../resources.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Resources</a>
+                <a href="../../network.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Network</a>
+                <a href="../../press.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Press</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero -->
+    <section class="py-16 px-6">
+        <div class="container mx-auto max-w-5xl">
+            <span class="text-xs font-mono uppercase tracking-widest text-carbon-text-secondary">Training</span>
+            <h1 class="text-4xl font-semibold mt-4 mb-6 leading-tight">Video tutorials</h1>
+            <p class="text-lg text-carbon-text-secondary max-w-3xl leading-relaxed">
+                A guided tour through the SYNAPSIS pipeline — from understanding what video masking is, through the four tools that take a sensitive recording to a citeable, FAIR-archived dataset.
+            </p>
+        </div>
+    </section>
+
+    <!-- Pipeline arc -->
+    <section class="px-6 pb-16">
+        <div class="container mx-auto max-w-5xl">
+            <h2 class="text-xs font-mono uppercase tracking-widest text-carbon-text-secondary mb-4">The pipeline</h2>
+            <div class="pipeline-arc">
+                <div class="pipeline-step">
+                    <div class="step-num">01</div>
+                    <div class="step-name">Concepts</div>
+                    <div class="step-desc">Why mask</div>
+                    <span class="pipeline-arrow"><i class="fa fa-arrow-right"></i></span>
+                </div>
+                <div class="pipeline-step">
+                    <div class="step-num">02</div>
+                    <div class="step-name">MaskAnyone</div>
+                    <div class="step-desc">The tool</div>
+                    <span class="pipeline-arrow"><i class="fa fa-arrow-right"></i></span>
+                </div>
+                <div class="pipeline-step">
+                    <div class="step-num">03</div>
+                    <div class="step-name">MaskBench</div>
+                    <div class="step-desc">Proving it works</div>
+                    <span class="pipeline-arrow"><i class="fa fa-arrow-right"></i></span>
+                </div>
+                <div class="pipeline-step">
+                    <div class="step-num">04</div>
+                    <div class="step-name">MaskingOps</div>
+                    <div class="step-desc">At scale</div>
+                    <span class="pipeline-arrow"><i class="fa fa-arrow-right"></i></span>
+                </div>
+                <div class="pipeline-step">
+                    <div class="step-num">05</div>
+                    <div class="step-name">Archiving</div>
+                    <div class="step-desc">FAIR deposit</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Batch 1: Pipeline tour -->
+    <section class="px-6 pb-16">
+        <div class="container mx-auto max-w-5xl">
+            <div class="flex items-baseline gap-3 mb-8">
+                <h2 class="text-2xl font-semibold">Pipeline tour</h2>
+                <span class="text-sm text-carbon-text-secondary">~36 min · 5 episodes</span>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-6">
+                <a href="01-what-is-masking.html" class="tutorial-card p-6 no-underline">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="badge badge-pipeline">01 · Concepts</span>
+                        <span class="badge badge-draft">Script drafted</span>
+                    </div>
+                    <h3 class="text-lg font-semibold mb-2">What is video masking, and why you need it</h3>
+                    <p class="text-sm text-carbon-text-secondary mb-4 flex-1">Privacy–utility trade-offs, the five types of identifying information, and when masking is worth your time.</p>
+                    <div class="flex items-center justify-between text-xs text-carbon-text-secondary mt-auto">
+                        <span><i class="fa fa-clock mr-1"></i> ~7 min</span>
+                        <span>Watch <i class="fa fa-arrow-right ml-1"></i></span>
+                    </div>
+                </a>
+
+                <a href="02-maskanyone.html" class="tutorial-card p-6 no-underline">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="badge badge-pipeline">02 · Stage 1</span>
+                        <span class="badge badge-draft">Script drafted</span>
+                    </div>
+                    <h3 class="text-lg font-semibold mb-2">MaskAnyone — the masking tool</h3>
+                    <p class="text-sm text-carbon-text-secondary mb-4 flex-1">What MaskAnyone does, where it sits in the pipeline, and a 90-second tour of running a job end-to-end.</p>
+                    <div class="flex items-center justify-between text-xs text-carbon-text-secondary mt-auto">
+                        <span><i class="fa fa-clock mr-1"></i> ~8 min</span>
+                        <span>Watch <i class="fa fa-arrow-right ml-1"></i></span>
+                    </div>
+                </a>
+
+                <a href="03-maskbench.html" class="tutorial-card p-6 no-underline">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="badge badge-pipeline">03 · Stage 2</span>
+                        <span class="badge badge-draft">Script drafted</span>
+                    </div>
+                    <h3 class="text-lg font-semibold mb-2">MaskBench — proving the masking works</h3>
+                    <p class="text-sm text-carbon-text-secondary mb-4 flex-1">Pose-accuracy and kinematic metrics — the numbers that let you defend masked outputs to a reviewer or data steward.</p>
+                    <div class="flex items-center justify-between text-xs text-carbon-text-secondary mt-auto">
+                        <span><i class="fa fa-clock mr-1"></i> ~8 min</span>
+                        <span>Watch <i class="fa fa-arrow-right ml-1"></i></span>
+                    </div>
+                </a>
+
+                <a href="04-maskingops.html" class="tutorial-card p-6 no-underline">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="badge badge-pipeline">04 · Stage 3</span>
+                        <span class="badge badge-draft">Script drafted</span>
+                    </div>
+                    <h3 class="text-lg font-semibold mb-2">MaskingOps — running masking at scale</h3>
+                    <p class="text-sm text-carbon-text-secondary mb-4 flex-1">Dashboards, batch processing, QA review, archive prep. When the laptop full of progress bars stops working.</p>
+                    <div class="flex items-center justify-between text-xs text-carbon-text-secondary mt-auto">
+                        <span><i class="fa fa-clock mr-1"></i> ~7 min</span>
+                        <span>Watch <i class="fa fa-arrow-right ml-1"></i></span>
+                    </div>
+                </a>
+
+                <a href="05-archiving.html" class="tutorial-card p-6 no-underline md:col-span-2">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="badge badge-pipeline">05 · Stage 4</span>
+                        <span class="badge badge-draft">Script drafted</span>
+                    </div>
+                    <h3 class="text-lg font-semibold mb-2">Archiving — FAIR sharing and DANS deposit</h3>
+                    <p class="text-sm text-carbon-text-secondary mb-4 flex-1">Packaging masked outputs with FAIR metadata, choosing an access tier, and depositing into DANS Data Station SSH.</p>
+                    <div class="flex items-center justify-between text-xs text-carbon-text-secondary mt-auto">
+                        <span><i class="fa fa-clock mr-1"></i> ~6 min</span>
+                        <span>Watch <i class="fa fa-arrow-right ml-1"></i></span>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Batch 2: Deep-dive companions -->
+    <section class="px-6 pb-20 border-t border-carbon-border pt-16">
+        <div class="container mx-auto max-w-5xl">
+            <div class="flex items-baseline gap-3 mb-2">
+                <h2 class="text-2xl font-semibold">Deep-dive companions</h2>
+                <span class="text-sm text-carbon-text-secondary">Production scheduled for 2027</span>
+            </div>
+            <p class="text-sm text-carbon-text-secondary mb-8 max-w-3xl">
+                Detailed mechanics that don't fit in the pipeline-tour videos. Each companion goes deep on a specific surface — installation, the hands-on first job, structured quality assessment, and troubleshooting.
+            </p>
+
+            <div class="grid md:grid-cols-2 gap-6">
+                <a href="deepdive-installation.html" class="tutorial-card p-5 no-underline">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="badge badge-deepdive">Deep dive</span>
+                        <span class="badge badge-draft">Script drafted</span>
+                    </div>
+                    <h3 class="text-base font-semibold mb-2">Installation &amp; setup</h3>
+                    <p class="text-sm text-carbon-text-secondary mb-3">Docker, GPU support, starting the stack, recognising a healthy install.</p>
+                    <div class="flex items-center justify-between text-xs text-carbon-text-secondary mt-auto">
+                        <span><i class="fa fa-clock mr-1"></i> ~5 min · Companion to 02</span>
+                        <span>Watch <i class="fa fa-arrow-right ml-1"></i></span>
+                    </div>
+                </a>
+
+                <a href="deepdive-first-masking-job.html" class="tutorial-card p-5 no-underline">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="badge badge-deepdive">Deep dive</span>
+                        <span class="badge badge-draft">Script drafted</span>
+                    </div>
+                    <h3 class="text-base font-semibold mb-2">Your first masking job</h3>
+                    <p class="text-sm text-carbon-text-secondary mb-3">Six-step walkthrough: upload, select people, pick a masking style, run, review, refine.</p>
+                    <div class="flex items-center justify-between text-xs text-carbon-text-secondary mt-auto">
+                        <span><i class="fa fa-clock mr-1"></i> ~10 min · Companion to 02</span>
+                        <span>Watch <i class="fa fa-arrow-right ml-1"></i></span>
+                    </div>
+                </a>
+
+                <a href="deepdive-quality-check.html" class="tutorial-card p-5 no-underline">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="badge badge-deepdive">Deep dive</span>
+                        <span class="badge badge-draft">Script drafted</span>
+                    </div>
+                    <h3 class="text-base font-semibold mb-2">Quality check — did the masking work?</h3>
+                    <p class="text-sm text-carbon-text-secondary mb-3">Structured sampling protocol, privacy vs utility checks, QA paperwork your data steward will accept.</p>
+                    <div class="flex items-center justify-between text-xs text-carbon-text-secondary mt-auto">
+                        <span><i class="fa fa-clock mr-1"></i> ~6 min · Companion to 03</span>
+                        <span>Watch <i class="fa fa-arrow-right ml-1"></i></span>
+                    </div>
+                </a>
+
+                <a href="deepdive-troubleshooting.html" class="tutorial-card p-5 no-underline">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="badge badge-deepdive">Deep dive</span>
+                        <span class="badge badge-draft">Script drafted</span>
+                    </div>
+                    <h3 class="text-base font-semibold mb-2">When something goes wrong</h3>
+                    <p class="text-sm text-carbon-text-secondary mb-3">Six common failure modes — install errors, container crashes, OOM, detection failures, tracking loss, GPU missing.</p>
+                    <div class="flex items-center justify-between text-xs text-carbon-text-secondary mt-auto">
+                        <span><i class="fa fa-clock mr-1"></i> ~5 min · Companion to 02</span>
+                        <span>Watch <i class="fa fa-arrow-right ml-1"></i></span>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Production status / footer note -->
+    <section class="px-6 pb-20 border-t border-carbon-border pt-12">
+        <div class="container mx-auto max-w-5xl">
+            <span class="accent-bar"></span>
+            <h2 class="text-base font-semibold mb-3">Production status</h2>
+            <p class="text-sm text-carbon-text-secondary leading-relaxed max-w-3xl">
+                Scripts for the full series are drafted. Recording, editing, and publication are scheduled across 2026–2027 under the SYNAPSIS RA-Training workstream (WP1, batch 1; WP2, batch 2). Source markdown lives at <code class="font-mono text-xs px-1 py-0.5" style="background: var(--color-bg-hover);">team/ra_training/video-tutorials/scripts/</code>. Open an issue on the SYNAPSIS repository to flag content corrections or request additional topics.
+            </p>
+        </div>
+    </section>
+</body>
+</html>

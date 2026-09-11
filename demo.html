@@ -1,63 +1,169 @@
----
-layout: base.njk
-title: "SYNAPSIS Demo - MaskAnyone in Action"
-activeNav: Demo
----
-
-<style>
-    .video-container {
-        position: relative;
-        background: #000;
-        border: 1px solid var(--color-border);
-        aspect-ratio: 16 / 9;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-    .video-container video {
-        width: 100%;
-        height: 100%;
-        display: block;
-        object-fit: cover;
-    }
-    .video-label {
-        position: absolute;
-        top: 12px;
-        left: 12px;
-        background: rgba(0,0,0,0.7);
-        color: white;
-        padding: 4px 12px;
-        font-size: 12px;
-        font-family: 'IBM Plex Mono', monospace;
-        text-transform: uppercase;
-    }
-    .video-label-masked {
-        background: rgba(22,101,52,0.9);
-    }
-    html.dark .video-label-masked {
-        background: rgba(34,197,94,0.85);
-    }
-    .comparison-slider {
-        position: relative;
-        overflow: hidden;
-    }
-    .feature-icon {
-        width: 48px;
-        height: 48px;
-        border: 1px solid var(--color-border);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-    .demo-card {
-        border: 1px solid var(--color-border);
-        transition: all 0.15s ease;
-    }
-    .demo-card:hover {
-        border-color: var(--color-text);
-        box-shadow: 0 4px 14px rgba(0,0,0,0.1);
-    }
-</style>
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon-180x180.png">
+    <title>SYNAPSIS Demo - MaskAnyone in Action</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link rel="stylesheet" href="theme.css">
+    <script src="theme.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'sans': ['IBM Plex Sans', 'sans-serif'],
+                        'mono': ['IBM Plex Mono', 'monospace'],
+                    },
+                    colors: {
+                        'carbon': {
+                            'bg': 'var(--color-bg)',
+                            'bg-hover': 'var(--color-bg-hover)',
+                            'border': 'var(--color-border)',
+                            'text': 'var(--color-text)',
+                            'text-secondary': 'var(--color-text-secondary)',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'IBM Plex Sans', sans-serif;
+            background-color: var(--color-bg);
+            color: var(--color-text);
+        }
+        .accent-bar {
+            height: 3px;
+            background: var(--color-accent);
+        }
+        .nav-link {
+            position: relative;
+            padding-bottom: 4px;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--color-accent);
+            transition: width 0.2s ease;
+        }
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        .btn-primary {
+            background: var(--color-accent);
+            color: var(--color-inverse);
+            transition: all 0.15s ease;
+        }
+        .btn-primary:hover {
+            background: var(--color-accent-hover);
+        }
+        .btn-secondary {
+            background: var(--color-bg);
+            color: var(--color-text);
+            border: 1px solid var(--color-accent);
+            transition: all 0.15s ease;
+        }
+        .btn-secondary:hover {
+            background: var(--color-bg-hover);
+        }
+        .video-container {
+            position: relative;
+            background: #000;
+            border: 1px solid var(--color-border);
+            aspect-ratio: 16 / 9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .video-container video {
+            width: 100%;
+            height: 100%;
+            display: block;
+            object-fit: cover;
+        }
+        .video-label {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            padding: 4px 12px;
+            font-size: 12px;
+            font-family: 'IBM Plex Mono', monospace;
+            text-transform: uppercase;
+        }
+        .comparison-slider {
+            position: relative;
+            overflow: hidden;
+        }
+        .feature-icon {
+            width: 48px;
+            height: 48px;
+            border: 1px solid var(--color-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .demo-card {
+            border: 1px solid var(--color-border);
+            transition: all 0.15s ease;
+        }
+        .demo-card:hover {
+            border-color: var(--color-text);
+            box-shadow: 0 4px 14px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <!-- Header -->
+    <header class="border-b border-carbon-border sticky top-0 z-50 bg-white">
+        <div class="accent-bar"></div>
+        <nav class="container mx-auto px-6 py-4">
+            <div class="flex justify-between items-center">
+                <a href="index.html" class="flex items-center gap-2 text-xl font-semibold tracking-tight">
+                    <img src="logo-mark.svg" alt="" class="h-20 w-auto">
+                    SYNAPSIS
+                </a>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="index.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Home</a>
+                    <a href="platform.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Platform</a>
+                    <a href="demo.html" class="text-sm font-medium border-b-2 border-carbon-text pb-1">Demo</a>
+                    <a href="training.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Training</a>
+                    <a href="resources.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Resources</a>
+                    <a href="network.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Network</a>
+                    <a href="press.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">News</a>
+                </div>
+                <button class="md:hidden p-2 -mr-2" onclick="toggleMobileMenu()" aria-label="Toggle navigation menu">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+                <button onclick="toggleTheme()" class="theme-toggle" title="Toggle dark mode">
+                    <i class="fas fa-moon"></i><i class="fas fa-sun"></i>
+                </button>
+            </div>
+        </nav>
+        <!-- Mobile menu -->
+        <div id="mobile-menu" class="hidden md:hidden border-t border-carbon-border">
+            <a href="index.html" class="block px-6 py-3 text-sm font-medium text-carbon-text-secondary hover:text-carbon-text hover:bg-carbon-bg-hover">Home</a>
+            <a href="platform.html" class="block px-6 py-3 text-sm font-medium text-carbon-text-secondary hover:text-carbon-text hover:bg-carbon-bg-hover">Platform</a>
+            <a href="demo.html" class="block px-6 py-3 text-sm font-medium bg-carbon-bg-hover border-l-2 border-carbon-text">Demo</a>
+            <a href="training.html" class="block px-6 py-3 text-sm font-medium text-carbon-text-secondary hover:text-carbon-text hover:bg-carbon-bg-hover">Training</a>
+            <a href="resources.html" class="block px-6 py-3 text-sm font-medium text-carbon-text-secondary hover:text-carbon-text hover:bg-carbon-bg-hover">Resources</a>
+            <a href="network.html" class="block px-6 py-3 text-sm font-medium text-carbon-text-secondary hover:text-carbon-text hover:bg-carbon-bg-hover">Network</a>
+            <a href="press.html" class="block px-6 py-3 text-sm font-medium text-carbon-text-secondary hover:text-carbon-text hover:bg-carbon-bg-hover">News</a>
+        </div>
+    </header>
 
     <main>
         <!-- Hero -->
@@ -84,24 +190,24 @@ activeNav: Demo
                     <p class="text-carbon-text-secondary mt-2">Compare original footage with de-identified output</p>
                 </div>
 
-                <!-- Demo 1: Sample Recording -->
+                <!-- Demo 1: Sample Video -->
                 <div class="demo-card bg-white p-8 mb-8">
                     <h3 class="font-semibold text-lg mb-4 flex items-center">
                         <i class="fas fa-video mr-3 text-carbon-text-secondary"></i>
-                        Sample Recording - Face Masking
+                        Sample Recording - Face Swap Method
                     </h3>
                     <div class="grid md:grid-cols-2 gap-6">
                         <div class="video-container">
                             <div class="video-label"><i class="fas fa-eye mr-2"></i>Original</div>
-                            <video controls>
-                                <source src="assets/Input_Videos/sample.mp4" type="video/mp4">
+                            <video controls poster="demos/poster-original.jpg">
+                                <source src="demos/sample_original.mp4" type="video/mp4">
                                 Your browser does not support video playback.
                             </video>
                         </div>
                         <div class="video-container">
-                            <div class="video-label video-label-masked"><i class="fas fa-mask mr-2"></i>Masked</div>
-                            <video controls>
-                                <source src="assets/Output_MaskedVideos/sample.mp4" type="video/mp4">
+                            <div class="video-label" style="background: rgba(22,101,52,0.9);"><i class="fas fa-mask mr-2"></i>Masked</div>
+                            <video controls poster="demos/poster-masked.jpg">
+                                <source src="demos/sample_masked.mp4" type="video/mp4">
                                 Your browser does not support video playback.
                             </video>
                         </div>
@@ -109,33 +215,37 @@ activeNav: Demo
                     <div class="mt-6 flex flex-wrap gap-4">
                         <div class="flex items-center gap-2 text-sm text-carbon-text-secondary">
                             <i class="fas fa-cog"></i>
-                            <span>Method: Face Masking</span>
+                            <span>Method: Face Swap (DeepPrivacy2)</span>
                         </div>
                         <div class="flex items-center gap-2 text-sm text-carbon-text-secondary">
-                            <i class="fas fa-check-circle text-green-600"></i>
+                            <i class="fas fa-clock"></i>
+                            <span>Processing: ~2 min</span>
+                        </div>
+                        <div class="flex items-center gap-2 text-sm text-carbon-text-secondary">
+                            <i class="fas fa-circle-check text-green-600"></i>
                             <span>Expression preserved</span>
                         </div>
                     </div>
                 </div>
 
-                <!-- Demo 2: TED Talk -->
+                <!-- Demo 2: Classroom -->
                 <div class="demo-card bg-white p-8 mb-8">
                     <h3 class="font-semibold text-lg mb-4 flex items-center">
-                        <i class="fas fa-chalkboard-teacher mr-3 text-carbon-text-secondary"></i>
-                        Presentation Recording - Speaker Masking
+                        <i class="fas fa-chalkboard-user mr-3 text-carbon-text-secondary"></i>
+                        Classroom Recording - Selective Masking
                     </h3>
                     <div class="grid md:grid-cols-2 gap-6">
                         <div class="video-container">
                             <div class="video-label"><i class="fas fa-eye mr-2"></i>Original</div>
                             <video controls>
-                                <source src="assets/Input_Videos/ted_kid.mp4" type="video/mp4">
+                                <source src="demos/classroom_original.mp4" type="video/mp4">
                                 Your browser does not support video playback.
                             </video>
                         </div>
                         <div class="video-container">
-                            <div class="video-label video-label-masked"><i class="fas fa-mask mr-2"></i>Masked</div>
+                            <div class="video-label" style="background: rgba(22,101,52,0.9);"><i class="fas fa-mask mr-2"></i>Students Masked</div>
                             <video controls>
-                                <source src="assets/Output_MaskedVideos/ted_kid.mp4" type="video/mp4">
+                                <source src="demos/classroom_masked.mp4" type="video/mp4">
                                 Your browser does not support video playback.
                             </video>
                         </div>
@@ -143,7 +253,7 @@ activeNav: Demo
                     <div class="mt-6 flex flex-wrap gap-4">
                         <div class="flex items-center gap-2 text-sm text-carbon-text-secondary">
                             <i class="fas fa-cog"></i>
-                            <span>Method: Face Masking</span>
+                            <span>Method: Selective (teacher visible, students masked)</span>
                         </div>
                         <div class="flex items-center gap-2 text-sm text-carbon-text-secondary">
                             <i class="fas fa-users"></i>
@@ -152,38 +262,14 @@ activeNav: Demo
                     </div>
                 </div>
 
-                <!-- Demo 3: Research Recording -->
-                <div class="demo-card bg-white p-8 mb-8">
-                    <h3 class="font-semibold text-lg mb-4 flex items-center">
-                        <i class="fas fa-flask mr-3 text-carbon-text-secondary"></i>
-                        Research Recording - Participant Masking
-                    </h3>
-                    <div class="grid md:grid-cols-2 gap-6">
-                        <div class="video-container">
-                            <div class="video-label"><i class="fas fa-eye mr-2"></i>Original</div>
-                            <video controls>
-                                <source src="assets/Input_Videos/1413451-11105600-11163240_1a1_1.mp4" type="video/mp4">
-                                Your browser does not support video playback.
-                            </video>
-                        </div>
-                        <div class="video-container">
-                            <div class="video-label video-label-masked"><i class="fas fa-mask mr-2"></i>Masked</div>
-                            <video controls>
-                                <source src="assets/Output_MaskedVideos/1413451-11105600-11163240_1a1_1.mp4" type="video/mp4">
-                                Your browser does not support video playback.
-                            </video>
-                        </div>
-                    </div>
-                    <div class="mt-6 flex flex-wrap gap-4">
-                        <div class="flex items-center gap-2 text-sm text-carbon-text-secondary">
-                            <i class="fas fa-cog"></i>
-                            <span>Method: Face Masking</span>
-                        </div>
-                        <div class="flex items-center gap-2 text-sm text-carbon-text-secondary">
-                            <i class="fas fa-check-circle text-green-600"></i>
-                            <span>Expression preserved</span>
-                        </div>
-                    </div>
+                <!-- Placeholder for more demos -->
+                <div class="border border-dashed border-carbon-border p-8 text-center">
+                    <i class="fas fa-film text-4xl text-carbon-text-secondary mb-4"></i>
+                    <h3 class="font-semibold mb-2">More Demos Coming Soon</h3>
+                    <p class="text-sm text-carbon-text-secondary mb-4">Voice anonymization, pose extraction, and batch processing examples</p>
+                    <a href="survey.html" class="btn-secondary px-4 py-2 text-sm inline-block">
+                        Request specific demo <i class="fas fa-arrow-right ml-2"></i>
+                    </a>
                 </div>
             </div>
         </section>
@@ -216,7 +302,7 @@ activeNav: Demo
                         <div class="feature-icon mb-4">
                             <i class="fas fa-masks-theater text-xl"></i>
                         </div>
-                        <h3 class="font-semibold mb-2">Face Masking</h3>
+                        <h3 class="font-semibold mb-2">Face Swap</h3>
                         <p class="text-sm text-carbon-text-secondary">Replace with synthetic face preserving expressions and gaze.</p>
                         <div class="mt-4 text-xs font-mono text-carbon-text-secondary">Privacy: High | Utility: High</div>
                     </div>
@@ -286,21 +372,77 @@ activeNav: Demo
             </div>
         </section>
 
-        <!-- CTA -->
-        <section class="py-20 px-6">
+        <!-- Live Demo -->
+        <section class="py-20 px-6 bg-carbon-bg-hover border-y border-carbon-border">
             <div class="container mx-auto max-w-5xl text-center">
-                <h2 class="text-3xl font-semibold mb-4">Ready to Try?</h2>
+                <div class="mb-4">
+                    <span class="text-xs font-mono uppercase tracking-widest text-carbon-text-secondary">Live Platform</span>
+                </div>
+                <h2 class="text-3xl font-semibold mb-4">MaskAnyone Demo</h2>
                 <p class="text-carbon-text-secondary mb-8 max-w-xl mx-auto">
-                    Contact us to schedule a live demo or request access to the pilot platform.
+                    MaskAnyone is deployed on Radboud University infrastructure. Access is currently restricted to project partners and pilot participants.
                 </p>
                 <div class="flex flex-wrap justify-center gap-4">
                     <a href="mailto:babajide.owoyele@ru.nl" class="btn-primary px-6 py-3 font-medium">
-                        <i class="fas fa-envelope mr-2"></i> Request Demo
+                        <i class="fas fa-envelope mr-2"></i> Request Access
                     </a>
                     <a href="training.html" class="btn-secondary px-6 py-3 font-medium">
                         <i class="fas fa-graduation-cap mr-2"></i> View Training
                     </a>
                 </div>
+                <p class="text-xs text-carbon-text-secondary mt-4">
+                    Hosted on Radboud Ponyland cluster. Contact us to arrange a guided demo session.
+                </p>
+            </div>
+        </section>
+
+        <!-- CTA -->
+        <section class="py-20 px-6">
+            <div class="container mx-auto max-w-5xl text-center">
+                <h2 class="text-3xl font-semibold mb-4">Want to Learn More?</h2>
+                <p class="text-carbon-text-secondary mb-8 max-w-xl mx-auto">
+                    Explore our training materials or get in touch to discuss deploying MaskAnyone at your institution.
+                </p>
+                <div class="flex flex-wrap justify-center gap-4">
+                    <a href="network.html" class="btn-primary px-6 py-3 font-medium">
+                        <i class="fas fa-building-columns mr-2"></i> Partner Network
+                    </a>
+                    <a href="resources.html" class="btn-secondary px-6 py-3 font-medium">
+                        <i class="fas fa-book mr-2"></i> Resources
+                    </a>
+                </div>
             </div>
         </section>
     </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-carbon-border py-12 px-6">
+        <div class="container mx-auto max-w-5xl">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-8">
+                <div>
+                    <div class="font-semibold text-lg mb-2">SYNAPSIS</div>
+                    <div class="text-sm text-carbon-text-secondary">
+                        Funded by NWO TDCC-SSH
+                    </div>
+                </div>
+                <div class="flex gap-8">
+                    <a href="index.html" class="text-sm text-carbon-text-secondary hover:text-carbon-text">Home</a>
+                    <a href="platform.html" class="text-sm text-carbon-text-secondary hover:text-carbon-text">Platform</a>
+                    <a href="training.html" class="text-sm text-carbon-text-secondary hover:text-carbon-text">Training</a>
+                    <a href="https://github.com/MaskAnyone/MaskAnyone" class="text-sm text-carbon-text-secondary hover:text-carbon-text">GitHub</a>
+                </div>
+            </div>
+            <div class="mt-8 pt-8 border-t border-carbon-border flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div class="text-sm text-carbon-text-secondary">
+                    © 2026 SYNAPSIS Project. Radboud University.
+                </div>
+                <div class="flex gap-4 text-xs text-carbon-text-secondary">
+                    <a href="https://www.nwo.nl/en/projects/zazlb40252" class="hover:text-carbon-text">NWO</a>
+                    <a href="https://tdcc.nl/tdcc-ssh-challenge-projects/synapsis/" class="hover:text-carbon-text">TDCC-SSH</a>
+                    <a href="https://zenodo.org/records/16996002" class="hover:text-carbon-text">Zenodo</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

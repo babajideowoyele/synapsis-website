@@ -1,0 +1,173 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tutorial 04 · MaskingOps — SYNAPSIS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link rel="stylesheet" href="../../theme.css">
+    <script src="../../theme.js"></script>
+    <script>
+        tailwind.config = { theme: { extend: {
+            fontFamily: { 'sans': ['IBM Plex Sans', 'sans-serif'], 'mono': ['IBM Plex Mono', 'monospace'] },
+            colors: { 'carbon': {
+                'bg': 'var(--color-bg)', 'bg-hover': 'var(--color-bg-hover)',
+                'border': 'var(--color-border)', 'text': 'var(--color-text)',
+                'text-secondary': 'var(--color-text-secondary)', 'interactive': '#0f62fe',
+            }}
+        }}}
+    </script>
+    <style>
+        body { font-family: 'IBM Plex Sans', sans-serif; background-color: var(--color-bg); color: var(--color-text); line-height: 1.6; }
+        .accent-bar { height: 3px; background: var(--color-accent); width: 48px; margin-bottom: 14px; }
+        .badge { display: inline-block; padding: 3px 10px; font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: .04em; text-transform: uppercase; }
+        .badge-draft { background: var(--color-bg-hover); color: var(--color-text-secondary); border: 1px solid var(--color-border); }
+        .badge-pipeline { background: var(--color-text); color: var(--color-inverse); }
+        .video-placeholder { background: var(--color-bg-hover); border: 1px solid var(--color-border); aspect-ratio: 16 / 9; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 12px; color: var(--color-text-secondary); }
+        .video-placeholder i { font-size: 48px; }
+        .transcript h3 { font-size: 1.25rem; font-weight: 600; margin-top: 2.5rem; margin-bottom: 0.75rem; }
+        .transcript h4 { font-size: 1.05rem; font-weight: 600; margin-top: 1.5rem; margin-bottom: 0.5rem; }
+        .transcript p { margin-bottom: 1.25rem; color: var(--color-text); }
+        .transcript p.lede { font-size: 1.1rem; }
+        .transcript strong { color: var(--color-text); font-weight: 600; }
+        .transcript blockquote { border-left: 3px solid var(--color-accent); padding-left: 1rem; margin: 1.5rem 0; color: var(--color-text-secondary); font-style: italic; }
+        .meta-row { font-size: 13px; color: var(--color-text-secondary); font-family: 'IBM Plex Mono', monospace; }
+        .meta-row a { color: var(--color-text); text-decoration: underline; text-underline-offset: 3px; }
+        .sidebar-section { border: 1px solid var(--color-border); padding: 18px 20px; margin-bottom: 16px; }
+        .sidebar-section h4 { font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--color-text-secondary); margin-bottom: 10px; }
+        .sidebar-section ul { list-style: none; padding: 0; margin: 0; font-size: 14px; }
+        .sidebar-section li { padding: 6px 0; border-bottom: 1px solid var(--color-border); }
+        .sidebar-section li:last-child { border-bottom: none; }
+        .sidebar-section a { color: var(--color-text); text-decoration: none; }
+        .sidebar-section a:hover { text-decoration: underline; }
+        .nav-pager { display: flex; justify-content: space-between; gap: 24px; margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--color-border); }
+        .nav-pager a { flex: 1; padding: 18px 22px; border: 1px solid var(--color-border); text-decoration: none; color: var(--color-text); transition: all .15s; }
+        .nav-pager a:hover { border-color: var(--color-text); }
+        .nav-pager .label { font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: .04em; text-transform: uppercase; color: var(--color-text-secondary); margin-bottom: 4px; display: block; }
+        .nav-pager .title { font-weight: 600; }
+        .nav-pager .next { text-align: right; }
+    </style>
+</head>
+<body>
+    <header class="border-b border-carbon-border sticky top-0 z-50" style="background: var(--color-bg);">
+        <div class="container mx-auto max-w-5xl px-6 py-4 flex items-center justify-between">
+            <a href="../../index.html" class="flex items-center gap-2 text-xl font-semibold tracking-tight"><span>SYNAPSIS</span></a>
+            <nav class="hidden md:flex gap-6">
+                <a href="../../index.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Home</a>
+                <a href="../../platform.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Platform</a>
+                <a href="../../training.html" class="text-sm font-medium border-b-2 border-carbon-text pb-1">Training</a>
+                <a href="../../resources.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Resources</a>
+                <a href="../../network.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Network</a>
+                <a href="../../press.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Press</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container mx-auto max-w-5xl px-6 py-12">
+        <div class="meta-row mb-6"><a href="index.html">Tutorials</a> &nbsp;/&nbsp; <span>04 · Stage 3</span></div>
+        <div class="flex items-center gap-3 mb-4">
+            <span class="badge badge-pipeline">04 · Stage 3</span>
+            <span class="badge badge-draft">Script drafted</span>
+            <span class="meta-row"><i class="fa fa-clock mr-1"></i> ~7 min</span>
+        </div>
+        <span class="accent-bar"></span>
+        <h1 class="text-4xl font-semibold mb-4 leading-tight">MaskingOps — running masking at scale</h1>
+        <p class="text-lg text-carbon-text-secondary max-w-3xl">
+            Dashboards, batch processing, QA review, archive prep. When the laptop tab full of progress bars stops working.
+        </p>
+
+        <div class="video-placeholder mt-10">
+            <i class="fa fa-circle-play"></i>
+            <div class="text-sm font-mono uppercase tracking-widest">Video coming soon</div>
+            <div class="text-xs">Script drafted · Recording scheduled in batch 1 production</div>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-12 mt-12">
+            <article class="md:col-span-2 transcript">
+                <h2 class="text-2xl font-semibold mb-2">Learning goal</h2>
+                <p class="lede">After watching, you understand what MaskingOps is, when a project crosses the threshold from "I'll mask each video by hand" to "I need an operations layer," and the four main surfaces it provides: a dashboard, batch processing, QA review, and an archive view that hands off to stage 5.</p>
+
+                <h2 class="text-2xl font-semibold mt-12 mb-2">Transcript</h2>
+
+                <h3>Cold open</h3>
+                <p>You've masked one video. Then ten. Then five hundred. At some point the laptop tab full of progress bars stops working. <strong>That's the line MaskingOps is on the other side of.</strong></p>
+
+                <h3>When you cross the threshold</h3>
+                <p>Four signs you've crossed the line:</p>
+                <ul class="list-disc pl-6 mb-6 space-y-2">
+                    <li><strong>More than ~20 videos to process.</strong> Manually tracking which one's done, which failed, which needs QA — it stops being possible in your head.</li>
+                    <li><strong>Multiple people working on the same corpus.</strong> You need shared state, not a folder of files on someone's desktop.</li>
+                    <li><strong>Reviewers need to certify outputs before archive.</strong> You need a review queue, not a Slack thread.</li>
+                    <li><strong>Processing happens on shared compute</strong> (HPC, SURF, cloud). Jobs need to be submitted, monitored, retrieved, and tracked.</li>
+                </ul>
+
+                <h3>The four surfaces</h3>
+                <p>MaskingOps wraps the MaskAnyone pipeline with four surfaces. Each one handles a part of the operations problem.</p>
+
+                <h4>Surface 1 — Dashboard</h4>
+                <p>Single pane of glass: how many videos in the corpus, how many processed, how many failed, how many waiting for review. Stop-the-world questions answered at a glance. Status counters at the top. Recent activity below. If something failed five hours ago, the dashboard surfaces it — you don't have to dig in logs to find out.</p>
+                <p>Carbon design system. Looks deliberately neutral — this is a tool you'll have open while screen-sharing with privacy officers and IT. <strong>Aesthetics are a trust signal.</strong></p>
+
+                <h4>Surface 2 — Batch processing</h4>
+                <p>Submit a whole folder. MaskingOps queues every video, picks the right masking template, dispatches jobs to whatever compute backend you've connected — local Docker, an HPC, SURF — and reports back when each one finishes. Run jobs in parallel. Priority-tag the urgent ones. Re-run a failed batch with one click instead of fishing through job IDs.</p>
+
+                <h4>Surface 3 — QA review</h4>
+                <p>This is the surface a data steward lives in. Every processed video lands in a queue with a status: pending, in review, approved, rejected. The reviewer opens a card, watches the masked output, runs the structured QA sampling protocol — the one from the <a href="deepdive-quality-check.html">Quality-check deep-dive</a> — and clicks approve, reject, or send-back-for-refinement.</p>
+                <p>Every action is logged. Who approved what, when, against which processing parameters. That log is what survives the project — and what an auditor will read.</p>
+
+                <h4>Surface 4 — Archive prep</h4>
+                <p>Where approved outputs queue up for stage five. Approved videos arrive here with their processing parameters, QA log, and masking-method metadata already attached. From here it's one step to FAIR packaging and DANS deposit — which is <a href="05-archiving.html">Tutorial 05</a>. Notice what's NOT here: anything that didn't pass QA. The archive surface only sees clean, signed-off outputs. <strong>No accidental publishing of failed runs.</strong></p>
+
+                <h3>A typical MaskingOps week</h3>
+                <p>Concretely, here's what a research week using MaskingOps looks like.</p>
+                <p><strong>Monday morning.</strong> An RA uploads fifty fresh interview videos through the batch surface. MaskingOps queues them, dispatches to the HPC overnight.</p>
+                <p><strong>Tuesday morning.</strong> Dashboard says forty-seven succeeded, three failed. The three failures are tagged with the reason — OOM on a 4K clip, for example. RA re-queues them with a downsampled flag.</p>
+                <p><strong>Wednesday through Friday.</strong> The data steward opens the QA queue, reviews each masked video against the lab's sampling protocol. Approves nine, rejects one — that one goes back with a comment for refinement.</p>
+                <p><strong>End of week.</strong> Forty-six videos sitting in the archive-prep surface with full audit trails. Ready to FAIR-package and deposit.</p>
+
+                <h3>Recap</h3>
+                <p>MaskingOps: four surfaces over the same MaskAnyone pipeline. <strong>Dashboard</strong> for stop-the-world questions. <strong>Batch processing</strong> for scale. <strong>QA review</strong> for sign-off. <strong>Archive prep</strong> for handoff. Every action logged, every approval traceable.</p>
+                <blockquote>Final stage of the pipeline — <a href="05-archiving.html">Archiving</a>. FAIR metadata, DANS deposit, what gets shared and what stays restricted.</blockquote>
+            </article>
+
+            <aside>
+                <div class="sidebar-section">
+                    <h4>Details</h4>
+                    <ul>
+                        <li><span class="meta-row">Duration target</span><br>~7 min</li>
+                        <li><span class="meta-row">Audience</span><br>Researchers at corpus scale</li>
+                        <li><span class="meta-row">Prereqs</span><br><a href="02-maskanyone.html">02 · MaskAnyone</a><br><a href="03-maskbench.html">03 · MaskBench</a></li>
+                    </ul>
+                </div>
+                <div class="sidebar-section">
+                    <h4>Source</h4>
+                    <ul>
+                        <li><a href="../../../maskingops_oss/docs/architecture.md"><i class="fa fa-file-lines mr-2"></i>architecture.md</a></li>
+                        <li><a href="../../../manuscripts/maskingops/"><i class="fa fa-folder mr-2"></i>manuscripts/maskingops/</a></li>
+                        <li><a href="../../demos_carbon_maskingops/maskingops/dashboard.html"><i class="fa fa-play mr-2"></i>Live demo dashboard</a></li>
+                    </ul>
+                </div>
+                <div class="sidebar-section">
+                    <h4>Companion deep dive</h4>
+                    <ul>
+                        <li><a href="deepdive-quality-check.html">→ Quality check</a></li>
+                    </ul>
+                </div>
+                <div class="sidebar-section">
+                    <h4>Up next</h4>
+                    <ul>
+                        <li><a href="05-archiving.html">→ 05 · Archiving</a></li>
+                    </ul>
+                </div>
+            </aside>
+        </div>
+
+        <nav class="nav-pager">
+            <a href="03-maskbench.html"><span class="label">← Previous</span><span class="title">03 · MaskBench</span></a>
+            <a href="05-archiving.html" class="next"><span class="label">Next →</span><span class="title">05 · Archiving</span></a>
+        </nav>
+    </main>
+</body>
+</html>

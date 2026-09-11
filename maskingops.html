@@ -1,0 +1,980 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon-180x180.png">
+    <title>MaskingOPS - End-to-End Privacy-Preserving Video Workflow</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link rel="stylesheet" href="theme.css">
+    <script src="theme.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'sans': ['IBM Plex Sans', 'sans-serif'],
+                        'mono': ['IBM Plex Mono', 'monospace'],
+                    },
+                    colors: {
+                        'carbon': {
+                            'bg': 'var(--color-bg)',
+                            'bg-hover': 'var(--color-bg-hover)',
+                            'border': 'var(--color-border)',
+                            'text': 'var(--color-text)',
+                            'text-secondary': 'var(--color-text-secondary)',
+                            'interactive': '#0f62fe',
+                            'support-error': '#da1e28',
+                            'support-success': '#198038',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'IBM Plex Sans', sans-serif;
+            background-color: var(--color-bg);
+            color: var(--color-text);
+        }
+        .accent-bar {
+            height: 3px;
+            background: var(--color-accent);
+        }
+        .card {
+            border: 1px solid var(--color-border);
+            transition: all 0.15s ease;
+        }
+        .card:hover {
+            border-color: var(--color-text);
+            box-shadow: 0 4px 14px rgba(0,0,0,0.1);
+        }
+        .btn-primary {
+            background: var(--color-accent);
+            color: var(--color-inverse);
+            transition: all 0.15s ease;
+        }
+        .btn-primary:hover {
+            background: var(--color-accent-hover);
+        }
+        .btn-secondary {
+            background: var(--color-bg);
+            color: var(--color-text);
+            border: 1px solid var(--color-accent);
+            transition: all 0.15s ease;
+        }
+        .btn-secondary:hover {
+            background: var(--color-bg-hover);
+        }
+        .nav-link {
+            position: relative;
+            padding-bottom: 4px;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--color-accent);
+            transition: width 0.2s ease;
+        }
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        .stat-number {
+            font-family: 'IBM Plex Mono', monospace;
+        }
+
+        /* Pipeline visualization */
+        .pipeline-step {
+            position: relative;
+            border: 1px solid var(--color-border);
+            transition: all 0.15s ease;
+        }
+        .pipeline-step:hover {
+            border-color: var(--color-text);
+            box-shadow: 0 4px 14px rgba(0,0,0,0.1);
+        }
+        .pipeline-connector {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--color-text-secondary);
+        }
+        .step-number {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 12px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: var(--color-text-secondary);
+        }
+
+        /* Metric cards */
+        .metric-card {
+            border-left: 4px solid var(--color-accent);
+            padding: 24px;
+            background: var(--color-bg-hover);
+        }
+        .metric-value {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 36px;
+            font-weight: 600;
+            line-height: 1;
+        }
+
+        /* Strategy comparison table */
+        .strategy-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .strategy-table th {
+            text-align: left;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--color-text-secondary);
+            padding: 12px 16px;
+            border-bottom: 2px solid var(--color-text);
+        }
+        .strategy-table td {
+            padding: 16px;
+            border-bottom: 1px solid var(--color-border);
+            font-size: 14px;
+        }
+        .strategy-table tr:hover td {
+            background: var(--color-bg-hover);
+        }
+        .quality-bar {
+            height: 8px;
+            background: var(--color-bg-hover);
+            border: 1px solid var(--color-border);
+            position: relative;
+        }
+        .quality-fill {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            background: var(--color-accent);
+        }
+
+        /* Archive/callout box */
+        .callout-box {
+            background: var(--color-bg-hover);
+            border-left: 4px solid #198038;
+            padding: 24px;
+        }
+
+        /* Tool badge */
+        .tool-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 12px;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 12px;
+            border: 1px solid var(--color-border);
+            color: var(--color-text-secondary);
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        /* Dark mode: metric-value red needs lighter shade for contrast */
+        html.dark .metric-value[style*="da1e28"] { color: #ff8389 !important; }
+        /* Dark mode: metric-value amber/yellow */
+        html.dark .metric-value[style*="b28600"] { color: #f1c21b !important; }
+    </style>
+</head>
+<body class="min-h-screen">
+    <!-- Header -->
+    <header class="border-b border-carbon-border sticky top-0 z-50 bg-white">
+        <div class="accent-bar"></div>
+        <nav class="container mx-auto px-6 py-4">
+            <div class="flex justify-between items-center">
+                <a href="index.html" class="flex items-center gap-2 text-xl font-semibold tracking-tight">
+                    <img src="logo-mark.svg" alt="" class="h-20 w-auto">
+                    SYNAPSIS
+                </a>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="index.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Home</a>
+                    <a href="platform.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Platform</a>
+                    <a href="demo.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Demo</a>
+                    <a href="training.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Training</a>
+                    <a href="resources.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Resources</a>
+                    <a href="network.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Network</a>
+                    <a href="press.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">News</a>
+                </div>
+                <button class="md:hidden p-2 -mr-2" onclick="toggleMobileMenu()" aria-label="Toggle navigation menu">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+                <button onclick="toggleTheme()" class="theme-toggle" title="Toggle dark mode">
+                    <i class="fas fa-moon"></i><i class="fas fa-sun"></i>
+                </button>
+            </div>
+        </nav>
+        <!-- Mobile menu -->
+        <div id="mobile-menu" class="hidden md:hidden border-t border-carbon-border">
+            <a href="index.html" class="block px-6 py-3 text-sm font-medium text-carbon-text-secondary hover:text-carbon-text hover:bg-carbon-bg-hover">Home</a>
+            <a href="platform.html" class="block px-6 py-3 text-sm font-medium text-carbon-text-secondary hover:text-carbon-text hover:bg-carbon-bg-hover">Platform</a>
+            <a href="demo.html" class="block px-6 py-3 text-sm font-medium text-carbon-text-secondary hover:text-carbon-text hover:bg-carbon-bg-hover">Demo</a>
+            <a href="training.html" class="block px-6 py-3 text-sm font-medium text-carbon-text-secondary hover:text-carbon-text hover:bg-carbon-bg-hover">Training</a>
+            <a href="resources.html" class="block px-6 py-3 text-sm font-medium text-carbon-text-secondary hover:text-carbon-text hover:bg-carbon-bg-hover">Resources</a>
+            <a href="network.html" class="block px-6 py-3 text-sm font-medium text-carbon-text-secondary hover:text-carbon-text hover:bg-carbon-bg-hover">Network</a>
+            <a href="press.html" class="block px-6 py-3 text-sm font-medium text-carbon-text-secondary hover:text-carbon-text hover:bg-carbon-bg-hover">News</a>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="py-24 px-6 border-b border-carbon-border">
+        <div class="container mx-auto max-w-5xl">
+            <div class="mb-4 flex items-center gap-3">
+                <span class="text-xs font-mono uppercase tracking-widest text-carbon-text-secondary">Privacy Operations</span>
+                <span class="tool-badge">Open Source</span>
+            </div>
+            <h1 class="text-5xl md:text-6xl font-semibold leading-tight mb-6">
+                MaskingOPS
+            </h1>
+            <p class="text-xl text-carbon-text-secondary max-w-3xl mb-4 leading-relaxed">
+                End-to-end workflow for privacy-preserving video de-identification
+                and quality assurance in behavioral research.
+            </p>
+            <p class="text-base text-carbon-text-secondary max-w-2xl mb-10 leading-relaxed">
+                Mask it with <strong class="text-carbon-text">MaskAnyone</strong>.
+                Verify it with <strong class="text-carbon-text">MaskBench</strong>.
+                Archive it <strong class="text-carbon-text">FAIRly</strong>.
+            </p>
+            <div class="flex flex-wrap gap-4">
+                <a href="https://github.com/MaskAnyone/MaskAnyone" target="_blank" rel="noopener"
+                   class="btn-primary px-6 py-3 font-medium inline-flex items-center gap-2">
+                    <i class="fab fa-github"></i> Get Started
+                </a>
+                <a href="#pipeline" class="btn-secondary px-6 py-3 font-medium">
+                    See the Pipeline <i class="fas fa-arrow-down ml-2"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Bar -->
+    <section class="border-b border-carbon-border bg-carbon-bg-hover py-8">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+                <div class="text-center">
+                    <div class="stat-number text-3xl font-semibold">~86%</div>
+                    <div class="text-sm text-carbon-text-secondary mt-1">Pose preserved (blur)</div>
+                </div>
+                <div class="text-center">
+                    <div class="stat-number text-3xl font-semibold">7</div>
+                    <div class="text-sm text-carbon-text-secondary mt-1">Pose estimators</div>
+                </div>
+                <div class="text-center">
+                    <div class="stat-number text-3xl font-semibold">5</div>
+                    <div class="text-sm text-carbon-text-secondary mt-1">Masking strategies</div>
+                </div>
+                <div class="text-center">
+                    <div class="stat-number text-3xl font-semibold">FAIR</div>
+                    <div class="text-sm text-carbon-text-secondary mt-1">Data-ready outputs</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- The Problem -->
+    <section class="py-20 px-6">
+        <div class="container mx-auto max-w-5xl">
+            <div class="grid md:grid-cols-2 gap-16 items-start">
+                <div>
+                    <span class="text-xs font-mono uppercase tracking-widest text-carbon-text-secondary">The Challenge</span>
+                    <h2 class="text-3xl font-semibold mt-2 mb-6">Two problems, one workflow</h2>
+                    <p class="text-base text-carbon-text-secondary leading-relaxed mb-6">
+                        Video data is central to behavioral research across psychology,
+                        communication science, and human-computer interaction. Yet privacy
+                        concerns create two interconnected operational challenges that
+                        limit data sharing and reproducibility.
+                    </p>
+                </div>
+                <div class="space-y-6">
+                    <div class="card p-6">
+                        <div class="flex items-start gap-4">
+                            <div class="w-10 h-10 bg-carbon-bg-hover flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-user-shield text-lg"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold mb-2">Challenge 1: De-identification</h3>
+                                <p class="text-sm text-carbon-text-secondary leading-relaxed">
+                                    How do you remove identifying information from video while
+                                    preserving the behavioral signals your research depends on?
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card p-6">
+                        <div class="flex items-start gap-4">
+                            <div class="w-10 h-10 bg-carbon-bg-hover flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-chart-line text-lg"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold mb-2">Challenge 2: Quality Assurance</h3>
+                                <p class="text-sm text-carbon-text-secondary leading-relaxed">
+                                    How do you verify that your de-identification hasn't
+                                    compromised downstream analyses like pose estimation?
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pipeline Section -->
+    <section id="pipeline" class="py-20 px-6 border-t border-carbon-border bg-carbon-bg-hover">
+        <div class="container mx-auto max-w-5xl">
+            <div class="mb-12">
+                <span class="text-xs font-mono uppercase tracking-widest text-carbon-text-secondary">The Pipeline</span>
+                <h2 class="text-3xl font-semibold mt-2 mb-4">End-to-end in four steps</h2>
+                <p class="text-base text-carbon-text-secondary max-w-2xl leading-relaxed">
+                    MaskingOPS integrates de-identification, quality assurance, and data archiving
+                    into a single operational workflow.
+                </p>
+            </div>
+
+            <div class="space-y-4">
+                <!-- Step 1 -->
+                <div class="pipeline-step p-6 bg-white">
+                    <div class="flex items-start gap-6">
+                        <div class="flex flex-col items-center flex-shrink-0">
+                            <span class="step-number">Step 01</span>
+                            <div class="w-12 h-12 bg-carbon-text text-white flex items-center justify-center mt-2">
+                                <i class="fas fa-mask text-xl"></i>
+                            </div>
+                        </div>
+                        <div class="flex-1">
+                            <div class="flex items-center gap-3 mb-2">
+                                <h3 class="text-lg font-semibold">De-identify with MaskAnyone</h3>
+                                <span class="tool-badge"><i class="fas fa-circle text-[8px]" style="color: #42be65;"></i> MaskAnyone</span>
+                            </div>
+                            <p class="text-sm text-carbon-text-secondary leading-relaxed mb-3">
+                                Upload your video, select a masking strategy (blur, pixelation, solid fill,
+                                contour, or skeleton), and let SAM2-based segmentation automatically
+                                detect and track people across frames. Use the human-in-the-loop
+                                editor to refine any tracking errors.
+                            </p>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="text-xs font-mono px-2 py-1 bg-carbon-bg-hover">SAM2 backbone</span>
+                                <span class="text-xs font-mono px-2 py-1 bg-carbon-bg-hover">YOLO prompting</span>
+                                <span class="text-xs font-mono px-2 py-1 bg-carbon-bg-hover">Interactive refinement</span>
+                                <span class="text-xs font-mono px-2 py-1 bg-carbon-bg-hover">Docker deployment</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pipeline-connector py-2">
+                    <i class="fas fa-arrow-down text-xl"></i>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="pipeline-step p-6 bg-white">
+                    <div class="flex items-start gap-6">
+                        <div class="flex flex-col items-center flex-shrink-0">
+                            <span class="step-number">Step 02</span>
+                            <div class="w-12 h-12 bg-carbon-text text-white flex items-center justify-center mt-2">
+                                <i class="fas fa-vials text-xl"></i>
+                            </div>
+                        </div>
+                        <div class="flex-1">
+                            <div class="flex items-center gap-3 mb-2">
+                                <h3 class="text-lg font-semibold">Benchmark with MaskBench</h3>
+                                <span class="tool-badge"><i class="fas fa-circle text-[8px]" style="color: #78a9ff;"></i> MaskBench</span>
+                            </div>
+                            <p class="text-sm text-carbon-text-secondary leading-relaxed mb-3">
+                                Run your raw and masked videos through multiple pose estimators.
+                                MaskBench computes standardized accuracy metrics (PCK, RMSE)
+                                and kinematic smoothness metrics (velocity, acceleration, jerk)
+                                to quantify the impact of masking on pose estimation quality.
+                            </p>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="text-xs font-mono px-2 py-1 bg-carbon-bg-hover">7 estimators</span>
+                                <span class="text-xs font-mono px-2 py-1 bg-carbon-bg-hover">PCK &amp; RMSE</span>
+                                <span class="text-xs font-mono px-2 py-1 bg-carbon-bg-hover">Kinematic metrics</span>
+                                <span class="text-xs font-mono px-2 py-1 bg-carbon-bg-hover">Automated reports</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pipeline-connector py-2">
+                    <i class="fas fa-arrow-down text-xl"></i>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="pipeline-step p-6 bg-white">
+                    <div class="flex items-start gap-6">
+                        <div class="flex flex-col items-center flex-shrink-0">
+                            <span class="step-number">Step 03</span>
+                            <div class="w-12 h-12 bg-carbon-text text-white flex items-center justify-center mt-2">
+                                <i class="fas fa-check-double text-xl"></i>
+                            </div>
+                        </div>
+                        <div class="flex-1">
+                            <h3 class="text-lg font-semibold mb-2">Evaluate and Iterate</h3>
+                            <p class="text-sm text-carbon-text-secondary leading-relaxed mb-3">
+                                Review quality reports. If pose estimation accuracy falls below
+                                your threshold, adjust your masking strategy and repeat.
+                                The iterative loop ensures you find the optimal balance between
+                                privacy protection and research utility for your specific use case.
+                            </p>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="text-xs font-mono px-2 py-1 bg-carbon-bg-hover">Quality threshold</span>
+                                <span class="text-xs font-mono px-2 py-1 bg-carbon-bg-hover">Strategy adjustment</span>
+                                <span class="text-xs font-mono px-2 py-1 bg-carbon-bg-hover">Decision support</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pipeline-connector py-2">
+                    <i class="fas fa-arrow-down text-xl"></i>
+                </div>
+
+                <!-- Step 4 -->
+                <div class="pipeline-step p-6 bg-white">
+                    <div class="flex items-start gap-6">
+                        <div class="flex flex-col items-center flex-shrink-0">
+                            <span class="step-number">Step 04</span>
+                            <div class="w-12 h-12 bg-carbon-text text-white flex items-center justify-center mt-2">
+                                <i class="fas fa-box-archive text-xl"></i>
+                            </div>
+                        </div>
+                        <div class="flex-1">
+                            <h3 class="text-lg font-semibold mb-2">Archive FAIRly</h3>
+                            <p class="text-sm text-carbon-text-secondary leading-relaxed mb-3">
+                                Export masked videos with full provenance metadata:
+                                what was masked, which strategy, processing parameters, and quality scores.
+                                Deposit to DANS, institutional repositories, or other FAIR-compliant archives
+                                with confidence that your data is both privacy-safe and research-ready.
+                            </p>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="text-xs font-mono px-2 py-1 bg-carbon-bg-hover">FAIR metadata</span>
+                                <span class="text-xs font-mono px-2 py-1 bg-carbon-bg-hover">GDPR compliant</span>
+                                <span class="text-xs font-mono px-2 py-1 bg-carbon-bg-hover">Provenance trail</span>
+                                <span class="text-xs font-mono px-2 py-1 bg-carbon-bg-hover">DANS / ODISSEI</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Key Findings -->
+    <section class="py-20 px-6">
+        <div class="container mx-auto max-w-5xl">
+            <div class="mb-12">
+                <span class="text-xs font-mono uppercase tracking-widest text-carbon-text-secondary">Results</span>
+                <h2 class="text-3xl font-semibold mt-2 mb-4">Masking strategy matters</h2>
+                <p class="text-base text-carbon-text-secondary max-w-2xl leading-relaxed">
+                    Our benchmarking shows that the choice of masking strategy dramatically
+                    affects downstream analysis quality. Not all masking is equal.
+                </p>
+            </div>
+
+            <!-- Metric highlights -->
+            <div class="grid md:grid-cols-3 gap-6 mb-12">
+                <div class="metric-card" style="border-left-color: #198038;">
+                    <div class="metric-value" style="color: #42be65;">~86%</div>
+                    <p class="text-sm text-carbon-text-secondary mt-2">Pose information preserved with <strong class="text-carbon-text">Gaussian blur</strong></p>
+                </div>
+                <div class="metric-card" style="border-left-color: #f1c21b;">
+                    <div class="metric-value" style="color: #b28600;">~52%</div>
+                    <p class="text-sm text-carbon-text-secondary mt-2">Pose information preserved with <strong class="text-carbon-text">pixelation</strong></p>
+                </div>
+                <div class="metric-card" style="border-left-color: #da1e28;">
+                    <div class="metric-value" style="color: #da1e28;">~31%</div>
+                    <p class="text-sm text-carbon-text-secondary mt-2">Pose information preserved with <strong class="text-carbon-text">solid fill</strong></p>
+                </div>
+            </div>
+
+            <!-- Strategy comparison table -->
+            <div class="border border-carbon-border overflow-x-auto">
+                <table class="strategy-table">
+                    <thead>
+                        <tr>
+                            <th>Strategy</th>
+                            <th>Privacy Level</th>
+                            <th>Pose Quality</th>
+                            <th>Best For</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="font-medium">Gaussian Blur</td>
+                            <td>
+                                <span class="text-xs font-mono px-2 py-1 bg-carbon-bg-hover">Moderate</span>
+                            </td>
+                            <td>
+                                <div class="flex items-center gap-3">
+                                    <div class="quality-bar w-24"><div class="quality-fill" style="width: 86%;"></div></div>
+                                    <span class="text-xs font-mono">86%</span>
+                                </div>
+                            </td>
+                            <td class="text-sm text-carbon-text-secondary">Gesture &amp; movement research</td>
+                        </tr>
+                        <tr>
+                            <td class="font-medium">Contour</td>
+                            <td>
+                                <span class="text-xs font-mono px-2 py-1 bg-carbon-bg-hover">Moderate-High</span>
+                            </td>
+                            <td>
+                                <div class="flex items-center gap-3">
+                                    <div class="quality-bar w-24"><div class="quality-fill" style="width: 70%;"></div></div>
+                                    <span class="text-xs font-mono">~70%</span>
+                                </div>
+                            </td>
+                            <td class="text-sm text-carbon-text-secondary">Spatial interaction studies</td>
+                        </tr>
+                        <tr>
+                            <td class="font-medium">Pixelation</td>
+                            <td>
+                                <span class="text-xs font-mono px-2 py-1 bg-carbon-bg-hover">High</span>
+                            </td>
+                            <td>
+                                <div class="flex items-center gap-3">
+                                    <div class="quality-bar w-24"><div class="quality-fill" style="width: 52%;"></div></div>
+                                    <span class="text-xs font-mono">~52%</span>
+                                </div>
+                            </td>
+                            <td class="text-sm text-carbon-text-secondary">Moderate privacy needs</td>
+                        </tr>
+                        <tr>
+                            <td class="font-medium">Skeleton Overlay</td>
+                            <td>
+                                <span class="text-xs font-mono px-2 py-1 bg-carbon-bg-hover">Very High</span>
+                            </td>
+                            <td>
+                                <div class="flex items-center gap-3">
+                                    <div class="quality-bar w-24"><div class="quality-fill" style="width: 45%;"></div></div>
+                                    <span class="text-xs font-mono">~45%</span>
+                                </div>
+                            </td>
+                            <td class="text-sm text-carbon-text-secondary">Maximum privacy with motion</td>
+                        </tr>
+                        <tr>
+                            <td class="font-medium">Solid Fill</td>
+                            <td>
+                                <span class="text-xs font-mono px-2 py-1 bg-carbon-bg-hover">Maximum</span>
+                            </td>
+                            <td>
+                                <div class="flex items-center gap-3">
+                                    <div class="quality-bar w-24"><div class="quality-fill" style="width: 31%;"></div></div>
+                                    <span class="text-xs font-mono">~31%</span>
+                                </div>
+                            </td>
+                            <td class="text-sm text-carbon-text-secondary">Clinical / highly sensitive</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tools Section -->
+    <section class="py-20 px-6 border-t border-carbon-border">
+        <div class="container mx-auto max-w-5xl">
+            <div class="mb-12">
+                <span class="text-xs font-mono uppercase tracking-widest text-carbon-text-secondary">Components</span>
+                <h2 class="text-3xl font-semibold mt-2 mb-4">Two tools, one workflow</h2>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8">
+                <!-- MaskAnyone -->
+                <div class="card p-0 overflow-hidden">
+                    <div class="p-6 border-b border-carbon-border bg-carbon-bg-hover">
+                        <div class="flex items-center gap-3 mb-1">
+                            <div class="w-10 h-10 bg-carbon-text text-white flex items-center justify-center">
+                                <i class="fas fa-mask"></i>
+                            </div>
+                            <h3 class="text-xl font-semibold">MaskAnyone</h3>
+                        </div>
+                        <p class="text-xs font-mono text-carbon-text-secondary mt-2">De-identification framework</p>
+                    </div>
+                    <div class="p-6">
+                        <p class="text-sm text-carbon-text-secondary leading-relaxed mb-6">
+                            Flexible video de-identification built on the Segment Anything Model 2 (SAM2).
+                            Supports multiple masking strategies, multi-person tracking, consent-aware
+                            processing, and human-in-the-loop refinement through an interactive web editor.
+                        </p>
+                        <ul class="space-y-3 mb-6">
+                            <li class="flex items-start gap-3 text-sm">
+                                <i class="fas fa-check text-xs mt-1" style="color: #42be65;"></i>
+                                <span>SAM2-based segmentation with YOLO pose prompting</span>
+                            </li>
+                            <li class="flex items-start gap-3 text-sm">
+                                <i class="fas fa-check text-xs mt-1" style="color: #42be65;"></i>
+                                <span>5 masking strategies: blur, pixelation, solid, contour, skeleton</span>
+                            </li>
+                            <li class="flex items-start gap-3 text-sm">
+                                <i class="fas fa-check text-xs mt-1" style="color: #42be65;"></i>
+                                <span>Interactive editor for tracking error correction</span>
+                            </li>
+                            <li class="flex items-start gap-3 text-sm">
+                                <i class="fas fa-check text-xs mt-1" style="color: #42be65;"></i>
+                                <span>Batch processing via CLI or web interface</span>
+                            </li>
+                            <li class="flex items-start gap-3 text-sm">
+                                <i class="fas fa-check text-xs mt-1" style="color: #42be65;"></i>
+                                <span>Docker-based deployment for reproducibility</span>
+                            </li>
+                        </ul>
+                        <a href="https://github.com/MaskAnyone/MaskAnyone" target="_blank" rel="noopener"
+                           class="btn-primary px-4 py-2 text-sm font-medium inline-flex items-center gap-2">
+                            <i class="fab fa-github"></i> GitHub
+                        </a>
+                    </div>
+                </div>
+
+                <!-- MaskBench -->
+                <div class="card p-0 overflow-hidden">
+                    <div class="p-6 border-b border-carbon-border bg-carbon-bg-hover">
+                        <div class="flex items-center gap-3 mb-1">
+                            <div class="w-10 h-10 bg-carbon-text text-white flex items-center justify-center">
+                                <i class="fas fa-chart-bar"></i>
+                            </div>
+                            <h3 class="text-xl font-semibold">MaskBench</h3>
+                        </div>
+                        <p class="text-xs font-mono text-carbon-text-secondary mt-2">Benchmarking framework</p>
+                    </div>
+                    <div class="p-6">
+                        <p class="text-sm text-carbon-text-secondary leading-relaxed mb-6">
+                            Open-source benchmarking framework for evaluating pose estimation quality
+                            on raw and masked videos. Integrates multiple pose estimators with
+                            standardized accuracy and kinematic metrics for systematic quality assurance.
+                        </p>
+                        <ul class="space-y-3 mb-6">
+                            <li class="flex items-start gap-3 text-sm">
+                                <i class="fas fa-check text-xs mt-1" style="color: #42be65;"></i>
+                                <span>7 pose estimators: YOLOv11, MediaPipe, OpenPose, MaskAnyone (4)</span>
+                            </li>
+                            <li class="flex items-start gap-3 text-sm">
+                                <i class="fas fa-check text-xs mt-1" style="color: #42be65;"></i>
+                                <span>Accuracy metrics: PCK, RMSE per keypoint</span>
+                            </li>
+                            <li class="flex items-start gap-3 text-sm">
+                                <i class="fas fa-check text-xs mt-1" style="color: #42be65;"></i>
+                                <span>Kinematic metrics: velocity, acceleration, jerk smoothness</span>
+                            </li>
+                            <li class="flex items-start gap-3 text-sm">
+                                <i class="fas fa-check text-xs mt-1" style="color: #42be65;"></i>
+                                <span>Automated visualization and comparison reports</span>
+                            </li>
+                            <li class="flex items-start gap-3 text-sm">
+                                <i class="fas fa-check text-xs mt-1" style="color: #42be65;"></i>
+                                <span>Extensible: add custom datasets, metrics, estimators</span>
+                            </li>
+                        </ul>
+                        <a href="https://github.com/babajideowoyele/MaskBench" target="_blank" rel="noopener" class="btn-primary px-4 py-2 text-sm font-medium inline-flex items-center gap-2">
+                            <i class="fab fa-github"></i> GitHub
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Use Cases / Recommendations -->
+    <section class="py-20 px-6 border-t border-carbon-border bg-carbon-bg-hover">
+        <div class="container mx-auto max-w-5xl">
+            <div class="mb-12">
+                <span class="text-xs font-mono uppercase tracking-widest text-carbon-text-secondary">Recommendations</span>
+                <h2 class="text-3xl font-semibold mt-2 mb-4">Choose by research context</h2>
+                <p class="text-base text-carbon-text-secondary max-w-2xl leading-relaxed">
+                    Different research scenarios call for different privacy-utility trade-offs.
+                    Here are our recommended configurations.
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="card p-6 bg-white">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-10 h-10 bg-carbon-bg-hover flex items-center justify-center">
+                            <i class="fas fa-hand text-lg"></i>
+                        </div>
+                        <h3 class="font-semibold">Gesture &amp; Movement Research</h3>
+                    </div>
+                    <p class="text-sm text-carbon-text-secondary leading-relaxed mb-4">
+                        Full-body kinematics must remain intact. Blur preserves the most
+                        pose information while providing moderate privacy.
+                    </p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="text-xs font-mono px-2 py-1 border border-carbon-border">Blur</span>
+                        <span class="text-xs font-mono px-2 py-1 border border-carbon-border">YOLOv11-Pose</span>
+                    </div>
+                </div>
+
+                <div class="card p-6 bg-white">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-10 h-10 bg-carbon-bg-hover flex items-center justify-center">
+                            <i class="fas fa-comments text-lg"></i>
+                        </div>
+                        <h3 class="font-semibold">Face-Focused Interaction</h3>
+                    </div>
+                    <p class="text-sm text-carbon-text-secondary leading-relaxed mb-4">
+                        Facial features must be fully obscured while preserving
+                        body orientation and spatial relationships.
+                    </p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="text-xs font-mono px-2 py-1 border border-carbon-border">Solid fill</span>
+                        <span class="text-xs font-mono px-2 py-1 border border-carbon-border">Careful QA</span>
+                    </div>
+                </div>
+
+                <div class="card p-6 bg-white">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-10 h-10 bg-carbon-bg-hover flex items-center justify-center">
+                            <i class="fas fa-database text-lg"></i>
+                        </div>
+                        <h3 class="font-semibold">Large-Scale Archiving</h3>
+                    </div>
+                    <p class="text-sm text-carbon-text-secondary leading-relaxed mb-4">
+                        Processing entire corpora for long-term storage.
+                        Use default presets with batch processing for consistency.
+                    </p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="text-xs font-mono px-2 py-1 border border-carbon-border">Default preset</span>
+                        <span class="text-xs font-mono px-2 py-1 border border-carbon-border">Batch CLI</span>
+                    </div>
+                </div>
+
+                <div class="card p-6 bg-white">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-10 h-10 bg-carbon-bg-hover flex items-center justify-center">
+                            <i class="fas fa-hospital text-lg"></i>
+                        </div>
+                        <h3 class="font-semibold">Clinical / Sensitive Data</h3>
+                    </div>
+                    <p class="text-sm text-carbon-text-secondary leading-relaxed mb-4">
+                        Maximum privacy with human-in-the-loop verification.
+                        Every frame must be checked for residual identifiability.
+                    </p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="text-xs font-mono px-2 py-1 border border-carbon-border">Solid fill / Skeleton</span>
+                        <span class="text-xs font-mono px-2 py-1 border border-carbon-border">Manual QA</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAIR Data & GDPR -->
+    <section class="py-20 px-6">
+        <div class="container mx-auto max-w-5xl">
+            <div class="grid md:grid-cols-2 gap-16 items-start">
+                <div>
+                    <span class="text-xs font-mono uppercase tracking-widest text-carbon-text-secondary">Compliance</span>
+                    <h2 class="text-3xl font-semibold mt-2 mb-6">FAIR data, GDPR ready</h2>
+                    <p class="text-base text-carbon-text-secondary leading-relaxed mb-6">
+                        MaskingOPS outputs are designed for integration with research data
+                        management workflows. Every masked dataset includes provenance
+                        documentation, processing metadata, and quality assurance reports.
+                    </p>
+                    <ul class="space-y-4">
+                        <li class="flex items-start gap-3">
+                            <div class="w-8 h-8 bg-carbon-bg-hover flex items-center justify-center flex-shrink-0 mt-0.5">
+                                <span class="text-xs font-bold">F</span>
+                            </div>
+                            <div>
+                                <span class="font-medium text-sm">Findable</span>
+                                <p class="text-xs text-carbon-text-secondary mt-1">Persistent identifiers and rich metadata for masked datasets</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <div class="w-8 h-8 bg-carbon-bg-hover flex items-center justify-center flex-shrink-0 mt-0.5">
+                                <span class="text-xs font-bold">A</span>
+                            </div>
+                            <div>
+                                <span class="font-medium text-sm">Accessible</span>
+                                <p class="text-xs text-carbon-text-secondary mt-1">Compatible with DANS, ODISSEI, and institutional repositories</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <div class="w-8 h-8 bg-carbon-bg-hover flex items-center justify-center flex-shrink-0 mt-0.5">
+                                <span class="text-xs font-bold">I</span>
+                            </div>
+                            <div>
+                                <span class="font-medium text-sm">Interoperable</span>
+                                <p class="text-xs text-carbon-text-secondary mt-1">Standard output formats (JSON, CSV) and documented schemas</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <div class="w-8 h-8 bg-carbon-bg-hover flex items-center justify-center flex-shrink-0 mt-0.5">
+                                <span class="text-xs font-bold">R</span>
+                            </div>
+                            <div>
+                                <span class="font-medium text-sm">Reusable</span>
+                                <p class="text-xs text-carbon-text-secondary mt-1">Clear licenses, processing provenance, quality scores attached</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div>
+                    <div class="callout-box mb-6">
+                        <h3 class="font-semibold mb-2 flex items-center gap-2">
+                            <i class="fas fa-shield-halved" style="color: #42be65;"></i>
+                            GDPR Compliance
+                        </h3>
+                        <p class="text-sm text-carbon-text-secondary leading-relaxed">
+                            MaskingOPS helps researchers meet GDPR Article 89 requirements
+                            for processing personal data for scientific research purposes.
+                            The workflow produces documented evidence of data minimization
+                            and proportionate privacy measures.
+                        </p>
+                    </div>
+                    <div class="callout-box" style="border-left-color: #0f62fe;">
+                        <h3 class="font-semibold mb-2 flex items-center gap-2">
+                            <i class="fas fa-file-contract" style="color: #78a9ff;"></i>
+                            Informed Consent
+                        </h3>
+                        <p class="text-sm text-carbon-text-secondary leading-relaxed">
+                            Masking is not a substitute for informed consent. MaskingOPS
+                            supports consent-aware processing where different participants
+                            can receive different masking levels based on their consent status.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tutorial Paper / Getting Started -->
+    <section class="py-20 px-6 border-t border-carbon-border bg-carbon-bg-hover">
+        <div class="container mx-auto max-w-5xl">
+            <div class="mb-12">
+                <span class="text-xs font-mono uppercase tracking-widest text-carbon-text-secondary">Documentation</span>
+                <h2 class="text-3xl font-semibold mt-2 mb-4">Learn MaskingOPS</h2>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-6">
+                <div class="card p-6 bg-white">
+                    <div class="w-10 h-10 bg-carbon-bg-hover flex items-center justify-center mb-4">
+                        <i class="fas fa-book text-lg"></i>
+                    </div>
+                    <h3 class="font-semibold mb-2">Tutorial Paper</h3>
+                    <p class="text-sm text-carbon-text-secondary leading-relaxed mb-4">
+                        Step-by-step guide submitted to Behavior Research Methods,
+                        covering the full MaskingOPS pipeline with worked examples.
+                    </p>
+                    <span class="text-xs font-mono text-carbon-text-secondary">Under review — Behavior Research Methods</span>
+                </div>
+                <div class="card p-6 bg-white">
+                    <div class="w-10 h-10 bg-carbon-bg-hover flex items-center justify-center mb-4">
+                        <i class="fas fa-circle-play text-lg"></i>
+                    </div>
+                    <h3 class="font-semibold mb-2">Video Walkthrough</h3>
+                    <p class="text-sm text-carbon-text-secondary leading-relaxed mb-4">
+                        Watch the complete workflow from video upload through
+                        quality verification to FAIR archiving.
+                    </p>
+                    <a href="demo.html" class="text-sm font-medium hover:underline">Watch demo &rarr;</a>
+                </div>
+                <div class="card p-6 bg-white">
+                    <div class="w-10 h-10 bg-carbon-bg-hover flex items-center justify-center mb-4">
+                        <i class="fas fa-chalkboard-user text-lg"></i>
+                    </div>
+                    <h3 class="font-semibold mb-2">Masking Lab</h3>
+                    <p class="text-sm text-carbon-text-secondary leading-relaxed mb-4">
+                        Hands-on training events where researchers learn
+                        MaskingOPS with their own data and expert guidance.
+                    </p>
+                    <a href="training.html" class="text-sm font-medium hover:underline">View schedule &rarr;</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA / Getting Started -->
+    <section class="py-20 px-6 border-t border-carbon-border">
+        <div class="container mx-auto max-w-3xl text-center">
+            <h2 class="text-3xl font-semibold mb-4">Start masking your research videos</h2>
+            <p class="text-base text-carbon-text-secondary mb-8 leading-relaxed">
+                MaskingOPS is free, open source, and designed for researchers.
+                Deploy with Docker, process your first video, and verify the results.
+            </p>
+            <div class="flex flex-wrap justify-center gap-4">
+                <a href="https://github.com/MaskAnyone/MaskAnyone" target="_blank" rel="noopener"
+                   class="btn-primary px-8 py-3 font-medium inline-flex items-center gap-2">
+                    <i class="fab fa-github"></i> MaskAnyone on GitHub
+                </a>
+                <a href="platform.html"
+                   class="btn-secondary px-8 py-3 font-medium inline-flex items-center gap-2">
+                    Platform Overview
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="border-t border-carbon-border py-12 px-6">
+        <div class="container mx-auto max-w-5xl">
+            <div class="grid md:grid-cols-4 gap-8 mb-8">
+                <div>
+                    <h3 class="text-sm font-semibold mb-4">MaskingOPS</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#pipeline" class="text-sm text-carbon-text-secondary hover:text-carbon-text">Pipeline</a></li>
+                        <li><a href="https://github.com/MaskAnyone/MaskAnyone" target="_blank" rel="noopener" class="text-sm text-carbon-text-secondary hover:text-carbon-text">MaskAnyone</a></li>
+                        <li><a href="https://github.com/babajideowoyele/MaskBench" target="_blank" rel="noopener" class="text-sm text-carbon-text-secondary hover:text-carbon-text">MaskBench</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-sm font-semibold mb-4">SYNAPSIS</h3>
+                    <ul class="space-y-2">
+                        <li><a href="index.html" class="text-sm text-carbon-text-secondary hover:text-carbon-text">Home</a></li>
+                        <li><a href="platform.html" class="text-sm text-carbon-text-secondary hover:text-carbon-text">Platform</a></li>
+                        <li><a href="resources.html" class="text-sm text-carbon-text-secondary hover:text-carbon-text">Resources</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-sm font-semibold mb-4">Learn</h3>
+                    <ul class="space-y-2">
+                        <li><a href="training.html" class="text-sm text-carbon-text-secondary hover:text-carbon-text">Training</a></li>
+                        <li><a href="demo.html" class="text-sm text-carbon-text-secondary hover:text-carbon-text">Demo</a></li>
+                        <li><a href="press.html" class="text-sm text-carbon-text-secondary hover:text-carbon-text">News</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-sm font-semibold mb-4">Connect</h3>
+                    <ul class="space-y-2">
+                        <li><a href="https://github.com/MaskAnyone" target="_blank" rel="noopener" class="text-sm text-carbon-text-secondary hover:text-carbon-text"><i class="fab fa-github mr-1"></i> GitHub</a></li>
+                        <li><a href="network.html" class="text-sm text-carbon-text-secondary hover:text-carbon-text">Network</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-carbon-border pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+                <p class="text-xs text-carbon-text-secondary">
+                    &copy; 2024-2026 SYNAPSIS Project. Funded by NWO TDCC-SSH.
+                </p>
+                <div class="flex items-center gap-4">
+                    <a href="index.html" class="flex items-center gap-2 text-sm font-semibold">
+                        <img src="logo-mark.svg" alt="" class="h-5 w-auto">
+                        SYNAPSIS
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

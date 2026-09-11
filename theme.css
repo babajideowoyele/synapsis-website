@@ -26,95 +26,9 @@ html.dark .bg-white {
     background-color: #161616 !important;
 }
 
-/* Dark mode overrides for colored backgrounds */
-html.dark .bg-yellow-50 {
-    background-color: #292211 !important;
-}
+/* Override Tailwind bg-yellow-100 in dark mode */
 html.dark .bg-yellow-100 {
-    background-color: #332b14 !important;
-    color: #e2c97e !important;
-}
-html.dark .border-yellow-200 {
-    border-color: #5c4a1e !important;
-}
-html.dark .border-yellow-400 {
-    border-color: #a68523 !important;
-}
-html.dark .text-yellow-600 {
-    color: #e2b93a !important;
-}
-html.dark .bg-blue-50 {
-    background-color: #1a2332 !important;
-}
-html.dark .border-blue-400 {
-    border-color: #3b82f6 !important;
-}
-html.dark .text-blue-600 {
-    color: #60a5fa !important;
-}
-html.dark .bg-green-50 {
-    background-color: #132917 !important;
-}
-html.dark .border-green-200 {
-    border-color: #285e34 !important;
-}
-html.dark .bg-green-600 {
-    background-color: #16a34a !important;
-}
-html.dark .text-green-600 {
-    color: #4ade80 !important;
-}
-html.dark .text-purple-600 {
-    color: #c084fc !important;
-}
-html.dark .text-orange-600 {
-    color: #fb923c !important;
-}
-html.dark .text-gray-400 {
-    color: #a8a8a8 !important;
-}
-html.dark .text-gray-500 {
-    color: #8d8d8d !important;
-}
-html.dark .hover\:bg-gray-100:hover {
-    background-color: #262626 !important;
-}
-html.dark .text-gray-600 {
-    color: #a8a8a8 !important;
-}
-html.dark .text-gray-700 {
-    color: #c6c6c6 !important;
-}
-html.dark .bg-gray-50 {
-    background-color: #262626 !important;
-}
-html.dark .border-gray-200 {
-    border-color: #393939 !important;
-}
-html.dark .bg-gray-100 {
-    background-color: #262626 !important;
-}
-
-/* Survey form dark mode overrides */
-html.dark .survey-info-blue {
-    background-color: #1a2332 !important;
-    border-left-color: #3b82f6 !important;
-}
-html.dark .survey-info-blue .text-gray-700 {
-    color: #93c5fd !important;
-}
-
-/* Dark mode: keep accent sections dark (prevent text-color inversion) */
-html.dark .bg-carbon-text {
-    background-color: #262626 !important;
-}
-html.dark .text-carbon-bg {
-    color: #161616 !important;
-}
-
-/* Dark mode header */
-html.dark header.bg-white {
-    background-color: #161616 !important;
+    background-color: #3a3000 !important;
 }
 
 /* Dark mode toggle button */
@@ -146,185 +60,101 @@ html.dark .header-logo line {
     stroke: #c0c0c0;
 }
 
-/* Scroll reveal animations */
+/* ── Reading progress bar ── */
+.reading-progress-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    width: 0%;
+    background: var(--color-accent);
+    z-index: 99999;
+    transition: width 0.08s linear;
+    pointer-events: none;
+}
+
+/* ── Header scroll transition ── */
+header {
+    transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+header.header-transparent {
+    background-color: transparent !important;
+    border-bottom-color: transparent !important;
+}
+header.header-transparent .accent-bar {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+header.header-solid {
+    background-color: #ffffff;
+    box-shadow: 0 1px 10px rgba(0,0,0,0.07);
+}
+html.dark header.header-solid {
+    background-color: #161616;
+}
+
+/* ── Hero network background ── */
+.hero-network-bg {
+    position: absolute;
+    right: -80px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 560px;
+    height: 560px;
+    pointer-events: none;
+    opacity: 0.06;
+    animation: networkDrift 20s ease-in-out infinite;
+}
+html.dark .hero-network-bg { opacity: 0.1; }
+@keyframes networkDrift {
+    0%   { transform: translateY(-50%) rotate(0deg)  scale(1);    }
+    33%  { transform: translateY(-54%) rotate(5deg)  scale(1.03); }
+    66%  { transform: translateY(-46%) rotate(-3deg) scale(0.97); }
+    100% { transform: translateY(-50%) rotate(0deg)  scale(1);    }
+}
+@media (max-width: 768px) {
+    .hero-network-bg { width: 260px; height: 260px; right: -30px; opacity: 0.04; }
+}
+
+/* ── Scroll reveal ── */
 .reveal {
     opacity: 0;
-    transform: translateY(30px);
-    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+    transform: translateY(28px);
+    transition: opacity 0.65s ease, transform 0.65s ease;
 }
-.reveal.active {
+.reveal.revealed {
     opacity: 1;
     transform: translateY(0);
 }
-
-/* Staggered children within revealed sections */
-.reveal .stagger-child {
+.reveal-stagger > * {
     opacity: 0;
     transform: translateY(20px);
-    transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+    transition: opacity 0.5s ease, transform 0.5s ease;
 }
-.reveal.active .stagger-child {
+.reveal-stagger.revealed > *:nth-child(1) { transition-delay: 0.05s; }
+.reveal-stagger.revealed > *:nth-child(2) { transition-delay: 0.15s; }
+.reveal-stagger.revealed > *:nth-child(3) { transition-delay: 0.25s; }
+.reveal-stagger.revealed > *:nth-child(4) { transition-delay: 0.35s; }
+.reveal-stagger.revealed > *:nth-child(5) { transition-delay: 0.45s; }
+.reveal-stagger.revealed > *:nth-child(6) { transition-delay: 0.55s; }
+.reveal-stagger.revealed > * {
     opacity: 1;
     transform: translateY(0);
 }
 
-/* Mobile menu overlay */
-.mobile-menu-overlay {
-    position: fixed;
-    inset: 0;
-    background: var(--color-bg);
-    z-index: 100;
-    transform: translateX(100%);
-    transition: transform 0.3s ease;
-    padding: 1.5rem;
-}
-.mobile-menu-overlay.open {
-    transform: translateX(0);
+/* ── Dark mode fixes ── */
+
+/* Fix 1: icon squares that use bg-carbon-text — text must be inverse in dark mode */
+html.dark .bg-carbon-text {
+    color: var(--color-inverse) !important;
 }
 
-/* ── Search ────────────────────────────────────────────────── */
-.search-btn {
-    background: none;
-    border: 1px solid var(--color-border);
-    color: var(--color-text-secondary);
-    width: 32px;
-    height: 32px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: all 0.15s ease;
-}
-.search-btn:hover {
-    border-color: var(--color-text);
-    color: var(--color-text);
-}
+/* Fix 3: pastel callout boxes — add dark backgrounds */
+html.dark .bg-yellow-50  { background-color: #3a3000 !important; color: #e8d48a !important; }
+html.dark .bg-blue-50    { background-color: #001d3d !important; color: #a6c8ff !important; }
+html.dark .bg-green-50   { background-color: #0d3321 !important; color: #a7f0ba !important; }
 
-.search-overlay {
-    position: fixed;
-    inset: 0;
-    z-index: 200;
-    background: rgba(0, 0, 0, 0.5);
-    display: flex;
-    align-items: flex-start;
-    justify-content: center;
-    padding-top: 20vh;
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.15s ease, visibility 0.15s ease;
-}
-.search-overlay.open {
-    opacity: 1;
-    visibility: visible;
-}
-
-.search-dialog {
-    background: var(--color-bg);
-    border: 1px solid var(--color-border);
-    width: 100%;
-    max-width: 560px;
-    max-height: 60vh;
-    display: flex;
-    flex-direction: column;
-    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.2);
-    margin: 0 1rem;
-}
-
-.search-header {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 12px 16px;
-    border-bottom: 1px solid var(--color-border);
-}
-.search-header i {
-    color: var(--color-text-secondary);
-    font-size: 14px;
-}
-.search-header input {
-    flex: 1;
-    border: none;
-    outline: none;
-    font-size: 16px;
-    font-family: 'IBM Plex Sans', sans-serif;
-    background: transparent;
-    color: var(--color-text);
-}
-.search-header input::placeholder {
-    color: var(--color-text-secondary);
-}
-.search-header kbd {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 11px;
-    padding: 2px 6px;
-    border: 1px solid var(--color-border);
-    color: var(--color-text-secondary);
-    background: var(--color-bg-hover);
-}
-
-.search-results {
-    overflow-y: auto;
-    flex: 1;
-}
-
-.search-result {
-    display: block;
-    padding: 12px 16px;
-    border-bottom: 1px solid var(--color-border);
-    text-decoration: none;
-    color: var(--color-text);
-    transition: background 0.1s ease;
-}
-.search-result:hover,
-.search-result.active {
-    background: var(--color-bg-hover);
-}
-.search-result-page {
-    font-size: 11px;
-    font-family: 'IBM Plex Mono', monospace;
-    color: var(--color-text-secondary);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    margin-bottom: 2px;
-}
-.search-result-heading {
-    font-size: 14px;
-    font-weight: 600;
-    margin-bottom: 2px;
-}
-.search-result-excerpt {
-    font-size: 13px;
-    color: var(--color-text-secondary);
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
-.search-empty {
-    padding: 32px 16px;
-    text-align: center;
-    color: var(--color-text-secondary);
-    font-size: 14px;
-}
-
-.search-footer {
-    display: flex;
-    gap: 16px;
-    padding: 8px 16px;
-    border-top: 1px solid var(--color-border);
-    font-size: 12px;
-    color: var(--color-text-secondary);
-}
-/* ── Form Elements ─────────────────────────────────────────── */
-.form-input {
-    background: var(--color-bg);
-    color: var(--color-text);
-}
-
-.search-footer kbd {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 10px;
-    padding: 1px 4px;
-    border: 1px solid var(--color-border);
-    margin-right: 4px;
-}
+/* Fix 5: Tailwind colour classes that lose contrast on dark card backgrounds */
+html.dark .text-blue-600   { color: #78a9ff !important; }
+html.dark .text-green-600  { color: #42be65 !important; }
+html.dark .text-purple-600 { color: #be95ff !important; }

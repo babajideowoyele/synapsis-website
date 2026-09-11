@@ -1,0 +1,977 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MaskingOPS - Benchmark</title>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+
+    :root {
+      --carbon-bg: #ffffff;
+      --carbon-bg-hover: #f4f4f4;
+      --carbon-bg-dark: #f5f5f5;
+      --carbon-border: #e0e0e0;
+      --carbon-text: #161616;
+      --carbon-text-secondary: #393939;
+      --carbon-focus: #0f62fe;
+      --carbon-success: #198038;
+      --carbon-success-light: #defbe6;
+      --carbon-warning: #f1c21b;
+      --carbon-warning-light: #fff8e1;
+      --carbon-error: #da1e28;
+      --carbon-error-light: #fff1f1;
+      --carbon-info: #0f62fe;
+      --carbon-info-light: #edf5ff;
+    }
+
+    body {
+      font-family: 'IBM Plex Sans', sans-serif;
+      background: var(--carbon-bg-dark);
+      color: var(--carbon-text);
+      line-height: 1.5;
+      overflow: hidden;
+    }
+
+    *:focus-visible {
+      outline: 2px solid var(--carbon-focus);
+      outline-offset: 2px;
+    }
+
+    /* ── Shared components (same as dashboard) ── */
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      gap: 8px; min-height: 40px; padding: 8px 20px;
+      font-family: inherit; font-size: 13px; font-weight: 500;
+      cursor: pointer; transition: all 0.15s; border: none; text-decoration: none;
+    }
+    .btn-primary { background: var(--carbon-text); color: #fff; }
+    .btn-primary:hover { background: #393939; }
+    .btn-secondary { background: #fff; color: var(--carbon-text); border: 1px solid var(--carbon-text); }
+    .btn-secondary:hover { background: var(--carbon-bg-hover); }
+    .btn-ghost { background: transparent; color: var(--carbon-text-secondary); }
+    .btn-ghost:hover { background: var(--carbon-bg-hover); color: var(--carbon-text); }
+    .btn-sm { min-height: 32px; padding: 4px 12px; font-size: 12px; }
+    .btn-icon { width: 36px; height: 36px; padding: 0; }
+    .btn-danger { background: #fff; color: var(--carbon-error); border: 1px solid var(--carbon-error); }
+    .btn-danger:hover { background: var(--carbon-error); color: #fff; }
+
+    .tag {
+      display: inline-flex; align-items: center; gap: 4px;
+      padding: 2px 10px; font-size: 11px; font-weight: 500;
+    }
+    .tag-success { background: var(--carbon-success-light); color: var(--carbon-success); }
+    .tag-warning { background: var(--carbon-warning-light); color: #735f00; }
+    .tag-error { background: var(--carbon-error-light); color: var(--carbon-error); }
+    .tag-info { background: var(--carbon-info-light); color: var(--carbon-info); }
+    .tag-default { background: var(--carbon-bg-hover); color: var(--carbon-text-secondary); }
+    .tag-processing { background: var(--carbon-text); color: #fff; }
+
+    /* ── App chrome ── */
+    .app-frame { height: 100vh; display: flex; flex-direction: column; }
+
+    .app-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 24px; height: 48px;
+      background: var(--carbon-text); color: #f4f4f4; flex-shrink: 0;
+    }
+    .app-logo {
+      font-size: 14px; font-weight: 600; display: flex; align-items: center;
+      gap: 10px; letter-spacing: 0.5px; color: #f4f4f4; text-decoration: none;
+    }
+    .header-nav { display: flex; align-items: center; gap: 0; height: 100%; }
+    .header-nav a {
+      display: flex; align-items: center; gap: 6px; height: 100%;
+      padding: 0 16px; font-size: 13px; font-weight: 400;
+      color: #c6c6c6; text-decoration: none; transition: all 0.15s;
+      border-bottom: 2px solid transparent;
+    }
+    .header-nav a:hover { color: #fff; background: rgba(255,255,255,0.08); }
+    .header-nav a.active { color: #fff; border-bottom-color: #fff; font-weight: 500; }
+    .header-actions { display: flex; align-items: center; gap: 8px; }
+    .header-actions button {
+      width: 36px; height: 36px; background: transparent; border: none;
+      color: #c6c6c6; cursor: pointer; display: flex; align-items: center;
+      justify-content: center; transition: all 0.15s;
+    }
+    .header-actions button:hover { color: #fff; background: rgba(255,255,255,0.08); }
+
+    .app-body { display: flex; flex: 1; overflow: hidden; }
+
+    /* ── Main content ── */
+    .main-content { flex: 1; overflow-y: auto; padding: 24px 32px; }
+
+    .page-header {
+      display: flex; justify-content: space-between; align-items: flex-start;
+      margin-bottom: 24px;
+    }
+    .page-label {
+      font-family: 'IBM Plex Mono', monospace; font-size: 11px;
+      letter-spacing: 1.5px; text-transform: uppercase;
+      color: var(--carbon-text-secondary); margin-bottom: 4px;
+    }
+    .page-title { font-size: 28px; font-weight: 300; }
+    .page-title strong { font-weight: 600; }
+
+    /* ── Tabs ── */
+    .tab-bar {
+      display: flex; border-bottom: 1px solid var(--carbon-border);
+      margin-bottom: 24px; gap: 0;
+    }
+    .tab {
+      padding: 12px 20px; font-size: 13px; font-weight: 500;
+      color: var(--carbon-text-secondary); cursor: pointer;
+      border-bottom: 2px solid transparent; transition: all 0.15s;
+      background: none; border-top: none; border-left: none; border-right: none;
+      font-family: inherit;
+    }
+    .tab:hover { color: var(--carbon-text); background: var(--carbon-bg-hover); }
+    .tab.active { color: var(--carbon-text); border-bottom-color: var(--carbon-text); }
+
+    /* ── Experiment config panel ── */
+    .config-panel {
+      background: #fff; border: 1px solid var(--carbon-border);
+      margin-bottom: 24px;
+    }
+    .config-header {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 16px 20px; border-bottom: 1px solid var(--carbon-border);
+    }
+    .config-title { font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 8px; }
+    .config-body { padding: 20px; }
+    .config-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
+    }
+    .config-section { margin-bottom: 20px; }
+    .config-label {
+      font-family: 'IBM Plex Mono', monospace; font-size: 10px;
+      font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px;
+      color: var(--carbon-text-secondary); margin-bottom: 10px;
+    }
+
+    /* ── Form elements ── */
+    .form-group { margin-bottom: 16px; }
+    .form-label {
+      font-size: 12px; font-weight: 600; margin-bottom: 6px; display: block;
+    }
+    .form-hint {
+      font-size: 11px; color: var(--carbon-text-secondary); margin-bottom: 6px;
+    }
+    .form-select, .form-input {
+      width: 100%; padding: 10px 12px; font-family: inherit; font-size: 13px;
+      border: 1px solid var(--carbon-border); background: #fff;
+      color: var(--carbon-text); transition: border-color 0.15s;
+    }
+    .form-select:focus, .form-input:focus {
+      outline: none; border-color: var(--carbon-text);
+    }
+
+    /* ── Checkbox list ── */
+    .check-list { list-style: none; }
+    .check-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 12px; border: 1px solid var(--carbon-border);
+      margin-bottom: -1px; cursor: pointer; transition: all 0.15s;
+    }
+    .check-item:hover { background: var(--carbon-bg-hover); }
+    .check-item.selected {
+      background: var(--carbon-bg-hover); border-color: var(--carbon-text);
+      z-index: 1; position: relative;
+    }
+    .check-item input[type="checkbox"] {
+      width: 16px; height: 16px; accent-color: var(--carbon-text);
+    }
+    .check-item-label { font-size: 13px; font-weight: 500; }
+    .check-item-desc { font-size: 11px; color: var(--carbon-text-secondary); }
+
+    /* ── Results panels ── */
+    .results-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+      margin-bottom: 24px;
+    }
+    .result-panel {
+      background: #fff; border: 1px solid var(--carbon-border);
+    }
+    .result-header {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 14px 20px; border-bottom: 1px solid var(--carbon-border);
+    }
+    .result-title { font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 8px; }
+    .result-body { padding: 20px; }
+
+    /* ── Chart placeholder ── */
+    .chart-placeholder {
+      background: var(--carbon-bg-hover); border: 1px dashed var(--carbon-border);
+      display: flex; flex-direction: column; align-items: center;
+      justify-content: center; color: var(--carbon-text-secondary);
+      font-size: 12px; gap: 8px;
+    }
+    .chart-placeholder i { font-size: 24px; opacity: 0.4; }
+
+    /* ── Metric result table ── */
+    .metric-table { width: 100%; border-collapse: collapse; }
+    .metric-table th {
+      text-align: left; font-size: 11px; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 0.5px;
+      color: var(--carbon-text-secondary);
+      padding: 8px 12px; border-bottom: 2px solid var(--carbon-text);
+    }
+    .metric-table td {
+      padding: 10px 12px; border-bottom: 1px solid var(--carbon-border);
+      font-size: 13px;
+    }
+    .metric-table tr:hover td { background: var(--carbon-bg-hover); }
+    .metric-table .mono {
+      font-family: 'IBM Plex Mono', monospace; font-weight: 500;
+    }
+
+    /* ── Estimator comparison bars ── */
+    .bar-row {
+      display: flex; align-items: center; gap: 12px;
+      padding: 8px 0; border-bottom: 1px solid var(--carbon-border);
+    }
+    .bar-row:last-child { border-bottom: none; }
+    .bar-label { width: 120px; font-size: 12px; font-weight: 500; flex-shrink: 0; }
+    .bar-track {
+      flex: 1; height: 20px; background: var(--carbon-bg-hover);
+      position: relative;
+    }
+    .bar-fill {
+      height: 100%; position: absolute; left: 0; top: 0;
+      transition: width 0.3s;
+    }
+    .bar-value {
+      font-family: 'IBM Plex Mono', monospace; font-size: 12px;
+      font-weight: 600; width: 50px; text-align: right; flex-shrink: 0;
+    }
+
+    /* ── Experiment list ── */
+    .experiment-row {
+      display: flex; align-items: center; padding: 14px 20px;
+      border-bottom: 1px solid var(--carbon-border);
+      cursor: pointer; transition: background 0.1s;
+    }
+    .experiment-row:hover { background: var(--carbon-bg-hover); }
+    .experiment-row:last-child { border-bottom: none; }
+    .exp-name { flex: 1; min-width: 0; }
+    .exp-title { font-size: 13px; font-weight: 500; }
+    .exp-meta { font-size: 11px; color: var(--carbon-text-secondary); margin-top: 2px; }
+    .exp-col { width: 120px; flex-shrink: 0; font-size: 12px; }
+    .exp-actions { width: 80px; flex-shrink: 0; display: flex; justify-content: flex-end; gap: 4px; }
+
+    /* ── Utility ── */
+    .mono { font-family: 'IBM Plex Mono', monospace; }
+    .text-secondary { color: var(--carbon-text-secondary); }
+    .text-xs { font-size: 11px; }
+    .text-sm { font-size: 13px; }
+
+    /* ── Animations ── */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes slideInLeft {
+      from { opacity: 0; transform: translateX(-16px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.6; transform: scale(1.3); }
+    }
+
+    .config-panel {
+      animation: fadeInUp 0.4s ease-out both;
+    }
+    .config-panel:nth-child(1) { animation-delay: 0s; }
+    .config-panel:nth-child(2) { animation-delay: 0.08s; }
+    .config-panel:nth-child(3) { animation-delay: 0.16s; }
+
+    .result-panel {
+      animation: fadeInUp 0.4s ease-out both;
+    }
+    .result-panel:nth-child(1) { animation-delay: 0.05s; }
+    .result-panel:nth-child(2) { animation-delay: 0.12s; }
+    .result-panel:nth-child(3) { animation-delay: 0.19s; }
+    .result-panel:nth-child(4) { animation-delay: 0.26s; }
+
+    .config-panel:hover,
+    .result-panel:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+    }
+
+    .check-item {
+      transition: all 0.15s ease, transform 0.15s ease;
+    }
+    .check-item:hover {
+      transform: translateX(3px);
+    }
+
+    .bar-fill {
+      transition: width 1s ease-out !important;
+    }
+
+    .tab {
+      transition: all 0.15s ease, transform 0.15s ease;
+    }
+    .tab:hover {
+      transform: translateY(-1px);
+    }
+
+    .notif-badge {
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      width: 8px;
+      height: 8px;
+      background: var(--carbon-error);
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+      pointer-events: none;
+    }
+
+    .bar-row {
+      transition: background 0.15s;
+    }
+    .bar-row:hover {
+      background: var(--carbon-bg-hover);
+    }
+    .bar-row:hover .bar-value {
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-frame">
+    <!-- Header (shared with dashboard) -->
+    <div class="app-header">
+      <a href="dashboard.html" class="app-logo">
+        <i class="fas fa-shield-halved" aria-hidden="true"></i>
+        MASKINGOPS
+      </a>
+      <nav class="header-nav" aria-label="Main navigation">
+        <a href="dashboard.html"><i class="fas fa-th-large" aria-hidden="true"></i> Dashboard</a>
+        <a href="../maskanyone/upload.html"><i class="fas fa-mask" aria-hidden="true"></i> MaskAnyone</a>
+        <a href="benchmark.html" class="active"><i class="fas fa-chart-bar" aria-hidden="true"></i> MaskBench</a>
+        <a href="archive.html"><i class="fas fa-box-archive" aria-hidden="true"></i> Archive</a>
+      </nav>
+      <div class="header-actions">
+        <button title="Notifications" style="position:relative;"><i class="fas fa-bell"></i><span class="notif-badge"></span></button>
+        <button title="Settings"><i class="fas fa-cog"></i></button>
+        <button title="Help"><i class="fas fa-circle-question"></i></button>
+      </div>
+    </div>
+
+    <div class="app-body">
+      <main class="main-content">
+        <!-- Page header -->
+        <div class="page-header">
+          <div>
+            <p class="page-label">MaskBench</p>
+            <h1 class="page-title">Pose Estimation <strong>Benchmark</strong></h1>
+          </div>
+          <div style="display:flex; align-items:center; gap:8px;">
+            <button class="btn btn-secondary btn-sm">
+              <i class="fas fa-history" aria-hidden="true"></i> History
+            </button>
+            <button class="btn btn-primary" id="btnNewExperiment">
+              <i class="fas fa-plus" aria-hidden="true"></i> New Experiment
+            </button>
+          </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="tab-bar">
+          <button class="tab active" data-tab="configure"><i class="fas fa-cogs" aria-hidden="true"></i> Configure</button>
+          <button class="tab" data-tab="results"><i class="fas fa-poll" aria-hidden="true"></i> Results</button>
+          <button class="tab" data-tab="compare"><i class="fas fa-columns" aria-hidden="true"></i> Compare</button>
+          <button class="tab" data-tab="history"><i class="fas fa-history" aria-hidden="true"></i> History</button>
+        </div>
+
+        <!-- ─── TAB: Configure ─── -->
+        <div id="tab-configure">
+          <!-- Video Selection -->
+          <div class="config-panel">
+            <div class="config-header">
+              <span class="config-title"><i class="fas fa-video" aria-hidden="true"></i> Select Videos</span>
+              <span class="text-xs text-secondary">2 of 12 selected</span>
+            </div>
+            <div class="config-body">
+              <p class="form-hint" style="margin-bottom:12px;">
+                Choose which masked videos to benchmark. You can compare raw vs. masked versions.
+              </p>
+              <ul class="check-list">
+                <li class="check-item selected">
+                  <input type="checkbox" checked>
+                  <div>
+                    <div class="check-item-label">Interview_P002.mp4</div>
+                    <div class="check-item-desc">Masked (Blur) &middot; 08:21 &middot; 980 MB</div>
+                  </div>
+                  <span class="tag tag-default" style="margin-left:auto;"><i class="fas fa-eye-slash" style="margin-right:3px;"></i>Blur</span>
+                </li>
+                <li class="check-item selected">
+                  <input type="checkbox" checked>
+                  <div>
+                    <div class="check-item-label">Gait_Analysis_007.mp4</div>
+                    <div class="check-item-desc">Masked (Contour) &middot; 22:05 &middot; 1.8 GB</div>
+                  </div>
+                  <span class="tag tag-default" style="margin-left:auto;"><i class="fas fa-draw-polygon" style="margin-right:3px;"></i>Contour</span>
+                </li>
+                <li class="check-item">
+                  <input type="checkbox">
+                  <div>
+                    <div class="check-item-label">Interview_P003.mp4</div>
+                    <div class="check-item-desc">Masked (Blur) &middot; 15:42 &middot; 1.4 GB</div>
+                  </div>
+                  <span class="tag tag-default" style="margin-left:auto;"><i class="fas fa-eye-slash" style="margin-right:3px;"></i>Blur</span>
+                </li>
+                <li class="check-item">
+                  <input type="checkbox">
+                  <div>
+                    <div class="check-item-label">Classroom_Session3.mp4</div>
+                    <div class="check-item-desc">Masked (Pixelation) &middot; 45:10 &middot; 2.1 GB</div>
+                  </div>
+                  <span class="tag tag-default" style="margin-left:auto;"><i class="fas fa-th" style="margin-right:3px;"></i>Pixelate</span>
+                </li>
+              </ul>
+              <div style="margin-top:12px;">
+                <label style="display:flex; align-items:center; gap:8px; font-size:12px; cursor:pointer;">
+                  <input type="checkbox" checked style="accent-color: var(--carbon-text);">
+                  Include raw (unmasked) versions as baseline
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Estimator + Metrics selection -->
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px; margin-bottom:24px;">
+            <!-- Pose Estimators -->
+            <div class="config-panel">
+              <div class="config-header">
+                <span class="config-title"><i class="fas fa-person-running" aria-hidden="true"></i> Pose Estimators</span>
+                <span class="text-xs text-secondary">3 selected</span>
+              </div>
+              <div class="config-body">
+                <ul class="check-list">
+                  <li class="check-item selected">
+                    <input type="checkbox" checked>
+                    <div>
+                      <div class="check-item-label"><i class="fas fa-bolt" style="color:#198038; margin-right:4px;"></i>YOLOv11-Pose (Large)</div>
+                      <div class="check-item-desc">COCO 17 keypoints &middot; Fast</div>
+                    </div>
+                  </li>
+                  <li class="check-item selected">
+                    <input type="checkbox" checked>
+                    <div>
+                      <div class="check-item-label"><i class="fas fa-hands" style="color:#0f62fe; margin-right:4px;"></i>MediaPipe Pose (Heavy)</div>
+                      <div class="check-item-desc">33 keypoints &middot; Moderate</div>
+                    </div>
+                  </li>
+                  <li class="check-item selected">
+                    <input type="checkbox" checked>
+                    <div>
+                      <div class="check-item-label"><i class="fas fa-project-diagram" style="color:#8a3ffc; margin-right:4px;"></i>OpenPose (BODY_25)</div>
+                      <div class="check-item-desc">25 keypoints &middot; Slower</div>
+                    </div>
+                  </li>
+                  <li class="check-item">
+                    <input type="checkbox">
+                    <div>
+                      <div class="check-item-label"><i class="fas fa-robot" style="color:#198038; margin-right:4px;"></i>MaskAnyone API (MediaPipe)</div>
+                      <div class="check-item-desc">API-based &middot; Requires running instance</div>
+                    </div>
+                  </li>
+                  <li class="check-item">
+                    <input type="checkbox">
+                    <div>
+                      <div class="check-item-label"><i class="fas fa-robot" style="color:#8a3ffc; margin-right:4px;"></i>MaskAnyone API (OpenPose)</div>
+                      <div class="check-item-desc">API-based &middot; Requires running instance</div>
+                    </div>
+                  </li>
+                  <li class="check-item">
+                    <input type="checkbox">
+                    <div>
+                      <div class="check-item-label"><i class="fas fa-user-cog" style="color:#198038; margin-right:4px;"></i>MaskAnyone UI (MediaPipe)</div>
+                      <div class="check-item-desc">Human-in-the-loop &middot; Pre-computed</div>
+                    </div>
+                  </li>
+                  <li class="check-item">
+                    <input type="checkbox">
+                    <div>
+                      <div class="check-item-label"><i class="fas fa-user-cog" style="color:#8a3ffc; margin-right:4px;"></i>MaskAnyone UI (OpenPose)</div>
+                      <div class="check-item-desc">Human-in-the-loop &middot; Pre-computed</div>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- Metrics -->
+            <div class="config-panel">
+              <div class="config-header">
+                <span class="config-title"><i class="fas fa-ruler-combined" aria-hidden="true"></i> Metrics</span>
+                <span class="text-xs text-secondary">5 selected</span>
+              </div>
+              <div class="config-body">
+                <div class="config-label">Accuracy (require ground truth)</div>
+                <ul class="check-list" style="margin-bottom:16px;">
+                  <li class="check-item selected">
+                    <input type="checkbox" checked>
+                    <div>
+                      <div class="check-item-label"><i class="fas fa-bullseye" style="color:var(--carbon-success); margin-right:4px;"></i>PCK</div>
+                      <div class="check-item-desc">Percentage of Correct Keypoints (threshold: 0.2, normalize: bbox)</div>
+                    </div>
+                  </li>
+                  <li class="check-item selected">
+                    <input type="checkbox" checked>
+                    <div>
+                      <div class="check-item-label"><i class="fas fa-ruler" style="color:var(--carbon-error); margin-right:4px;"></i>RMSE</div>
+                      <div class="check-item-desc">Root Mean Square Error (normalize: bbox)</div>
+                    </div>
+                  </li>
+                </ul>
+
+                <div class="config-label">Kinematic (no ground truth needed)</div>
+                <ul class="check-list">
+                  <li class="check-item selected">
+                    <input type="checkbox" checked>
+                    <div>
+                      <div class="check-item-label"><i class="fas fa-tachometer-alt" style="color:var(--carbon-info); margin-right:4px;"></i>Velocity</div>
+                      <div class="check-item-desc">Keypoint movement per frame (pixels/frame)</div>
+                    </div>
+                  </li>
+                  <li class="check-item selected">
+                    <input type="checkbox" checked>
+                    <div>
+                      <div class="check-item-label"><i class="fas fa-forward" style="color:#8a3ffc; margin-right:4px;"></i>Acceleration</div>
+                      <div class="check-item-desc">Second derivative of position (pixels/frame&sup2;)</div>
+                    </div>
+                  </li>
+                  <li class="check-item selected">
+                    <input type="checkbox" checked>
+                    <div>
+                      <div class="check-item-label"><i class="fas fa-wave-square" style="color:#f1c21b; margin-right:4px;"></i>Jerk</div>
+                      <div class="check-item-desc">Third derivative &mdash; smoothness measure (pixels/frame&sup3;)</div>
+                    </div>
+                  </li>
+                </ul>
+
+                <!-- Metric config -->
+                <div style="margin-top:16px; padding:16px; background:var(--carbon-bg-hover); border-left:3px solid var(--carbon-text);">
+                  <div class="config-label">Metric Settings</div>
+                  <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+                    <div class="form-group" style="margin-bottom:0;">
+                      <label class="form-label"><i class="fas fa-crosshairs" style="margin-right:4px;"></i>PCK Threshold</label>
+                      <input type="number" class="form-input" value="0.2" step="0.05" min="0" max="1">
+                    </div>
+                    <div class="form-group" style="margin-bottom:0;">
+                      <label class="form-label"><i class="fas fa-minimize" style="margin-right:4px;"></i>Normalization</label>
+                      <select class="form-select">
+                        <option value="bbox" selected>Bounding Box</option>
+                        <option value="head">Head Size</option>
+                        <option value="torso">Torso Length</option>
+                      </select>
+                    </div>
+                    <div class="form-group" style="margin-bottom:0;">
+                      <label class="form-label"><i class="fas fa-clock" style="margin-right:4px;"></i>Time Unit</label>
+                      <select class="form-select">
+                        <option value="frame" selected>Per Frame</option>
+                        <option value="second">Per Second</option>
+                      </select>
+                    </div>
+                    <div class="form-group" style="margin-bottom:0;">
+                      <label class="form-label"><i class="fas fa-percentage" style="margin-right:4px;"></i>Confidence Threshold</label>
+                      <input type="number" class="form-input" value="0.3" step="0.05" min="0" max="1">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Run button -->
+          <div style="display:flex; justify-content:space-between; align-items:center; padding:20px; background:#fff; border:1px solid var(--carbon-border); margin-bottom:24px;">
+            <div>
+              <div style="font-size:13px; font-weight:600;"><i class="fas fa-rocket" style="margin-right:4px;"></i>Ready to benchmark</div>
+              <div class="text-xs text-secondary">2 videos &times; 4 estimators &times; 5 metrics &middot; <i class="fas fa-flask" style="margin-right:4px;"></i>Est. GPU time: ~18 min</div>
+            </div>
+            <div style="display:flex; gap:8px;">
+              <button class="btn btn-secondary btn-sm">
+                <i class="fas fa-file-export" aria-hidden="true"></i> Export Config (YAML)
+              </button>
+              <button class="btn btn-primary">
+                <i class="fas fa-play" aria-hidden="true"></i> Run Benchmark
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ─── TAB: Results (shown inline below configure for demo) ─── -->
+        <div id="tab-results" style="display:none;">
+          <!-- Result summary table -->
+          <div class="config-panel">
+            <div class="config-header">
+              <span class="config-title"><i class="fas fa-poll" aria-hidden="true"></i> Result Summary</span>
+              <div style="display:flex; gap:8px;">
+                <button class="btn btn-ghost btn-sm"><i class="fas fa-download"></i> CSV</button>
+                <button class="btn btn-ghost btn-sm"><i class="fas fa-file-pdf"></i> Report</button>
+              </div>
+            </div>
+            <div class="config-body" style="padding:0;">
+              <table class="metric-table">
+                <thead>
+                  <tr>
+                    <th>Estimator</th>
+                    <th>PCK &uarr;</th>
+                    <th>RMSE &darr;</th>
+                    <th>Velocity</th>
+                    <th>Acceleration</th>
+                    <th>Jerk</th>
+                    <th>Inf. Time</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- Real data from MaskBench run 2026-03-31 on sample.mp4 -->
+                  <tr>
+                    <td style="font-weight:500;"><i class="fas fa-bolt" style="color:#198038; margin-right:6px;"></i>YoloPose (Nano)</td>
+                    <td class="mono" style="color: var(--carbon-text-secondary);">&mdash;</td>
+                    <td class="mono" style="color: var(--carbon-text-secondary);">&mdash;</td>
+                    <td class="mono" style="color: var(--carbon-success); font-weight:600;">1.54</td>
+                    <td class="mono" style="color: var(--carbon-success); font-weight:600;">2.21</td>
+                    <td class="mono" style="color: var(--carbon-success); font-weight:600;">3.84</td>
+                    <td class="mono text-secondary">15.4s</td>
+                  </tr>
+                  <tr>
+                    <td style="font-weight:500;"><i class="fas fa-hands" style="color:#0f62fe; margin-right:6px;"></i>MediaPipe Pose (Lite)</td>
+                    <td class="mono" style="color: var(--carbon-text-secondary);">&mdash;</td>
+                    <td class="mono" style="color: var(--carbon-text-secondary);">&mdash;</td>
+                    <td class="mono">5.14</td>
+                    <td class="mono">8.62</td>
+                    <td class="mono">15.31</td>
+                    <td class="mono text-secondary">13.5s</td>
+                  </tr>
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <td colspan="7" style="font-size:11px; color: var(--carbon-text-secondary); padding:8px 12px; border-top: 1px solid var(--carbon-border);">
+                      <i class="fas fa-circle-info" style="margin-right:4px;"></i>
+                      Real data from MaskBench run on <strong>sample.mp4</strong> (518 frames, 1 person).
+                      PCK and RMSE require ground-truth labels (not available for this video).
+                      Lower kinematic values = smoother pose estimation.
+                    </td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+          </div>
+
+          <!-- Charts grid — Real MaskBench output plots -->
+          <div class="results-grid" style="margin-top:16px;">
+            <!-- Velocity Distribution (real plot) -->
+            <div class="result-panel">
+              <div class="result-header">
+                <span class="result-title"><i class="fas fa-chart-area" aria-hidden="true"></i> Velocity Distribution</span>
+                <span style="font-size:10px; color:var(--carbon-text-secondary);">Real MaskBench output</span>
+              </div>
+              <div class="result-body" style="padding:8px;">
+                <img src="benchmark_data/velocity_distribution.png" alt="Velocity distribution: YoloPose vs MediaPipePose"
+                     style="width:100%; height:auto; border-radius:2px;">
+              </div>
+            </div>
+
+            <!-- Acceleration Distribution (real plot) -->
+            <div class="result-panel">
+              <div class="result-header">
+                <span class="result-title"><i class="fas fa-chart-line" aria-hidden="true"></i> Acceleration Distribution</span>
+                <span style="font-size:10px; color:var(--carbon-text-secondary);">Real MaskBench output</span>
+              </div>
+              <div class="result-body" style="padding:8px;">
+                <img src="benchmark_data/acceleration_distribution.png" alt="Acceleration distribution: YoloPose vs MediaPipePose"
+                     style="width:100%; height:auto; border-radius:2px;">
+              </div>
+            </div>
+
+            <!-- Jerk Distribution (real plot) -->
+            <div class="result-panel">
+              <div class="result-header">
+                <span class="result-title"><i class="fas fa-wave-square" aria-hidden="true"></i> Jerk Distribution</span>
+                <span style="font-size:10px; color:var(--carbon-text-secondary);">Real MaskBench output</span>
+              </div>
+              <div class="result-body" style="padding:8px;">
+                <img src="benchmark_data/jerk_distribution.png" alt="Jerk distribution: YoloPose vs MediaPipePose"
+                     style="width:100%; height:auto; border-radius:2px;">
+              </div>
+            </div>
+
+            <!-- Per-Keypoint Acceleration (real plot) -->
+            <div class="result-panel">
+              <div class="result-header">
+                <span class="result-title"><i class="fas fa-bone" aria-hidden="true"></i> Per-Keypoint Acceleration</span>
+                <span style="font-size:10px; color:var(--carbon-text-secondary);">Real MaskBench output</span>
+              </div>
+              <div class="result-body" style="padding:8px;">
+                <img src="benchmark_data/keypoint_plot_acceleration.png" alt="Per-keypoint acceleration breakdown"
+                     style="width:100%; height:auto; border-radius:2px;">
+              </div>
+            </div>
+
+            <!-- Inference Time (real plot) -->
+            <div class="result-panel">
+              <div class="result-header">
+                <span class="result-title"><i class="fas fa-stopwatch" aria-hidden="true"></i> Inference Time</span>
+                <span style="font-size:10px; color:var(--carbon-text-secondary);">Real MaskBench output</span>
+              </div>
+              <div class="result-body" style="padding:8px;">
+                <img src="benchmark_data/inference_time_plot.png" alt="Inference time comparison"
+                     style="width:100%; height:auto; border-radius:2px;">
+              </div>
+            </div>
+
+            <!-- Per-keypoint breakdown -->
+            <div class="result-panel">
+              <div class="result-header">
+                <span class="result-title"><i class="fas fa-bone" aria-hidden="true"></i> Per-Keypoint Accuracy</span>
+                <select class="form-select" style="width:160px; padding:4px 8px; font-size:11px;">
+                  <option>YOLOv11-Pose</option>
+                  <option>MediaPipe</option>
+                  <option>OpenPose</option>
+                  <option>MaskAnyone-MP</option>
+                </select>
+              </div>
+              <div class="result-body">
+                <div style="height:180px; display:flex; align-items:flex-end; gap:6px; padding:20px 16px 30px;">
+                  <div style="position:relative; width:100%; height:100%; display:flex; align-items:flex-end;">
+                    <div style="position:absolute; top:0; left:0; font-size:10px; color:#525252;">Median Accel.</div>
+                    <div style="display:flex; align-items:flex-end; gap:3px; width:100%; height:100%; padding-left:24px;">
+                      <!-- nose -->
+                      <div style="flex:1; height:30%; background:#198038;"></div>
+                      <!-- L eye -->
+                      <div style="flex:1; height:25%; background:#198038;"></div>
+                      <!-- R eye -->
+                      <div style="flex:1; height:28%; background:#198038;"></div>
+                      <!-- L ear -->
+                      <div style="flex:1; height:22%; background:#198038;"></div>
+                      <!-- R ear -->
+                      <div style="flex:1; height:24%; background:#198038;"></div>
+                      <!-- L shoulder -->
+                      <div style="flex:1; height:45%; background:#198038;"></div>
+                      <!-- R shoulder -->
+                      <div style="flex:1; height:48%; background:#198038;"></div>
+                      <!-- L elbow -->
+                      <div style="flex:1; height:65%; background:#198038;"></div>
+                      <!-- R elbow -->
+                      <div style="flex:1; height:62%; background:#198038;"></div>
+                      <!-- L wrist -->
+                      <div style="flex:1; height:90%; background:#198038;"></div>
+                      <!-- R wrist -->
+                      <div style="flex:1; height:95%; background:#198038;"></div>
+                      <!-- L hip -->
+                      <div style="flex:1; height:35%; background:#198038;"></div>
+                      <!-- R hip -->
+                      <div style="flex:1; height:38%; background:#198038;"></div>
+                      <!-- L knee -->
+                      <div style="flex:1; height:55%; background:#198038;"></div>
+                      <!-- R knee -->
+                      <div style="flex:1; height:52%; background:#198038;"></div>
+                      <!-- L ankle -->
+                      <div style="flex:1; height:72%; background:#198038;"></div>
+                      <!-- R ankle -->
+                      <div style="flex:1; height:78%; background:#198038;"></div>
+                    </div>
+                    <div style="position:absolute; bottom:-20px; left:24px; display:flex; gap:8px; font-size:9px; color:#525252;">
+                      <span>Nose</span><span>Eyes</span><span>Ears</span><span>Shoulders</span><span>Elbows</span><span>Wrists</span><span>Hips</span><span>Knees</span><span>Ankles</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Inference time -->
+            <div class="result-panel">
+              <div class="result-header">
+                <span class="result-title"><i class="fas fa-clock" aria-hidden="true"></i> Inference Time</span>
+              </div>
+              <div class="result-body">
+                <div class="bar-row">
+                  <span class="bar-label">YOLOv11-Pose</span>
+                  <div class="bar-track">
+                    <div class="bar-fill" style="width:18%; background: var(--carbon-success);"></div>
+                  </div>
+                  <span class="bar-value">12.3s</span>
+                </div>
+                <div class="bar-row">
+                  <span class="bar-label">MediaPipe</span>
+                  <div class="bar-track">
+                    <div class="bar-fill" style="width:66%; background: var(--carbon-info);"></div>
+                  </div>
+                  <span class="bar-value">45.1s</span>
+                </div>
+                <div class="bar-row">
+                  <span class="bar-label">MaskAnyone-MP</span>
+                  <div class="bar-track">
+                    <div class="bar-fill" style="width:77%; background: #da1e28;"></div>
+                  </div>
+                  <span class="bar-value">52.7s</span>
+                </div>
+                <div class="bar-row">
+                  <span class="bar-label">OpenPose</span>
+                  <div class="bar-track">
+                    <div class="bar-fill" style="width:100%; background: #8a3ffc;"></div>
+                  </div>
+                  <span class="bar-value">68.4s</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Rendered video previews -->
+          <div class="config-panel" style="margin-top:16px;">
+            <div class="config-header">
+              <span class="config-title"><i class="fas fa-film" aria-hidden="true"></i> Rendered Outputs</span>
+            </div>
+            <div class="config-body">
+              <div style="display:grid; grid-template-columns: repeat(4, 1fr); gap:12px;">
+                <div style="border:1px solid var(--carbon-border);">
+                  <div style="background:#1a1a1a; aspect-ratio:16/9; display:flex; align-items:center; justify-content:center;">
+                    <i class="fas fa-circle-play" style="font-size:32px; color:#666;"></i>
+                  </div>
+                  <div style="padding:10px 12px;">
+                    <div style="font-size:12px; font-weight:500;">Interview_P002 &middot; YOLOv11</div>
+                    <div class="text-xs text-secondary">17 keypoints &middot; Blur</div>
+                  </div>
+                </div>
+                <div style="border:1px solid var(--carbon-border);">
+                  <div style="background:#1a1a1a; aspect-ratio:16/9; display:flex; align-items:center; justify-content:center;">
+                    <i class="fas fa-circle-play" style="font-size:32px; color:#666;"></i>
+                  </div>
+                  <div style="padding:10px 12px;">
+                    <div style="font-size:12px; font-weight:500;">Interview_P002 &middot; MediaPipe</div>
+                    <div class="text-xs text-secondary">33 keypoints &middot; Blur</div>
+                  </div>
+                </div>
+                <div style="border:1px solid var(--carbon-border);">
+                  <div style="background:#1a1a1a; aspect-ratio:16/9; display:flex; align-items:center; justify-content:center;">
+                    <i class="fas fa-circle-play" style="font-size:32px; color:#666;"></i>
+                  </div>
+                  <div style="padding:10px 12px;">
+                    <div style="font-size:12px; font-weight:500;">Interview_P002 &middot; OpenPose</div>
+                    <div class="text-xs text-secondary">25 keypoints &middot; Blur</div>
+                  </div>
+                </div>
+                <div style="border:1px solid var(--carbon-border);">
+                  <div style="background:#1a1a1a; aspect-ratio:16/9; display:flex; align-items:center; justify-content:center;">
+                    <i class="fas fa-circle-play" style="font-size:32px; color:#666;"></i>
+                  </div>
+                  <div style="padding:10px 12px;">
+                    <div style="font-size:12px; font-weight:500;">Interview_P002 &middot; MaskAnyone-MP</div>
+                    <div class="text-xs text-secondary">33 keypoints &middot; Blur</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script>
+    // Tab switching with content visibility
+    const tabPanels = {
+      'configure': document.getElementById('tab-configure'),
+      'results': document.getElementById('tab-results')
+    };
+
+    document.querySelectorAll('.tab').forEach(tab => {
+      tab.addEventListener('click', function() {
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        this.classList.add('active');
+
+        const targetTab = this.getAttribute('data-tab');
+        // Hide all tab panels
+        Object.values(tabPanels).forEach(panel => {
+          if (panel) panel.style.display = 'none';
+        });
+        // Show the selected panel if it exists
+        if (tabPanels[targetTab]) {
+          tabPanels[targetTab].style.display = 'block';
+        }
+      });
+    });
+
+    // Checkbox items with count updater
+    function updateCheckCounts() {
+      document.querySelectorAll('.config-panel').forEach(panel => {
+        const countEl = panel.querySelector('.config-header .text-xs');
+        if (!countEl) return;
+        const checkboxes = panel.querySelectorAll('.check-item input[type="checkbox"]');
+        if (checkboxes.length === 0) return;
+        const checked = panel.querySelectorAll('.check-item input[type="checkbox"]:checked').length;
+        const total = checkboxes.length;
+        // Update the counter text
+        const currentText = countEl.textContent;
+        if (currentText.includes('selected') || currentText.includes('of')) {
+          countEl.textContent = checked + ' of ' + total + ' selected';
+        }
+      });
+    }
+
+    document.querySelectorAll('.check-item').forEach(item => {
+      item.addEventListener('click', function(e) {
+        if (e.target.type === 'checkbox') {
+          // Checkbox was clicked directly; sync the selected class
+          this.classList.toggle('selected', e.target.checked);
+          updateCheckCounts();
+          return;
+        }
+        const cb = this.querySelector('input[type="checkbox"]');
+        cb.checked = !cb.checked;
+        this.classList.toggle('selected', cb.checked);
+        updateCheckCounts();
+      });
+    });
+
+    // Animated bar fills: start from 0 and animate to target width on load
+    document.addEventListener('DOMContentLoaded', function() {
+      const barFills = document.querySelectorAll('.bar-fill');
+      barFills.forEach(function(bar) {
+        const targetWidth = bar.style.width;
+        bar.style.width = '0%';
+        bar.setAttribute('data-target-width', targetWidth);
+        setTimeout(function() {
+          bar.style.width = targetWidth;
+        }, 300);
+      });
+    });
+
+    // Hover tooltip behavior on bar rows: show value prominently on hover
+    document.querySelectorAll('.bar-row').forEach(function(row) {
+      const valueEl = row.querySelector('.bar-value');
+      if (!valueEl) return;
+      const originalSize = valueEl.style.fontSize || '';
+      const originalWeight = valueEl.style.fontWeight || '';
+
+      row.addEventListener('mouseenter', function() {
+        valueEl.style.fontSize = '14px';
+        valueEl.style.fontWeight = '700';
+        valueEl.style.transition = 'all 0.15s ease';
+      });
+      row.addEventListener('mouseleave', function() {
+        valueEl.style.fontSize = originalSize;
+        valueEl.style.fontWeight = originalWeight;
+      });
+    });
+  </script>
+<script src="../demo.js"></script>
+</body>
+</html>

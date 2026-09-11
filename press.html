@@ -1,237 +1,501 @@
----
-layout: base.njk
-title: SYNAPSIS Press
-activeNav: Press
----
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SYNAPSIS — News & Events</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link rel="stylesheet" href="theme.css">
+    <script src="theme.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'sans': ['IBM Plex Sans', 'sans-serif'],
+                        'mono': ['IBM Plex Mono', 'monospace'],
+                    },
+                    colors: {
+                        'carbon': {
+                            'bg': 'var(--color-bg)',
+                            'bg-hover': 'var(--color-bg-hover)',
+                            'border': 'var(--color-border)',
+                            'text': 'var(--color-text)',
+                            'text-secondary': 'var(--color-text-secondary)',
+                            'interactive': '#0f62fe',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'IBM Plex Sans', sans-serif;
+            background-color: var(--color-bg);
+            color: var(--color-text);
+        }
+        .accent-bar { height: 3px; background: var(--color-accent); }
+        .card {
+            border: 1px solid var(--color-border);
+            transition: all 0.15s ease;
+        }
+        .card:hover {
+            border-color: var(--color-text);
+            box-shadow: 0 4px 14px rgba(0,0,0,0.06);
+        }
+        .btn-primary {
+            background: var(--color-accent);
+            color: var(--color-inverse);
+            transition: all 0.15s ease;
+        }
+        .btn-primary:hover { background: var(--color-accent-hover); }
+        .nav-link {
+            position: relative;
+            padding-bottom: 4px;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0;
+            width: 0; height: 2px;
+            background: var(--color-accent);
+            transition: width 0.2s ease;
+        }
+        .nav-link:hover::after { width: 100%; }
 
-<style>
-    .prose h3 {
-        font-size: 1.25rem;
-        font-weight: 600;
-        margin-top: 2rem;
-        margin-bottom: 0.75rem;
-    }
-    .prose p {
-        margin-bottom: 1rem;
-        line-height: 1.75;
-        color: var(--color-text-secondary);
-    }
-    .prose blockquote {
-        border-left: 4px solid var(--color-accent);
-        padding-left: 1.5rem;
-        margin: 1.5rem 0;
-        font-style: italic;
-    }
-    .prose blockquote p {
-        color: var(--color-text);
-    }
-</style>
+        .label-mono {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: var(--color-text-secondary);
+        }
+
+        /* News feed row */
+        .news-row {
+            display: grid;
+            grid-template-columns: 120px 1fr;
+            gap: 1.5rem;
+            padding: 1.25rem 0;
+            border-bottom: 1px solid var(--color-border);
+            align-items: start;
+        }
+        .news-row:last-child { border-bottom: 0; }
+        .news-date {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 11px;
+            color: var(--color-text-secondary);
+            padding-top: 4px;
+            white-space: nowrap;
+        }
+
+        /* Tag chip */
+        .tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            padding: 2px 6px;
+            border: 1px solid var(--color-border);
+            color: var(--color-text-secondary);
+            margin-right: 4px;
+        }
+        .tag.event { border-color: #0f62fe; color: #0f62fe; }
+        html.dark .tag.event { border-color: #78a9ff; color: #78a9ff; }
+        .tag.press { border-color: var(--color-text); color: var(--color-text); background: var(--color-text); color: var(--color-bg); }
+        .tag.coverage { border-color: #198038; color: #198038; }
+        html.dark .tag.coverage { border-color: #42be65; color: #42be65; }
+        .tag.grant { border-color: #8a3ffc; color: #8a3ffc; }
+        html.dark .tag.grant { border-color: #be95ff; color: #be95ff; }
+
+        /* Prose for press release */
+        .prose h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-top: 1.75rem;
+            margin-bottom: 0.6rem;
+        }
+        .prose p {
+            margin-bottom: 1rem;
+            line-height: 1.75;
+            color: var(--color-text-secondary);
+        }
+        .prose blockquote {
+            border-left: 3px solid var(--color-accent);
+            padding-left: 1.25rem;
+            margin: 1.25rem 0;
+            font-style: italic;
+        }
+        .prose blockquote p { color: var(--color-text); }
+
+        @media (max-width: 640px) {
+            .news-row { grid-template-columns: 1fr; gap: 0.5rem; }
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+
+    <!-- Header -->
+    <header class="border-b border-carbon-border sticky top-0 z-50 bg-white">
+        <div class="accent-bar"></div>
+        <nav class="container mx-auto px-6 py-4">
+            <div class="flex justify-between items-center">
+                <a href="index.html" class="flex items-center gap-2 text-xl font-semibold tracking-tight">
+                    <img src="logo-mark.svg" alt="" class="h-7 w-auto">
+                    SYNAPSIS
+                </a>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="index.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Home</a>
+                    <a href="platform.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Platform</a>
+                    <a href="demo.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Demo</a>
+                    <a href="training.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Training</a>
+                    <a href="resources.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Resources</a>
+                    <a href="network.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Network</a>
+                    <a href="press.html" class="text-sm font-medium border-b-2 border-carbon-text pb-1">News</a>
+                </div>
+                <div class="flex items-center gap-3">
+                    <button class="md:hidden p-2 -mr-2" onclick="toggleMobileMenu()" aria-label="Toggle menu">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                    <button onclick="toggleTheme()" class="theme-toggle" title="Toggle dark mode">
+                        <i class="fas fa-moon"></i><i class="fas fa-sun"></i>
+                    </button>
+                </div>
+            </div>
+        </nav>
+        <div id="mobile-menu" class="hidden md:hidden border-t border-carbon-border">
+            <a href="index.html" class="block px-6 py-3 text-sm font-medium text-carbon-text-secondary hover:bg-carbon-bg-hover">Home</a>
+            <a href="platform.html" class="block px-6 py-3 text-sm font-medium text-carbon-text-secondary hover:bg-carbon-bg-hover">Platform</a>
+            <a href="demo.html" class="block px-6 py-3 text-sm font-medium text-carbon-text-secondary hover:bg-carbon-bg-hover">Demo</a>
+            <a href="training.html" class="block px-6 py-3 text-sm font-medium text-carbon-text-secondary hover:bg-carbon-bg-hover">Training</a>
+            <a href="resources.html" class="block px-6 py-3 text-sm font-medium text-carbon-text-secondary hover:bg-carbon-bg-hover">Resources</a>
+            <a href="network.html" class="block px-6 py-3 text-sm font-medium text-carbon-text-secondary hover:bg-carbon-bg-hover">Network</a>
+            <a href="press.html" class="block px-6 py-3 text-sm font-medium bg-carbon-bg-hover border-l-2 border-carbon-text">News</a>
+        </div>
+    </header>
 
     <main>
+
         <!-- Hero -->
-        <section class="py-20 px-6">
-            <div class="container mx-auto max-w-5xl">
-                <div class="mb-4">
-                    <span class="text-xs font-mono uppercase tracking-widest text-carbon-text-secondary">Press</span>
-                </div>
-                <h1 class="text-5xl font-semibold leading-tight mb-6">
-                    Press & Announcements
+        <section class="py-16 md:py-24 px-6">
+            <div class="container mx-auto max-w-4xl">
+                <span class="label-mono">SYNAPSIS · Updates</span>
+                <h1 class="text-4xl md:text-5xl font-semibold tracking-tight leading-tight mt-4 mb-4">
+                    News & Events
                 </h1>
-                <p class="text-xl text-carbon-text-secondary max-w-2xl mb-10 leading-relaxed">
-                    News and updates from the SYNAPSIS project.
+                <p class="text-lg text-carbon-text-secondary max-w-2xl leading-relaxed">
+                    Project milestones, upcoming events, and coverage of SYNAPSIS in the research community.
                 </p>
             </div>
         </section>
 
-        <!-- Press Release -->
-        <section class="py-12 px-6">
-            <div class="container mx-auto max-w-3xl">
-                <!-- Release Item -->
-                <article class="border border-carbon-border bg-white mb-8">
-                    <div class="p-8">
-                        <div class="flex items-center gap-4 mb-6">
-                            <span class="text-xs font-mono uppercase tracking-widest px-3 py-1 bg-carbon-text text-white">Press Release</span>
-                            <span class="text-sm text-carbon-text-secondary">February 2026</span>
-                            <div class="ml-auto flex border border-carbon-border">
-                                <button type="button" id="btn-en" onclick="switchLang('en')" class="px-3 py-1 text-xs font-mono uppercase tracking-widest bg-carbon-text text-white">EN</button>
-                                <button type="button" id="btn-nl" onclick="switchLang('nl')" class="px-3 py-1 text-xs font-mono uppercase tracking-widest text-carbon-text-secondary hover:bg-carbon-bg-hover">NL</button>
+        <!-- Upcoming events -->
+        <section class="border-y border-carbon-border bg-carbon-bg-hover py-16 px-6">
+            <div class="container mx-auto max-w-4xl">
+                <div class="flex items-center gap-3 mb-8">
+                    <span class="label-mono">Upcoming events</span>
+                </div>
+
+                <div class="space-y-4">
+
+                    <!-- Masking Lab — next up -->
+                    <a href="events/masking-lab/index.html" class="block card bg-white p-8 md:p-10 group">
+                        <div class="flex flex-col md:flex-row md:items-start gap-8">
+                            <div class="flex-shrink-0">
+                                <div class="border border-carbon-border p-4 text-center w-24">
+                                    <div class="label-mono text-xs">OCT</div>
+                                    <div class="text-4xl font-semibold leading-none mt-1">19</div>
+                                    <div class="label-mono text-xs mt-1">2026</div>
+                                </div>
+                            </div>
+                            <div class="flex-1">
+                                <div class="flex flex-wrap items-center gap-2 mb-2">
+                                    <span class="tag event"><i class="fas fa-calendar-day"></i> Event</span>
+                                    <span class="tag">WP2 · Co-creation</span>
+                                </div>
+                                <h2 class="text-2xl md:text-3xl font-semibold tracking-tight mb-2 group-hover:underline underline-offset-4">
+                                    The Masking Lab
+                                </h2>
+                                <p class="text-carbon-text-secondary mb-3 leading-relaxed max-w-2xl text-sm">
+                                    A working day for researchers, data stewards, and infrastructure providers to co-create the privacy-aware audiovisual workflows the community will actually use. Four parallel rooms, two keynotes, hands-on all day.
+                                </p>
+                                <div class="flex flex-wrap gap-x-6 gap-y-2 text-sm text-carbon-text-secondary mb-4">
+                                    <span><i class="fas fa-location-dot mr-1.5"></i>VU Amsterdam</span>
+                                    <span><i class="fas fa-clock mr-1.5"></i>09:00 – 17:30</span>
+                                    <span><i class="fas fa-users mr-1.5"></i>~50 participants · registration open</span>
+                                </div>
+                                <div class="border-t border-carbon-border pt-3">
+                                    <p class="text-xs text-carbon-text-secondary mb-2 label-mono">Keynotes confirmed</p>
+                                    <div class="flex flex-wrap gap-4 text-sm">
+                                        <div class="flex items-center gap-2">
+                                            <img src="assets/team/lindegaard.jpg" alt="" class="w-7 h-7 rounded-full object-cover">
+                                            <span>Marie Rosenkrantz Lindegaard <span class="text-carbon-text-secondary">· VU Amsterdam</span></span>
+                                        </div>
+                                        <div class="flex items-center gap-2">
+                                            <img src="assets/team/ordelman.jpg" alt="" class="w-7 h-7 rounded-full object-cover">
+                                            <span>Roeland Ordelman <span class="text-carbon-text-secondary">· Sound &amp; Vision / Univ. Twente</span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="hidden md:flex items-center self-center text-carbon-text-secondary group-hover:text-carbon-text transition-colors">
+                                <i class="fas fa-arrow-right text-lg"></i>
                             </div>
                         </div>
-
-                        <!-- English version -->
-                        <div id="press-en">
-                            <h2 class="text-2xl font-semibold mb-6 leading-snug">New SYNAPSIS platform enables secure sharing of video and audio data</h2>
-
-                            <img src="assets/snypsis_pr_sam_833837649694218.png" alt="Stylised illustration of a workshop setting with anonymised participants, demonstrating privacy-aware data practices" class="w-full mb-8">
-
-                            <div class="prose">
-                                <p><strong>The Netherlands</strong> -- Researchers will soon have new opportunities to safely share and reuse video and audio materials. Through the SYNAPSIS project, universities and partners are developing a platform that allows recordings to be easily anonymised without losing valuable research information. The initiative aims to support responsible open science while improving privacy protection.</p>
-
-                                <p>An increasing number of researchers in fields such as linguistics, communication science and other disciplines work with audiovisual data, including interviews, classroom observations and recordings of real-life interactions. At the same time, many recordings remain unused because privacy regulations make sharing complex. SYNAPSIS provides practical tools to lower this barrier and make data more accessible for future research.</p>
-
-                                <blockquote>
-                                    <p>"Video and audio data are essential for understanding human communication," says principal investigator Mark Dingemanse (Radboud University). "With SYNAPSIS, we make it possible to share data securely while safeguarding participants' privacy. In this way, we strengthen open science in a responsible manner."</p>
-                                </blockquote>
-
-                                <h3>Automatic anonymisation</h3>
-
-                                <p>Through a secure online environment, researchers can upload recordings and anonymise them in just a few steps. The platform uses technology to mask faces and voices and remove identifiable features while preserving important information such as movements, gestures and interactions. No programming knowledge is required, and the system can be used both in the cloud and locally.</p>
-
-                                <p>According to data steward Henk van den Heuvel (Radboud University), this will help researchers handle sensitive data more effectively.</p>
-
-                                <blockquote>
-                                    <p>"By better protecting personal information, it becomes easier to manage audiovisual data according to FAIR principles and to share it responsibly."</p>
-                                </blockquote>
-
-                                <h3>Training and digital skills</h3>
-
-                                <p>In addition to technology, SYNAPSIS also focuses on training and support. In collaboration with partner universities, Vrije Universiteit Amsterdam will organise several training events where researchers, data stewards and support staff learn how to work with audiovisual data in a privacy-conscious way -- from data collection to archiving. Bogdana Huma (VU Amsterdam) and Inge Slouwerhof (Radboud University) are involved in organising the Masking Lab, a one-day workshop for research support professionals. Wim Pouw (Tilburg University) and James Trujillo (University of Amsterdam, ILLC) are involved in organising the Masking Schools, workshops on privacy-preserving techniques for audiovisual data.</p>
-
-                                <blockquote>
-                                    <p>"Our goal is to make innovative machine learning accessible to researchers without a technical background," says researcher Babajide Owoyele (Radboud University). "In this way, we strengthen digital skills across a wide range of disciplines."</p>
-                                </blockquote>
-
-                                <h3>Collaboration between universities</h3>
-
-                                <p>SYNAPSIS is a collaboration between Radboud University, Vrije Universiteit Amsterdam, Tilburg University, University of Amsterdam and Erasmus University Rotterdam, with support from SURF, DANS and international partners. The project is funded by the Dutch Research Council (NWO) through a programme for Thematic Digital Competence Centres (TDCC).</p>
-
-                                <blockquote>
-                                    <p>"We should archive and share our audiovisual data in a secure way such that people's identities are protected. We can increase the security and protection levels through masking, while maintaining the original purposes of transparency, verifiability, and open science," says Wim Pouw, Associate Professor at Tilburg University (Department of Computational Cognitive Science) and Radboud University (Donders Institute).</p>
-                                </blockquote>
-
-                                <p>Over the next two years, the platform will be tested at multiple universities, and more than one hundred researchers and data stewards will receive training in privacy-conscious data management.</p>
-                            </div>
-                        </div>
-
-                        <!-- Dutch version -->
-                        <div id="press-nl" class="hidden">
-                            <h2 class="text-2xl font-semibold mb-6 leading-snug">Nieuw platform SYNAPSIS maakt veilig delen van video- en audiodata mogelijk</h2>
-
-                            <img src="assets/snypsis_pr_sam_833837649694218.png" alt="Gestileerde illustratie van een workshop met geanonimiseerde deelnemers" class="w-full mb-8">
-
-                            <div class="prose">
-                                <p><strong>Nederland</strong> -- Onderzoekers krijgen binnenkort nieuwe mogelijkheden om video- en audiomateriaal veilig te delen en te hergebruiken. Met het project SYNAPSIS ontwikkelen universiteiten en partners een platform waarmee opnames eenvoudig kunnen worden geanonimiseerd, zonder dat waardevolle onderzoeksinformatie verloren gaat. Daarmee wil het project bijdragen aan verantwoorde open science en betere bescherming van privacy.</p>
-
-                                <p>Steeds meer onderzoekers in onder meer taalwetenschap, communicatiewetenschappen en andere disciplines werkt met audiovisuele data, waaronder interviews, observaties in de klas en opnames van interacties in het dagelijks leven. Tegelijkertijd blijven veel opnames ongebruikt omdat privacyregelgeving het delen ervan bemoeilijkt. SYNAPSIS biedt praktische tools om deze drempel te verlagen en data toegankelijker te maken voor toekomstig onderzoek.</p>
-
-                                <blockquote>
-                                    <p>"Video- en audiogegevens zijn essentieel om menselijke communicatie te begrijpen," zegt hoofdonderzoeker Mark Dingemanse (Radboud Universiteit). "Met SYNAPSIS maken we het mogelijk om data veilig te delen en tegelijkertijd de privacy van deelnemers te waarborgen. Zo versterken we open science op een verantwoorde manier."</p>
-                                </blockquote>
-
-                                <h3>Automatische anonimisatie</h3>
-
-                                <p>Via een beveiligde online omgeving kunnen onderzoekers hun opnames uploaden en met enkele stappen anonimiseren. Het platform gebruikt technologie om gezichten en stemmen te maskeren en herkenbare kenmerken te verwijderen, terwijl belangrijke informatie -- zoals bewegingen, gebaren en interacties -- behouden blijft. Programmeerkennis is niet nodig en het systeem kan zowel in de cloud als lokaal worden gebruikt.</p>
-
-                                <p>Volgens data steward Henk van den Heuvel (Radboud Universiteit) helpt dit onderzoekers om beter om te gaan met gevoelige data.</p>
-
-                                <blockquote>
-                                    <p>"Door persoonlijke informatie beter te beschermen, wordt het eenvoudiger om audiovisuele data volgens FAIR-principes te beheren en verantwoord te delen."</p>
-                                </blockquote>
-
-                                <h3>Training en digitale vaardigheden</h3>
-
-                                <p>Naast technologie richt SYNAPSIS zich ook op training en ondersteuning. De Vrije Universiteit Amsterdam organiseert in samenwerking verschillende trainingsessies waarin onderzoekers, data stewards en ondersteunend personeel leren hoe zij privacybewust kunnen werken met audiovisuele data -- van verzameling tot archivering. Bogdana Huma (VU Amsterdam) en Inge Slouwerhof (Radboud Universiteit) zijn betrokken bij de organisatie van de Masking Lab, een eendaagse workshop voor professionals in onderzoeksondersteuning. Wim Pouw (Tilburg University) en James Trujillo (Universiteit van Amsterdam, ILLC) zijn betrokken bij de organisatie van de Masking Schools, workshops over privacybeschermende technieken voor audiovisuele data.</p>
-
-                                <blockquote>
-                                    <p>"Ons doel is om innovatieve machine learning toegankelijk te maken voor onderzoekers zonder technische achtergrond," zegt onderzoeker Babajide Owoyele (Radboud Universiteit). "Zo versterken we digitale vaardigheden in uiteenlopende disciplines."</p>
-                                </blockquote>
-
-                                <h3>Samenwerking tussen universiteiten</h3>
-
-                                <p>SYNAPSIS is een samenwerking tussen Radboud Universiteit, Vrije Universiteit Amsterdam, Tilburg University, Universiteit van Amsterdam en Erasmus Universiteit Rotterdam, met ondersteuning van SURF, DANS en internationale partners. Het project wordt gefinancierd door de Nederlandse Organisatie voor Wetenschappelijk Onderzoek (NWO) vanuit een fonds voor thematische digitale competentie centra (TDCC).</p>
-
-                                <blockquote>
-                                    <p>"We moeten onze audiovisuele data op een veilige manier archiveren en delen, zodat de identiteit van mensen beschermd wordt. We kunnen het beveiligings- en beschermingsniveau verhogen door middel van maskering, met behoud van de oorspronkelijke doelen van transparantie, verifieerbaarheid en open science," aldus Wim Pouw, universitair hoofddocent aan Tilburg University (Department of Computational Cognitive Science) en Radboud Universiteit (Donders Institute).</p>
-                                </blockquote>
-
-                                <p>De komende twee jaar wordt het platform getest bij meerdere universiteiten en krijgen meer dan honderd onderzoekers en data stewards training in privacybewust databeheer.</p>
-                            </div>
-                        </div>
+                    </a>
+                    <div class="flex flex-col sm:flex-row sm:items-center gap-3">
+                        <a href="https://docs.google.com/forms/d/e/1FAIpQLSedaarmiKs7WJ8x_LJA1yTYvkyMEIsyhBLgvQyPNX2r9vAgWA/viewform" target="_blank" rel="noopener" class="btn-primary px-5 py-2.5 font-medium text-sm inline-flex items-center justify-center">
+                            <i class="fas fa-pen-to-square mr-2"></i> Register for the Masking Lab
+                        </a>
+                        <span class="text-sm text-carbon-text-secondary">19 October 2026 · VU Amsterdam · no fee</span>
                     </div>
 
-                    <!-- Notes for Editors -->
-                    <div class="border-t border-carbon-border p-8 bg-carbon-bg-hover">
-                        <h3 class="font-semibold mb-4 text-sm uppercase tracking-wide">Notes for editors</h3>
-                        <div class="grid md:grid-cols-2 gap-6 text-sm text-carbon-text-secondary">
-                            <div>
-                                <div class="mb-4">
-                                    <div class="font-medium text-carbon-text mb-1">Project</div>
-                                    SYNAPSIS -- Synergy Network and Platform for Integrating Audiovisual Data Archiving and Stewardship in Social Sciences and Humanities
-                                </div>
-                                <div class="mb-4">
-                                    <div class="font-medium text-carbon-text mb-1">Funding</div>
-                                    NWO Thematic Digital Competence Centres (TDCC-SSH)<br>
-                                    Grant number: TDCC-SSH-C2024-011
-                                </div>
-                                <div class="mb-4">
-                                    <div class="font-medium text-carbon-text mb-1">Duration</div>
-                                    1 February 2026 -- 31 December 2027
-                                </div>
-                                <div class="mb-4">
-                                    <div class="font-medium text-carbon-text mb-1">Lead institution</div>
-                                    Radboud University, Faculty of Arts and Centre for Language Studies
-                                </div>
-                            </div>
-                            <div>
-                                <div class="mb-4">
-                                    <div class="font-medium text-carbon-text mb-1">Partner institutions</div>
-                                    VU Amsterdam, Tilburg University, University of Amsterdam, Erasmus University Rotterdam, Hasso Plattner Institute (Germany)
-                                </div>
-                                <div class="mb-4">
-                                    <div class="font-medium text-carbon-text mb-1">Infrastructure partners</div>
-                                    SURF, DANS
-                                </div>
-                                <div class="mb-4">
-                                    <div class="font-medium text-carbon-text mb-1">Contact</div>
-                                    Mark Dingemanse -- <a href="mailto:m.dingemanse@ru.nl" class="underline">m.dingemanse@ru.nl</a><br>
-                                    Babajide Owoyele -- <a href="mailto:babajide.owoyele@ru.nl" class="underline">babajide.owoyele@ru.nl</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </article>
+                </div>
             </div>
         </section>
 
-        <!-- Media Kit -->
-        <section class="py-12 px-6 bg-carbon-bg-hover border-y border-carbon-border">
-            <div class="container mx-auto max-w-3xl">
-                <h2 class="text-2xl font-semibold mb-6">Media Resources</h2>
-                <div class="grid md:grid-cols-2 gap-6">
-                    <div class="border border-carbon-border bg-white p-6">
-                        <div class="w-10 h-10 border border-carbon-border flex items-center justify-center mb-4">
-                            <i class="fas fa-file-alt"></i>
+        <!-- News timeline -->
+        <section class="py-16 px-6 bg-white">
+            <div class="container mx-auto max-w-4xl">
+                <div class="flex items-center gap-3 mb-10">
+                    <span class="label-mono">Latest updates</span>
+                </div>
+
+                <div>
+
+                    <!-- MDIG2026 masking day -->
+                    <div class="news-row">
+                        <div class="news-date">Jul 2026</div>
+                        <div>
+                            <div class="mb-2">
+                                <span class="tag event"><i class="fas fa-calendar-day"></i> Event</span>
+                            </div>
+                            <h3 class="font-semibold text-base mb-1">Masking School @ Tilburg — MDIG2026</h3>
+                            <p class="text-sm text-carbon-text-secondary leading-relaxed mb-2">
+                                Babajide Owoyele led the Masking School, the SYNAPSIS masking day inside the week-long Multiscale Social Dynamics in Individuals and Groups summer school at MindLabs, Tilburg University, introducing the MaskingOPS framework and running the first sandbox session with the SYNAPSIS card decks. Twenty-nine researchers took part. Participants located the value of audiovisual data in <em>interaction</em> rather than individual identity, named <em>emotion</em> as what they most fear losing to masking, and overwhelmingly read masking as transformation rather than removal. The findings feed directly into the next print run of the decks and into the Masking Lab in October.
+                            </p>
+                            <a href="https://envisionbox.org/summerschool2026.html" target="_blank" rel="noopener" class="text-xs underline text-carbon-text-secondary hover:text-carbon-text inline-flex items-center gap-1">
+                                Summer school programme <i class="fas fa-arrow-up-right-from-square text-[10px]"></i>
+                            </a>
                         </div>
-                        <h3 class="font-semibold mb-2">Press Release (PDF)</h3>
-                        <p class="text-sm text-carbon-text-secondary mb-4">Download the full press release in PDF format.</p>
-                        <span class="text-xs text-carbon-text-secondary bg-yellow-100 px-2 py-1">Coming soon</span>
                     </div>
-                    <div class="border border-carbon-border bg-white p-6">
-                        <div class="w-10 h-10 border border-carbon-border flex items-center justify-center mb-4">
-                            <i class="fas fa-images"></i>
+
+                    <!-- TU Delft HoMI talk -->
+                    <div class="news-row">
+                        <div class="news-date">Jun 2026</div>
+                        <div>
+                            <div class="mb-2">
+                                <span class="tag event"><i class="fas fa-microphone"></i> Talk</span>
+                            </div>
+                            <h3 class="font-semibold text-base mb-1">MaskingOPS at TU Delft HoMI</h3>
+                            <p class="text-sm text-carbon-text-secondary leading-relaxed">
+                                Babajide Owoyele presented MaskingOPS to the Human-Machine Interaction (HoMI) group at TU Delft, covering the end-to-end de-identification workflow, the privacy–utility trade-off, and early results from the gesture detection challenge. The talk drew on the three applied vignettes from the accompanying BRM tutorial paper and closed with an open discussion on participatory masked data collection.
+                            </p>
                         </div>
-                        <h3 class="font-semibold mb-2">Project Logo & Images</h3>
-                        <p class="text-sm text-carbon-text-secondary mb-4">Logo files and project visuals for media use.</p>
-                        <span class="text-xs text-carbon-text-secondary bg-yellow-100 px-2 py-1">Coming soon</span>
+                    </div>
+
+                    <!-- VU Amsterdam coverage -->
+                    <div class="news-row">
+                        <div class="news-date">June 2026</div>
+                        <div>
+                            <div class="mb-2">
+                                <span class="tag coverage"><i class="fas fa-newspaper"></i> Coverage</span>
+                            </div>
+                            <h3 class="font-semibold text-base mb-1">New SYNAPSIS platform enables secure sharing of video and audio data</h3>
+                            <p class="text-sm text-carbon-text-secondary leading-relaxed mb-2">
+                                VU Amsterdam and Radboud University report on the launch of SYNAPSIS and its implications for open science in the social sciences and humanities.
+                            </p>
+                            <a href="https://vu.nl/en/news/2026/new-synapsis-platform-enables-secure-sharing-of-video-and-audio-data" target="_blank" rel="noopener" class="text-xs underline text-carbon-text-secondary hover:text-carbon-text inline-flex items-center gap-1">
+                                Read at VU Amsterdam <i class="fas fa-arrow-up-right-from-square text-[10px]"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- RSSF Fellowship -->
+                    <div class="news-row">
+                        <div class="news-date">June 2026</div>
+                        <div>
+                            <div class="mb-2">
+                                <span class="tag grant"><i class="fas fa-file-pen"></i> Grant</span>
+                            </div>
+                            <h3 class="font-semibold text-base mb-1">RSSF 2026 Fellowship application — MaskBench</h3>
+                            <p class="text-sm text-carbon-text-secondary leading-relaxed">
+                                SYNAPSIS submitted an application to the Research Software Sustainability Fellows (RSSF) 2026 programme, with MaskBench — a benchmark for evaluating privacy-utility trade-offs in audiovisual masking — as the headline contribution.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Radboud coverage -->
+                    <div class="news-row">
+                        <div class="news-date">Feb 2026</div>
+                        <div>
+                            <div class="mb-2">
+                                <span class="tag coverage"><i class="fas fa-newspaper"></i> Coverage</span>
+                            </div>
+                            <h3 class="font-semibold text-base mb-1">Radboud researchers launch SYNAPSIS</h3>
+                            <p class="text-sm text-carbon-text-secondary leading-relaxed mb-2">
+                                Radboud University news on the launch of the SYNAPSIS platform and training programme for privacy-aware research with sensitive audiovisual data.
+                            </p>
+                            <a href="https://www.ru.nl/en/about-us/news/radboud-researchers-launch-synapsis-a-platform-for-privacy-aware-sharing-of-video-and-audio-data" target="_blank" rel="noopener" class="text-xs underline text-carbon-text-secondary hover:text-carbon-text inline-flex items-center gap-1">
+                                Read at Radboud University <i class="fas fa-arrow-up-right-from-square text-[10px]"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Press release -->
+                    <div class="news-row">
+                        <div class="news-date">Feb 2026</div>
+                        <div>
+                            <div class="mb-2">
+                                <span class="tag press">Press release</span>
+                            </div>
+                            <h3 class="font-semibold text-base mb-1">Radboud University launches SYNAPSIS: a platform and training programme for privacy-aware research with video and audio data</h3>
+                            <p class="text-sm text-carbon-text-secondary leading-relaxed mb-3">
+                                SYNAPSIS, funded by NWO TDCC-SSH, brings together researchers from Radboud University, VU Amsterdam, University of Amsterdam, Erasmus University Rotterdam, and Hasso Plattner Institute to tackle the challenge of sharing sensitive audiovisual research data responsibly.
+                            </p>
+                            <button onclick="document.getElementById('press-release').classList.toggle('hidden')" class="text-xs underline text-carbon-text-secondary hover:text-carbon-text">
+                                Read full press release <i class="fas fa-chevron-down text-[10px] ml-1"></i>
+                            </button>
+
+                            <!-- Collapsible press release -->
+                            <div id="press-release" class="hidden mt-6 border border-carbon-border">
+                                <div class="p-6">
+                                    <div class="prose text-sm">
+                                        <p><strong>Nijmegen</strong> — Radboud University has launched SYNAPSIS, a collaborative project to help researchers in the social sciences and humanities share video and audio data while protecting the privacy of the people in those recordings. The project is funded by the Dutch Research Council (NWO) through its Thematic Digital Competence Centres programme.</p>
+
+                                        <p>Researchers across the social sciences and humanities increasingly rely on video and audio recordings to study human behaviour and social interaction — from classroom observations to clinical interviews and conversational data. Yet privacy concerns often prevent this valuable data from being shared or reused, limiting transparency and reproducibility in research.</p>
+
+                                        <p>SYNAPSIS addresses this challenge head-on. The project provides an open-source platform that integrates masking tools, allowing researchers to mask faces, mask voices, and remove other identifying features from recordings — all through a user-friendly interface that requires no programming expertise. The toolkit can be deployed on cloud infrastructure or set up locally. At the same time, the platform preserves research-relevant information such as body movement, gesture, and other behavioural signals.</p>
+
+                                        <blockquote>
+                                            <p>"The goal is to make audiovisual research data as open as possible and as closed as necessary. Many researchers want to share their data but don't know how to do so responsibly. SYNAPSIS gives them the tools and the training."</p>
+                                            <footer class="text-xs text-carbon-text-secondary not-italic mt-1">— Mark Dingemanse, Professor of AI: Language diversity and communication technologies, Radboud University</footer>
+                                        </blockquote>
+
+                                        <h3>Platform and training</h3>
+
+                                        <p>SYNAPSIS has two main pillars. The first is a cloud-based platform built on the existing <a href="https://github.com/MaskAnyone/MaskAnyone" class="underline">MaskAnyone toolkit</a> and integrated with Dutch research infrastructure provider SURF. Researchers can upload recordings, apply masking, and archive privacy-compliant data — all within a secure, GDPR-compliant environment.</p>
+
+                                        <blockquote>
+                                            <p>"Minimising privacy risks, maximising analytic utility in SSH — that is the core challenge SYNAPSIS is designed to address."</p>
+                                            <footer class="text-xs text-carbon-text-secondary not-italic mt-1">— Wim Pouw, Tilburg University &amp; Donders Institute</footer>
+                                        </blockquote>
+
+                                        <p>The second pillar is a comprehensive training programme — the Masking School — designed for researchers, data stewards, and support staff at Dutch universities. Workshops, hands-on sessions, and a summer school will build the digital skills needed to incorporate privacy-aware practices into everyday research workflows.</p>
+
+                                        <blockquote>
+                                            <p>"Researchers and support staff tell us they find current masking tools too technical or hard to fit into their workflows. We are building something that is accessible to everyone, regardless of their technical background."</p>
+                                            <footer class="text-xs text-carbon-text-secondary not-italic mt-1">— Babajide Owoyele, Postdoctoral Researcher, Radboud University</footer>
+                                        </blockquote>
+
+                                        <h3>A collaborative effort</h3>
+
+                                        <p>SYNAPSIS brings together a team of researchers from Radboud University, Vrije Universiteit Amsterdam, the University of Amsterdam, and Erasmus University Rotterdam, with support from infrastructure partners SURF and DANS, and international partner the Hasso Plattner Institute in Potsdam. The research infrastructure organisations CLARIAH and ODISSEI serve in an advisory capacity.</p>
+
+                                        <p>Over the next two years, the project will pilot the platform at several Dutch universities while training over 100 researchers and data stewards. The aim is to develop workflows and standards that can scale to other institutions in the Netherlands and beyond.</p>
+
+                                        <blockquote>
+                                            <p>"Masking opens up new possibilities for open science, but it also raises important ethical questions. SYNAPSIS ensures these questions are part of the conversation from the start."</p>
+                                            <footer class="text-xs text-carbon-text-secondary not-italic mt-1">— Bogdana Huma, VU Amsterdam</footer>
+                                        </blockquote>
+
+                                        <blockquote>
+                                            <p>"Building sustainable research infrastructure means connecting the right tools with the right standards. SYNAPSIS bridges masking technology and established data archiving workflows."</p>
+                                            <footer class="text-xs text-carbon-text-secondary not-italic mt-1">— Henk van den Heuvel, Radboud University, CLST</footer>
+                                        </blockquote>
+
+                                        <h3>Background</h3>
+
+                                        <p>The project is funded under NWO's Thematic Digital Competence Centres for Social Sciences and Humanities (TDCC-SSH), which supports initiatives that strengthen digital skills and infrastructure in the SSH domain. SYNAPSIS responds to growing calls in the research community for better data management practices, including a recent policy shift arguing that audio and video recordings should not be destroyed by default but rather managed responsibly.</p>
+
+                                        <p>The SYNAPSIS platform builds on MaskAnyone, an open-source toolkit developed by members of the project team that enables face masking, voice anonymisation, and body kinematics extraction through a point-and-click interface.</p>
+                                    </div>
+                                </div>
+                                <div class="border-t border-carbon-border p-6 bg-carbon-bg-hover">
+                                    <p class="text-xs font-semibold uppercase tracking-wide mb-3">Notes for editors</p>
+                                    <div class="grid md:grid-cols-2 gap-4 text-xs text-carbon-text-secondary">
+                                        <div class="space-y-2">
+                                            <div><span class="font-medium text-carbon-text">Project</span><br>SYNAPSIS — Synergy Network and Platform for Integrating Audiovisual Data Archiving and Stewardship in Social Sciences and Humanities</div>
+                                            <div><span class="font-medium text-carbon-text">Funding</span><br>NWO Thematic Digital Competence Centres (TDCC-SSH) · Grant: TDCC-SSH-C2024-011</div>
+                                            <div><span class="font-medium text-carbon-text">Duration</span><br>24 months (2025–2027)</div>
+                                        </div>
+                                        <div class="space-y-2">
+                                            <div><span class="font-medium text-carbon-text">Partners</span><br>Radboud University, VU Amsterdam, UvA, EUR, Hasso Plattner Institute (DE) · SURF, DANS</div>
+                                            <div><span class="font-medium text-carbon-text">Contact</span><br>Mark Dingemanse — <a href="mailto:m.dingemanse@ru.nl" class="underline">m.dingemanse@ru.nl</a><br>Babajide Owoyele — <a href="mailto:babajide.owoyele@ru.nl" class="underline">babajide.owoyele@ru.nl</a></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Media resources -->
+        <section class="py-16 px-6 border-t border-carbon-border bg-carbon-bg-hover">
+            <div class="container mx-auto max-w-4xl">
+                <div class="flex items-center gap-3 mb-8">
+                    <span class="label-mono">Media resources</span>
+                </div>
+                <div class="grid md:grid-cols-3 gap-6">
+                    <div class="card bg-white p-6">
+                        <div class="w-10 h-10 border border-carbon-border flex items-center justify-center mb-4">
+                            <i class="fas fa-file-alt text-sm"></i>
+                        </div>
+                        <h3 class="font-semibold text-sm mb-2">Press release (PDF)</h3>
+                        <p class="text-xs text-carbon-text-secondary mb-3">Full press release for download.</p>
+                        <span class="label-mono text-[10px]">Coming soon</span>
+                    </div>
+                    <div class="card bg-white p-6">
+                        <div class="w-10 h-10 border border-carbon-border flex items-center justify-center mb-4">
+                            <i class="fas fa-images text-sm"></i>
+                        </div>
+                        <h3 class="font-semibold text-sm mb-2">Project logos & visuals</h3>
+                        <p class="text-xs text-carbon-text-secondary mb-3">Logo files and project visuals for media use.</p>
+                        <span class="label-mono text-[10px]">Coming soon</span>
+                    </div>
+                    <div class="card bg-white p-6">
+                        <div class="w-10 h-10 border border-carbon-border flex items-center justify-center mb-4">
+                            <i class="fas fa-envelope text-sm"></i>
+                        </div>
+                        <h3 class="font-semibold text-sm mb-2">Press enquiries</h3>
+                        <p class="text-xs text-carbon-text-secondary mb-3">For interview requests or further information.</p>
+                        <a href="mailto:babajide.owoyele@ru.nl?subject=SYNAPSIS%20press%20enquiry" class="label-mono text-[10px] underline hover:text-carbon-text">babajide.owoyele@ru.nl</a>
                     </div>
                 </div>
             </div>
         </section>
+
     </main>
 
-<script>
-    function switchLang(lang) {
-        document.getElementById('press-en').classList.toggle('hidden', lang !== 'en');
-        document.getElementById('press-nl').classList.toggle('hidden', lang !== 'nl');
-        var btnEn = document.getElementById('btn-en');
-        var btnNl = document.getElementById('btn-nl');
-        if (lang === 'en') {
-            btnEn.className = 'px-3 py-1 text-xs font-mono uppercase tracking-widest bg-carbon-text text-white';
-            btnNl.className = 'px-3 py-1 text-xs font-mono uppercase tracking-widest text-carbon-text-secondary hover:bg-carbon-bg-hover';
-        } else {
-            btnNl.className = 'px-3 py-1 text-xs font-mono uppercase tracking-widest bg-carbon-text text-white';
-            btnEn.className = 'px-3 py-1 text-xs font-mono uppercase tracking-widest text-carbon-text-secondary hover:bg-carbon-bg-hover';
-        }
-    }
-</script>
+    <!-- Footer -->
+    <footer class="border-t border-carbon-border py-12 px-6">
+        <div class="container mx-auto max-w-4xl px-6">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-8">
+                <div>
+                    <div class="font-semibold text-lg mb-1">SYNAPSIS</div>
+                    <div class="text-sm text-carbon-text-secondary">Funded by NWO TDCC-SSH</div>
+                </div>
+                <div class="flex gap-8">
+                    <a href="index.html" class="text-sm text-carbon-text-secondary hover:text-carbon-text">Home</a>
+                    <a href="platform.html" class="text-sm text-carbon-text-secondary hover:text-carbon-text">Platform</a>
+                    <a href="resources.html" class="text-sm text-carbon-text-secondary hover:text-carbon-text">Resources</a>
+                    <a href="https://github.com/MaskAnyone/MaskAnyone" class="text-sm text-carbon-text-secondary hover:text-carbon-text">GitHub</a>
+                </div>
+            </div>
+            <div class="mt-8 pt-8 border-t border-carbon-border text-xs text-carbon-text-secondary">
+                &copy; 2026 SYNAPSIS Project · Radboud University
+            </div>
+        </div>
+    </footer>
 
+</body>
+</html>
