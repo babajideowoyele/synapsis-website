@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
     <link rel="stylesheet" href="theme.css">
     <script src="theme.js"></script>
+    <script src="countdown.js"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -92,6 +93,24 @@
         .stat-number {
             font-family: 'IBM Plex Mono', monospace;
         }
+        .route-card {
+            border: 1px solid var(--color-border);
+            padding: 22px 22px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            text-decoration: none;
+            color: var(--color-text);
+            background: var(--color-bg);
+            transition: border-color .15s ease, transform .15s ease, box-shadow .15s ease;
+        }
+        .route-card:hover { border-color: var(--color-text); transform: translateY(-2px); box-shadow: 0 6px 18px rgba(0,0,0,.08); }
+        .route-num { font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: .1em; color: var(--color-text-secondary); }
+        .route-card h3 { font-weight: 600; font-size: 1.05rem; line-height: 1.35; }
+        .route-card p { font-size: 13px; color: var(--color-text-secondary); line-height: 1.55; }
+        .route-card .go { margin-top: auto; padding-top: 10px; font-size: 12px; font-family: 'IBM Plex Mono', monospace; text-transform: uppercase; letter-spacing: .06em; }
+        .sample video { aspect-ratio: 16 / 9; object-fit: cover; display: block; }
+        [hidden] { display: none !important; }
     </style>
 </head>
 <body class="min-h-screen has-hero">
@@ -106,11 +125,11 @@
                 </a>
                 <div class="hidden md:flex items-center space-x-8">
                     <a href="index.html" class="text-sm font-medium border-b-2 border-carbon-text pb-1">Home</a>
+                    <a href="start.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Start here</a>
                     <a href="platform.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Platform</a>
                     <a href="demo.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Demo</a>
                     <a href="training.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Training</a>
                     <a href="resources.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Resources</a>
-                    <a href="network.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Network</a>
                     <a href="press.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">News</a>
                 </div>
                 <button class="md:hidden p-2 -mr-2" onclick="toggleMobileMenu()" aria-label="Toggle navigation menu">
@@ -124,11 +143,11 @@
         <!-- Mobile menu (visible only when toggled, hidden on md+) -->
         <div id="mobile-menu" class="hidden md:hidden border-t border-carbon-border">
             <a href="index.html" class="block px-6 py-3 text-sm font-medium bg-carbon-bg-hover border-l-2 border-carbon-text">Home</a>
+            <a href="start.html" class="block px-6 py-3 text-sm font-medium text-carbon-text-secondary hover:text-carbon-text hover:bg-carbon-bg-hover">Start here</a>
             <a href="platform.html" class="block px-6 py-3 text-sm font-medium text-carbon-text-secondary hover:text-carbon-text hover:bg-carbon-bg-hover">Platform</a>
             <a href="demo.html" class="block px-6 py-3 text-sm font-medium text-carbon-text-secondary hover:text-carbon-text hover:bg-carbon-bg-hover">Demo</a>
             <a href="training.html" class="block px-6 py-3 text-sm font-medium text-carbon-text-secondary hover:text-carbon-text hover:bg-carbon-bg-hover">Training</a>
             <a href="resources.html" class="block px-6 py-3 text-sm font-medium text-carbon-text-secondary hover:text-carbon-text hover:bg-carbon-bg-hover">Resources</a>
-            <a href="network.html" class="block px-6 py-3 text-sm font-medium text-carbon-text-secondary hover:text-carbon-text hover:bg-carbon-bg-hover">Network</a>
             <a href="press.html" class="block px-6 py-3 text-sm font-medium text-carbon-text-secondary hover:text-carbon-text hover:bg-carbon-bg-hover">News</a>
         </div>
     </header>
@@ -147,13 +166,15 @@
                         <div class="text-2xl font-semibold leading-none">19</div>
                     </div>
                     <div>
-                        <div class="text-xs font-mono uppercase tracking-widest text-carbon-text-secondary">Registration open</div>
+                        <div class="text-xs font-mono uppercase tracking-widest text-carbon-text-secondary">
+                            <span data-countdown data-compact data-start="2026-10-19T09:00:00+02:00" data-end="2026-10-19T17:30:00+02:00">19 October 2026</span><span data-countdown-when="upcoming"> · Registration open</span>
+                        </div>
                         <a href="events/masking-lab/index.html" class="font-semibold hover:underline underline-offset-4">The Masking Lab 2026</a>
                         <div class="text-sm text-carbon-text-secondary">Co-creation day on privacy-preserving audiovisual data · VU Amsterdam · no fee</div>
                     </div>
                 </div>
                 <div class="flex gap-2 flex-shrink-0">
-                    <a href="https://docs.google.com/forms/d/e/1FAIpQLSedaarmiKs7WJ8x_LJA1yTYvkyMEIsyhBLgvQyPNX2r9vAgWA/viewform" target="_blank" rel="noopener" class="btn-primary px-4 py-2 text-sm font-medium inline-flex items-center">
+                    <a href="https://docs.google.com/forms/d/e/1FAIpQLSedaarmiKs7WJ8x_LJA1yTYvkyMEIsyhBLgvQyPNX2r9vAgWA/viewform" target="_blank" rel="noopener" data-countdown-when="upcoming live" class="btn-primary px-4 py-2 text-sm font-medium inline-flex items-center">
                         <i class="fas fa-pen-to-square mr-2"></i> Register
                     </a>
                     <a href="events/masking-lab/index.html" class="btn-secondary px-4 py-2 text-sm font-medium inline-flex items-center">
@@ -172,11 +193,11 @@
                 SYNAPSIS provides tools and training for masking sensitive information in video and audio data, enabling SSH researchers to share data while protecting privacy.
             </p>
             <div class="flex flex-wrap gap-4">
-                <a href="platform.html" class="btn-primary px-6 py-3 font-medium">
-                    Explore Platform <i class="fas fa-arrow-right ml-2"></i>
+                <a href="#routes" class="btn-primary px-6 py-3 font-medium">
+                    Find your starting point <i class="fas fa-arrow-down ml-2"></i>
                 </a>
-                <a href="training.html" class="btn-secondary px-6 py-3 font-medium">
-                    View Training
+                <a href="demo.html" class="btn-secondary px-6 py-3 font-medium">
+                    See masking in action
                 </a>
             </div>
         </div>
@@ -191,8 +212,8 @@
                     <div class="text-sm text-carbon-text-secondary mt-1">Months</div>
                 </div>
                 <div class="text-center">
-                    <div class="stat-number text-3xl font-semibold" data-count="250" data-prefix="€" data-suffix="K">€250K</div>
-                    <div class="text-sm text-carbon-text-secondary mt-1">Funding</div>
+                    <div class="stat-number text-3xl font-semibold" data-count="4">4</div>
+                    <div class="text-sm text-carbon-text-secondary mt-1">Ways to Mask</div>
                 </div>
                 <div class="text-center">
                     <div class="stat-number text-3xl font-semibold" data-count="7">7</div>
@@ -203,6 +224,122 @@
                     <div class="text-sm text-carbon-text-secondary mt-1">Target Trainees</div>
                 </div>
             </div>
+        </div>
+    </section>
+
+    <!-- What masking looks like (samples) -->
+    <section id="samples" class="py-16 px-6 border-b border-carbon-border" data-sample-strip hidden>
+        <div class="container mx-auto max-w-5xl">
+            <div class="mb-8">
+                <span class="text-xs font-mono uppercase tracking-widest text-carbon-text-secondary">In practice</span>
+                <h2 class="text-3xl font-semibold mt-4">What masking actually looks like</h2>
+                <p class="text-carbon-text-secondary mt-3 max-w-2xl leading-relaxed">
+                    Same recording, three strategies. How much identity you remove and how much behaviour you keep is
+                    a choice, not a setting the tool makes for you.
+                </p>
+            </div>
+            <div class="grid md:grid-cols-3 gap-6">
+                <figure class="sample" hidden>
+                    <video class="w-full border border-carbon-border bg-carbon-bg-hover" autoplay muted loop playsinline preload="metadata">
+                        <source src="demos/sample-blur.mp4" type="video/mp4">
+                    </video>
+                    <figcaption class="text-sm mt-3">
+                        <span class="font-semibold">Blur</span>
+                        <span class="text-carbon-text-secondary block mt-1">Fast, runs on any laptop, keeps gross body movement readable. Route 3.</span>
+                    </figcaption>
+                </figure>
+                <figure class="sample" hidden>
+                    <video class="w-full border border-carbon-border bg-carbon-bg-hover" autoplay muted loop playsinline preload="metadata">
+                        <source src="demos/sample-silhouette.mp4" type="video/mp4">
+                    </video>
+                    <figcaption class="text-sm mt-3">
+                        <span class="font-semibold">Silhouette &amp; skeleton</span>
+                        <span class="text-carbon-text-secondary block mt-1">Removes appearance entirely, keeps kinematics for gesture analysis. Route 3.</span>
+                    </figcaption>
+                </figure>
+                <figure class="sample" hidden>
+                    <video class="w-full border border-carbon-border bg-carbon-bg-hover" autoplay muted loop playsinline preload="metadata">
+                        <source src="demos/sample-sam2.mp4" type="video/mp4">
+                    </video>
+                    <figcaption class="text-sm mt-3">
+                        <span class="font-semibold">SAM2 precision mask</span>
+                        <span class="text-carbon-text-secondary block mt-1">Pixel-accurate, person-by-person, holds up when people overlap. Routes 4&ndash;6.</span>
+                    </figcaption>
+                </figure>
+            </div>
+            <div class="mt-8">
+                <a href="demo.html" class="btn-secondary px-6 py-3 font-medium inline-block">More comparisons <i class="fas fa-arrow-right ml-2"></i></a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Route chooser -->
+    <section id="routes" class="py-20 px-6 reveal">
+        <div class="container mx-auto max-w-5xl">
+            <div class="mb-10">
+                <span class="text-xs font-mono uppercase tracking-widest text-carbon-text-secondary">Start here</span>
+                <h2 class="text-3xl font-semibold mt-4">What do you need?</h2>
+                <p class="text-carbon-text-secondary mt-3 max-w-2xl leading-relaxed">
+                    Masking a research video can mean a ten-minute run on your own laptop or a GPU server your whole
+                    department shares. Pick the row that sounds like you &mdash; each route says what it costs you as well
+                    as what it gives you.
+                </p>
+            </div>
+            <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 reveal-stagger">
+                <a href="start.html#route-1" class="route-card">
+                    <span class="route-num">01</span>
+                    <h3>I need to learn about masking</h3>
+                    <p>What it is, what it costs in data quality, whether you need it at all.</p>
+                    <span class="go">Learn <i class="fas fa-arrow-right ml-1"></i></span>
+                </a>
+                <a href="start.html#route-2" class="route-card">
+                    <span class="route-num">02</span>
+                    <h3>I need resources for a DMP or ethics review</h3>
+                    <p>Consent forms, DPIA screening, masking reports &mdash; templates you can paste in.</p>
+                    <span class="go">Templates <i class="fas fa-arrow-right ml-1"></i></span>
+                </a>
+                <a href="start.html#route-3" class="route-card">
+                    <span class="route-num">03</span>
+                    <h3>I need to mask &mdash; light-weight, bulk, local</h3>
+                    <p>Any laptop, no GPU, no account. Scriptable over a whole folder.</p>
+                    <span class="go">Masked-Piper <i class="fas fa-arrow-right ml-1"></i></span>
+                </a>
+                <a href="start.html#route-4" class="route-card">
+                    <span class="route-num">04</span>
+                    <h3>I need to mask &mdash; heavy-weight precision, local</h3>
+                    <p>Pixel-accurate SAM2 in a browser interface. Needs a GPU. Data never leaves.</p>
+                    <span class="go">Local MaskAnyone <i class="fas fa-arrow-right ml-1"></i></span>
+                </a>
+                <a href="start.html#route-5" class="route-card">
+                    <span class="route-num">05</span>
+                    <h3>Our department needs to mask &mdash; server deploy</h3>
+                    <p>One GPU box, many researchers, IT-managed. Ansible playbooks provided.</p>
+                    <span class="go">Deploy <i class="fas fa-arrow-right ml-1"></i></span>
+                </a>
+                <a href="start.html#route-6" class="route-card">
+                    <span class="route-num">06</span>
+                    <h3>We need a masking service &mdash; hosted, at bulk</h3>
+                    <p>No install, no hardware. You send the data; we run the GPUs.</p>
+                    <span class="go">Hosted <i class="fas fa-arrow-right ml-1"></i></span>
+                </a>
+                <a href="start.html#route-7" class="route-card">
+                    <span class="route-num">07</span>
+                    <h3>Events</h3>
+                    <p>Masking School, the Masking Lab, the Maskathon &mdash; and hosting one yourself.</p>
+                    <span class="go">Calendar <i class="fas fa-arrow-right ml-1"></i></span>
+                </a>
+                <a href="start.html#compare" class="route-card" style="background: var(--color-bg-hover);">
+                    <span class="route-num">&mdash;</span>
+                    <h3>Not sure yet?</h3>
+                    <p>Compare routes 3&ndash;6: hardware, effort, precision, and where your data ends up.</p>
+                    <span class="go">Compare <i class="fas fa-arrow-right ml-1"></i></span>
+                </a>
+            </div>
+            <p class="text-sm text-carbon-text-secondary mt-8 max-w-2xl leading-relaxed">
+                <i class="fas fa-circle-info mr-2"></i>Routes 3 and 4 need no account at all &mdash; they run entirely on your
+                own machine. A login only appears where masking happens on a shared server, and there it is what keeps
+                your unmasked footage separated from everyone else's.
+            </p>
         </div>
     </section>
 
@@ -574,5 +711,22 @@
             </div>
         </div>
     </footer>
+    <script>
+        // The sample strip stays hidden until a clip actually loads, so the page never
+        // shows empty players while demos/*.mp4 are not installed.
+        document.addEventListener('DOMContentLoaded', function () {
+            var strip = document.querySelector('[data-sample-strip]');
+            if (!strip) return;
+            strip.querySelectorAll('figure.sample').forEach(function (fig) {
+                var video = fig.querySelector('video');
+                if (!video) return;
+                video.addEventListener('loadeddata', function () {
+                    fig.hidden = false;
+                    strip.hidden = false;
+                });
+                video.addEventListener('error', function () { fig.remove(); }, true);
+            });
+        });
+    </script>
 </body>
 </html>

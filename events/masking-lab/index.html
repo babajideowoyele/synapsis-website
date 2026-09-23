@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
     <link rel="stylesheet" href="../../theme.css">
     <script src="../../theme.js"></script>
+    <script src="../../countdown.js"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -240,6 +241,7 @@
                         <div class="label-mono mb-1">Date</div>
                         <div class="font-medium text-sm">October 19, 2026</div>
                         <div class="text-xs text-carbon-text-secondary mt-1">09:00 – 17:30</div>
+                        <div class="text-xs font-medium mt-2" data-countdown data-start="2026-10-19T09:00:00+02:00" data-end="2026-10-19T17:30:00+02:00">19 October 2026</div>
                     </div>
                 </div>
                 <div class="card p-5 bg-white flex gap-4 items-start">
@@ -260,10 +262,11 @@
                 </div>
             </div>
             <div class="flex flex-col sm:flex-row sm:items-center gap-4 mt-8">
-                <a href="https://docs.google.com/forms/d/e/1FAIpQLSedaarmiKs7WJ8x_LJA1yTYvkyMEIsyhBLgvQyPNX2r9vAgWA/viewform" target="_blank" rel="noopener" class="btn-primary px-6 py-3 font-medium text-sm inline-flex items-center justify-center">
+                <a href="https://docs.google.com/forms/d/e/1FAIpQLSedaarmiKs7WJ8x_LJA1yTYvkyMEIsyhBLgvQyPNX2r9vAgWA/viewform" target="_blank" rel="noopener" data-countdown-when="upcoming live" class="btn-primary px-6 py-3 font-medium text-sm inline-flex items-center justify-center">
                     <i class="fas fa-pen-to-square mr-2"></i> Register for the Masking Lab
                 </a>
-                <span class="text-sm text-carbon-text-secondary">A short form — you'll rank your two preferred parallel sessions.</span>
+                <span class="text-sm text-carbon-text-secondary" data-countdown-when="upcoming live">A short form — you'll rank your two preferred parallel sessions.</span>
+                <span class="text-sm text-carbon-text-secondary" data-countdown-when="past" hidden>The Masking Lab has taken place — outputs from the day follow here.</span>
             </div>
         </div>
     </section>
@@ -684,8 +687,8 @@
                     <img src="../../assets/team/stoop.jpg" alt="Wessel Stoop" class="avatar">
                     <div class="flex-1">
                         <h4 class="font-semibold">Wessel Stoop</h4>
-                        <p class="text-xs text-carbon-text-secondary mt-1">Radboud Humanities Lab · Demo</p>
-                        <p class="text-xs text-carbon-text-secondary mt-2 leading-relaxed">Engineer behind the MaskAnyone and Masked-Piper tooling; Humanities Lab at Radboud.</p>
+                        <p class="text-xs text-carbon-text-secondary mt-1">Radboud University · Humanities Lab, Faculty of Arts · Demo</p>
+                        <p class="text-xs text-carbon-text-secondary mt-2 leading-relaxed">ICT developer at the Humanities Lab; leads the pilot deployment of the masking toolchain at Radboud.</p>
                     </div>
                 </div>
 
@@ -847,8 +850,8 @@
                             <h4 class="font-semibold">Inge Slouwerhof</h4>
                             <span class="chip">Chair · K2</span>
                         </div>
-                        <p class="text-xs text-carbon-text-secondary mt-1">Radboud University, RDM</p>
-                        <p class="text-xs text-carbon-text-secondary mt-2 leading-relaxed">Research data management at Radboud; chairs Keynote 2 and co-leads the synthesis that feeds the SYNAPSIS policy paper.</p>
+                        <p class="text-xs text-carbon-text-secondary mt-1">Radboud University · Digital Competence Centre</p>
+                        <p class="text-xs text-carbon-text-secondary mt-2 leading-relaxed">Team Lead Publications and coordinator of Radboud’s Digital Competence Centre; chairs Keynote 2 and co-leads the synthesis that feeds the SYNAPSIS policy paper.</p>
                     </div>
                 </div>
 
