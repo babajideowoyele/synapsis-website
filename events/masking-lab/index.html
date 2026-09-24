@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="../../theme.css">
     <script src="../../theme.js"></script>
     <script src="../../countdown.js"></script>
+    <script src="../../shuffle.js"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -654,8 +655,33 @@
                     </div>
                 </div>
 
+                <!-- Running the day -->
+                <div class="speaker" data-pair="leads">
+                    <img src="../../assets/team/owoyele-square.jpg" alt="Babajide Owoyele" class="avatar">
+                    <div class="flex-1">
+                        <div class="flex justify-between items-start gap-2">
+                            <h4 class="font-semibold">Babajide Owoyele</h4>
+                            <span class="chip">Demo &amp; Co-creation</span>
+                        </div>
+                        <p class="text-xs text-carbon-text-secondary mt-1">Radboud University · HPI Potsdam</p>
+                        <p class="text-xs text-carbon-text-secondary mt-2 leading-relaxed">SYNAPSIS design scientist; builds the MaskingOPS toolchain and runs Masking School / Lab co-creation formats.</p>
+                    </div>
+                </div>
+
+                <div class="speaker" data-pair="leads">
+                    <img src="../../assets/team/shongwe.jpg" alt="Nthabiseng Shongwe" class="avatar">
+                    <div class="flex-1">
+                        <div class="flex justify-between items-start gap-2">
+                            <h4 class="font-semibold">Nthabiseng Shongwe</h4>
+                            <span class="chip">Synthesis</span>
+                        </div>
+                        <p class="text-xs text-carbon-text-secondary mt-1">SYNAPSIS</p>
+                        <p class="text-xs text-carbon-text-secondary mt-2 leading-relaxed">Day-of facilitation, format intro, synthesis lead.</p>
+                    </div>
+                </div>
+
                 <!-- Hosts -->
-                <div class="speaker">
+                <div class="speaker" data-pair="hosts">
                     <img src="../../assets/team/huma.jpg" alt="Bogdana Huma" class="avatar">
                     <div class="flex-1">
                         <h4 class="font-semibold"><a href="https://vu.nl/en/research/scientists/bogdana-raluca-huma" target="_blank" rel="noopener" class="hover:underline underline-offset-4 decoration-1">Bogdana Huma</a></h4>
@@ -664,7 +690,7 @@
                     </div>
                 </div>
 
-                <div class="speaker">
+                <div class="speaker" data-pair="hosts">
                     <img src="../../assets/team/dingemanse.jpg" alt="Mark Dingemanse" class="avatar">
                     <div class="flex-1">
                         <h4 class="font-semibold"><a href="https://www.ru.nl/en/people/dingemanse-m" target="_blank" rel="noopener" class="hover:underline underline-offset-4 decoration-1">Mark Dingemanse</a></h4>
@@ -675,15 +701,6 @@
 
                 <!-- Demo -->
                 <div class="speaker">
-                    <img src="../../assets/team/owoyele-square.jpg" alt="Babajide Owoyele" class="avatar">
-                    <div class="flex-1">
-                        <h4 class="font-semibold">Babajide Owoyele</h4>
-                        <p class="text-xs text-carbon-text-secondary mt-1">Radboud University · HPI Potsdam · Demo & Co-creation</p>
-                        <p class="text-xs text-carbon-text-secondary mt-2 leading-relaxed">SYNAPSIS design scientist; builds the MaskingOPS toolchain and runs Masking School / Lab co-creation formats.</p>
-                    </div>
-                </div>
-
-                <div class="speaker">
                     <img src="../../assets/team/stoop.jpg" alt="Wessel Stoop" class="avatar">
                     <div class="flex-1">
                         <h4 class="font-semibold"><a href="https://www.ru.nl/en/people/stoop-w" target="_blank" rel="noopener" class="hover:underline underline-offset-4 decoration-1">Wessel Stoop</a></h4>
@@ -693,7 +710,7 @@
                 </div>
 
                 <!-- Session A -->
-                <div class="speaker">
+                <div class="speaker" data-pair="session-a">
                     <img src="../../assets/team/maineri.jpg" alt="Angelica Maineri" class="avatar">
                     <div class="flex-1">
                         <div class="flex justify-between items-start gap-2">
@@ -705,7 +722,7 @@
                     </div>
                 </div>
 
-                <div class="speaker">
+                <div class="speaker" data-pair="session-a">
                     <img src="../../assets/team/bernotas.jpg" alt="Tadas Bernotas" class="avatar">
                     <div class="flex-1">
                         <div class="flex justify-between items-start gap-2">
@@ -718,7 +735,7 @@
                 </div>
 
                 <!-- Session B -->
-                <div class="speaker">
+                <div class="speaker" data-pair="session-b">
                     <img src="../../assets/team/touber.jpg" alt="Jetze Touber" class="avatar">
                     <div class="flex-1">
                         <div class="flex justify-between items-start gap-2">
@@ -730,7 +747,7 @@
                     </div>
                 </div>
 
-                <div class="speaker">
+                <div class="speaker" data-pair="session-b">
                     <img src="../../assets/team/karrouche.jpg" alt="Norah Karrouche" class="avatar">
                     <div class="flex-1">
                         <div class="flex justify-between items-start gap-2">
@@ -743,7 +760,7 @@
                 </div>
 
                 <!-- Session C - paired -->
-                <div class="speaker">
+                <div class="speaker" data-pair="session-c">
                     <img src="../../assets/team/huijser.jpg" alt="Dorien Huijser" class="avatar">
                     <div class="flex-1">
                         <div class="flex justify-between items-start gap-2">
@@ -755,7 +772,7 @@
                     </div>
                 </div>
 
-                <div class="speaker">
+                <div class="speaker" data-pair="session-c">
                     <img src="../../assets/team/ilamparuthi.webp" alt="Santosh Ilamparuthi" class="avatar">
                     <div class="flex-1">
                         <div class="flex justify-between items-start gap-2">
@@ -781,7 +798,7 @@
                 </div>
 
                 <!-- Co-creation -->
-                <div class="speaker">
+                <div class="speaker" data-pair="cocreation">
                     <img src="../../assets/team/pouw.png" alt="Wim Pouw" class="avatar">
                     <div class="flex-1">
                         <div class="flex justify-between items-start gap-2">
@@ -793,7 +810,7 @@
                     </div>
                 </div>
 
-                <div class="speaker">
+                <div class="speaker" data-pair="cocreation">
                     <img src="../../assets/team/trujillo.jpg" alt="James Trujillo" class="avatar">
                     <div class="flex-1">
                         <div class="flex justify-between items-start gap-2">
@@ -819,18 +836,6 @@
                 </div>
 
                 <!-- Synthesis -->
-                <div class="speaker">
-                    <img src="../../assets/team/shongwe.jpg" alt="Nthabiseng Shongwe" class="avatar">
-                    <div class="flex-1">
-                        <div class="flex justify-between items-start gap-2">
-                            <h4 class="font-semibold">Nthabiseng Shongwe</h4>
-                            <span class="chip">Synthesis</span>
-                        </div>
-                        <p class="text-xs text-carbon-text-secondary mt-1">SYNAPSIS</p>
-                        <p class="text-xs text-carbon-text-secondary mt-2 leading-relaxed">Day-of facilitation, format intro, synthesis lead.</p>
-                    </div>
-                </div>
-
                 <div class="speaker">
                     <img src="../../assets/team/slouwerhof.jpg" alt="Inge Slouwerhof" class="avatar">
                     <div class="flex-1">
