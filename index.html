@@ -125,7 +125,7 @@
                 </a>
                 <div class="hidden md:flex items-center space-x-8">
                     <a href="index.html" class="text-sm font-medium border-b-2 border-carbon-text pb-1">Home</a>
-                    <a href="start.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Start here</a>
+                    <a href="#routes" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Start here</a>
                     <a href="platform.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Platform</a>
                     <a href="demo.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Demo</a>
                     <a href="training.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Training</a>
@@ -143,7 +143,7 @@
         <!-- Mobile menu (visible only when toggled, hidden on md+) -->
         <div id="mobile-menu" class="hidden md:hidden border-t border-carbon-border">
             <a href="index.html" class="block px-6 py-3 text-sm font-medium bg-carbon-bg-hover border-l-2 border-carbon-text">Home</a>
-            <a href="start.html" class="block px-6 py-3 text-sm font-medium text-carbon-text-secondary hover:text-carbon-text hover:bg-carbon-bg-hover">Start here</a>
+            <a href="#routes" class="block px-6 py-3 text-sm font-medium text-carbon-text-secondary hover:text-carbon-text hover:bg-carbon-bg-hover">Start here</a>
             <a href="platform.html" class="block px-6 py-3 text-sm font-medium text-carbon-text-secondary hover:text-carbon-text hover:bg-carbon-bg-hover">Platform</a>
             <a href="demo.html" class="block px-6 py-3 text-sm font-medium text-carbon-text-secondary hover:text-carbon-text hover:bg-carbon-bg-hover">Demo</a>
             <a href="training.html" class="block px-6 py-3 text-sm font-medium text-carbon-text-secondary hover:text-carbon-text hover:bg-carbon-bg-hover">Training</a>
@@ -245,7 +245,7 @@
                     </video>
                     <figcaption class="text-sm mt-3">
                         <span class="font-semibold">Blur</span>
-                        <span class="text-carbon-text-secondary block mt-1">Fast, runs on any laptop, keeps gross body movement readable. Route 3.</span>
+                        <span class="text-carbon-text-secondary block mt-1">Fast, runs on any laptop, keeps gross body movement readable. Masked-Piper.</span>
                     </figcaption>
                 </figure>
                 <figure class="sample" hidden>
@@ -254,7 +254,7 @@
                     </video>
                     <figcaption class="text-sm mt-3">
                         <span class="font-semibold">Silhouette &amp; skeleton</span>
-                        <span class="text-carbon-text-secondary block mt-1">Removes appearance entirely, keeps kinematics for gesture analysis. Route 3.</span>
+                        <span class="text-carbon-text-secondary block mt-1">Removes appearance entirely, keeps kinematics for gesture analysis. Masked-Piper.</span>
                     </figcaption>
                 </figure>
                 <figure class="sample" hidden>
@@ -263,7 +263,7 @@
                     </video>
                     <figcaption class="text-sm mt-3">
                         <span class="font-semibold">SAM2 precision mask</span>
-                        <span class="text-carbon-text-secondary block mt-1">Pixel-accurate, person-by-person, holds up when people overlap. Routes 4&ndash;6.</span>
+                        <span class="text-carbon-text-secondary block mt-1">Pixel-accurate, person-by-person, holds up when people overlap. MaskAnyone.</span>
                     </figcaption>
                 </figure>
             </div>
@@ -273,72 +273,70 @@
         </div>
     </section>
 
-    <!-- Route chooser -->
+    <!-- Starting points -->
     <section id="routes" class="py-20 px-6 reveal">
         <div class="container mx-auto max-w-5xl">
             <div class="mb-10">
                 <span class="text-xs font-mono uppercase tracking-widest text-carbon-text-secondary">Start here</span>
-                <h2 class="text-3xl font-semibold mt-4">What do you need?</h2>
+                <h2 class="text-3xl font-semibold mt-4">Find your starting point</h2>
                 <p class="text-carbon-text-secondary mt-3 max-w-2xl leading-relaxed">
-                    Masking a research video can mean a ten-minute run on your own laptop or a GPU server your whole
-                    department shares. Pick the row that sounds like you &mdash; each route says what it costs you as well
-                    as what it gives you.
+                    Open tools, training and papers for masking research video &mdash; from a light-weight run on your
+                    own laptop to precision masking and the evidence behind it.
                 </p>
             </div>
-            <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 reveal-stagger">
-                <a href="start.html#route-1" class="route-card">
+            <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 reveal-stagger">
+                <a href="https://envisionbox.org/embedded_Mediapiping.html" target="_blank" rel="noopener" class="route-card">
                     <span class="route-num">01</span>
-                    <h3>I need to learn about masking</h3>
-                    <p>What it is, what it costs in data quality, whether you need it at all.</p>
-                    <span class="go">Learn <i class="fas fa-arrow-right ml-1"></i></span>
+                    <h3>Masking lite &mdash; Masked-Piper</h3>
+                    <p>Light-weight masking that keeps body and face kinematics. Step-by-step module on EnvisionBox; runs on any laptop.</p>
+                    <span class="go">EnvisionBox module <i class="fas fa-arrow-up-right-from-square ml-1"></i></span>
                 </a>
-                <a href="start.html#route-2" class="route-card">
+                <a href="https://github.com/MaskAnyone/MaskAnyone" target="_blank" rel="noopener" class="route-card">
                     <span class="route-num">02</span>
-                    <h3>I need resources for a DMP or ethics review</h3>
-                    <p>Consent forms, DPIA screening, masking reports &mdash; templates you can paste in.</p>
-                    <span class="go">Templates <i class="fas fa-arrow-right ml-1"></i></span>
+                    <h3>MaskAnyone</h3>
+                    <p>Precision masking with SAM2 in a browser interface, run locally or on a department server. Data never leaves your machine.</p>
+                    <span class="go">Code &amp; docs <i class="fas fa-arrow-up-right-from-square ml-1"></i></span>
                 </a>
-                <a href="start.html#route-3" class="route-card">
+                <a href="https://maskbench.github.io/maskbench/" target="_blank" rel="noopener" class="route-card">
                     <span class="route-num">03</span>
-                    <h3>I need to mask &mdash; light-weight, bulk, local</h3>
-                    <p>Any laptop, no GPU, no account. Scriptable over a whole folder.</p>
-                    <span class="go">Masked-Piper <i class="fas fa-arrow-right ml-1"></i></span>
+                    <h3>MaskBench</h3>
+                    <p>Benchmarks how well pose estimation survives masking, so you can choose a strategy with evidence.</p>
+                    <span class="go">Preprint &amp; results <i class="fas fa-arrow-up-right-from-square ml-1"></i></span>
                 </a>
-                <a href="start.html#route-4" class="route-card">
+                <a href="https://envisionbox.org" target="_blank" rel="noopener" class="route-card">
                     <span class="route-num">04</span>
-                    <h3>I need to mask &mdash; heavy-weight precision, local</h3>
-                    <p>Pixel-accurate SAM2 in a browser interface. Needs a GPU. Data never leaves.</p>
-                    <span class="go">Local MaskAnyone <i class="fas fa-arrow-right ml-1"></i></span>
+                    <h3>EnvisionBox</h3>
+                    <p>Open training modules for multimodal and audiovisual research methods, including masking and pose tracking.</p>
+                    <span class="go">envisionbox.org <i class="fas fa-arrow-up-right-from-square ml-1"></i></span>
                 </a>
-                <a href="start.html#route-5" class="route-card">
+                <a href="https://doi.org/10.1016/j.softx.2022.101236" target="_blank" rel="noopener" class="route-card">
                     <span class="route-num">05</span>
-                    <h3>Our department needs to mask &mdash; server deploy</h3>
-                    <p>One GPU box, many researchers, IT-managed. Ansible playbooks provided.</p>
-                    <span class="go">Deploy <i class="fas fa-arrow-right ml-1"></i></span>
+                    <h3>Paper: Masked-Piper</h3>
+                    <p>Owoyele, Trujillo, de Melo &amp; Pouw (2022). <em>SoftwareX</em> 20.</p>
+                    <span class="go">Read the paper <i class="fas fa-arrow-up-right-from-square ml-1"></i></span>
                 </a>
-                <a href="start.html#route-6" class="route-card">
+                <a href="https://aisel.aisnet.org/icis2024/adv_theory/adv_theory/1" target="_blank" rel="noopener" class="route-card">
                     <span class="route-num">06</span>
-                    <h3>We need a masking service &mdash; hosted, at bulk</h3>
-                    <p>No install, no hardware. You send the data; we run the GPUs.</p>
-                    <span class="go">Hosted <i class="fas fa-arrow-right ml-1"></i></span>
+                    <h3>Paper: MaskAnyone Toolkit</h3>
+                    <p>Owoyele et al. (2024). Minimising privacy risk, maximising utility in AV archiving. ICIS 2024.</p>
+                    <span class="go">Read the paper <i class="fas fa-arrow-up-right-from-square ml-1"></i></span>
                 </a>
-                <a href="start.html#route-7" class="route-card">
+                <a href="https://doi.org/10.5281/zenodo.16996002" target="_blank" rel="noopener" class="route-card">
                     <span class="route-num">07</span>
-                    <h3>Events</h3>
-                    <p>Masking School, the Masking Lab, the Maskathon &mdash; and hosting one yourself.</p>
-                    <span class="go">Calendar <i class="fas fa-arrow-right ml-1"></i></span>
+                    <h3>SYNAPSIS on Zenodo</h3>
+                    <p>The project proposal and open outputs, with DOIs you can cite.</p>
+                    <span class="go">Zenodo <i class="fas fa-arrow-up-right-from-square ml-1"></i></span>
                 </a>
-                <a href="start.html#compare" class="route-card" style="background: var(--color-bg-hover);">
-                    <span class="route-num">&mdash;</span>
-                    <h3>Not sure yet?</h3>
-                    <p>Compare routes 3&ndash;6: hardware, effort, precision, and where your data ends up.</p>
-                    <span class="go">Compare <i class="fas fa-arrow-right ml-1"></i></span>
+                <a href="events/masking-lab/" class="route-card">
+                    <span class="route-num">08</span>
+                    <h3>Masking Lab &middot; 19 Oct</h3>
+                    <p>A free co-creation day at VU Amsterdam. Bring your own masking or data-sharing dilemma.</p>
+                    <span class="go">Register <i class="fas fa-arrow-right ml-1"></i></span>
                 </a>
             </div>
             <p class="text-sm text-carbon-text-secondary mt-8 max-w-2xl leading-relaxed">
-                <i class="fas fa-circle-info mr-2"></i>Routes 3 and 4 need no account at all &mdash; they run entirely on your
-                own machine. A login only appears where masking happens on a shared server, and there it is what keeps
-                your unmasked footage separated from everyone else's.
+                <i class="fas fa-circle-info mr-2"></i>More papers, templates and code on the
+                <a href="resources.html#publications" class="underline">Resources</a> page.
             </p>
         </div>
     </section>
