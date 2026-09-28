@@ -1,0 +1,7 @@
+# Copy to inventory.ini and fill in your server.
+[maskanyone]
+maskanyone-server ansible_host=<SERVER_IP_OR_HOSTNAME> ansible_user=<your_username>
+
+[maskanyone:vars]
+# ansible_ssh_private_key_file=~/.ssh/id_maskanyone
+# ansible_become_method=sudo

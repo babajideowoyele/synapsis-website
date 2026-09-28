@@ -1,0 +1,376 @@
+---
+# MaskAnyone server deployment (GPU, Keycloak login) — SYNAPSIS reference playbook
+#
+# STATUS: DRAFT, NOT YET VALIDATED. Written from the official manual setup in
+# https://github.com/MaskAnyone/MaskAnyoneProdInfrastructure ("Setup (Main Server)")
+# plus lessons from the Radboud Ponyland deployment. Radboud TSG maintains the
+# validated playbooks; this one will be checked against them.
+#
+# Usage:
+#   cp inventory.ini.example inventory.ini        # fill in your host
+#   cp group_vars/all.yml.example group_vars/all.yml   # fill in hostname etc.
+#   ansible-galaxy collection install community.general community.docker
+#   ansible-playbook -i inventory.ini deploy.yml --ask-become-pass \
+#     -e db_password='...' -e kc_admin_password='...'
+#
+# The Keycloak realm and first user are created by hand in the admin UI, exactly
+# as in the manual setup: the playbook pauses and tells you what to do, then
+# picks up the realm's public key by itself.
+
+- name: Deploy MaskAnyone (server mode)
+  hosts: maskanyone
+  become: true
+
+  vars:
+    compose_file: "docker-compose-{{ 'server-gpu' if use_gpu else 'server' }}.yml"
+    compose: "docker compose -f {{ install_dir }}/{{ compose_file }} --env-file {{ install_dir }}/.env"
+    public_url: "https://{{ maskanyone_hostname }}{{ '' if public_port | int == 443 else ':' ~ public_port }}"
+
+  pre_tasks:
+    - name: Require secrets on the command line (no defaults, so a missing one fails loudly)
+      ansible.builtin.assert:
+        that:
+          - db_password is defined and db_password | length >= 16
+          - kc_admin_password is defined and kc_admin_password | length >= 16
+          - db_password != kc_admin_password
+        fail_msg: "Pass -e db_password=... -e kc_admin_password=... (16+ characters, different from each other)."
+
+    - name: Require a real public hostname
+      # Ponyland lesson: an internal IP here makes the token issuer mismatch and every login fails.
+      ansible.builtin.assert:
+        that:
+          - maskanyone_hostname is defined
+          - maskanyone_hostname not in ['localhost', '127.0.0.1']
+        fail_msg: "Set maskanyone_hostname to the DNS name users will type in their browser."
+
+  tasks:
+    # ---------------------------------------------------------------------------
+    # 1. Host checks
+    # ---------------------------------------------------------------------------
+    - name: Create data directory on project storage
+      # Ponyland lesson: a 5 GB home quota could not hold model weights and uploads.
+      ansible.builtin.file:
+        path: "{{ data_dir }}"
+        state: directory
+        mode: "0750"
+
+    - name: Check free disk space on the data directory
+      ansible.builtin.command: df --output=avail -BG {{ data_dir }}
+      register: df_out
+      changed_when: false
+
+    - name: Require enough free space on the data directory
+      ansible.builtin.assert:
+        that: (df_out.stdout_lines[-1] | regex_replace('[^0-9]', '') | int) >= min_free_gb
+        fail_msg: "Only {{ df_out.stdout_lines[-1] | trim }} free on {{ data_dir }}."
+
+    - name: Check the NVIDIA driver
+      ansible.builtin.command: nvidia-smi --query-gpu=name,memory.total --format=csv,noheader
+      register: gpu_out
+      changed_when: false
+      failed_when: false
+      when: use_gpu
+
+    - name: Stop if a GPU deployment was asked for but no GPU driver is present
+      ansible.builtin.fail:
+        msg: >-
+          nvidia-smi failed. Install the NVIDIA driver and nvidia-container-toolkit first
+          (this playbook does not touch drivers), or set use_gpu: false for MediaPipe-only masking.
+      when: use_gpu and gpu_out.rc != 0
+
+    - name: Report GPU
+      ansible.builtin.debug:
+        msg: "GPU: {{ gpu_out.stdout }}. Under 10 GB VRAM? Set sam2_offload_state_to_cpu: true."
+      when: use_gpu
+
+    # ---------------------------------------------------------------------------
+    # 2. Docker (skipped when already installed)
+    # ---------------------------------------------------------------------------
+    - name: Check for Docker Compose v2
+      ansible.builtin.command: docker compose version
+      register: compose_check
+      changed_when: false
+      failed_when: false
+
+    - name: Install Docker from the official repository
+      when: compose_check.rc != 0
+      block:
+        - name: Install prerequisites
+          ansible.builtin.apt:
+            name: [ca-certificates, curl, gnupg, git]
+            state: present
+            update_cache: true
+
+        - name: Add Docker GPG key
+          ansible.builtin.get_url:
+            url: "https://download.docker.com/linux/{{ ansible_distribution | lower }}/gpg"
+            dest: /etc/apt/keyrings/docker.asc
+            mode: "0644"
+
+        - name: Add Docker apt repository
+          ansible.builtin.apt_repository:
+            repo: >-
+              deb [arch=amd64 signed-by=/etc/apt/keyrings/docker.asc]
+              https://download.docker.com/linux/{{ ansible_distribution | lower }}
+              {{ ansible_distribution_release }} stable
+            filename: docker
+            state: present
+
+        - name: Install Docker Engine and Compose plugin
+          ansible.builtin.apt:
+            name: [docker-ce, docker-ce-cli, containerd.io, docker-compose-plugin]
+            state: present
+            update_cache: true
+
+    - name: Ensure Docker is running
+      ansible.builtin.service:
+        name: docker
+        state: started
+        enabled: true
+
+    - name: Ensure git is present
+      ansible.builtin.apt:
+        name: git
+        state: present
+
+    # ---------------------------------------------------------------------------
+    # 3. MaskAnyone production infrastructure
+    # ---------------------------------------------------------------------------
+    - name: Clone MaskAnyoneProdInfrastructure
+      ansible.builtin.git:
+        repo: https://github.com/MaskAnyone/MaskAnyoneProdInfrastructure.git
+        dest: "{{ install_dir }}"
+        version: "{{ infra_git_ref }}"
+        update: false   # never clobber a live installation on re-runs
+
+    - name: Keep application data on project storage (./data -> data_dir)
+      block:
+        - name: Check the repository's data folder
+          ansible.builtin.stat:
+            path: "{{ install_dir }}/data"
+          register: repo_data
+
+        - name: Seed data_dir with the repository's folder layout
+          ansible.builtin.command: cp -rn {{ install_dir }}/data/. {{ data_dir }}/
+          when: repo_data.stat.isdir is defined and repo_data.stat.isdir
+          changed_when: false
+
+        - name: Replace ./data with a symlink to data_dir
+          ansible.builtin.file:
+            path: "{{ install_dir }}/data"
+            state: absent
+          when: repo_data.stat.isdir is defined and repo_data.stat.isdir
+
+        - name: Link ./data
+          ansible.builtin.file:
+            src: "{{ data_dir }}"
+            dest: "{{ install_dir }}/data"
+            state: link
+
+    - name: Bind the MaskAnyone proxy to localhost behind Apache
+      # The proxy container serves HTTPS on 443. With Apache in front we move it to
+      # 127.0.0.1:<internal_https_port> so only Apache is reachable from outside.
+      ansible.builtin.replace:
+        path: "{{ install_dir }}/{{ compose_file }}"
+        regexp: '- "443:443"'
+        replace: '- "127.0.0.1:{{ internal_https_port }}:443"'
+      when: use_apache
+
+    - name: Tell the backend which token issuer to expect
+      # Needed whenever users reach MaskAnyone on anything other than https://localhost.
+      # (The upstream README spells this BACKEND_AUtH_ISSUER; we assume BACKEND_AUTH_ISSUER.)
+      ansible.builtin.lineinfile:
+        path: "{{ install_dir }}/{{ compose_file }}"
+        insertafter: "MASK_ANYONE_PLATFORM_MODE: server"
+        line: "      BACKEND_AUTH_ISSUER: {{ public_url }}/auth/realms/maskanyone"
+        regexp: "BACKEND_AUTH_ISSUER:"
+
+    - name: Check whether .env already holds a Keycloak public key
+      ansible.builtin.slurp:
+        src: "{{ install_dir }}/.env"
+      register: env_existing
+      failed_when: false
+
+    - name: Write .env
+      ansible.builtin.template:
+        src: templates/env.j2
+        dest: "{{ install_dir }}/.env"
+        mode: "0600"
+      vars:
+        kc_public_key: >-
+          {{ (env_existing.content | default('') | b64decode
+              | regex_search('MASK_ANYONE_KC_PUBLIC_KEY=(\S+)', '\1') | default([''], true)) | first }}
+
+    # ---------------------------------------------------------------------------
+    # 4. First start, in the order the manual setup prescribes
+    # ---------------------------------------------------------------------------
+    - name: Pull images
+      ansible.builtin.command: "{{ compose }} pull"
+      changed_when: true
+
+    - name: Start the database
+      ansible.builtin.command: "{{ compose }} up -d postgres"
+      changed_when: true
+
+    - name: Wait for Postgres to accept connections
+      ansible.builtin.command: "{{ compose }} exec -T postgres pg_isready -U {{ db_user }}"
+      register: pg_ready
+      until: pg_ready.rc == 0
+      retries: 20
+      delay: 3
+      changed_when: false
+
+    - name: Start proxy, frontend, backend and Keycloak (workers later)
+      ansible.builtin.command: "{{ compose }} up -d proxy frontend backend keycloak"
+      changed_when: true
+
+    - name: Wait for Keycloak
+      ansible.builtin.uri:
+        url: "https://127.0.0.1:{{ internal_https_port if use_apache else 443 }}/auth/"
+        validate_certs: false
+        status_code: [200, 302, 303]
+      register: kc_up
+      until: kc_up.status in [200, 302, 303]
+      retries: 30
+      delay: 10
+
+    # ---------------------------------------------------------------------------
+    # 5. Reverse proxy (optional; most institutional servers already run Apache)
+    # ---------------------------------------------------------------------------
+    - name: Configure Apache
+      when: use_apache
+      block:
+        - name: Install Apache
+          ansible.builtin.apt:
+            name: apache2
+            state: present
+
+        - name: Enable modules
+          community.general.apache2_module:
+            name: "{{ item }}"
+            state: present
+          loop: [ssl, proxy, proxy_http, proxy_wstunnel, headers, rewrite]
+          notify: Reload Apache
+
+        - name: Write the MaskAnyone vhost
+          # Ponyland lesson: Apache was live on :80 with ProxyPass commented out,
+          # so MaskAnyone looked broken while it was running fine behind it.
+          ansible.builtin.template:
+            src: templates/apache-maskanyone.conf.j2
+            dest: /etc/apache2/sites-available/maskanyone.conf
+            mode: "0644"
+          notify: Reload Apache
+
+        - name: Enable the vhost
+          ansible.builtin.command: a2ensite maskanyone.conf
+          args:
+            creates: /etc/apache2/sites-enabled/maskanyone.conf
+          notify: Reload Apache
+
+        - name: Test the Apache configuration
+          ansible.builtin.command: apache2ctl configtest
+          changed_when: false
+
+    - name: Apply Apache changes now
+      ansible.builtin.meta: flush_handlers
+
+    # ---------------------------------------------------------------------------
+    # 6. Keycloak realm and first user (manual, as in the upstream setup)
+    # ---------------------------------------------------------------------------
+    - name: Check whether the maskanyone realm exists
+      ansible.builtin.uri:
+        url: "https://127.0.0.1:{{ internal_https_port if use_apache else 443 }}/auth/realms/maskanyone"
+        validate_certs: false
+        status_code: [200, 404]
+      register: realm_check
+
+    - name: Create the realm and first user in Keycloak
+      ansible.builtin.pause:
+        prompt: |
+
+          Open {{ public_url }}/auth/ and log in to the Administration Console
+          as '{{ kc_admin_user }}' with the kc_admin_password you passed in.
+
+            1. Top-left realm menu > Create realm > paste the contents of
+               {{ install_dir }}/realm.json into "Resource file" > Create.
+            2. Clients > maskanyone-fe:
+                 Root URL             = {{ public_url }}
+                 Valid redirect URIs  = {{ public_url }}/*   (replace https://localhost/*)
+               Save.
+            3. Users > Add user (username, email, names, Email verified = on) > Create.
+               Credentials > Set password.
+
+          Press Enter when done. The playbook fetches the realm's public key itself.
+      when: realm_check.status == 404
+
+    - name: Fetch the realm's RS256 public key
+      ansible.builtin.uri:
+        url: "https://127.0.0.1:{{ internal_https_port if use_apache else 443 }}/auth/realms/maskanyone"
+        validate_certs: false
+        return_content: true
+      register: realm_info
+      until: realm_info.status == 200
+      retries: 5
+      delay: 5
+
+    - name: Store the public key in .env
+      ansible.builtin.lineinfile:
+        path: "{{ install_dir }}/.env"
+        regexp: "^MASK_ANYONE_KC_PUBLIC_KEY="
+        line: "MASK_ANYONE_KC_PUBLIC_KEY={{ realm_info.json.public_key }}"
+      register: key_written
+
+    # ---------------------------------------------------------------------------
+    # 7. Start everything and check
+    # ---------------------------------------------------------------------------
+    - name: Start all services (recreates the backend if the key changed)
+      ansible.builtin.command: "{{ compose }} up -d"
+      changed_when: true
+
+    - name: Wait for the frontend
+      ansible.builtin.uri:
+        url: "https://127.0.0.1:{{ internal_https_port if use_apache else 443 }}/"
+        validate_certs: false
+      register: fe_up
+      until: fe_up.status == 200
+      retries: 20
+      delay: 6
+
+    - name: Show container status
+      ansible.builtin.command: "{{ compose }} ps"
+      register: ps_out
+      changed_when: false
+
+    - name: Report
+      ansible.builtin.debug:
+        msg:
+          - "{{ ps_out.stdout_lines }}"
+          - "MaskAnyone should now be reachable at {{ public_url }}"
+          - "Federated (institutional) login is site-specific and not configured by this playbook."
+
+    # ---------------------------------------------------------------------------
+    # 8. Nightly database backup
+    # Ponyland lesson: data survives restarts, not 'docker compose down -v'.
+    # Back up before any real research data lands.
+    # ---------------------------------------------------------------------------
+    - name: Create backup directory
+      ansible.builtin.file:
+        path: "{{ backup_dir }}"
+        state: directory
+        mode: "0750"
+
+    - name: Install nightly pg_dumpall cron (keeps 30 days)
+      ansible.builtin.cron:
+        name: maskanyone-db-backup
+        minute: "30"
+        hour: "2"
+        job: >-
+          {{ compose }} exec -T postgres pg_dumpall -U {{ db_user }}
+          | gzip > {{ backup_dir }}/maskanyone-$(date +\%F).sql.gz
+          && find {{ backup_dir }} -name 'maskanyone-*.sql.gz' -mtime +30 -delete
+
+  handlers:
+    - name: Reload Apache
+      ansible.builtin.service:
+        name: apache2
+        state: reloaded

@@ -1,0 +1,33 @@
+# Copy to all.yml and adjust. Secrets (db_password, kc_admin_password) go on the
+# command line with -e, or in an ansible-vault file — never in this file.
+
+maskanyone_hostname: maskanyone.example.university.nl   # the name users type in the browser
+public_port: 443                                        # port users reach it on
+
+# Image version. 0.4.6 is the latest published on ghcr.io (Sept 2026);
+# the upstream .env.dist still says 0.3.1.
+maskanyone_version: "0.4.6"
+infra_git_ref: master        # MaskAnyoneProdInfrastructure branch or commit
+
+use_gpu: true                # false = MediaPipe-only masking, no SAM2/OpenPose
+use_apache: true             # false = the MaskAnyone proxy listens on :443 itself
+internal_https_port: 8443    # where the MaskAnyone proxy listens when Apache is in front
+
+install_dir: /opt/maskanyone
+data_dir: /data/maskanyone          # project/shared storage, not a home directory
+backup_dir: /data/maskanyone-backup
+min_free_gb: 50
+
+# Apache TLS certificate (usually managed centrally by IT)
+tls_cert_file: /etc/ssl/certs/maskanyone.crt
+tls_key_file: /etc/ssl/private/maskanyone.key
+
+db_user: maskanyone
+kc_admin_user: admin
+
+# Workers and SAM2 memory — see the comments in upstream .env.dist
+basic_worker_count: 1        # keep at 1 for the SAM2-based process
+basic_worker_cpus: 6
+basic_worker_mem_limit: 12288m
+sam2_offload_video_to_cpu: false
+sam2_offload_state_to_cpu: false   # set true on GPUs with < 10 GB VRAM or long videos
