@@ -207,79 +207,85 @@
                     <span class="text-xs font-mono uppercase tracking-widest text-carbon-text-secondary">Guides</span>
                     <h2 class="text-3xl font-semibold mt-4">Documentation</h2>
                 </div>
-                <p class="text-sm text-carbon-text-secondary mb-8 bg-yellow-50 border border-yellow-200 p-4">
-                    <i class="fas fa-circle-info mr-2"></i>Documentation is being developed as part of the SYNAPSIS project. Guides will be published here as they become available.
+                <p class="text-sm text-carbon-text-secondary mb-8 bg-white border border-carbon-border p-4">
+                    <i class="fas fa-circle-info mr-2"></i>Guides draw on the SYNAPSIS video tutorials, <a href="https://envisionbox.org" target="_blank" rel="noopener" class="underline">EnvisionBox</a> and the <a href="https://wimpouw.github.io/TilburgMultiscaleSummerschool2026/" target="_blank" rel="noopener" class="underline">MDIG2026 Tilburg summer school handbook</a>.
                 </p>
                 <div class="grid md:grid-cols-3 gap-6">
-                    <!-- Getting Started -->
-                    <div class="card bg-white p-6 opacity-75">
-                        <span class="resource-badge resource-badge-doc mb-4 inline-block">Guide</span>
-                        <span class="text-xs bg-yellow-100 px-2 py-1 ml-2">Coming Soon</span>
-                        <h3 class="font-semibold mb-2 mt-3">Getting Started</h3>
-                        <p class="text-sm text-carbon-text-secondary mb-4">Quick-start guide for new users. Platform registration, first upload, and basic masking workflow.</p>
-                        <div class="flex items-center gap-4 text-xs text-carbon-text-secondary mb-4">
-                            <span><i class="fas fa-clock mr-1"></i> 15 min read</span>
+                    <div class="card bg-white p-6 flex flex-col">
+                        <span class="resource-badge resource-badge-doc mb-4 inline-block self-start">Guide</span>
+                        <h3 class="font-semibold mb-2">Getting Started</h3>
+                        <p class="text-sm text-carbon-text-secondary mb-4">What video masking is, when you need it, and what it costs in data quality. Then install MaskAnyone and run a first job.</p>
+                        <div class="flex items-center gap-4 text-xs text-carbon-text-secondary mb-4 mt-auto">
+                            <span><i class="fas fa-book-open mr-1"></i> SYNAPSIS tutorials</span>
                             <span><i class="fas fa-signal mr-1"></i> Beginner</span>
                         </div>
+                        <div class="flex flex-wrap gap-2">
+                            <a href="training/tutorials/01-what-is-masking.html" class="btn-secondary px-4 py-2 text-sm inline-block">What is masking?</a>
+                            <a href="training/tutorials/deepdive-installation.html" class="btn-secondary px-4 py-2 text-sm inline-block">Install</a>
+                            <a href="training/tutorials/deepdive-first-masking-job.html" class="btn-secondary px-4 py-2 text-sm inline-block">First job</a>
+                        </div>
                     </div>
-
-                    <!-- Face Masking -->
-                    <div class="card bg-white p-6 opacity-75">
-                        <span class="resource-badge resource-badge-doc mb-4 inline-block">Guide</span>
-                        <span class="text-xs bg-yellow-100 px-2 py-1 ml-2">Coming Soon</span>
-                        <h3 class="font-semibold mb-2 mt-3">Face Masking Methods</h3>
-                        <p class="text-sm text-carbon-text-secondary mb-4">Detailed comparison of face de-identification techniques: blur, pixelation, face swap, and neural methods.</p>
-                        <div class="flex items-center gap-4 text-xs text-carbon-text-secondary mb-4">
-                            <span><i class="fas fa-clock mr-1"></i> 25 min read</span>
+                    <div class="card bg-white p-6 flex flex-col">
+                        <span class="resource-badge resource-badge-doc mb-4 inline-block self-start">Guide</span>
+                        <h3 class="font-semibold mb-2">Face Masking Methods</h3>
+                        <p class="text-sm text-carbon-text-secondary mb-4">Blur, pixelation, contours, silhouettes and face masking compared side by side on the same clips, with the tools that produce them.</p>
+                        <div class="flex items-center gap-4 text-xs text-carbon-text-secondary mb-4 mt-auto">
+                            <span><i class="fas fa-book-open mr-1"></i> SYNAPSIS demo + EnvisionBox</span>
+                            <span><i class="fas fa-signal mr-1"></i> Beginner</span>
+                        </div>
+                        <div class="flex flex-wrap gap-2">
+                            <a href="demo.html" class="btn-secondary px-4 py-2 text-sm inline-block">Compare methods</a>
+                            <a href="https://envisionbox.org/embedded_Mediapiping.html" target="_blank" rel="noopener" class="btn-secondary px-4 py-2 text-sm inline-block">EnvisionBox module <i class="fas fa-arrow-up-right-from-square ml-1"></i></a>
+                        </div>
+                    </div>
+                    <div class="card bg-white p-6 flex flex-col">
+                        <span class="resource-badge resource-badge-doc mb-4 inline-block self-start">Notebook</span>
+                        <h3 class="font-semibold mb-2">Voice Anonymization</h3>
+                        <p class="text-sm text-carbon-text-secondary mb-4">Audio de-identification from simple redaction to voice anonymization, with runnable code. From the MDIG2026 summer school.</p>
+                        <div class="flex items-center gap-4 text-xs text-carbon-text-secondary mb-4 mt-auto">
+                            <span><i class="fas fa-book-open mr-1"></i> Tilburg summer school</span>
                             <span><i class="fas fa-signal mr-1"></i> Intermediate</span>
                         </div>
+                        <div class="flex flex-wrap gap-2">
+                            <a href="https://wimpouw.github.io/TilburgMultiscaleSummerschool2026/thursday-masking/notebooks/audio_deidentification.html" target="_blank" rel="noopener" class="btn-secondary px-4 py-2 text-sm inline-block">Open notebook <i class="fas fa-arrow-up-right-from-square ml-1"></i></a>
+                        </div>
                     </div>
-
-                    <!-- Voice Anonymization -->
-                    <div class="card bg-white p-6 opacity-75">
-                        <span class="resource-badge resource-badge-doc mb-4 inline-block">Guide</span>
-                        <span class="text-xs bg-yellow-100 px-2 py-1 ml-2">Coming Soon</span>
-                        <h3 class="font-semibold mb-2 mt-3">Voice Anonymization</h3>
-                        <p class="text-sm text-carbon-text-secondary mb-4">Audio de-identification methods preserving prosodic features while protecting speaker identity.</p>
-                        <div class="flex items-center gap-4 text-xs text-carbon-text-secondary mb-4">
-                            <span><i class="fas fa-clock mr-1"></i> 20 min read</span>
+                    <div class="card bg-white p-6 flex flex-col">
+                        <span class="resource-badge resource-badge-doc mb-4 inline-block self-start">Notebook</span>
+                        <h3 class="font-semibold mb-2">Pose Data Extraction</h3>
+                        <p class="text-sm text-carbon-text-secondary mb-4">Full-body, hand and face tracking with MediaPipe, with optional masking and movement tracing, and exported time series.</p>
+                        <div class="flex items-center gap-4 text-xs text-carbon-text-secondary mb-4 mt-auto">
+                            <span><i class="fas fa-book-open mr-1"></i> EnvisionBox · Tilburg summer school</span>
                             <span><i class="fas fa-signal mr-1"></i> Intermediate</span>
                         </div>
-                    </div>
-
-                    <!-- Pose Extraction -->
-                    <div class="card bg-white p-6 opacity-75">
-                        <span class="resource-badge resource-badge-doc mb-4 inline-block">Guide</span>
-                        <span class="text-xs bg-yellow-100 px-2 py-1 ml-2">Coming Soon</span>
-                        <h3 class="font-semibold mb-2 mt-3">Pose Data Extraction</h3>
-                        <p class="text-sm text-carbon-text-secondary mb-4">Extract skeletal pose data and kinematic features from masked videos for behavioral analysis.</p>
-                        <div class="flex items-center gap-4 text-xs text-carbon-text-secondary mb-4">
-                            <span><i class="fas fa-clock mr-1"></i> 30 min read</span>
-                            <span><i class="fas fa-signal mr-1"></i> Advanced</span>
+                        <div class="flex flex-wrap gap-2">
+                            <a href="https://wimpouw.github.io/TilburgMultiscaleSummerschool2026/Datasets/BalanceCorpus/scripts/motiontracking/Masking_Mediapiping.html" target="_blank" rel="noopener" class="btn-secondary px-4 py-2 text-sm inline-block">Open notebook <i class="fas fa-arrow-up-right-from-square ml-1"></i></a>
+                            <a href="training/tutorials/03-maskbench.html" class="btn-secondary px-4 py-2 text-sm inline-block">Check pose quality</a>
                         </div>
                     </div>
-
-                    <!-- FAIR Archiving -->
-                    <div class="card bg-white p-6 opacity-75">
-                        <span class="resource-badge resource-badge-doc mb-4 inline-block">Guide</span>
-                        <span class="text-xs bg-yellow-100 px-2 py-1 ml-2">Coming Soon</span>
-                        <h3 class="font-semibold mb-2 mt-3">FAIR Data Archiving</h3>
-                        <p class="text-sm text-carbon-text-secondary mb-4">Archive masked data following FAIR principles with DANS integration and metadata standards.</p>
-                        <div class="flex items-center gap-4 text-xs text-carbon-text-secondary mb-4">
-                            <span><i class="fas fa-clock mr-1"></i> 20 min read</span>
+                    <div class="card bg-white p-6 flex flex-col">
+                        <span class="resource-badge resource-badge-doc mb-4 inline-block self-start">Guide</span>
+                        <h3 class="font-semibold mb-2">FAIR Data Archiving</h3>
+                        <p class="text-sm text-carbon-text-secondary mb-4">Archiving masked data: what to deposit, which metadata to record, and how to document the masking you applied.</p>
+                        <div class="flex items-center gap-4 text-xs text-carbon-text-secondary mb-4 mt-auto">
+                            <span><i class="fas fa-book-open mr-1"></i> SYNAPSIS tutorials</span>
                             <span><i class="fas fa-signal mr-1"></i> Intermediate</span>
                         </div>
+                        <div class="flex flex-wrap gap-2">
+                            <a href="training/tutorials/05-archiving.html" class="btn-secondary px-4 py-2 text-sm inline-block">Read tutorial</a>
+                        </div>
                     </div>
-
-                    <!-- API Reference -->
-                    <div class="card bg-white p-6 opacity-75">
-                        <span class="resource-badge resource-badge-code mb-4 inline-block">API</span>
-                        <span class="text-xs bg-yellow-100 px-2 py-1 ml-2">Coming Soon</span>
-                        <h3 class="font-semibold mb-2 mt-3">API Reference</h3>
-                        <p class="text-sm text-carbon-text-secondary mb-4">Complete API documentation for programmatic access to masking capabilities.</p>
-                        <div class="flex items-center gap-4 text-xs text-carbon-text-secondary mb-4">
-                            <span><i class="fas fa-code mr-1"></i> REST API</span>
-                            <span><i class="fas fa-signal mr-1"></i> Advanced</span>
+                    <div class="card bg-white p-6 flex flex-col">
+                        <span class="resource-badge resource-badge-code mb-4 inline-block self-start">Hands-on</span>
+                        <h3 class="font-semibold mb-2">Masking Lite, No Code</h3>
+                        <p class="text-sm text-carbon-text-secondary mb-4">Run Masked-Piper on your own videos step by step, no programming needed. Used at the MDIG2026 summer school.</p>
+                        <div class="flex items-center gap-4 text-xs text-carbon-text-secondary mb-4 mt-auto">
+                            <span><i class="fas fa-book-open mr-1"></i> Tilburg summer school</span>
+                            <span><i class="fas fa-signal mr-1"></i> Beginner</span>
+                        </div>
+                        <div class="flex flex-wrap gap-2">
+                            <a href="https://wimpouw.github.io/TilburgMultiscaleSummerschool2026/thursday-masking/notebooks/masking-lite.html" target="_blank" rel="noopener" class="btn-secondary px-4 py-2 text-sm inline-block">Start <i class="fas fa-arrow-up-right-from-square ml-1"></i></a>
+                            <a href="https://wimpouw.github.io/TilburgMultiscaleSummerschool2026/thursday-masking/HANDS_ON_SETUP.html" target="_blank" rel="noopener" class="btn-secondary px-4 py-2 text-sm inline-block">Setup <i class="fas fa-arrow-up-right-from-square ml-1"></i></a>
                         </div>
                     </div>
                 </div>
