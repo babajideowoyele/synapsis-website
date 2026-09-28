@@ -197,6 +197,26 @@
         <!-- Demo Videos -->
         <section class="py-12 px-6 bg-carbon-bg-hover border-y border-carbon-border">
             <div class="container mx-auto max-w-6xl">
+                <div class="mb-6">
+                    <span class="text-xs font-mono uppercase tracking-widest text-carbon-text-secondary">MaskAnyone</span>
+                    <h2 class="text-3xl font-semibold mt-4">Several people, one room, each masked</h2>
+                    <p class="text-carbon-text-secondary mt-2 max-w-3xl leading-relaxed">
+                        A clinical training simulation. MaskAnyone follows each person separately with SAM2 and masks them
+                        while keeping their pose and hand tracking, even when people cross and overlap. (The patient is a
+                        training manikin.)
+                    </p>
+                </div>
+                <figure class="demo-card bg-white p-4 mb-14">
+                    <div class="video-container">
+                        <div class="video-label" style="background: rgba(22,101,52,0.9);"><i class="fas fa-mask mr-2"></i>Masked</div>
+                        <video class="w-full" autoplay muted loop playsinline preload="metadata">
+                            <source src="demos/maskanyone-multiperson.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                    <figcaption class="text-sm text-carbon-text-secondary mt-3">
+                        Demo from the <a href="https://github.com/MaskAnyone/MaskAnyone" target="_blank" rel="noopener" class="underline">MaskAnyone repository</a>.
+                    </figcaption>
+                </figure>
                 <div class="mb-10">
                     <span class="text-xs font-mono uppercase tracking-widest text-carbon-text-secondary">Same clip, four strategies</span>
                     <h2 class="text-3xl font-semibold mt-4">What masking looks like</h2>
@@ -244,6 +264,62 @@
                         <figcaption class="text-sm text-carbon-text-secondary mt-3 leading-relaxed">A flat silhouette removes appearance entirely, yet pose is still recoverable.</figcaption>
                     </figure>
                 </div>
+
+                <div class="mt-14 mb-6">
+                    <span class="text-xs font-mono uppercase tracking-widest text-carbon-text-secondary">Masking lite</span>
+                    <h2 class="text-2xl font-semibold mt-3">Masked-Piper: hide the person, keep the signal</h2>
+                    <p class="text-carbon-text-secondary mt-2 max-w-3xl leading-relaxed">
+                        Masked-Piper masks face and body but keeps the face mesh, hand and body tracking drawn over the
+                        mask, so gesture, gaze direction and facial movement stay analysable. It runs on an ordinary laptop.
+                    </p>
+                </div>
+                <figure class="demo-card bg-white p-4 mb-6">
+                    <div class="video-container">
+                        <div class="video-label">One run, twelve outputs</div>
+                        <video class="w-full" autoplay muted loop playsinline preload="metadata">
+                            <source src="demos/masked-piper-options.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                    <figcaption class="text-sm text-carbon-text-secondary mt-3 leading-relaxed">
+                        The same clip rendered in every output mode: skeleton only, face or body masked, face or body blurred,
+                        finger traces, and more. From the
+                        <a href="https://envisionbox.org/embedded_Mediapiping.html" target="_blank" rel="noopener" class="underline">EnvisionBox Masked-Piper module</a> (MIT licence).
+                    </figcaption>
+                </figure>
+                <div class="grid md:grid-cols-3 gap-6">
+                    <figure class="demo-card bg-white p-4">
+                        <div class="video-container">
+                            <div class="video-label">Gesture</div>
+                            <video class="w-full" controls muted loop playsinline preload="metadata">
+                                <source src="demos/masked-piper-gesture.mp4#t=1" type="video/mp4">
+                            </video>
+                        </div>
+                        <figcaption class="text-sm text-carbon-text-secondary mt-3 leading-relaxed">Hands tracked finger by finger while the person is fully masked.</figcaption>
+                    </figure>
+                    <figure class="demo-card bg-white p-4">
+                        <div class="video-container">
+                            <div class="video-label">Face mesh</div>
+                            <video class="w-full" controls muted loop playsinline preload="metadata">
+                                <source src="demos/masked-piper-talk.mp4#t=1" type="video/mp4">
+                            </video>
+                        </div>
+                        <figcaption class="text-sm text-carbon-text-secondary mt-3 leading-relaxed">The face mesh keeps expression and mouth movement without showing the face.</figcaption>
+                    </figure>
+                    <figure class="demo-card bg-white p-4">
+                        <div class="video-container">
+                            <div class="video-label">Full body</div>
+                            <video class="w-full" controls muted loop playsinline preload="metadata">
+                                <source src="demos/masked-piper-ted.mp4#t=1" type="video/mp4">
+                            </video>
+                        </div>
+                        <figcaption class="text-sm text-carbon-text-secondary mt-3 leading-relaxed">Whole-body masking with the pose skeleton kept, on a public TED talk.</figcaption>
+                    </figure>
+                </div>
+                <p class="text-xs text-carbon-text-secondary mt-4">
+                    Clips from Wim Pouw&rsquo;s
+                    <a href="https://github.com/WimPouw/TowardsMultimodalOpenScience/tree/main/Output_MaskedVideos" target="_blank" rel="noopener" class="underline">TowardsMultimodalOpenScience</a>
+                    examples, accompanying <a href="https://doi.org/10.1016/j.softx.2022.101236" target="_blank" rel="noopener" class="underline">Owoyele et al. (2022), <em>SoftwareX</em></a>.
+                </p>
 
                 <div class="mt-14 mb-6">
                     <span class="text-xs font-mono uppercase tracking-widest text-carbon-text-secondary">Try it yourself</span>
