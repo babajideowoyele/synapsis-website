@@ -197,91 +197,76 @@
         <!-- Demo Videos -->
         <section class="py-12 px-6 bg-carbon-bg-hover border-y border-carbon-border">
             <div class="container mx-auto max-w-6xl">
-                <div class="mb-12">
-                    <span class="text-xs font-mono uppercase tracking-widest text-carbon-text-secondary">Before & After</span>
-                    <h2 class="text-3xl font-semibold mt-4">Face Masking Demonstration</h2>
-                    <p class="text-carbon-text-secondary mt-2">Compare original footage with de-identified output</p>
+                <div class="mb-10">
+                    <span class="text-xs font-mono uppercase tracking-widest text-carbon-text-secondary">Same clip, four strategies</span>
+                    <h2 class="text-3xl font-semibold mt-4">What masking looks like</h2>
+                    <p class="text-carbon-text-secondary mt-2 max-w-3xl leading-relaxed">
+                        One public TED talk, masked four ways. The coloured skeleton is pose tracking run on the masked
+                        video: it shows how much movement data survives each strategy. Clips from the
+                        <a href="https://maskbench.github.io/maskbench/" target="_blank" rel="noopener" class="underline">MaskBench</a> benchmark.
+                    </p>
+                </div>
+                <div class="grid sm:grid-cols-2 gap-6">
+                    <figure class="demo-card bg-white p-4">
+                        <div class="video-container">
+                            <div class="video-label">Blur</div>
+                            <video class="w-full" controls muted loop playsinline preload="metadata">
+                                <source src="https://maskbench.github.io/maskbench/videos/raw-masked/Blurring-TED-curiosity-chunk_YoloPose.mp4#t=1" type="video/mp4">
+                            </video>
+                        </div>
+                        <figcaption class="text-sm text-carbon-text-secondary mt-3 leading-relaxed">Gaussian blur over the whole person. Posture and gesture stay readable.</figcaption>
+                    </figure>
+                    <figure class="demo-card bg-white p-4">
+                        <div class="video-container">
+                            <div class="video-label">Pixelation</div>
+                            <video class="w-full" controls muted loop playsinline preload="metadata">
+                                <source src="https://maskbench.github.io/maskbench/videos/raw-masked/Pixelation-TED-curiosity-chunk_MaskAnyoneUI-MediaPipe.mp4#t=1" type="video/mp4">
+                            </video>
+                        </div>
+                        <figcaption class="text-sm text-carbon-text-secondary mt-3 leading-relaxed">Block-based obscuring. Familiar and fast; how much it hides depends on the block size.</figcaption>
+                    </figure>
+                    <figure class="demo-card bg-white p-4">
+                        <div class="video-container">
+                            <div class="video-label">Contours</div>
+                            <video class="w-full" controls muted loop playsinline preload="metadata">
+                                <source src="https://maskbench.github.io/maskbench/videos/raw-masked/Contours-TED-curiosity-chunk_YoloPose.mp4#t=1" type="video/mp4">
+                            </video>
+                        </div>
+                        <figcaption class="text-sm text-carbon-text-secondary mt-3 leading-relaxed">Only the outline is kept. Appearance goes; the body shape and movement remain.</figcaption>
+                    </figure>
+                    <figure class="demo-card bg-white p-4">
+                        <div class="video-container">
+                            <div class="video-label">Solid fill</div>
+                            <video class="w-full" controls muted loop playsinline preload="metadata">
+                                <source src="https://maskbench.github.io/maskbench/videos/raw-masked/SolidFill-TED-curiosity-chunk_YoloPose.mp4#t=1" type="video/mp4">
+                            </video>
+                        </div>
+                        <figcaption class="text-sm text-carbon-text-secondary mt-3 leading-relaxed">A flat silhouette removes appearance entirely, yet pose is still recoverable.</figcaption>
+                    </figure>
                 </div>
 
-                <!-- Demo 1: Sample Video -->
-                <div class="demo-card bg-white p-8 mb-8">
-                    <h3 class="font-semibold text-lg mb-4 flex items-center">
-                        <i class="fas fa-video mr-3 text-carbon-text-secondary"></i>
-                        Sample Recording - Face Swap Method
-                    </h3>
-                    <div class="grid md:grid-cols-2 gap-6">
-                        <div class="video-container">
-                            <div class="video-label"><i class="fas fa-eye mr-2"></i>Original</div>
-                            <div class="video-coming-soon" role="img" aria-label="Original recording coming soon">
-                                <i class="fa-solid fa-video" aria-hidden="true"></i>
-                                <span>Coming soon</span>
-                            </div>
-                        </div>
-                        <div class="video-container">
-                            <div class="video-label" style="background: rgba(22,101,52,0.9);"><i class="fas fa-mask mr-2"></i>Masked</div>
-                            <div class="video-coming-soon" role="img" aria-label="Masked recording coming soon">
-                                <i class="fa-solid fa-mask" aria-hidden="true"></i>
-                                <span>Coming soon</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="mt-6 flex flex-wrap gap-4">
-                        <div class="flex items-center gap-2 text-sm text-carbon-text-secondary">
-                            <i class="fas fa-cog"></i>
-                            <span>Method: Face Swap (DeepPrivacy2)</span>
-                        </div>
-                        <div class="flex items-center gap-2 text-sm text-carbon-text-secondary">
-                            <i class="fas fa-clock"></i>
-                            <span>Processing: ~2 min</span>
-                        </div>
-                        <div class="flex items-center gap-2 text-sm text-carbon-text-secondary">
-                            <i class="fas fa-circle-check text-green-600"></i>
-                            <span>Expression preserved</span>
-                        </div>
-                    </div>
+                <div class="mt-14 mb-6">
+                    <span class="text-xs font-mono uppercase tracking-widest text-carbon-text-secondary">Try it yourself</span>
+                    <h2 class="text-2xl font-semibold mt-3">Open tools, free to use</h2>
                 </div>
-
-                <!-- Demo 2: Classroom -->
-                <div class="demo-card bg-white p-8 mb-8">
-                    <h3 class="font-semibold text-lg mb-4 flex items-center">
-                        <i class="fas fa-chalkboard-user mr-3 text-carbon-text-secondary"></i>
-                        Classroom Recording - Selective Masking
-                    </h3>
-                    <div class="grid md:grid-cols-2 gap-6">
-                        <div class="video-container">
-                            <div class="video-label"><i class="fas fa-eye mr-2"></i>Original</div>
-                            <div class="video-coming-soon" role="img" aria-label="Original recording coming soon">
-                                <i class="fa-solid fa-video" aria-hidden="true"></i>
-                                <span>Coming soon</span>
-                            </div>
-                        </div>
-                        <div class="video-container">
-                            <div class="video-label" style="background: rgba(22,101,52,0.9);"><i class="fas fa-mask mr-2"></i>Students Masked</div>
-                            <div class="video-coming-soon" role="img" aria-label="Masked recording coming soon">
-                                <i class="fa-solid fa-mask" aria-hidden="true"></i>
-                                <span>Coming soon</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="mt-6 flex flex-wrap gap-4">
-                        <div class="flex items-center gap-2 text-sm text-carbon-text-secondary">
-                            <i class="fas fa-cog"></i>
-                            <span>Method: Selective (teacher visible, students masked)</span>
-                        </div>
-                        <div class="flex items-center gap-2 text-sm text-carbon-text-secondary">
-                            <i class="fas fa-users"></i>
-                            <span>Multi-person detection</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Placeholder for more demos -->
-                <div class="border border-dashed border-carbon-border p-8 text-center">
-                    <i class="fas fa-film text-4xl text-carbon-text-secondary mb-4"></i>
-                    <h3 class="font-semibold mb-2">More Demos Coming Soon</h3>
-                    <p class="text-sm text-carbon-text-secondary mb-4">Voice anonymization, pose extraction, and batch processing examples</p>
-                    <a href="survey.html" class="btn-secondary px-4 py-2 text-sm inline-block">
-                        Request specific demo <i class="fas fa-arrow-right ml-2"></i>
+                <div class="grid md:grid-cols-3 gap-6">
+                    <a href="https://envisionbox.org/embedded_Mediapiping.html" target="_blank" rel="noopener" class="demo-card bg-white p-6 block">
+                        <i class="fas fa-feather text-xl text-carbon-text-secondary"></i>
+                        <h3 class="font-semibold mt-3 mb-2">Masking lite: Masked-Piper</h3>
+                        <p class="text-sm text-carbon-text-secondary leading-relaxed mb-3">A step-by-step EnvisionBox module. Runs on any laptop, keeps body and face kinematics.</p>
+                        <span class="text-xs font-mono uppercase tracking-wider">EnvisionBox module <i class="fas fa-arrow-up-right-from-square ml-1"></i></span>
+                    </a>
+                    <a href="https://github.com/MaskAnyone/MaskAnyone" target="_blank" rel="noopener" class="demo-card bg-white p-6 block">
+                        <i class="fas fa-mask text-xl text-carbon-text-secondary"></i>
+                        <h3 class="font-semibold mt-3 mb-2">MaskAnyone</h3>
+                        <p class="text-sm text-carbon-text-secondary leading-relaxed mb-3">Precision masking in a browser interface, run locally or on a department server.</p>
+                        <span class="text-xs font-mono uppercase tracking-wider">Code &amp; install guide <i class="fas fa-arrow-up-right-from-square ml-1"></i></span>
+                    </a>
+                    <a href="https://maskbench.github.io/maskbench/" target="_blank" rel="noopener" class="demo-card bg-white p-6 block">
+                        <i class="fas fa-chart-line text-xl text-carbon-text-secondary"></i>
+                        <h3 class="font-semibold mt-3 mb-2">MaskBench</h3>
+                        <p class="text-sm text-carbon-text-secondary leading-relaxed mb-3">All benchmark videos and results: how pose estimation holds up under each masking strategy.</p>
+                        <span class="text-xs font-mono uppercase tracking-wider">Preprint &amp; results <i class="fas fa-arrow-up-right-from-square ml-1"></i></span>
                     </a>
                 </div>
             </div>
@@ -401,6 +386,9 @@
                     </a>
                     <a href="training.html" class="btn-secondary px-6 py-3 font-medium">
                         <i class="fas fa-graduation-cap mr-2"></i> View Training
+                    </a>
+                    <a href="https://github.com/MaskAnyone/MaskAnyone" target="_blank" rel="noopener" class="btn-secondary px-6 py-3 font-medium">
+                        <i class="fab fa-github mr-2"></i> Install it yourself
                     </a>
                 </div>
                 <p class="text-xs text-carbon-text-secondary mt-4">
