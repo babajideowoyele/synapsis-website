@@ -656,25 +656,69 @@
                 </div>
                 <div class="bg-carbon-bg-hover border border-carbon-border p-8">
                     <h3 class="font-semibold mb-6">Stay Updated</h3>
-                    <form class="space-y-4">
+                    <form id="subscribe-form" class="space-y-4">
+                        <p class="text-sm text-carbon-text-secondary">
+                            Pressing the button opens your email app with a short message to the project lead. Send it,
+                            and you're on the list. Reply "unsubscribe" at any time.
+                        </p>
                         <div>
-                            <label class="block text-sm text-carbon-text-secondary mb-2">Email</label>
-                            <input type="email" class="w-full border border-carbon-border px-4 py-3 focus:outline-none focus:border-carbon-text" placeholder="your@email.com">
-                        </div>
-                        <div>
-                            <label class="block text-sm text-carbon-text-secondary mb-2">Interest</label>
-                            <select class="w-full border border-carbon-border px-4 py-3 focus:outline-none focus:border-carbon-text bg-white">
-                                <option>Platform User</option>
-                                <option>Workshop Participant</option>
-                                <option>Pilot Site</option>
-                                <option>Partner Organization</option>
-                                <option>General Interest</option>
+                            <label for="sub-interest" class="block text-sm text-carbon-text-secondary mb-2">I'm interested as a</label>
+                            <select id="sub-interest" class="w-full border border-carbon-border px-4 py-3 focus:outline-none focus:border-carbon-text bg-white">
+                                <option>Researcher working with video or audio</option>
+                                <option>Data steward or privacy officer</option>
+                                <option>Research IT / infrastructure</option>
+                                <option>Workshop or Masking Lab participant</option>
+                                <option>Potential pilot site or partner</option>
+                                <option>General interest</option>
                             </select>
                         </div>
+                        <div>
+                            <label for="sub-note" class="block text-sm text-carbon-text-secondary mb-2">Anything you'd like to hear about? <span class="text-xs">(optional)</span></label>
+                            <textarea id="sub-note" rows="3" class="w-full border border-carbon-border px-4 py-3 focus:outline-none focus:border-carbon-text bg-white" placeholder="e.g. training dates, pilots at my institution"></textarea>
+                        </div>
                         <button type="submit" class="btn-primary w-full py-3 font-medium">
-                            Subscribe to Updates
+                            <i class="fas fa-envelope mr-2"></i>Subscribe to Updates
                         </button>
+                        <p id="sub-status" class="text-sm text-carbon-text-secondary" hidden>
+                            Your email app should now open with the message ready to send. Nothing opened?
+                            Email <a href="mailto:babajide.owoyele@ru.nl" class="underline">babajide.owoyele@ru.nl</a>
+                            <button type="button" id="sub-copy" class="ml-1 underline text-xs">copy address</button>
+                            with the subject "SYNAPSIS updates".
+                        </p>
                     </form>
+                    <script>
+                    (function () {
+                        var TO = 'babajide.owoyele@ru.nl';
+                        var form = document.getElementById('subscribe-form');
+                        var status = document.getElementById('sub-status');
+                        form.addEventListener('submit', function (e) {
+                            e.preventDefault();
+                            var interest = document.getElementById('sub-interest').value;
+                            var note = document.getElementById('sub-note').value.trim();
+                            var subject = 'SYNAPSIS updates: please add me (' + interest + ')';
+                            var body = [
+                                'Hi Babajide,',
+                                '',
+                                'Please add me to the SYNAPSIS updates list.',
+                                '',
+                                "I'm interested as a: " + interest,
+                                note ? "I'd like to hear about: " + note : null,
+                                '',
+                                'I understand my address is used only for SYNAPSIS updates, and I can unsubscribe at any time by replying "unsubscribe".',
+                                '',
+                                'Best wishes,',
+                                ''
+                            ].filter(function (l) { return l !== null; }).join('\n');
+                            window.location.href = 'mailto:' + TO + '?subject=' + encodeURIComponent(subject) +
+                                '&body=' + encodeURIComponent(body);
+                            status.hidden = false;
+                        });
+                        document.getElementById('sub-copy').addEventListener('click', function () {
+                            var btn = this;
+                            navigator.clipboard.writeText(TO).then(function () { btn.textContent = 'copied'; });
+                        });
+                    })();
+                    </script>
                 </div>
             </div>
         </div>
