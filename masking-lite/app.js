@@ -2,14 +2,14 @@
 // Frames are read by seeking the <video>, analysed with MediaPipe Tasks (pose, hands, face),
 // rendered to a canvas and encoded with WebCodecs into an MP4. Nothing leaves the machine.
 import {
-    FilesetResolver, PoseLandmarker, FaceLandmarker, HandLandmarker, DrawingUtils,
+    FilesetResolver, PoseLandmarker, FaceLandmarker, HandLandmarker, ImageSegmenter, DrawingUtils,
 } from 'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@1.0.1/vision_bundle.mjs';
 import { Muxer, ArrayBufferTarget } from 'https://cdn.jsdelivr.net/npm/mp4-muxer@5.2.2/+esm';
 import { maskot } from './maskot.js';
 
 const WASM = 'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@1.0.1/wasm';
 const MODELS = new URL('models/', import.meta.url).href;
-const VERSION = '0.1.0-draft';
+const VERSION = '0.2.0-draft';
 
 const POSE_NAMES = ['nose', 'left_eye_inner', 'left_eye', 'left_eye_outer', 'right_eye_inner', 'right_eye',
     'right_eye_outer', 'left_ear', 'right_ear', 'mouth_left', 'mouth_right', 'left_shoulder', 'right_shoulder',
@@ -34,7 +34,7 @@ const ui = {
     unsupported: $('unsupported'),
     hide: $('opt-hide'), style: $('opt-style'), bg: $('opt-bg'), size: $('opt-size'), skeleton: $('opt-skeleton'),
     hands: $('opt-hands'), facemesh: $('opt-facemesh'), facedata: $('opt-facedata'), people: $('opt-people'),
-    safety: $('opt-safety'), exact: $('opt-exact'),
+    safety: $('opt-safety'), exact: $('opt-exact'), seg: $('opt-seg'), margin: $('opt-margin'), smooth: $('opt-smooth'),
 };
 
 let fileset = null;
@@ -52,8 +52,14 @@ function settings() {
         hide: ui.hide.value, style: ui.style.value, bg: ui.bg.value, maxWidth: +ui.size.value,
         skeleton: ui.skeleton.checked, hands: ui.hands.checked, facemesh: ui.facemesh.checked,
         faceData: ui.facedata.checked, people: Math.max(1, Math.min(8, +ui.people.value || 4)),
-        safety: ui.safety.checked, exact: ui.exact.checked,
+        safety: ui.safety.checked, exact: ui.exact.checked, smooth: ui.smooth.checked,
+        segmenter: ui.seg.value, margin: ui.margin.value,
     };
+}
+const PRESET_SLUGS = { classic: 'masked-piper-classic', face: 'hide-faces', blur: 'blur-body', skeleton: 'movement-only' };
+function strategySlug(s) {
+    const name = Object.keys(PRESETS).find((k) => Object.entries(PRESETS[k]).every(([o, v]) => s[o] === v));
+    return name ? PRESET_SLUGS[name] : `custom-hide-${s.hide}-${s.style}`;
 }
 function applyPreset(name) {
     const p = PRESETS[name];
@@ -185,7 +191,7 @@ async function createTask(Cls, model, extra) {
     throw lastErr;
 }
 export async function getTask(kind, s) {
-    const key = kind + JSON.stringify(kind === 'pose' ? [s.people, s.hide === 'body'] : [s.people]);
+    const key = kind + JSON.stringify(kind === 'pose' ? [s.people, s.hide === 'body'] : kind === 'seg' ? [s.segmenter] : [s.people]);
     if (tasks[key]) return tasks[key];
     if (kind === 'pose') {
         tasks[key] = await createTask(PoseLandmarker, 'pose_landmarker_full.task', {
@@ -196,6 +202,21 @@ export async function getTask(kind, s) {
         tasks[key] = await createTask(FaceLandmarker, 'face_landmarker.task', {
             numFaces: s.people, minFaceDetectionConfidence: 0.4, minFacePresenceConfidence: 0.4,
         });
+    } else if (kind === 'seg') {
+        const multi = s.segmenter === 'multiclass';
+        const t = await createTask(ImageSegmenter, multi ? 'selfie_multiclass_256x256.tflite' : 'deeplab_v3.tflite',
+            { outputCategoryMask: true, outputConfidenceMasks: false });
+        const labels = (t.getLabels() || []).map((l) => String(l).toLowerCase());
+        if (multi) {
+            const L = labels.length ? labels : ['background', 'hair', 'body-skin', 'face-skin', 'clothes', 'others'];
+            t._person = L.map((l, i) => (l === 'background' ? -1 : i)).filter((i) => i >= 0);
+            t._head = L.map((l, i) => (/hair|face/.test(l) ? i : -1)).filter((i) => i >= 0);
+        } else {
+            const i = labels.indexOf('person');
+            t._person = [i >= 0 ? i : 15];   // PASCAL VOC: 15 = person
+            t._head = [];
+        }
+        tasks[key] = t;
     } else {
         tasks[key] = await createTask(HandLandmarker, 'hand_landmarker.task', {
             numHands: s.people * 2, minHandDetectionConfidence: 0.4,
@@ -204,6 +225,57 @@ export async function getTask(kind, s) {
     return tasks[key];
 }
 export function nextTs(stepMs) { lastTs += Math.max(1, stepMs); return Math.round(lastTs); }
+
+// ---------------------------------------------------------------------------
+// Smoothing: a One Euro filter per landmark (Casiez et al., 2012) steadies small jitter but
+// follows fast movement. Each detected person/hand/face is matched to the nearest track from
+// the previous frame. Only the drawing is smoothed; the CSV files keep the raw values.
+// ---------------------------------------------------------------------------
+function makeSmoother(W, H, { minCutoff = 1.2, beta = 0.015, dCutoff = 1.0 } = {}) {
+    const alpha = (cut, dt) => 1 / (1 + 1 / (2 * Math.PI * cut * dt));
+    const tracks = {};   // kind -> [{ cx, cy, x: Float64Array, y, dx, dy, t }]
+    function centroid(lm) {
+        let x = 0, y = 0;
+        for (const q of lm) { x += q.x; y += q.y; }
+        return [x / lm.length * W, y / lm.length * H];
+    }
+    return function smooth(kind, list, t) {
+        const prev = tracks[kind] || [];
+        const used = new Set();
+        const next = [];
+        const out = (list || []).map((lm) => {
+            const [cx, cy] = centroid(lm);
+            let best = -1, bd = Infinity;
+            prev.forEach((tr, i) => {
+                if (used.has(i) || tr.x.length !== lm.length) return;
+                const d = Math.hypot(tr.cx - cx, tr.cy - cy);
+                if (d < bd) { bd = d; best = i; }
+            });
+            let tr = best >= 0 && bd < W * 0.15 ? prev[best] : null;
+            if (tr) used.add(best);
+            const n = lm.length;
+            if (!tr || t <= tr.t) {
+                tr = { x: new Float64Array(n), y: new Float64Array(n), dx: new Float64Array(n), dy: new Float64Array(n), t };
+                lm.forEach((q, k) => { tr.x[k] = q.x * W; tr.y[k] = q.y * H; });
+            } else {
+                const dt = t - tr.t, ad = alpha(dCutoff, dt);
+                lm.forEach((q, k) => {
+                    const X = q.x * W, Y = q.y * H;
+                    tr.dx[k] += ad * ((X - tr.x[k]) / dt - tr.dx[k]);
+                    tr.dy[k] += ad * ((Y - tr.y[k]) / dt - tr.dy[k]);
+                    tr.x[k] += alpha(minCutoff + beta * Math.abs(tr.dx[k]), dt) * (X - tr.x[k]);
+                    tr.y[k] += alpha(minCutoff + beta * Math.abs(tr.dy[k]), dt) * (Y - tr.y[k]);
+                });
+                tr.t = t;
+            }
+            tr.cx = cx; tr.cy = cy;
+            next.push(tr);
+            return lm.map((q, k) => ({ ...q, x: tr.x[k] / W, y: tr.y[k] / H }));
+        });
+        tracks[kind] = next;
+        return out;
+    };
+}
 
 // ---------------------------------------------------------------------------
 // Rendering
@@ -215,8 +287,13 @@ function makeRenderer(W, H, s) {
     const out = ui.out; out.width = W; out.height = H;
     const octx = out.getContext('2d');
     const layer = canvas(W, H), lctx = layer.getContext('2d');
-    const mask = canvas(W, H), mctx = mask.getContext('2d');
-    let small = null, sctx = null;
+    // Masks are combined and grown at a reduced size (fast), then scaled up when applied.
+    const Ws = Math.min(W, 320), Hs = Math.round(H * Ws / W);
+    const mask = canvas(Ws, Hs), mctx = mask.getContext('2d');
+    const hold = canvas(Ws, Hs), hctx = hold.getContext('2d');
+    const prev = canvas(Ws, Hs), pctx = prev.getContext('2d');
+    const smooth = s.smooth ? makeSmoother(W, H) : (_k, list) => list || [];
+    const smalls = [];
     const draw = new DrawingUtils(octx);
     const lw = Math.max(1, W / 640);
     const onWhite = s.bg === 'white';
@@ -224,28 +301,61 @@ function makeRenderer(W, H, s) {
         bone: onWhite ? '#161616' : '#ffffff', joint: '#ff4d4d', hand: '#ffb000',
         mesh: onWhite ? 'rgba(0,120,200,.55)' : 'rgba(127,219,255,.6)',
     };
-    const dilate = Math.max(4, Math.round(W / 120));
+    const dilate = Math.max(3, Math.round(W / 120 * ({ tight: 0.6, normal: 1, wide: 1.8 }[s.margin] || 1)));
 
-    function hardenInto(src, sw, sh) {
-        // Grow the mask a little so edges don't leak, then draw it at full size.
-        mctx.clearRect(0, 0, W, H);
-        mctx.filter = `blur(${dilate}px)`;
-        for (let k = 0; k < 3; k++) mctx.drawImage(src, 0, 0, sw, sh, 0, 0, W, H);
+    // Turn a mask (confidences or class labels) into an alpha canvas.
+    function toCanvas(n, w, h, fill) {
+        if (!smalls[n] || smalls[n].width !== w || smalls[n].height !== h) smalls[n] = canvas(w, h);
+        const c = smalls[n], x = c.getContext('2d');
+        const img = x.createImageData(w, h);
+        const count = fill(img.data);
+        x.putImageData(img, 0, 0);
+        return { c, count };
+    }
+    function personFromSeg(seg, classes, slot) {
+        const cm = seg?.categoryMask;
+        if (!cm) return null;
+        const set = new Uint8Array(256);
+        classes.forEach((k) => { set[k] = 1; });
+        const u = cm.getAsUint8Array();
+        return toCanvas(slot, cm.width, cm.height, (a) => {
+            let n = 0;
+            for (let i = 0; i < u.length; i++) if (set[u[i]]) { a[i * 4 + 3] = 255; n++; }
+            return n;
+        });
+    }
+    // Union of all sources, grown a little so edges don't leak, plus the previous frame's
+    // mask, so a one-frame dropout never shows a person.
+    function compose(sources) {
+        const grow = Math.max(1, dilate * Ws / W);
+        mctx.clearRect(0, 0, Ws, Hs);
+        mctx.filter = `blur(${grow}px)`;
+        for (const src of sources) for (let k = 0; k < 3; k++) mctx.drawImage(src, 0, 0, src.width, src.height, 0, 0, Ws, Hs);
         mctx.filter = 'none';
-        mctx.drawImage(src, 0, 0, sw, sh, 0, 0, W, H);
+        for (const src of sources) mctx.drawImage(src, 0, 0, src.width, src.height, 0, 0, Ws, Hs);
+        pctx.clearRect(0, 0, Ws, Hs); pctx.drawImage(mask, 0, 0);
+        mctx.drawImage(hold, 0, 0);
+        hctx.clearRect(0, 0, Ws, Hs); hctx.drawImage(prev, 0, 0);
     }
 
-    function bodyMask(masks) {
-        const w = masks[0].width, h = masks[0].height;
-        if (!small || small.width !== w || small.height !== h) { small = canvas(w, h); sctx = small.getContext('2d'); }
-        const img = sctx.createImageData(w, h);
-        const a = img.data;
-        for (const m of masks) {
-            const f = m.getAsFloat32Array();
-            for (let i = 0; i < f.length; i++) if (f[i] > 0.3) a[i * 4 + 3] = 255;
+    function bodyMask(pose, seg, task) {
+        const sources = [];
+        let share = 0;
+        const masks = pose?.segmentationMasks || [];
+        if (masks.length) {
+            const w = masks[0].width, h = masks[0].height;
+            const fs = masks.map((m) => m.getAsFloat32Array());
+            const r = toCanvas(0, w, h, (a) => {
+                let n = 0;
+                for (const f of fs) for (let i = 0; i < f.length; i++) if (f[i] > 0.3 && !a[i * 4 + 3]) { a[i * 4 + 3] = 255; n++; }
+                return n;
+            });
+            sources.push(r.c); share += r.count / (w * h);
         }
-        sctx.putImageData(img, 0, 0);
-        hardenInto(small, w, h);
+        const p = task ? personFromSeg(seg, task._person, 1) : null;
+        if (p && p.count) { sources.push(p.c); share += p.count / (p.c.width * p.c.height); }
+        compose(sources);
+        return share > 0.0005;
     }
 
     function hull(pts) {
@@ -257,7 +367,10 @@ function makeRenderer(W, H, s) {
         return lo.slice(0, -1).concat(up.slice(0, -1));
     }
 
-    function faceMask(face, pose) {
+    const faceCanvas = canvas(W, H), fctx = faceCanvas.getContext('2d');
+    let prevFound = false;
+    function faceMask(face, pose, seg, task) {
+        const mctx = fctx;
         mctx.clearRect(0, 0, W, H);
         mctx.fillStyle = '#000';
         const boxes = [];
@@ -286,8 +399,11 @@ function makeRenderer(W, H, s) {
             mctx.ellipse(nx, ny - d * 0.15, d * 0.85, d * 1.15, 0, 0, Math.PI * 2);
             mctx.fill();
         }
-        const snap = canvas(W, H); snap.getContext('2d').drawImage(mask, 0, 0);
-        hardenInto(snap, W, H);
+        const sources = [faceCanvas];
+        const head = task?._head?.length ? personFromSeg(seg, task._head, 2) : null;
+        if (head && head.count) sources.push(head.c);
+        compose(sources);
+        return boxes.length > 0 || (pose?.landmarks?.length || 0) > 0 || !!head?.count;
     }
 
     function applyMask() {
@@ -301,18 +417,24 @@ function makeRenderer(W, H, s) {
             lctx.fillRect(0, 0, W, H);
         }
         lctx.globalCompositeOperation = 'destination-in';
-        lctx.drawImage(mask, 0, 0);
+        lctx.drawImage(mask, 0, 0, Ws, Hs, 0, 0, W, H);
         lctx.globalCompositeOperation = 'source-over';
         octx.drawImage(layer, 0, 0);
     }
 
     return {
         work, wctx,
-        render(pose, face, hands) {
-            // Safety net: nobody found in a frame that should be masked -> blur the whole frame.
-            const found = s.hide === 'body' ? !!pose?.segmentationMasks?.length
-                : s.hide === 'face' ? !!(face?.faceLandmarks?.length || pose?.landmarks?.length) : true;
-            if (s.safety && s.bg === 'original' && !found) {
+        render(pose, face, hands, seg, segTask, t) {
+            // Build the mask first: segmentation + pose outline (+ previous frame's mask).
+            let found = true;
+            if (s.hide === 'body') found = bodyMask(pose, seg, segTask);
+            else if (s.hide === 'face') found = faceMask(face, pose, seg, segTask);
+            // Safety net: nobody found -> blur the whole frame. A single missed frame is already
+            // covered by the previous frame's mask, so only blur from the second miss in a row
+            // (or when there is no previous mask). This avoids blur flashing on and off.
+            const blurAll = !found && !prevFound;
+            prevFound = found;
+            if (s.safety && s.bg === 'original' && blurAll) {
                 octx.filter = `blur(${Math.max(12, Math.round(W / 30))}px)`;
                 octx.drawImage(work, 0, 0);
                 octx.filter = 'none';
@@ -320,15 +442,14 @@ function makeRenderer(W, H, s) {
             }
             if (s.bg === 'original') octx.drawImage(work, 0, 0);
             else { octx.fillStyle = s.bg === 'white' ? '#fff' : '#000'; octx.fillRect(0, 0, W, H); }
-            if (s.hide === 'body' && pose?.segmentationMasks?.length) { bodyMask(pose.segmentationMasks); applyMask(); }
-            if (s.hide === 'face') { faceMask(face, pose); applyMask(); }
-            if (s.facemesh) for (const lm of face?.faceLandmarks || [])
+            if (s.hide !== 'none') applyMask();
+            if (s.facemesh) for (const lm of smooth('face', face?.faceLandmarks, t))
                 draw.drawConnectors(lm, FaceLandmarker.FACE_LANDMARKS_TESSELATION, { color: col.mesh, lineWidth: lw * 0.5 });
-            if (s.skeleton) for (const lm of pose?.landmarks || []) {
+            if (s.skeleton) for (const lm of smooth('pose', pose?.landmarks, t)) {
                 draw.drawConnectors(lm, PoseLandmarker.POSE_CONNECTIONS, { color: col.bone, lineWidth: lw * 2 });
                 draw.drawLandmarks(lm, { color: col.joint, radius: lw * 2.2, lineWidth: 0 });
             }
-            if (s.hands) for (const lm of hands?.landmarks || []) {
+            if (s.hands) for (const lm of smooth('hands', hands?.landmarks, t)) {
                 draw.drawConnectors(lm, HandLandmarker.HAND_CONNECTIONS, { color: col.hand, lineWidth: lw * 1.5 });
                 draw.drawLandmarks(lm, { color: col.hand, radius: lw * 1.2, lineWidth: 0 });
             }
@@ -431,11 +552,13 @@ async function run() {
     ui.status.textContent = 'Loading the masking models (first time only)…';
     maskot.onStart(s);
 
-    let pose, face, hands, enc;
+    let pose, face, hands, seg, enc;
     try {
         pose = await getTask('pose', s);
         face = (s.hide === 'face' || s.facemesh || s.faceData) ? await getTask('face', s) : null;
         hands = s.hands ? await getTask('hands', s) : null;
+        seg = s.segmenter !== 'off' && (s.hide === 'body' || (s.hide === 'face' && s.segmenter === 'multiclass'))
+            ? await getTask('seg', s) : null;
         enc = await makeEncoder(W, H, fps);
     } catch (e) {
         ui.status.textContent = 'Could not start: ' + e.message;
@@ -451,8 +574,9 @@ async function run() {
     const handRows = ['frame,time_s,hand,side,landmark,x,y,z'];
     const faceRows = s.faceData ? ['frame,time_s,face,landmark,x,y,z'] : null;
     let framesWithPerson = 0, framesWithFace = 0, framesBlurred = 0;
-    const timing = { read: 0, pose: 0, face: 0, hands: 0, render: 0, encode: 0 };
+    const timing = { read: 0, pose: 0, face: 0, hands: 0, seg: 0, render: 0, encode: 0 };
     const t0 = performance.now();
+    const started = new Date();
     const step = 1000 / fps;
     const video = ui.src;
     video.pause();
@@ -472,7 +596,9 @@ async function run() {
         tB = performance.now(); timing.face += tB - tA;
         const hr = hands ? hands.detectForVideo(R.work, ts) : null;
         tA = performance.now(); timing.hands += tA - tB;
-        if (R.render(pr, fr, hr) === 'blurred') framesBlurred++;
+        const sr = seg ? seg.segmentForVideo(R.work, ts) : null;
+        tB = performance.now(); timing.seg += tB - tA; tA = tB;
+        if (R.render(pr, fr, hr, sr, seg, idx / fps) === 'blurred') framesBlurred++;
         tB = performance.now(); timing.render += tB - tA;
         // Frames the player skipped get this masked frame again, so nothing is ever shown unmasked.
         for (let k = nextOut; k <= idx; k++) await enc.add(ui.out, k);
@@ -493,6 +619,7 @@ async function run() {
         if (faceRows) fr?.faceLandmarks.forEach((lm, f) => lm.forEach((q, k) =>
             faceRows.push(`${idx},${t},${f},${k},${r4(q.x)},${r4(q.y)},${r4(q.z)}`)));
         pr.segmentationMasks?.forEach((m) => m.close());
+        sr?.close?.();
 
         if (analysed % 5 === 0) {
             const el = (performance.now() - t0) / 1000;
@@ -520,7 +647,13 @@ async function run() {
     ui.status.textContent = 'Finishing the video file…';
     const videoBlob = await enc.finish();
     const secs = (performance.now() - t0) / 1000;
-    const base = file.name.replace(/\.[^.]+$/, '');
+    // File names: <video>_<strategy>_<timestamp>_<content>, the same stem for every file of a run.
+    const base = file.name.replace(/\.[^.]+$/, '').replace(/[^\w.-]+/g, '-').replace(/^-+|-+$/g, '') || 'video';
+    const strategy = strategySlug(s);
+    const pad = (n) => String(n).padStart(2, '0');
+    const stamp = `${started.getFullYear()}${pad(started.getMonth() + 1)}${pad(started.getDate())}-` +
+        `${pad(started.getHours())}${pad(started.getMinutes())}${pad(started.getSeconds())}`;
+    const stem = `${base}_${strategy}_${stamp}`;
     const stats = {
         frames: N, frames_analysed: analysed, frames_repeated: framesRepeated,
         frames_with_person: framesWithPerson, frames_with_face: framesWithFace,
@@ -529,24 +662,28 @@ async function run() {
         ms_per_frame: Object.fromEntries(Object.entries(timing).map(([k, v]) => [k, +(v / Math.max(1, analysed)).toFixed(1)])),
     };
     const meta = {
-        tool: 'SYNAPSIS Masking Lite', version: VERSION, created: new Date().toISOString(),
+        tool: 'SYNAPSIS Masking Lite', version: VERSION, run_id: stem, strategy,
+        started: started.toISOString(), finished: new Date().toISOString(),
         source: { name: file.name, width, height, fps, duration_s: +duration.toFixed(3) },
         output: { width: W, height: H, fps, codec: enc.codec, audio: 'removed' },
         settings: s,
         models: { library: '@mediapipe/tasks-vision 1.0.1', pose: 'pose_landmarker_full (float16, v1)',
+            segmenter: seg ? (s.segmenter === 'multiclass' ? 'selfie_multiclass_256x256 (float32)' : 'deeplab_v3 (float32)') : null,
             face: face ? 'face_landmarker (float16, v1)' : null, hands: hands ? 'hand_landmarker (float16, v1)' : null,
             delegate: pose._delegate },
         stats,
         method: 'Masked-Piper (Owoyele, Trujillo, de Melo & Pouw, 2022, SoftwareX, doi:10.1016/j.softx.2022.101236)',
     };
     const files = [
-        [`${base}_masked.mp4`, videoBlob, 'fa-film', 'Masked video'],
-        [`${base}_pose.csv`, new Blob([poseRows.join('\n')], { type: 'text/csv' }), 'fa-person', 'Body pose (CSV)'],
+        [`${stem}_masked.mp4`, videoBlob, 'fa-film', 'Masked video'],
+        [`${stem}_pose.csv`, new Blob([poseRows.join('\n')], { type: 'text/csv' }), 'fa-person', 'Body pose (CSV)'],
     ];
-    if (hands) files.push([`${base}_hands.csv`, new Blob([handRows.join('\n')], { type: 'text/csv' }), 'fa-hand', 'Hands (CSV)']);
-    if (faceRows) files.push([`${base}_face.csv`, new Blob([faceRows.join('\n')], { type: 'text/csv' }), 'fa-face-smile', 'Face (CSV)']);
-    files.push([`${base}_settings.json`, new Blob([JSON.stringify(meta, null, 2)], { type: 'application/json' }), 'fa-file-code', 'Settings (JSON)']);
+    if (hands) files.push([`${stem}_hands.csv`, new Blob([handRows.join('\n')], { type: 'text/csv' }), 'fa-hand', 'Hands (CSV)']);
+    if (faceRows) files.push([`${stem}_face.csv`, new Blob([faceRows.join('\n')], { type: 'text/csv' }), 'fa-face-smile', 'Face (CSV)']);
+    files.push([`${stem}_settings.json`, new Blob([JSON.stringify(meta, null, 2)], { type: 'application/json' }), 'fa-file-code', 'Settings (JSON)']);
 
+    meta.output_files = files.map(([name]) => name);
+    files[files.length - 1][1] = new Blob([JSON.stringify(meta, null, 2)], { type: 'application/json' });
     ui.downloads.innerHTML = '';
     for (const [name, blob, icon, label] of files) {
         const u = URL.createObjectURL(blob); urls.push(u);

@@ -136,12 +136,23 @@
                     <label class="flex items-center justify-between gap-3">Working size
                         <select id="opt-size"><option value="960">960 px wide (fast)</option><option value="1280" selected>1280 px wide</option><option value="1920">1920 px wide (slow)</option></select>
                     </label>
+                    <label class="flex items-center justify-between gap-3">Find people with
+                        <select id="opt-seg">
+                            <option value="deeplab" selected>Person segmentation (recommended)</option>
+                            <option value="multiclass">Segmentation incl. hair &amp; clothes (close-ups)</option>
+                            <option value="off">Pose outline only (fastest)</option>
+                        </select>
+                    </label>
+                    <label class="flex items-center justify-between gap-3">Mask margin
+                        <select id="opt-margin"><option value="tight">Tight</option><option value="normal" selected>Normal</option><option value="wide">Wide (safest)</option></select>
+                    </label>
+                    <label class="flex items-center gap-2 sm:col-span-2"><input type="checkbox" id="opt-smooth" checked> Smooth the drawn tracking (less jitter; the CSV files keep the raw values)</label>
                     <label class="flex items-center gap-2"><input type="checkbox" id="opt-skeleton" checked> Draw body skeleton</label>
                     <label class="flex items-center gap-2"><input type="checkbox" id="opt-hands" checked> Draw hands</label>
                     <label class="flex items-center gap-2"><input type="checkbox" id="opt-facemesh" checked> Draw face mesh</label>
                     <label class="flex items-center gap-2"><input type="checkbox" id="opt-facedata"> Save face landmarks to CSV (large file)</label>
                     <label class="flex items-center gap-2 sm:col-span-2"><input type="checkbox" id="opt-safety" checked> If nobody is found in a frame, blur the whole frame (safer: a missed person is never shown)</label>
-                    <label class="flex items-center gap-2 sm:col-span-2"><input type="checkbox" id="opt-exact"> Read every frame exactly (slower; use it if the movement data must have no gaps)</label>
+                    <label class="flex items-center gap-2 sm:col-span-2"><input type="checkbox" id="opt-exact" checked> Read every frame exactly (steadier result, no gaps in the data; untick for a faster run that may repeat frames)</label>
                     <label class="flex items-center justify-between gap-3">Up to this many people
                         <input type="number" id="opt-people" min="1" max="8" value="4" class="w-20">
                     </label>

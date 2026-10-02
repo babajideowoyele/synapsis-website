@@ -335,7 +335,7 @@ export const maskot = {
         const blurred = stats.frames_fully_blurred;
         const gaps = stats.frames_repeated > stats.frames * 0.03 && !s.exact
             ? ` Note: this computer couldn't keep up with every frame, so ${stats.frames_repeated} frames repeat the one before ` +
-              '(the video is still fully masked, but the movement data has gaps). Tick <em>Read every frame exactly</em> for gap-free data.'
+              '(the video is still fully masked, but it may stutter and the movement data has gaps). Tick <em>Read every frame exactly</em> for a steady, gap-free result.'
             : '';
         if (s.hide !== 'none' && pct < 80) {
             say(`Done, but please look carefully: I found a person in only <strong>${pct}%</strong> of frames. ` +
