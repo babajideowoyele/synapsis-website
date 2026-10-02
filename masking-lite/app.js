@@ -9,7 +9,7 @@ import { maskot } from './maskot.js';
 
 const WASM = 'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@1.0.1/wasm';
 const MODELS = new URL('models/', import.meta.url).href;
-const VERSION = '0.2.0-draft';
+const VERSION = '0.2.1-draft';
 
 const POSE_NAMES = ['nose', 'left_eye_inner', 'left_eye', 'left_eye_outer', 'right_eye_inner', 'right_eye',
     'right_eye_outer', 'left_ear', 'right_ear', 'mouth_left', 'mouth_right', 'left_shoulder', 'right_shoulder',
