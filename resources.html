@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -121,11 +121,11 @@
                 </a>
                 <div class="hidden md:flex items-center space-x-8">
                     <a href="index.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Home</a>
+                    <a href="network.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Network</a>
                     <a href="platform.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Platform</a>
                     <a href="demo.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Demo</a>
                     <a href="training.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Training</a>
                     <a href="resources.html" class="text-sm font-medium border-b-2 border-carbon-text pb-1">Resources</a>
-                    <a href="network.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Network</a>
                     <a href="press.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">News</a>
                 </div>
                 <button class="md:hidden p-2 -mr-2" onclick="toggleMobileMenu()" aria-label="Toggle navigation menu">
@@ -139,11 +139,11 @@
         <!-- Mobile menu -->
         <div id="mobile-menu" class="hidden md:hidden border-t border-carbon-border">
             <a href="index.html" class="block px-6 py-3 text-sm font-medium text-carbon-text-secondary hover:text-carbon-text hover:bg-carbon-bg-hover">Home</a>
+            <a href="network.html" class="block px-6 py-3 text-sm font-medium text-carbon-text-secondary hover:text-carbon-text hover:bg-carbon-bg-hover">Network</a>
             <a href="platform.html" class="block px-6 py-3 text-sm font-medium text-carbon-text-secondary hover:text-carbon-text hover:bg-carbon-bg-hover">Platform</a>
             <a href="demo.html" class="block px-6 py-3 text-sm font-medium text-carbon-text-secondary hover:text-carbon-text hover:bg-carbon-bg-hover">Demo</a>
             <a href="training.html" class="block px-6 py-3 text-sm font-medium text-carbon-text-secondary hover:text-carbon-text hover:bg-carbon-bg-hover">Training</a>
             <a href="resources.html" class="block px-6 py-3 text-sm font-medium bg-carbon-bg-hover border-l-2 border-carbon-text">Resources</a>
-            <a href="network.html" class="block px-6 py-3 text-sm font-medium text-carbon-text-secondary hover:text-carbon-text hover:bg-carbon-bg-hover">Network</a>
             <a href="press.html" class="block px-6 py-3 text-sm font-medium text-carbon-text-secondary hover:text-carbon-text hover:bg-carbon-bg-hover">News</a>
         </div>
     </header>
@@ -520,22 +520,42 @@
                         </div>
                     </div>
 
-                    <!-- Masking Strategy Card Deck -->
-                    <div class="border border-carbon-border bg-white p-6 opacity-75">
+                    <!-- The Masking Lab Deck -->
+                    <div class="border border-carbon-border bg-white p-6">
                         <div class="flex items-start gap-4">
                             <div class="w-12 h-12 border border-carbon-border flex items-center justify-center flex-shrink-0">
                                 <i class="fas fa-layer-group text-xl"></i>
                             </div>
                             <div class="flex-1">
                                 <span class="resource-badge resource-badge-template mb-2 inline-block">Card Deck</span>
-                                <h3 class="font-semibold mb-2">Masking Strategy Card Deck</h3>
-                                <p class="text-sm text-carbon-text-secondary mb-4">A hands-on decision tool for researchers and data stewards. Cards guide you through masking strategy selection based on your research context, data type, and privacy requirements.</p>
+                                <h3 class="font-semibold mb-2">The Masking Lab Deck</h3>
+                                <p class="text-sm text-carbon-text-secondary mb-4">Thirty reflective cards in three suits — Past, Present, Future. Metaphors point to paradoxes, questions surface challenges, keywords name opportunities. Draw one per suit to seed a session. First tested with 29 researchers at the Masking School @ Tilburg in July 2026; participants reported it flattened the usual seniority dynamics in the room.</p>
                                 <div class="flex flex-wrap gap-2 mb-4">
                                     <span class="text-xs px-2 py-1 bg-carbon-bg-hover">Workshop</span>
-                                    <span class="text-xs px-2 py-1 bg-carbon-bg-hover">Decision Support</span>
-                                    <span class="text-xs px-2 py-1 bg-carbon-bg-hover">Print-ready</span>
+                                    <span class="text-xs px-2 py-1 bg-carbon-bg-hover">Deliberation</span>
+                                    <span class="text-xs px-2 py-1 bg-carbon-bg-hover">30 cards</span>
                                 </div>
-                                <span class="text-xs font-mono uppercase tracking-widest text-carbon-text-secondary">Coming soon</span>
+                                <a href="events/masking-lab/deck/index.html" class="btn-secondary px-4 py-2 text-sm inline-block"><i class="fas fa-eye mr-2"></i>Browse the deck</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- The Data Tarot -->
+                    <div class="border border-carbon-border bg-white p-6 opacity-75">
+                        <div class="flex items-start gap-4">
+                            <div class="w-12 h-12 border border-carbon-border flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-wand-magic-sparkles text-xl"></i>
+                            </div>
+                            <div class="flex-1">
+                                <span class="resource-badge resource-badge-template mb-2 inline-block">Card Deck</span>
+                                <h3 class="font-semibold mb-2">The Data Tarot</h3>
+                                <p class="text-sm text-carbon-text-secondary mb-4">Thirty-five didactic cards, one research-data concept each — masking, GDPR, FAIR, provenance, k-anonymity. Every card carries a metaphor, a discussion prompt, an ice-breaker, and a <em>reversed</em> meaning naming how the concept fails in practice. Companion to the Masking Lab Deck.</p>
+                                <div class="flex flex-wrap gap-2 mb-4">
+                                    <span class="text-xs px-2 py-1 bg-carbon-bg-hover">Teaching</span>
+                                    <span class="text-xs px-2 py-1 bg-carbon-bg-hover">Vocabulary</span>
+                                    <span class="text-xs px-2 py-1 bg-carbon-bg-hover">35 cards</span>
+                                </div>
+                                <span class="text-xs font-mono uppercase tracking-widest text-carbon-text-secondary">Illustration in production · print-ready release with the Masking Lab, Oct 2026</span>
                             </div>
                         </div>
                     </div>
@@ -911,10 +931,11 @@
                                 2025
                             </div>
                             <div>
-                                <h3 class="font-semibold mb-1">MaskingOPS: A Tutorial for End-to-End Privacy-Preserving Video De-identification and Quality Assurance in Behavioral Research</h3>
+                                <h3 class="font-semibold mb-1">MaskingOPS: A Tutorial for Navigating Video De-identification and Analytic Utility Workflows in Behavioral Research</h3>
                                 <p class="text-sm text-carbon-text-secondary mb-2">Owoyele, B.A., Schilling, M., Riedel, T., Shaik, S., Zafari, Z., Pouw, W., &amp; de Melo, G.</p>
-                                <p class="text-xs text-carbon-text-secondary mb-4">Under review — Behavior Research Methods</p>
+                                <p class="text-xs text-carbon-text-secondary mb-4">Preprint on Zenodo — under review at Behavior Research Methods</p>
                                 <div class="flex gap-2">
+                                    <a href="https://doi.org/10.5281/zenodo.20624439" class="text-xs btn-secondary px-3 py-1">Preprint</a>
                                     <a href="maskingops.html" class="text-xs btn-secondary px-3 py-1">Overview</a>
                                 </div>
                             </div>
@@ -938,6 +959,165 @@
         </section>
 
         <!-- FAQ -->
+        <!-- Further reading -->
+        <section id="further-reading" class="py-20 px-6">
+            <div class="container mx-auto max-w-5xl">
+                <div class="mb-12">
+                    <span class="text-xs font-mono uppercase tracking-widest text-carbon-text-secondary">Background</span>
+                    <h2 class="text-3xl font-semibold mt-4">Further reading</h2>
+                    <p class="text-sm text-carbon-text-secondary mt-4 max-w-2xl">
+                        The literature behind the SYNAPSIS tools &mdash; what masking methods exist, how much
+                        analysable signal they leave behind, and what it takes to share sensitive recordings
+                        responsibly. Every entry links to its DOI.
+                    </p>
+                </div>
+                <div class="grid md:grid-cols-2 gap-6">
+                <div class="card bg-white p-6">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-10 h-10 border border-carbon-border flex items-center justify-center">
+                            <i class="fas fa-user-shield"></i>
+                        </div>
+                        <h3 class="font-semibold">De-identifying faces and bodies</h3>
+                    </div>
+                    <ul>
+                        <li class="py-3 border-b border-carbon-border last:border-0">
+                            <a href="https://doi.org/10.1109/wacv56688.2023.00138" class="group block">
+                                <span class="text-sm font-medium group-hover:underline">DeepPrivacy2: Towards realistic full-body anonymization</span>
+                                <span class="block text-xs text-carbon-text-secondary mt-1">Hukkelås &amp; Lindseth (2023) &nbsp;·&nbsp; <span class="font-mono">10.1109/wacv56688.2023.00138</span></span>
+                            </a>
+                        </li>
+                        <li class="py-3 border-b border-carbon-border last:border-0">
+                            <a href="https://doi.org/10.1109/ICCV.2019.00947" class="group block">
+                                <span class="text-sm font-medium group-hover:underline">Live Face De-Identification in Video</span>
+                                <span class="block text-xs text-carbon-text-secondary mt-1">Gafni, Wolf &amp; Taigman (2019) &nbsp;·&nbsp; <span class="font-mono">10.1109/ICCV.2019.00947</span></span>
+                            </a>
+                        </li>
+                        <li class="py-3 border-b border-carbon-border last:border-0">
+                            <a href="https://doi.org/10.48550/arxiv.1902.06967" class="group block">
+                                <span class="text-sm font-medium group-hover:underline">Evaluating the Effectiveness of Automated Identity Masking Methods</span>
+                                <span class="block text-xs text-carbon-text-secondary mt-1">Orsten-Hooge et al. (2019) &nbsp;·&nbsp; <span class="font-mono">10.48550/arxiv.1902.06967</span></span>
+                            </a>
+                        </li>
+                        <li class="py-3 border-b border-carbon-border last:border-0">
+                            <a href="https://doi.org/10.1016/j.softx.2022.101236" class="group block">
+                                <span class="text-sm font-medium group-hover:underline">Masked-Piper: Masking personal identities while preserving multimodal information</span>
+                                <span class="block text-xs text-carbon-text-secondary mt-1">Owoyele, Trujillo, de Melo &amp; Pouw (2022) &nbsp;·&nbsp; <span class="font-mono">10.1016/j.softx.2022.101236</span></span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="card bg-white p-6">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-10 h-10 border border-carbon-border flex items-center justify-center">
+                            <i class="fas fa-person-running"></i>
+                        </div>
+                        <h3 class="font-semibold">What survives the mask: kinematics</h3>
+                    </div>
+                    <ul>
+                        <li class="py-3 border-b border-carbon-border last:border-0">
+                            <a href="https://doi.org/10.3758/s13428-024-02546-6" class="group block">
+                                <span class="text-sm font-medium group-hover:underline">How accurately can we estimate spontaneous body kinematics from video recordings?</span>
+                                <span class="block text-xs text-carbon-text-secondary mt-1">Koul et al. (2025) &nbsp;·&nbsp; <span class="font-mono">10.3758/s13428-024-02546-6</span></span>
+                            </a>
+                        </li>
+                        <li class="py-3 border-b border-carbon-border last:border-0">
+                            <a href="https://doi.org/10.3758/s13428-019-01271-9" class="group block">
+                                <span class="text-sm font-medium group-hover:underline">The quantification of gesture&ndash;speech synchrony: A tutorial and validation</span>
+                                <span class="block text-xs text-carbon-text-secondary mt-1">Pouw, Trujillo &amp; Dixon (2020) &nbsp;·&nbsp; <span class="font-mono">10.3758/s13428-019-01271-9</span></span>
+                            </a>
+                        </li>
+                        <li class="py-3 border-b border-carbon-border last:border-0">
+                            <a href="https://doi.org/10.31234/osf.io/psg5f_v1" class="group block">
+                                <span class="text-sm font-medium group-hover:underline">EnvisionHGdetector: Co-speech gesture detection and kinematic analysis</span>
+                                <span class="block text-xs text-carbon-text-secondary mt-1">Owoyele &amp; Pouw (2025) &nbsp;·&nbsp; <span class="font-mono">10.31234/osf.io/psg5f_v1</span></span>
+                            </a>
+                        </li>
+                        <li class="py-3 border-b border-carbon-border last:border-0">
+                            <a href="https://doi.org/10.3390/s21217315" class="group block">
+                                <span class="text-sm font-medium group-hover:underline">Applications of Pose Estimation in Human Health and Performance</span>
+                                <span class="block text-xs text-carbon-text-secondary mt-1">Stenum et al. (2021) &nbsp;·&nbsp; <span class="font-mono">10.3390/s21217315</span></span>
+                            </a>
+                        </li>
+                        <li class="py-3 border-b border-carbon-border last:border-0">
+                            <a href="https://doi.org/10.3758/s13428-025-02816-x" class="group block">
+                                <span class="text-sm font-medium group-hover:underline">Automatic infant 2D pose estimation: Comparing seven deep neural networks</span>
+                                <span class="block text-xs text-carbon-text-secondary mt-1">Gama et al. (2025) &nbsp;·&nbsp; <span class="font-mono">10.3758/s13428-025-02816-x</span></span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="card bg-white p-6">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-10 h-10 border border-carbon-border flex items-center justify-center">
+                            <i class="fas fa-scale-balanced"></i>
+                        </div>
+                        <h3 class="font-semibold">Sharing sensitive recordings</h3>
+                    </div>
+                    <ul>
+                        <li class="py-3 border-b border-carbon-border last:border-0">
+                            <a href="https://doi.org/10.1038/sdata.2016.18" class="group block">
+                                <span class="text-sm font-medium group-hover:underline">The FAIR Guiding Principles for scientific data management and stewardship</span>
+                                <span class="block text-xs text-carbon-text-secondary mt-1">Wilkinson et al. (2016) &nbsp;·&nbsp; <span class="font-mono">10.1038/sdata.2016.18</span></span>
+                            </a>
+                        </li>
+                        <li class="py-3 border-b border-carbon-border last:border-0">
+                            <a href="https://doi.org/10.1016/j.isci.2023.106348" class="group block">
+                                <span class="text-sm font-medium group-hover:underline">Open video data sharing in developmental science and clinical practice</span>
+                                <span class="block text-xs text-carbon-text-secondary mt-1">Marschik et al. (2023) &nbsp;·&nbsp; <span class="font-mono">10.1016/j.isci.2023.106348</span></span>
+                            </a>
+                        </li>
+                        <li class="py-3 border-b border-carbon-border last:border-0">
+                            <a href="https://doi.org/10.1002/eahr.500205" class="group block">
+                                <span class="text-sm font-medium group-hover:underline">Should Researchers Destroy Audio or Video Recordings?</span>
+                                <span class="block text-xs text-carbon-text-secondary mt-1">Resnik &amp; Elliott (2024) &nbsp;·&nbsp; <span class="font-mono">10.1002/eahr.500205</span></span>
+                            </a>
+                        </li>
+                        <li class="py-3 border-b border-carbon-border last:border-0">
+                            <a href="https://doi.org/10.1515/lingvan-2022-0017" class="group block">
+                                <span class="text-sm font-medium group-hover:underline">The Red Hen Anonymizer and Protocol for de-identifying audiovisual data</span>
+                                <span class="block text-xs text-carbon-text-secondary mt-1">Khasbage et al. (2023) &nbsp;·&nbsp; <span class="font-mono">10.1515/lingvan-2022-0017</span></span>
+                            </a>
+                        </li>
+                        <li class="py-3 border-b border-carbon-border last:border-0">
+                            <a href="https://doi.org/10.1038/s41562-017-0128" class="group block">
+                                <span class="text-sm font-medium group-hover:underline">Video can make behavioural science more reproducible</span>
+                                <span class="block text-xs text-carbon-text-secondary mt-1">Gilmore &amp; Adolph (2017) &nbsp;·&nbsp; <span class="font-mono">10.1038/s41562-017-0128</span></span>
+                            </a>
+                        </li>
+                        <li class="py-3 border-b border-carbon-border last:border-0">
+                            <a href="https://doi.org/10.1111/bjso.12568" class="group block">
+                                <span class="text-sm font-medium group-hover:underline">&lsquo;One size doesn&rsquo;t fit all&rsquo;: Tailoring open science to interaction analysis</span>
+                                <span class="block text-xs text-carbon-text-secondary mt-1">Huma, Alexander, Stokoe &amp; Tileag&#259; (2023) &nbsp;·&nbsp; <span class="font-mono">10.1111/bjso.12568</span></span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="card bg-white p-6">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-10 h-10 border border-carbon-border flex items-center justify-center">
+                            <i class="fas fa-diagram-project"></i>
+                        </div>
+                        <h3 class="font-semibold">Multimodal corpora and open pipelines</h3>
+                    </div>
+                    <ul>
+                        <li class="py-3 border-b border-carbon-border last:border-0">
+                            <a href="https://doi.org/10.1016/j.neuroimage.2022.119734" class="group block">
+                                <span class="text-sm font-medium group-hover:underline">The CABB dataset: A multimodal corpus of communicative interactions</span>
+                                <span class="block text-xs text-carbon-text-secondary mt-1">Pouw et al. (2022) &nbsp;·&nbsp; <span class="font-mono">10.1016/j.neuroimage.2022.119734</span></span>
+                            </a>
+                        </li>
+                        <li class="py-3 border-b border-carbon-border last:border-0">
+                            <a href="https://doi.org/10.31234/osf.io/ajks6_v2" class="group block">
+                                <span class="text-sm font-medium group-hover:underline">An Open-Source Standardized Pipeline for Equitable Observations of Interactive Behavioural Dynamics</span>
+                                <span class="block text-xs text-carbon-text-secondary mt-1">Pouw et al. (2025) &nbsp;·&nbsp; <span class="font-mono">10.31234/osf.io/ajks6_v2</span></span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                </div>
+            </div>
+        </section>
+
         <section id="faq" class="py-20 px-6">
             <div class="container mx-auto max-w-5xl">
                 <div class="mb-12">
@@ -1059,5 +1239,6 @@
             });
         });
     </script>
+<script data-goatcounter="https://synapsis-masking.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </body>
 </html>

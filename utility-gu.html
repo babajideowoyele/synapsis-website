@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GU — Generative Utility · SYNAPSIS Utility Triad</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --cds-background:#ffffff;--cds-layer-01:#f4f4f4;--cds-border-subtle:#e0e0e0;
+  --cds-text-primary:#161616;--cds-text-secondary:#525252;--cds-text-placeholder:#a8a8a8;
+  --cds-shell-bg:#161616;--cds-shell-text:#c6c6c6;--cds-footer-bg:#262626;
+  --gu-core:#8a3ffc;--gu-dark:#491d8b;--gu-light:#e8daff;--gu-subtle:#f6f2ff;
+  --danger:#da1e28;--danger-light:#fff1f1;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'IBM Plex Sans',sans-serif;background:var(--cds-background);color:var(--cds-text-primary);font-size:14px;line-height:1.5;}
+.cds-header{background:var(--cds-shell-bg);height:48px;display:flex;align-items:center;padding:0 16px;position:sticky;top:0;z-index:200;border-bottom:1px solid #393939;}
+.cds-header-name{font-size:14px;font-weight:600;color:#fff;text-decoration:none;padding:0 16px;}
+.cds-header-name span{font-weight:300;color:var(--cds-shell-text);padding-left:4px;}
+.cds-breadcrumb{display:flex;align-items:center;gap:8px;margin-left:auto;padding-right:16px;}
+.cds-breadcrumb a{font-size:12px;font-family:'IBM Plex Mono',monospace;color:var(--cds-shell-text);text-decoration:none;letter-spacing:0.04em;}
+.cds-breadcrumb a:hover{color:#fff;}.cds-breadcrumb span{color:#525252;font-size:12px;}
+.hero{background:var(--gu-dark);color:#fff;padding:72px 0 56px;}
+.page-inner{max-width:1200px;margin:0 auto;padding:0 24px;}
+.hero-eyebrow{font-size:11px;font-family:'IBM Plex Mono',monospace;letter-spacing:0.14em;text-transform:uppercase;color:#d4bbff;margin-bottom:16px;}
+.hero-picto{margin-bottom:24px;}
+.hero h1{font-size:clamp(32px,5vw,52px);font-weight:300;line-height:1.1;letter-spacing:-0.01em;margin-bottom:16px;}
+.hero h1 strong{font-weight:600;}
+.hero-def{font-size:16px;color:#c6c6c6;max-width:620px;line-height:1.65;margin-bottom:32px;}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(212,187,255,0.12);border:1px solid rgba(212,187,255,0.3);padding:8px 16px;font-size:13px;color:#d4bbff;font-family:'IBM Plex Mono',monospace;letter-spacing:0.04em;}
+section.page-section{padding:56px 0;}
+.section-label{font-size:11px;font-family:'IBM Plex Mono',monospace;letter-spacing:0.14em;text-transform:uppercase;color:var(--cds-text-placeholder);margin-bottom:20px;padding-bottom:12px;border-bottom:1px solid var(--cds-border-subtle);}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:48px;}
+@media(max-width:800px){.two-col{grid-template-columns:1fr;}}
+.three-col{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--cds-border-subtle);border:1px solid var(--cds-border-subtle);}
+@media(max-width:700px){.three-col{grid-template-columns:1fr;}}
+.content-tile{background:var(--cds-background);padding:28px 24px;}
+.content-tile h3{font-size:16px;font-weight:500;margin-bottom:10px;}
+.content-tile p{font-size:13px;color:var(--cds-text-secondary);line-height:1.7;}
+.gu-tag{display:inline-flex;font-size:11px;font-family:'IBM Plex Mono',monospace;letter-spacing:0.04em;padding:3px 8px;background:var(--gu-light);color:var(--gu-dark);margin:3px 3px 0 0;}
+.risk-tag{display:inline-flex;font-size:11px;font-family:'IBM Plex Mono',monospace;letter-spacing:0.04em;padding:3px 8px;background:#fff1f1;color:#da1e28;margin:3px 3px 0 0;}
+.use-case-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--cds-border-subtle);border:1px solid var(--cds-border-subtle);}
+@media(max-width:700px){.use-case-grid{grid-template-columns:1fr;}}
+.use-case-tile{background:var(--cds-background);padding:24px;position:relative;}
+.use-case-tile.risk{background:#fff8f8;}
+.use-case-tile h4{font-size:14px;font-weight:500;margin-bottom:8px;}
+.use-case-tile p{font-size:12px;color:var(--cds-text-secondary);line-height:1.6;}
+.use-case-tile .tile-marker{position:absolute;top:0;left:0;width:3px;height:100%;}
+.use-case-tile.opportunity .tile-marker{background:var(--gu-core);}
+.use-case-tile.risk .tile-marker{background:var(--danger);}
+.risk-notice{background:#fff1f1;border-left:4px solid var(--danger);padding:20px 24px;margin-top:24px;}
+.risk-notice h4{font-size:13px;font-weight:600;color:var(--danger);margin-bottom:8px;}
+.risk-notice p{font-size:13px;color:#393939;line-height:1.65;}
+.nav-strip{background:var(--cds-layer-01);border-top:1px solid var(--cds-border-subtle);border-bottom:1px solid var(--cds-border-subtle);padding:20px 0;}
+.nav-strip-inner{max-width:1200px;margin:0 auto;padding:0 24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;}
+.nav-strip a{font-size:13px;color:var(--cds-text-secondary);text-decoration:none;}
+.nav-strip a:hover{color:var(--cds-text-primary);}
+.theory-block{background:var(--cds-shell-bg);color:#fff;padding:48px 0;}
+.theory-block p{font-size:14px;color:#c6c6c6;line-height:1.75;margin-bottom:12px;}
+.theory-block strong{color:#fff;}
+footer{background:var(--cds-footer-bg);color:var(--cds-shell-text);font-size:12px;padding:20px 24px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+footer a{color:#78a9ff;text-decoration:none;}
+</style>
+</head>
+<body>
+<header class="cds-header">
+  <a class="cds-header-name" href="utility-triad.html">SYNAPSIS <span>/ Utility Triad</span></a>
+  <div class="cds-breadcrumb">
+    <a href="utility-triad.html">Triad</a>
+    <span>/</span>
+    <a href="utility-au.html">AU</a>
+    <span>/</span>
+    <a href="utility-ru.html">RU</a>
+    <span>/</span>
+    <a href="utility-gu.html" style="color:#d4bbff;">GU — Generative Utility</a>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="page-inner">
+    <p class="hero-eyebrow">Utility Triad · Vertex 3 of 3 · Bottom-right · Highest governance demand</p>
+    <div class="hero-picto">
+      <svg width="80" height="80" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M16 2C9.4 2 4 7.4 4 14c0 4.4 2.4 8.3 6 10.4V28h12v-3.6c3.6-2.1 6-6 6-10.4C28 7.4 22.6 2 16 2Z" fill="#8a3ffc" opacity="0.15"/>
+        <path d="M16 2C9.4 2 4 7.4 4 14c0 4.4 2.4 8.3 6 10.4V28h12v-3.6c3.6-2.1 6-6 6-10.4C28 7.4 22.6 2 16 2Z" stroke="#d4bbff" stroke-width="1.5" stroke-linejoin="round"/>
+        <line x1="10" y1="28" x2="22" y2="28" stroke="#d4bbff" stroke-width="1.5" stroke-linecap="round"/>
+        <circle cx="16" cy="9"  r="2.5" fill="#d4bbff"/>
+        <circle cx="10" cy="15" r="2.5" fill="#d4bbff"/>
+        <circle cx="22" cy="15" r="2.5" fill="#d4bbff"/>
+        <circle cx="16" cy="21" r="2.5" fill="#d4bbff"/>
+        <line x1="16" y1="11.5" x2="10" y2="12.5" stroke="#d4bbff" stroke-width="1.2" stroke-linecap="round" opacity="0.7"/>
+        <line x1="16" y1="11.5" x2="22" y2="12.5" stroke="#d4bbff" stroke-width="1.2" stroke-linecap="round" opacity="0.7"/>
+        <line x1="10" y1="17.5" x2="16" y2="18.5" stroke="#d4bbff" stroke-width="1.2" stroke-linecap="round" opacity="0.7"/>
+        <line x1="22" y1="17.5" x2="16" y2="18.5" stroke="#d4bbff" stroke-width="1.2" stroke-linecap="round" opacity="0.7"/>
+        <line x1="10" y1="15" x2="22" y2="15" stroke="#d4bbff" stroke-width="1.2" stroke-linecap="round" opacity="0.7"/>
+      </svg>
+    </div>
+    <h1><strong>GU</strong> — Generative Utility</h1>
+    <p class="hero-def">The capacity to synthesize new data, representations, and research artifacts from existing corpora using generative AI. The most powerful tier of the triad — and the most governance-demanding. Requires explicit safeguards against hallucination, re-identification, and epistemic laundering.</p>
+    <div class="hero-badge">Frontier tier · bottom-right vertex · open research agenda</div>
+  </div>
+</section>
+
+<section class="page-section">
+  <div class="page-inner">
+    <p class="section-label">Opportunities and risks — two faces of generative utility</p>
+    <div class="use-case-grid">
+      <div class="use-case-tile opportunity">
+        <div class="tile-marker"></div>
+        <h4>Synthetic corpus generation</h4>
+        <p>Generate pose-conditioned or speech-conditioned synthetic video clips to augment training sets, fill corpus gaps, or simulate rare interaction patterns. Privacy-safe by construction — no real participants in the generated data.</p>
+        <div style="margin-top:12px;"><span class="gu-tag">data augmentation</span><span class="gu-tag">synthetic training</span></div>
+      </div>
+      <div class="use-case-tile risk">
+        <div class="tile-marker"></div>
+        <h4>Deepfake production</h4>
+        <p>The same synthesis capability that generates synthetic training data can reconstruct identifiable faces from masked corpora, or produce convincing false recordings of real participants. A governance failure at this frontier undermines every RU protection in the infrastructure.</p>
+        <div style="margin-top:12px;"><span class="risk-tag">re-identification risk</span><span class="risk-tag">governance critical</span></div>
+      </div>
+      <div class="use-case-tile opportunity">
+        <div class="tile-marker"></div>
+        <h4>Model training on de-identified corpora</h4>
+        <p>Train gesture detection, emotion recognition, or speaker diarization models on masked corpora — using SMASH's provenance schema to ensure the masking history travels with the training data, making the model's data lineage auditable.</p>
+        <div style="margin-top:12px;"><span class="gu-tag">model training</span><span class="gu-tag">data lineage</span></div>
+      </div>
+      <div class="use-case-tile risk">
+        <div class="tile-marker"></div>
+        <h4>Epistemic laundering</h4>
+        <p>LLM-assisted annotation — asking a language model to fill in missing transcription, label gesture types, or summarize interactions — can introduce systematic hallucination that is then treated as ground truth if the provenance chain does not record the synthesis step.</p>
+        <div style="margin-top:12px;"><span class="risk-tag">hallucination risk</span><span class="risk-tag">provenance critical</span></div>
+      </div>
+      <div class="use-case-tile opportunity">
+        <div class="tile-marker"></div>
+        <h4>Cross-modal representation learning</h4>
+        <p>JEGAL (Joint Embedding for Gesture and Language Alignment) learns a shared representational space across gesture kinematics and speech tokens. This opens generative use cases: gesture-to-speech synthesis, speech-conditioned gesture prediction, cross-corpus embedding alignment.</p>
+        <div style="margin-top:12px;"><span class="gu-tag">JEGAL</span><span class="gu-tag">cross-modal</span><span class="gu-tag">embedding</span></div>
+      </div>
+      <div class="use-case-tile risk">
+        <div class="tile-marker"></div>
+        <h4>Synthetic identity construction</h4>
+        <p>Combining voice synthesis, pose generation, and face swap in a single pipeline can construct a synthetic identity that appears to be a real research participant — a failure mode with serious implications for clinical, legal, and educational research contexts.</p>
+        <div style="margin-top:12px;"><span class="risk-tag">identity synthesis</span><span class="risk-tag">future governance</span></div>
+      </div>
+    </div>
+    <div class="risk-notice">
+      <h4>⚠ Governance principle: RU must precede GU</h4>
+      <p>Every generative operation in SMASH writes a <code style="font-size:11px;background:#ffd7d9;padding:1px 4px;">provenance: synthetic</code> event to the canonical log. This ensures the audit chain that RU built is not erased by GU. Infrastructure that enables GU without an operationalised RU layer is not merely incomplete — it is a governance liability for the institutions that deploy it.</p>
+    </div>
+  </div>
+</section>
+
+<section class="page-section" style="background:var(--cds-layer-01);padding:56px 0;">
+  <div class="page-inner">
+    <p class="section-label">JEGAL — The GU substrate in SMASH</p>
+    <div class="two-col">
+      <div>
+        <h2 style="font-size:22px;font-weight:300;margin-bottom:16px;">Joint Embedding for<br><strong style="font-weight:600;">Gesture and Language Alignment</strong></h2>
+        <p style="font-size:14px;color:var(--cds-text-secondary);line-height:1.75;margin-bottom:14px;">JEGAL is a cross-modal attention model that computes token-level coupling scores between gesture stroke events and co-occurring word tokens from the transcription stream. Its output is a G×W coupling heatmap — the intensity at (g, w) representing the degree to which gesture event g and word token w co-occur systematically across the corpus.</p>
+        <p style="font-size:14px;color:var(--cds-text-secondary);line-height:1.75;margin-bottom:14px;">The representational space JEGAL learns is the substrate for GU: once gesture and speech are embedded in a shared space, generative operations become tractable — speech-conditioned gesture prediction, gesture-conditioned transcription scoring, and eventually full cross-modal synthesis.</p>
+        <p style="font-size:14px;color:var(--cds-text-secondary);line-height:1.75;">All JEGAL outputs are stored as typed events in the canonical log with <code style="font-size:12px;background:#e0e0e0;padding:1px 4px;">provenance: auto</code> and a model version tag, making them subject to the same audit chain as any other extraction.</p>
+      </div>
+      <div>
+        <div style="background:var(--cds-background);border:1px solid var(--cds-border-subtle);padding:24px;">
+          <p style="font-size:11px;font-family:'IBM Plex Mono',monospace;color:var(--cds-text-placeholder);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:16px;">JEGAL event schema</p>
+          <pre style="font-size:11px;font-family:'IBM Plex Mono',monospace;line-height:1.7;color:var(--cds-text-secondary);white-space:pre-wrap;">{
+  "kind":        "jegal_coupling",
+  "t_start_ms":  1240,
+  "t_end_ms":    1680,
+  "speaker_id":  "S04",
+  "gesture_id":  "g_0042",
+  "word_token":  "expanding",
+  "coupling":    0.87,
+  "model":       "jegal-v0.3",
+  "provenance":  "auto",
+  "corpus":      "envisionbox_nl_01"
+}</pre>
+        </div>
+        <div style="margin-top:16px;">
+          <span class="gu-tag">cross-modal attention</span>
+          <span class="gu-tag">G×W heatmap</span>
+          <span class="gu-tag">provenance: auto</span>
+          <span class="gu-tag">SMASH L4</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="page-section">
+  <div class="page-inner">
+    <p class="section-label">Open research agenda for GU</p>
+    <div class="three-col">
+      <div class="content-tile">
+        <h3>Governance frameworks for synthetic corpora</h3>
+        <p>No agreed standard exists for how synthetic research data should be labelled, audited, or cited. The SMASH provenance schema is a starting point — the research agenda is to make it interoperable with emerging standards from EOSC, CLARIN, and ISO/IEC AI governance frameworks.</p>
+        <div style="margin-top:16px;"><span class="gu-tag">EOSC</span><span class="gu-tag">CLARIN</span><span class="gu-tag">ISO AI</span></div>
+      </div>
+      <div class="content-tile">
+        <h3>Deepfake detection benchmarks for SSH</h3>
+        <p>Deepfake detection benchmarks exist for news media and social platforms but not for the specific modalities of SSH research video (close-up conversational data, clinical recordings, classroom interaction). MaskBench v2 will include synthetic detection as a benchmark track.</p>
+        <div style="margin-top:16px;"><span class="gu-tag">MaskBench v2</span><span class="risk-tag">detection</span></div>
+      </div>
+      <div class="content-tile">
+        <h3>Differential privacy for generative fine-tuning</h3>
+        <p>Fine-tuning generative models on private SSH corpora risks memorising participant data. Differential privacy techniques can bound this risk — but their application to multimodal (video + audio + text) corpora is an open engineering and governance problem.</p>
+        <div style="margin-top:16px;"><span class="gu-tag">differential privacy</span><span class="gu-tag">fine-tuning</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="nav-strip">
+  <div class="nav-strip-inner">
+    <a href="utility-ru.html">← RU — Reflexive Utility</a>
+    <a href="utility-triad.html">Back to Utility Triad overview →</a>
+  </div>
+</div>
+
+<section class="theory-block">
+  <div class="page-inner">
+    <p style="font-size:11px;font-family:'IBM Plex Mono',monospace;letter-spacing:0.14em;text-transform:uppercase;color:#d4bbff;margin-bottom:12px;">Beyond Maass et al. 2018 — Challenge 5</p>
+    <p>Maass et al.'s four IS challenges were framed before large-scale generative AI became a research tool. GU opens a fifth challenge they did not anticipate: <strong>how to govern synthesis</strong> — the production of new research artifacts from existing data using models that may hallucinate, memorise, or re-identify. This challenge sits at the intersection of information systems, AI ethics, and SSH methodology, and it will define the field's infrastructure priorities for the next decade.</p>
+    <p>The utility triad — and SMASH as its reference implementation — positions AU and RU as necessary prerequisites for responsible GU. Infrastructure that reaches for GU without having operationalised AU and RU is building on an unstable foundation: high synthesis capacity with low audit coverage is precisely the failure mode that erodes public trust in research data systems.</p>
+  </div>
+</section>
+
+<footer>
+  <span>SYNAPSIS · NWO TDCC-SSH · ICT.001.TDCC.013 · GU — Generative Utility</span>
+  <span><a href="utility-triad.html">Triad overview</a> · <a href="utility-au.html">AU</a> · <a href="utility-ru.html">RU</a></span>
+</footer>
+<script data-goatcounter="https://synapsis-masking.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

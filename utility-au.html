@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AU — Analytic Utility · SYNAPSIS Utility Triad</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --cds-background:#ffffff; --cds-layer-01:#f4f4f4; --cds-border-subtle:#e0e0e0;
+  --cds-text-primary:#161616; --cds-text-secondary:#525252; --cds-text-placeholder:#a8a8a8;
+  --cds-shell-bg:#161616; --cds-shell-text:#c6c6c6; --cds-footer-bg:#262626;
+  --au-core:#0f62fe; --au-dark:#0043ce; --au-light:#d0e2ff; --au-subtle:#edf4ff;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'IBM Plex Sans',sans-serif;background:var(--cds-background);color:var(--cds-text-primary);font-size:14px;line-height:1.5;}
+.cds-header{background:var(--cds-shell-bg);height:48px;display:flex;align-items:center;padding:0 16px;position:sticky;top:0;z-index:200;border-bottom:1px solid #393939;}
+.cds-header-name{font-size:14px;font-weight:600;color:#fff;text-decoration:none;padding:0 16px;}
+.cds-header-name span{font-weight:300;color:var(--cds-shell-text);padding-left:4px;}
+.cds-breadcrumb{display:flex;align-items:center;gap:8px;margin-left:auto;padding-right:16px;}
+.cds-breadcrumb a{font-size:12px;font-family:'IBM Plex Mono',monospace;color:var(--cds-shell-text);text-decoration:none;letter-spacing:0.04em;}
+.cds-breadcrumb a:hover{color:#fff;} .cds-breadcrumb span{color:#525252;font-size:12px;}
+.hero{background:var(--au-dark);color:#fff;padding:72px 0 56px;}
+.page-inner{max-width:1200px;margin:0 auto;padding:0 24px;}
+.hero-eyebrow{font-size:11px;font-family:'IBM Plex Mono',monospace;letter-spacing:0.14em;text-transform:uppercase;color:#a6c8ff;margin-bottom:16px;}
+.hero-picto{margin-bottom:24px;}
+.hero h1{font-size:clamp(32px,5vw,52px);font-weight:300;line-height:1.1;letter-spacing:-0.01em;margin-bottom:16px;}
+.hero h1 strong{font-weight:600;}
+.hero-def{font-size:16px;color:#c6c6c6;max-width:560px;line-height:1.65;margin-bottom:32px;}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(166,200,255,0.15);border:1px solid rgba(166,200,255,0.3);padding:8px 16px;font-size:13px;color:#a6c8ff;font-family:'IBM Plex Mono',monospace;letter-spacing:0.04em;}
+section.page-section{padding:56px 0;}
+.section-label{font-size:11px;font-family:'IBM Plex Mono',monospace;letter-spacing:0.14em;text-transform:uppercase;color:var(--cds-text-placeholder);margin-bottom:20px;padding-bottom:12px;border-bottom:1px solid var(--cds-border-subtle);}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:48px;}
+@media(max-width:800px){.two-col{grid-template-columns:1fr;}}
+.three-col{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--cds-border-subtle);border:1px solid var(--cds-border-subtle);}
+@media(max-width:700px){.three-col{grid-template-columns:1fr;}}
+.content-tile{background:var(--cds-background);padding:28px 24px;}
+.content-tile h3{font-size:16px;font-weight:500;margin-bottom:10px;}
+.content-tile p{font-size:13px;color:var(--cds-text-secondary);line-height:1.7;}
+.content-tile.layer{background:var(--cds-layer-01);}
+.au-tag{display:inline-flex;font-size:11px;font-family:'IBM Plex Mono',monospace;letter-spacing:0.04em;padding:3px 8px;background:var(--au-light);color:var(--au-dark);margin:3px 3px 0 0;}
+.stat-block{padding:24px;border-left:3px solid var(--au-core);}
+.stat-block .num{font-size:36px;font-weight:300;color:var(--au-core);font-family:'IBM Plex Mono',monospace;line-height:1;}
+.stat-block .stat-label{font-size:12px;color:var(--cds-text-secondary);margin-top:4px;}
+.module-row{display:flex;flex-direction:column;gap:1px;}
+.module-item{display:grid;grid-template-columns:160px 1fr;gap:16px;padding:16px;background:var(--cds-background);border-bottom:1px solid var(--cds-border-subtle);align-items:start;}
+.module-item:last-child{border-bottom:none;}
+.module-name{font-size:12px;font-family:'IBM Plex Mono',monospace;font-weight:500;color:var(--au-core);}
+.module-desc{font-size:13px;color:var(--cds-text-secondary);line-height:1.6;}
+.nav-strip{background:var(--cds-layer-01);border-top:1px solid var(--cds-border-subtle);border-bottom:1px solid var(--cds-border-subtle);padding:20px 0;}
+.nav-strip-inner{max-width:1200px;margin:0 auto;padding:0 24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;}
+.nav-strip a{font-size:13px;color:var(--cds-text-secondary);text-decoration:none;display:flex;align-items:center;gap:6px;}
+.nav-strip a:hover{color:var(--cds-text-primary);}
+.theory-block{background:var(--cds-shell-bg);color:#fff;padding:48px 0;}
+.theory-block p{font-size:14px;color:#c6c6c6;line-height:1.75;margin-bottom:12px;}
+.theory-block p:last-child{margin-bottom:0;}
+.theory-block strong{color:#fff;}
+footer{background:var(--cds-footer-bg);color:var(--cds-shell-text);font-size:12px;padding:20px 24px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+footer a{color:#78a9ff;text-decoration:none;}
+</style>
+</head>
+<body>
+<header class="cds-header">
+  <a class="cds-header-name" href="utility-triad.html">SYNAPSIS <span>/ Utility Triad</span></a>
+  <div class="cds-breadcrumb">
+    <a href="utility-triad.html">Triad</a>
+    <span>/</span>
+    <a href="utility-au.html" style="color:#78a9ff;">AU — Analytic Utility</a>
+    <span>·</span>
+    <a href="utility-ru.html">RU</a>
+    <a href="utility-gu.html">GU</a>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="page-inner">
+    <p class="hero-eyebrow">Utility Triad · Vertex 1 of 3</p>
+    <div class="hero-picto">
+      <svg width="80" height="80" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="2"  y="22" width="4" height="8"  fill="#0f62fe" opacity="0.3"/>
+        <rect x="8"  y="16" width="4" height="14" fill="#0f62fe" opacity="0.3"/>
+        <rect x="14" y="10" width="4" height="20" fill="#0f62fe" opacity="0.3"/>
+        <rect x="20" y="18" width="4" height="12" fill="#0f62fe" opacity="0.3"/>
+        <rect x="26" y="14" width="4" height="16" fill="#0f62fe" opacity="0.3"/>
+        <polyline points="4,21 10,15 16,9 22,17 28,13" stroke="#a6c8ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        <circle cx="4"  cy="21" r="2" fill="#a6c8ff"/>
+        <circle cx="10" cy="15" r="2" fill="#a6c8ff"/>
+        <circle cx="16" cy="9"  r="2" fill="#a6c8ff"/>
+        <circle cx="22" cy="17" r="2" fill="#a6c8ff"/>
+        <circle cx="28" cy="13" r="2" fill="#a6c8ff"/>
+        <line x1="1" y1="30" x2="31" y2="30" stroke="#a6c8ff" stroke-width="2" stroke-linecap="round"/>
+        <line x1="1" y1="2"  x2="1"  y2="30" stroke="#a6c8ff" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <h1><strong>AU</strong> — Analytic Utility</h1>
+    <p class="hero-def">The signal extractable from a corpus using available analytic methods. Every pipeline decision either preserves or reduces it. Maximising AU enables novel research designs that are otherwise computationally or logistically impossible.</p>
+    <div class="hero-badge">Primary goal · apex of the triad</div>
+  </div>
+</section>
+
+<section class="page-section">
+  <div class="page-inner">
+    <p class="section-label">What analytic utility means in practice</p>
+    <div class="two-col">
+      <div>
+        <h2 style="font-size:24px;font-weight:300;margin-bottom:16px;">Not just "quality data" — <strong style="font-weight:600;">legible tradeoffs</strong></h2>
+        <p style="font-size:14px;color:var(--cds-text-secondary);line-height:1.75;margin-bottom:14px;">Analytic utility is not a binary property of a dataset. It is a function of the relationship between a corpus, a set of analytic methods, and a research question. The same video corpus has high AU for gesture stroke detection and lower AU for facial action unit coding after face-blurring — because the analytic pipeline and the masking operation interact.</p>
+        <p style="font-size:14px;color:var(--cds-text-secondary);line-height:1.75;margin-bottom:14px;">SMASH makes this interaction explicit. Rather than treating masking as a prior step that happens before analysis, the canonical event log records every masking decision as a typed, provenanced event — which means AU can be assessed relative to specific pipeline configurations.</p>
+        <p style="font-size:14px;color:var(--cds-text-secondary);line-height:1.75;">This is what distinguishes AU from raw data quality: AU is always relative to a research purpose, and responsible infrastructure must preserve that relativity rather than collapsing it.</p>
+      </div>
+      <div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+          <div class="stat-block">
+            <div class="num">88–95%</div>
+            <div class="stat-label">pose quality preserved under face + body blur (MaskBench)</div>
+          </div>
+          <div class="stat-block">
+            <div class="num">7</div>
+            <div class="stat-label">corpora in EnvisionBOX gesture challenge</div>
+          </div>
+          <div class="stat-block">
+            <div class="num">150+</div>
+            <div class="stat-label">speakers across 4 languages</div>
+          </div>
+          <div class="stat-block">
+            <div class="num">32,575</div>
+            <div class="stat-label">gesture clips benchmarked</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="page-section" style="background:var(--cds-layer-01);padding:56px 0;">
+  <div class="page-inner">
+    <p class="section-label">SMASH modules that maximise AU</p>
+    <div class="module-row" style="border:1px solid var(--cds-border-subtle);">
+      <div class="module-item">
+        <div class="module-name">L0 · Ingest</div>
+        <div class="module-desc">Video, audio, transcript, and annotation import. All formats normalised to a single event schema. Provenance set to <code style="font-size:11px;background:#e0e0e0;padding:1px 4px;">auto</code> or <code style="font-size:11px;background:#e0e0e0;padding:1px 4px;">human</code> at import time.</div>
+      </div>
+      <div class="module-item">
+        <div class="module-name">L2 · Masking</div>
+        <div class="module-desc">SAM2, YOLO-based segmentation, MaskBench evaluation. AU cost of each masking strategy is computed and stored alongside the mask operation in the event log.</div>
+      </div>
+      <div class="module-item">
+        <div class="module-name">L3 · Extractors</div>
+        <div class="module-desc">Whisper (ASR), pyannote (diarization), MediaPipe / OpenPose / ViTPose (pose), openSMILE / Praat (audio features), BERTopic (topic modelling), JEGAL (cross-modal embedding).</div>
+      </div>
+      <div class="module-item">
+        <div class="module-name">L4 · Cross-modal Analytics</div>
+        <div class="module-desc">Gesture–prosody coupling, acoustic–gestural synchrony, trouble moments detection. Output is new events in the canonical log, composable with human annotations.</div>
+      </div>
+      <div class="module-item">
+        <div class="module-name">L5 · Run Management</div>
+        <div class="module-desc">YAML pipeline manifests, <code style="font-size:11px;background:#e0e0e0;padding:1px 4px;">smash reproduce</code>, inference cache. Every analysis run is reproducible from the manifest + event log alone.</div>
+      </div>
+      <div class="module-item">
+        <div class="module-name">L6 · UI Shell</div>
+        <div class="module-desc">Carbon Design System interface. Lite Wizard for non-technical researchers; full Pipeline editor for advanced users. Baselines and Results Viewer for AU comparison across runs.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="page-section">
+  <div class="page-inner">
+    <p class="section-label">Research designs AU enables</p>
+    <div class="three-col">
+      <div class="content-tile">
+        <h3>Cross-corpus comparison</h3>
+        <p>The canonical event schema is corpus-agnostic. Once two corpora are ingested and extracted, their event streams can be aligned by timestamp and modality — enabling comparisons across recording conditions, languages, or speaker populations that were previously blocked by format incompatibility.</p>
+        <div style="margin-top:16px;"><span class="au-tag">EnvisionBOX</span><span class="au-tag">ELAN import</span><span class="au-tag">schema alignment</span></div>
+      </div>
+      <div class="content-tile">
+        <h3>Longitudinal kinematic tracking</h3>
+        <p>Pose estimation events carry speaker identity, session metadata, and corpus provenance. Tracking kinematic change over time — within a clinical population, across an educational intervention, or through a conversation — requires reliable event linkage across recording sessions that SMASH makes native.</p>
+        <div style="margin-top:16px;"><span class="au-tag">ViTPose</span><span class="au-tag">MediaPipe</span><span class="au-tag">longitudinal</span></div>
+      </div>
+      <div class="content-tile">
+        <h3>Gesture–prosody synchrony at scale</h3>
+        <p>The simultaneous availability of kinematic, acoustic, and transcription events in a single schema makes gesture–prosody coupling analysis tractable at corpus scale. JEGAL produces token-level coupling heatmaps across the gesture stroke and speech waveform for entire corpora.</p>
+        <div style="margin-top:16px;"><span class="au-tag">JEGAL</span><span class="au-tag">Whisper</span><span class="au-tag">synchrony</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="nav-strip">
+  <div class="nav-strip-inner">
+    <a href="utility-triad.html">← Back to Utility Triad</a>
+    <div style="display:flex;gap:24px;">
+      <a href="utility-ru.html">Next: RU — Reflexive Utility →</a>
+      <a href="utility-gu.html">GU — Generative Utility →</a>
+    </div>
+  </div>
+</div>
+
+<section class="theory-block">
+  <div class="page-inner">
+    <p style="font-size:11px;font-family:'IBM Plex Mono',monospace;letter-spacing:0.14em;text-transform:uppercase;color:#78a9ff;margin-bottom:12px;">Maass et al. 2018 — Challenges 1 &amp; 2</p>
+    <p>Maass et al.'s first challenge — <strong>reconciling data-driven and theory-driven knowledge creation</strong> — is directly addressed by AU as SMASH operationalises it. The canonical event log carries both: automated feature extraction (data-driven) and human annotation with codebook references (theory-driven) co-exist as events with typed provenance. A researcher can impose McNeill gesture types onto MediaPipe keypoint events without discarding the confidence scores the estimator produced.</p>
+    <p>The second challenge — <strong>selecting data and analytical techniques appropriate for theory testing</strong> — maps onto AU's relativity to research purpose. The Baselines module in SMASH lets researchers compare the analytic output of different extraction pipelines on the same corpus before committing to one, making technique selection an empirical rather than incidental decision.</p>
+  </div>
+</section>
+
+<footer>
+  <span>SYNAPSIS · NWO TDCC-SSH · ICT.001.TDCC.013 · AU — Analytic Utility</span>
+  <span><a href="utility-triad.html">Triad overview</a> · <a href="utility-ru.html">RU</a> · <a href="utility-gu.html">GU</a></span>
+</footer>
+<script data-goatcounter="https://synapsis-masking.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

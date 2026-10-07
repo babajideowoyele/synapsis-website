@@ -12,6 +12,24 @@
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
     <link rel="stylesheet" href="theme.css">
+    <style>
+        .hero-pointcloud {
+            position: fixed; inset: 0; z-index: -1; pointer-events: none;
+            /* The content column is centred and capped at max-w-5xl, so fade the
+               layer out across the left two thirds. The figure then lives in the
+               right margin and never sits under body copy. */
+            -webkit-mask-image: linear-gradient(to right,
+                transparent 0%, transparent 52%, rgba(0,0,0,0.22) 66%,
+                rgba(0,0,0,0.7) 80%, #000 92%);
+            mask-image: linear-gradient(to right,
+                transparent 0%, transparent 52%, rgba(0,0,0,0.22) 66%,
+                rgba(0,0,0,0.7) 80%, #000 92%);
+        }
+        @media (max-width: 1100px) {
+            /* not enough margin to hold it beside the text */
+            .hero-pointcloud { display: none; }
+        }
+    </style>
     <script src="theme.js"></script>
     <script src="countdown.js"></script>
     <script>
@@ -39,9 +57,13 @@
         }
     </script>
     <style>
+        /* The point-cloud layer sits at z-index -1, below everything. For it to be
+           visible the page colour has to live on <html>, not on <body>, or the body
+           background would paint straight over it. */
+        html { background-color: var(--color-bg); }
         body {
             font-family: 'IBM Plex Sans', sans-serif;
-            background-color: var(--color-bg);
+            background-color: transparent;
             color: var(--color-text);
         }
         .accent-bar {
@@ -114,6 +136,12 @@
     </style>
 </head>
 <body class="min-h-screen has-hero">
+    <!-- Reactive point-cloud figure: a fixed layer behind the whole page.
+         Masks as you scroll down, restores on the way up. Sections with their own
+         background (bg-white, bg-carbon-bg-hover) deliberately cover it, so it shows
+         through the open sections only. See hero-pointcloud.js. -->
+    <div class="hero-pointcloud" data-hero-pointcloud aria-hidden="true"></div>
+
     <!-- Header -->
     <header class="border-b border-carbon-border sticky top-0 z-50 bg-white">
         <div class="accent-bar"></div>
@@ -154,6 +182,8 @@
 
     <!-- Hero Section -->
     <section class="py-24 px-6 relative overflow-hidden">
+        <!-- Static fallback: shown when WebGL is unavailable, hidden by
+             hero-pointcloud.js once the canvas is running. -->
         <div class="hero-network-bg" aria-hidden="true">
             <img src="logo-mark.svg" alt="" class="w-full h-full">
         </div>
@@ -174,7 +204,7 @@
                     </div>
                 </div>
                 <div class="flex gap-2 flex-shrink-0">
-                    <a href="https://docs.google.com/forms/d/e/1FAIpQLSedaarmiKs7WJ8x_LJA1yTYvkyMEIsyhBLgvQyPNX2r9vAgWA/viewform" target="_blank" rel="noopener" data-countdown-when="upcoming live" class="btn-primary px-4 py-2 text-sm font-medium inline-flex items-center">
+                    <a href="https://docs.google.com/forms/d/e/1FAIpQLSedaarmiKs7WJ8x_LJA1yTYvkyMEIsyhBLgvQyPNX2r9vAgWA/viewform" target="_blank" rel="noopener" data-countdown-when="upcoming live" class="btn-primary px-4 py-2 text-sm font-medium inline-flex items-center" data-goatcounter-click="register:index.html">
                         <i class="fas fa-pen-to-square mr-2"></i> Register
                     </a>
                     <a href="events/masking-lab/index.html" class="btn-secondary px-4 py-2 text-sm font-medium inline-flex items-center">
@@ -203,29 +233,35 @@
         </div>
     </section>
 
-    <!-- Stats Bar -->
-    <section class="border-y border-carbon-border bg-carbon-bg-hover py-8 reveal">
-        <div class="container mx-auto px-6">
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
-                <div class="text-center">
-                    <div class="stat-number text-3xl font-semibold" data-count="24">24</div>
-                    <div class="text-sm text-carbon-text-secondary mt-1">Months</div>
-                </div>
-                <div class="text-center">
-                    <div class="stat-number text-3xl font-semibold" data-count="4">4</div>
-                    <div class="text-sm text-carbon-text-secondary mt-1">Ways to Mask</div>
-                </div>
-                <div class="text-center">
-                    <div class="stat-number text-3xl font-semibold" data-count="7">7</div>
-                    <div class="text-sm text-carbon-text-secondary mt-1">Partners</div>
-                </div>
-                <div class="text-center">
-                    <div class="stat-number text-3xl font-semibold" data-count="100" data-suffix="+">100+</div>
-                    <div class="text-sm text-carbon-text-secondary mt-1">Target Trainees</div>
-                </div>
-            </div>
-        </div>
-    </section>
+    <!-- Stats bar — retired from the landing page 2026-10-06.
+         Kept rather than deleted. The filled, bordered band hard-stopped the hero,
+         and the numbers undersold the project ("100+ Target Trainees" is a target,
+         not an achievement). Same call as dropping the funding stat tile.
+         Uncomment to restore.
+
+         <section class="border-y border-carbon-border bg-carbon-bg-hover py-8 reveal">
+         <div class="container mx-auto px-6">
+         <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+         <div class="text-center">
+         <div class="stat-number text-3xl font-semibold" data-count="24">24</div>
+         <div class="text-sm text-carbon-text-secondary mt-1">Months</div>
+         </div>
+         <div class="text-center">
+         <div class="stat-number text-3xl font-semibold" data-count="4">4</div>
+         <div class="text-sm text-carbon-text-secondary mt-1">Ways to Mask</div>
+         </div>
+         <div class="text-center">
+         <div class="stat-number text-3xl font-semibold" data-count="7">7</div>
+         <div class="text-sm text-carbon-text-secondary mt-1">Partners</div>
+         </div>
+         <div class="text-center">
+         <div class="stat-number text-3xl font-semibold" data-count="100" data-suffix="+">100+</div>
+         <div class="text-sm text-carbon-text-secondary mt-1">Target Trainees</div>
+         </div>
+         </div>
+         </div>
+         </section>
+    -->
 
     <!-- What masking looks like (samples) -->
     <section id="samples" class="py-16 px-6 border-b border-carbon-border" data-sample-strip hidden>
@@ -275,7 +311,7 @@
 
     <!-- Starting points -->
     <section id="routes" class="py-20 px-6 reveal">
-        <div class="container mx-auto max-w-5xl">
+        <div class="container mx-auto max-w-5xl lg:pr-32 xl:pr-44">
             <div class="mb-10">
                 <span class="text-xs font-mono uppercase tracking-widest text-carbon-text-secondary">Start here</span>
                 <h2 class="text-3xl font-semibold mt-4">Find your starting point</h2>
@@ -343,7 +379,7 @@
 
     <!-- About Section -->
     <section id="about" class="py-20 px-6 reveal">
-        <div class="container mx-auto max-w-5xl">
+        <div class="container mx-auto max-w-5xl lg:pr-44 xl:pr-64">
             <div class="grid md:grid-cols-2 gap-16">
                 <div>
                     <span class="text-xs font-mono uppercase tracking-widest text-carbon-text-secondary">The Challenge</span>
@@ -377,48 +413,66 @@
                 <h2 class="text-3xl font-semibold mt-4">What SYNAPSIS offers</h2>
             </div>
             <div class="grid md:grid-cols-3 gap-6 reveal-stagger">
-                <div class="card bg-white p-6">
+                <a href="demo.html" class="card bg-white p-6 flex flex-col group">
                     <div class="w-12 h-12 border border-carbon-border flex items-center justify-center mb-4">
                         <i class="fas fa-user-shield text-xl"></i>
                     </div>
                     <h3 class="font-semibold mb-2">Face Masking</h3>
                     <p class="text-sm text-carbon-text-secondary">Blur, pixelate, or replace faces while preserving research-relevant features.</p>
-                </div>
-                <div class="card bg-white p-6">
+                    <span class="mt-auto pt-5 text-sm font-medium inline-flex items-center gap-2">
+                        See it on real footage <i class="fas fa-arrow-right text-xs transition-transform group-hover:translate-x-1"></i>
+                    </span>
+                </a>
+                <a href="platform.html#masking" class="card bg-white p-6 flex flex-col group">
                     <div class="w-12 h-12 border border-carbon-border flex items-center justify-center mb-4">
                         <i class="fas fa-microphone-slash text-xl"></i>
                     </div>
                     <h3 class="font-semibold mb-2">Voice Masking</h3>
                     <p class="text-sm text-carbon-text-secondary">Alter voice characteristics to prevent speaker identification.</p>
-                </div>
-                <div class="card bg-white p-6">
+                    <span class="mt-auto pt-5 text-sm font-medium inline-flex items-center gap-2">
+                        Compare audio methods <i class="fas fa-arrow-right text-xs transition-transform group-hover:translate-x-1"></i>
+                    </span>
+                </a>
+                <a href="utility-triad.html" class="card bg-white p-6 flex flex-col group">
                     <div class="w-12 h-12 border border-carbon-border flex items-center justify-center mb-4">
                         <i class="fas fa-person-running text-xl"></i>
                     </div>
                     <h3 class="font-semibold mb-2">Body Kinematics</h3>
                     <p class="text-sm text-carbon-text-secondary">Extract pose data and movement analytics from masked videos.</p>
-                </div>
-                <div class="card bg-white p-6">
+                    <span class="mt-auto pt-5 text-sm font-medium inline-flex items-center gap-2">
+                        How much signal survives <i class="fas fa-arrow-right text-xs transition-transform group-hover:translate-x-1"></i>
+                    </span>
+                </a>
+                <a href="platform.html#infrastructure" class="card bg-white p-6 flex flex-col group">
                     <div class="w-12 h-12 border border-carbon-border flex items-center justify-center mb-4">
                         <i class="fas fa-cloud text-xl"></i>
                     </div>
                     <h3 class="font-semibold mb-2">Cloud Platform</h3>
                     <p class="text-sm text-carbon-text-secondary">SURF-integrated infrastructure for secure, scalable processing.</p>
-                </div>
-                <div class="card bg-white p-6">
+                    <span class="mt-auto pt-5 text-sm font-medium inline-flex items-center gap-2">
+                        See the infrastructure <i class="fas fa-arrow-right text-xs transition-transform group-hover:translate-x-1"></i>
+                    </span>
+                </a>
+                <a href="training.html#courses" class="card bg-white p-6 flex flex-col group">
                     <div class="w-12 h-12 border border-carbon-border flex items-center justify-center mb-4">
                         <i class="fas fa-graduation-cap text-xl"></i>
                     </div>
                     <h3 class="font-semibold mb-2">Training</h3>
                     <p class="text-sm text-carbon-text-secondary">Masking School workshops for researchers and data stewards.</p>
-                </div>
-                <div class="card bg-white p-6">
+                    <span class="mt-auto pt-5 text-sm font-medium inline-flex items-center gap-2">
+                        Browse the course catalogue <i class="fas fa-arrow-right text-xs transition-transform group-hover:translate-x-1"></i>
+                    </span>
+                </a>
+                <a href="resources.html#templates" class="card bg-white p-6 flex flex-col group">
                     <div class="w-12 h-12 border border-carbon-border flex items-center justify-center mb-4">
                         <i class="fas fa-scale-balanced text-xl"></i>
                     </div>
                     <h3 class="font-semibold mb-2">GDPR Compliance</h3>
                     <p class="text-sm text-carbon-text-secondary">Tools and guidelines for privacy-compliant data sharing.</p>
-                </div>
+                    <span class="mt-auto pt-5 text-sm font-medium inline-flex items-center gap-2">
+                        Get the templates <i class="fas fa-arrow-right text-xs transition-transform group-hover:translate-x-1"></i>
+                    </span>
+                </a>
             </div>
         </div>
     </section>
@@ -770,5 +824,12 @@
             });
         });
     </script>
+
+    <script type="importmap">
+    { "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js" } }
+    </script>
+    <script type="module" src="hero-pointcloud.js"></script>
+
+<script data-goatcounter="https://synapsis-masking.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </body>
 </html>
