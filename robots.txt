@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /survey/
+Disallow: /demos_carbon_maskingops/
+Disallow: /masking-lite/
+
+Sitemap: https://synapsis.codeberg.page/sitemap.xml
