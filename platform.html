@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -158,11 +158,11 @@
                 </a>
                 <div class="hidden md:flex items-center space-x-8">
                     <a href="index.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Home</a>
+                    <a href="start.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Start here</a>
                     <a href="platform.html" class="text-sm font-medium border-b-2 border-carbon-text pb-1">Platform</a>
                     <a href="demo.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Demo</a>
                     <a href="training.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Training</a>
                     <a href="resources.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Resources</a>
-                    <a href="network.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">Network</a>
                     <a href="press.html" class="nav-link text-sm font-medium text-carbon-text-secondary hover:text-carbon-text">News</a>
                 </div>
                 <button class="md:hidden p-2 -mr-2" onclick="toggleMobileMenu()" aria-label="Toggle navigation menu">
@@ -176,11 +176,11 @@
         <!-- Mobile menu -->
         <div id="mobile-menu" class="hidden md:hidden border-t border-carbon-border">
             <a href="index.html" class="block px-6 py-3 text-sm font-medium text-carbon-text-secondary hover:text-carbon-text hover:bg-carbon-bg-hover">Home</a>
+            <a href="start.html" class="block px-6 py-3 text-sm font-medium text-carbon-text-secondary hover:text-carbon-text hover:bg-carbon-bg-hover">Start here</a>
             <a href="platform.html" class="block px-6 py-3 text-sm font-medium bg-carbon-bg-hover border-l-2 border-carbon-text">Platform</a>
             <a href="demo.html" class="block px-6 py-3 text-sm font-medium text-carbon-text-secondary hover:text-carbon-text hover:bg-carbon-bg-hover">Demo</a>
             <a href="training.html" class="block px-6 py-3 text-sm font-medium text-carbon-text-secondary hover:text-carbon-text hover:bg-carbon-bg-hover">Training</a>
             <a href="resources.html" class="block px-6 py-3 text-sm font-medium text-carbon-text-secondary hover:text-carbon-text hover:bg-carbon-bg-hover">Resources</a>
-            <a href="network.html" class="block px-6 py-3 text-sm font-medium text-carbon-text-secondary hover:text-carbon-text hover:bg-carbon-bg-hover">Network</a>
             <a href="press.html" class="block px-6 py-3 text-sm font-medium text-carbon-text-secondary hover:text-carbon-text hover:bg-carbon-bg-hover">News</a>
         </div>
     </header>
@@ -613,33 +613,43 @@ result.download_pose_data(<span class="text-green-400">"pose_data.json"</span>)<
                     <span class="text-xs font-mono uppercase tracking-widest text-carbon-text-secondary">Start</span>
                     <h2 class="text-3xl font-semibold mt-4">Get Started with SYNAPSIS</h2>
                 </div>
-                <div class="grid md:grid-cols-3 gap-6 mb-12">
-                    <div class="border border-carbon-border p-8 text-center">
-                        <div class="text-3xl font-mono font-semibold mb-4">1</div>
-                        <h3 class="font-semibold mb-3">Register</h3>
-                        <p class="text-sm text-carbon-text-secondary mb-6">Create an account using your institutional email address.</p>
-                        <span class="px-6 py-2 text-sm inline-block bg-gray-600 text-gray-400 cursor-not-allowed">Coming Soon</span>
+                <p class="text-carbon-text-secondary leading-relaxed max-w-3xl mb-8">
+                    There is more than one way in. Two of them run entirely on your own machine and need no account
+                    at all; the hosted routes need one, because a shared server has to know whose footage it is
+                    holding. Pick by what your data and your ethics approval allow &mdash;
+                    <a href="start.html#compare" class="underline">the routes are compared side by side here</a>.
+                </p>
+                <div class="grid md:grid-cols-3 gap-6 mb-8">
+                    <div class="border border-carbon-border p-8">
+                        <div class="text-xs font-mono uppercase tracking-widest text-carbon-text-secondary mb-3">On your own machine</div>
+                        <h3 class="font-semibold mb-3">Install and run it yourself</h3>
+                        <p class="text-sm text-carbon-text-secondary mb-6">No account, no upload, no waiting. Masked-Piper on any laptop, or MaskAnyone in local Docker if you have a GPU.</p>
+                        <a href="start.html#route-3" class="btn-secondary px-6 py-2 text-sm inline-block">Local routes</a>
                     </div>
-                    <div class="border border-carbon-border p-8 text-center">
-                        <div class="text-3xl font-mono font-semibold mb-4">2</div>
-                        <h3 class="font-semibold mb-3">Get Trained</h3>
-                        <p class="text-sm text-carbon-text-secondary mb-6">Complete the Masking School introduction course.</p>
-                        <a href="training.html" class="btn-secondary px-6 py-2 text-sm inline-block">View Courses</a>
+                    <div class="border border-carbon-border p-8">
+                        <div class="text-xs font-mono uppercase tracking-widest text-carbon-text-secondary mb-3">On a shared server</div>
+                        <h3 class="font-semibold mb-3">Use a hosted instance</h3>
+                        <p class="text-sm text-carbon-text-secondary mb-6">Here an account is the privacy control: it decides who can open your unmasked uploads and produces the access log your DPIA asks for.</p>
+                        <a href="start.html#route-6" class="btn-secondary px-6 py-2 text-sm inline-block">Request access</a>
                     </div>
-                    <div class="border border-carbon-border p-8 text-center">
-                        <div class="text-3xl font-mono font-semibold mb-4">3</div>
-                        <h3 class="font-semibold mb-3">Start Masking</h3>
-                        <p class="text-sm text-carbon-text-secondary mb-6">Access the platform and begin processing your data.</p>
-                        <span class="px-6 py-2 text-sm inline-block bg-gray-600 text-gray-400 cursor-not-allowed">Coming Soon</span>
+                    <div class="border border-carbon-border p-8">
+                        <div class="text-xs font-mono uppercase tracking-widest text-carbon-text-secondary mb-3">Either way</div>
+                        <h3 class="font-semibold mb-3">Get trained</h3>
+                        <p class="text-sm text-carbon-text-secondary mb-6">The Masking School introduction covers the decisions the tool will not make for you.</p>
+                        <a href="training.html" class="btn-secondary px-6 py-2 text-sm inline-block">View courses</a>
                     </div>
                 </div>
+                <p class="text-sm text-carbon-text-secondary mb-12">
+                    <i class="fas fa-circle-info mr-2"></i>A single national sign-up covering every institution is a
+                    WP3 goal, not something you need today &mdash; the routes above are open now.
+                </p>
 
                 <!-- System Requirements -->
                 <div class="border border-carbon-border bg-white p-8">
                     <h3 class="font-semibold mb-6">System Requirements</h3>
                     <div class="grid md:grid-cols-2 gap-8">
                         <div>
-                            <h4 class="font-medium mb-4">Web Interface</h4>
+                            <h4 class="font-medium mb-4">Hosted instance (routes 5&ndash;6)</h4>
                             <ul class="space-y-2 text-sm text-carbon-text-secondary">
                                 <li class="flex items-center gap-2"><i class="fas fa-check text-green-600"></i> Modern web browser</li>
                                 <li class="flex items-center gap-2"><i class="fas fa-check text-green-600"></i> Stable internet connection</li>
@@ -647,7 +657,7 @@ result.download_pose_data(<span class="text-green-400">"pose_data.json"</span>)<
                             </ul>
                         </div>
                         <div>
-                            <h4 class="font-medium mb-4">Local Installation (Optional)</h4>
+                            <h4 class="font-medium mb-4">Local installation (routes 3&ndash;4)</h4>
                             <ul class="space-y-2 text-sm text-carbon-text-secondary">
                                 <li class="flex items-center gap-2"><i class="fas fa-check text-green-600"></i> Python 3.8+</li>
                                 <li class="flex items-center gap-2"><i class="fas fa-check text-green-600"></i> CUDA-capable GPU (recommended)</li>
