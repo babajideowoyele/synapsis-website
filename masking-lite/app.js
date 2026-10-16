@@ -811,7 +811,7 @@ async function run() {
             segmenter: seg ? (s.segmenter === 'multiclass' ? 'selfie_multiclass_256x256 (float32)' : 'deeplab_v3 (float32)') : null,
             face: face ? 'face_landmarker (float16, v1)' : null, hands: hands ? 'hand_landmarker (float16, v1)' : null,
             voice_masking: audioNote.startsWith('voices masked')
-                ? 'LPC pole-angle transform (McAdams coefficient; Patino, Tomashenko, Todisco, Nautsch & Evans, 2021, Interspeech, arXiv:2011.01130)'
+                ? 'LPC pole-angle transform (McAdams coefficient; Patino, Tomashenko, Todisco, Nautsch & Evans, 2021, Interspeech, doi:10.21437/Interspeech.2021-1070)'
                 : null,
             delegate: pose._delegate },
         stats,

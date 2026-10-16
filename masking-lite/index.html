@@ -36,6 +36,10 @@
         .preset { border: 1px solid var(--color-border); cursor: pointer; transition: border-color .15s; }
         .preset:hover { border-color: var(--color-text-secondary); }
         .preset.active { border-color: var(--color-text); box-shadow: inset 0 0 0 1px var(--color-text); }
+        .info { position: relative; display: inline-flex; cursor: help; }
+        .info .tip { position: absolute; bottom: 100%; left: -10px; width: min(320px, 82vw); padding-bottom: 8px; display: none; z-index: 40; }
+        .info:hover .tip, .info:focus-within .tip { display: block; }
+        .info .tip > span { display: block; border: 1px solid var(--color-text); background: var(--color-bg); padding: 10px 12px; font-size: 12px; line-height: 1.5; font-weight: 400; box-shadow: 0 6px 24px rgba(0,0,0,.15); }
         .bar { height: 6px; background: var(--color-bg-hover); }
         .bar > div { height: 100%; background: var(--color-text); width: 0; transition: width .2s; }
         canvas.preview, video.preview { width: 100%; background: #111; }
@@ -123,6 +127,33 @@
                 </div>
             </div>
 
+            <div class="mt-5 pt-4 border-t border-carbon-border text-sm">
+                <div class="flex flex-wrap items-center gap-3">
+                    <span class="font-medium"><i class="fas fa-volume-high mr-2"></i>Sound</span>
+                    <span class="info" tabindex="0" aria-label="How voice masking works">
+                        <i class="fas fa-circle-info text-carbon-text-secondary"></i>
+                        <span class="tip" role="tooltip"><span>
+                            Voice masking shifts the voice's resonances with the <strong>McAdams coefficient</strong>,
+                            an established lightweight voice-anonymisation method: who is speaking is disguised,
+                            what is said stays audible.
+                            <a class="underline" href="https://doi.org/10.21437/Interspeech.2021-1070" target="_blank" rel="noopener">The science: Patino et&nbsp;al., Interspeech&nbsp;2021</a>
+                        </span></span>
+                    </span>
+                    <select id="opt-audio">
+                        <option value="remove" selected>Remove (safest)</option>
+                        <option value="mask">Mask the voices (speech stays audible)</option>
+                        <option value="keep">Keep original (identifies people)</option>
+                    </select>
+                </div>
+                <div id="voice-row" class="flex flex-wrap items-center gap-3 mt-3" hidden>
+                    <span>Masked voice</span>
+                    <span class="text-carbon-text-secondary"><i class="fas fa-arrow-up mr-1"></i>higher</span>
+                    <input type="range" id="opt-voice" min="-100" max="100" value="-67" class="flex-1 min-w-32" aria-label="How the masked voice sounds, from higher to deeper">
+                    <span class="text-carbon-text-secondary">deeper<i class="fas fa-arrow-down ml-1"></i></span>
+                    <button type="button" id="voice-preview" class="btn-secondary px-3 py-1.5"><i class="fas fa-play mr-2"></i>Preview on my video</button>
+                </div>
+            </div>
+
             <details class="mt-5">
                 <summary class="cursor-pointer text-sm font-medium">Adjust the details</summary>
                 <div class="grid sm:grid-cols-2 gap-x-8 gap-y-4 mt-4 text-sm">
@@ -148,20 +179,6 @@
                     <label class="flex items-center justify-between gap-3">Mask margin
                         <select id="opt-margin"><option value="tight">Tight</option><option value="normal" selected>Normal</option><option value="wide">Wide (safest)</option></select>
                     </label>
-                    <label class="flex items-center justify-between gap-3">Sound
-                        <select id="opt-audio">
-                            <option value="remove" selected>Remove (safest)</option>
-                            <option value="mask">Mask the voices (speech stays audible)</option>
-                            <option value="keep">Keep original (identifies people)</option>
-                        </select>
-                    </label>
-                    <div id="voice-row" class="sm:col-span-2 flex flex-wrap items-center gap-3" hidden>
-                        <span>Masked voice</span>
-                        <span class="text-carbon-text-secondary"><i class="fas fa-arrow-up mr-1"></i>higher</span>
-                        <input type="range" id="opt-voice" min="-100" max="100" value="-67" class="flex-1 min-w-32" aria-label="How the masked voice sounds, from higher to deeper">
-                        <span class="text-carbon-text-secondary">deeper<i class="fas fa-arrow-down ml-1"></i></span>
-                        <button type="button" id="voice-preview" class="btn-secondary px-3 py-1.5"><i class="fas fa-play mr-2"></i>Preview on my video</button>
-                    </div>
                     <label class="flex items-center gap-2 sm:col-span-2"><input type="checkbox" id="opt-smooth" checked> Smooth the drawn tracking (less jitter; the CSV files keep the raw values)</label>
                     <label class="flex items-center gap-2"><input type="checkbox" id="opt-skeleton" checked> Draw body skeleton</label>
                     <label class="flex items-center gap-2"><input type="checkbox" id="opt-hands" checked> Draw hands</label>
