@@ -305,7 +305,7 @@ export const maskot = {
         document.getElementById('report-close').addEventListener('click', () => document.getElementById('report-dialog').close());
         if (supported) {
             setTimeout(() => say("Hi, I'm <strong>Maskot</strong>! I help you mask people in videos, right here in your browser. " +
-                'Your video never leaves this computer. Shall I first check whether this computer is up to it?', [checkAction]), 900);
+                'Your video is processed on this computer, not on a server. Shall I first check whether this computer is up to it?', [checkAction]), 900);
         }
     },
     onVideo(v) {
