@@ -322,9 +322,12 @@ export const maskot = {
             say(`Got it: ${Math.round(v.duration)} seconds of video.${estTxt} Pick a look (<em>Masked-Piper classic</em> is a good start) and press <strong>Start masking</strong>.`);
         }
     },
-    onStart() {
+    onStart(s) {
         speed = 0.03; halfwaySaid = false;
-        say('Working on it! Keep this tab open and in front: browsers slow down tabs in the background.');
+        const audio = s?.audio === 'keep'
+            ? ' You are keeping the original sound: voices and any spoken names will still identify people.'
+            : s?.audio === 'mask' ? ' I will also disguise the voices.' : '';
+        say('Working on it! Keep this tab open and in front: browsers slow down tabs in the background.' + audio);
     },
     onProgress(frac) {
         if (frac >= 0.5 && !halfwaySaid) { halfwaySaid = true; say('Halfway there.'); }
@@ -337,13 +340,20 @@ export const maskot = {
             ? ` Note: this computer couldn't keep up with every frame, so ${stats.frames_repeated} frames repeat the one before ` +
               '(the video is still fully masked, but it may stutter and the movement data has gaps). Tick <em>Read every frame exactly</em> for a steady, gap-free result.'
             : '';
+        const audio = stats.audio?.startsWith('voices masked')
+            ? ' I disguised the voices: listen once before sharing — what is said, including names, stays audible.'
+            : stats.audio === 'original (unchanged)'
+                ? ' The original sound is kept, so the voices still identify people.'
+                : stats.audio && stats.audio !== 'removed' && s.audio !== 'remove'
+                    ? ` Note: the sound was ${stats.audio}.`
+                    : ' I removed the sound: voices identify people too.';
         if (s.hide !== 'none' && pct < 80) {
             say(`Done, but please look carefully: I found a person in only <strong>${pct}%</strong> of frames. ` +
                 (blurred ? `I blurred the ${blurred} frames where I found nobody. ` : 'Frames where I found nobody are <strong>not masked</strong>. ') +
-                'Better light, or a closer shot, helps. Always watch the result before sharing.' + gaps);
+                'Better light, or a closer shot, helps. Always watch the result before sharing.' + audio + gaps);
         } else {
             say(`All done! I found a person in ${pct}% of frames${blurred ? `, and blurred the ${blurred} frames where I didn't` : ''}. ` +
-                'Please watch the masked video once before sharing it. I removed the sound: voices identify people too.' + gaps);
+                'Please watch the masked video once before sharing it.' + audio + gaps);
         }
     },
 };

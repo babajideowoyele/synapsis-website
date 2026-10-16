@@ -146,6 +146,20 @@
                     <label class="flex items-center justify-between gap-3">Mask margin
                         <select id="opt-margin"><option value="tight">Tight</option><option value="normal" selected>Normal</option><option value="wide">Wide (safest)</option></select>
                     </label>
+                    <label class="flex items-center justify-between gap-3">Sound
+                        <select id="opt-audio">
+                            <option value="remove" selected>Remove (safest)</option>
+                            <option value="mask">Mask the voices (speech stays audible)</option>
+                            <option value="keep">Keep original (identifies people)</option>
+                        </select>
+                    </label>
+                    <div id="voice-row" class="sm:col-span-2 flex flex-wrap items-center gap-3" hidden>
+                        <span>Masked voice</span>
+                        <span class="text-carbon-text-secondary"><i class="fas fa-arrow-up mr-1"></i>higher</span>
+                        <input type="range" id="opt-voice" min="-100" max="100" value="-67" class="flex-1 min-w-32" aria-label="How the masked voice sounds, from higher to deeper">
+                        <span class="text-carbon-text-secondary">deeper<i class="fas fa-arrow-down ml-1"></i></span>
+                        <button type="button" id="voice-preview" class="btn-secondary px-3 py-1.5"><i class="fas fa-play mr-2"></i>Preview on my video</button>
+                    </div>
                     <label class="flex items-center gap-2 sm:col-span-2"><input type="checkbox" id="opt-smooth" checked> Smooth the drawn tracking (less jitter; the CSV files keep the raw values)</label>
                     <label class="flex items-center gap-2"><input type="checkbox" id="opt-skeleton" checked> Draw body skeleton</label>
                     <label class="flex items-center gap-2"><input type="checkbox" id="opt-hands" checked> Draw hands</label>
@@ -179,8 +193,9 @@
             <p class="text-sm text-carbon-text-secondary mt-4 leading-relaxed">
                 <i class="fas fa-triangle-exclamation mr-1"></i>
                 <strong>Watch the whole masked video once before you share it.</strong> Automatic masking can miss
-                people in some frames (fast movement, poor light, people at the edge). The sound is removed, because
-                voices identify people too. The CSV files hold the tracked points per frame (x and y from 0 to 1,
+                people in some frames (fast movement, poor light, people at the edge). By default the sound is removed,
+                because voices identify people too; a masked voice is disguised, not anonymous, and everything said —
+                including names — stays audible. The CSV files hold the tracked points per frame (x and y from 0 to 1,
                 relative to the frame), and <code>settings.json</code> records exactly how the video was masked, for
                 your data documentation.
             </p>

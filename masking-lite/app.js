@@ -6,10 +6,11 @@ import {
 } from 'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@1.0.1/vision_bundle.mjs';
 import { Muxer, ArrayBufferTarget } from 'https://cdn.jsdelivr.net/npm/mp4-muxer@5.2.2/+esm';
 import { maskot } from './maskot.js';
+import { decodeAudio, maskVoice, resampleTo } from './audio.js';
 
 const WASM = 'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@1.0.1/wasm';
 const MODELS = new URL('models/', import.meta.url).href;
-const VERSION = '0.2.1-draft';
+const VERSION = '0.3.0-draft';
 
 const POSE_NAMES = ['nose', 'left_eye_inner', 'left_eye', 'left_eye_outer', 'right_eye_inner', 'right_eye',
     'right_eye_outer', 'left_ear', 'right_ear', 'mouth_left', 'mouth_right', 'left_shoulder', 'right_shoulder',
@@ -35,6 +36,7 @@ const ui = {
     hide: $('opt-hide'), style: $('opt-style'), bg: $('opt-bg'), size: $('opt-size'), skeleton: $('opt-skeleton'),
     hands: $('opt-hands'), facemesh: $('opt-facemesh'), facedata: $('opt-facedata'), people: $('opt-people'),
     safety: $('opt-safety'), exact: $('opt-exact'), seg: $('opt-seg'), margin: $('opt-margin'), smooth: $('opt-smooth'),
+    audio: $('opt-audio'), voice: $('opt-voice'), voiceRow: $('voice-row'), voicePreview: $('voice-preview'),
 };
 
 let fileset = null;
@@ -54,6 +56,7 @@ function settings() {
         faceData: ui.facedata.checked, people: Math.max(1, Math.min(8, +ui.people.value || 4)),
         safety: ui.safety.checked, exact: ui.exact.checked, smooth: ui.smooth.checked,
         segmenter: ui.seg.value, margin: ui.margin.value,
+        audio: ui.audio.value, voice: ui.audio.value === 'mask' ? voiceAlpha() : null,
     };
 }
 const PRESET_SLUGS = { classic: 'masked-piper-classic', face: 'hide-faces', blur: 'blur-body', skeleton: 'movement-only' };
@@ -70,6 +73,74 @@ function applyPreset(name) {
 document.querySelectorAll('.preset').forEach((el) => el.addEventListener('click', () => applyPreset(el.dataset.preset)));
 [ui.hide, ui.style, ui.bg, ui.skeleton, ui.hands, ui.facemesh].forEach((el) =>
     el.addEventListener('change', () => document.querySelectorAll('.preset').forEach((p) => p.classList.remove('active'))));
+
+// ---------------------------------------------------------------------------
+// Sound: one slider sets how the masked voice sounds (the McAdams coefficient);
+// the preview masks a few seconds of the loaded video's own sound and plays it.
+// ---------------------------------------------------------------------------
+function voiceAlpha() {
+    let a = 1 + (+ui.voice.value / 100) * 0.3;
+    if (Math.abs(a - 1) < 0.08) a = a >= 1 ? 1.08 : 0.92;   // the exact middle would leave the voice unchanged
+    return Math.round(a * 100) / 100;
+}
+let previewCache = { file: null, mono: null };   // 16 kHz mono of the current file
+let previewCtx = null, previewNode = null, previewUsed = false;
+function stopPreview() { try { previewNode?.stop(); } catch { /* not playing */ } previewNode = null; }
+async function previewVoice() {
+    if (!current.file) {
+        maskot.say('Choose a video first; then I can play you a few seconds of it with the voice masked.');
+        return;
+    }
+    ui.voicePreview.disabled = true;
+    try {
+        if (previewCache.file !== current.file) {
+            ui.status.textContent = 'Reading the sound…';
+            previewCache = { file: current.file, mono: (await decodeAudio(current.file, 16000, 1))?.[0] || null };
+            ui.status.textContent = 'Ready. Pick a style, then start.';
+        }
+        const mono = previewCache.mono;
+        if (!mono) {
+            maskot.say('I found no sound in this video, so there is no voice to mask. The output will be silent either way.');
+            return;
+        }
+        // 5 seconds from the player's position; if that stretch is silent, the loudest stretch instead.
+        const sr = 16000, L = Math.min(5 * sr, mono.length);
+        const rms = (o) => { let s = 0; for (let i = o; i < o + L; i++) s += mono[i] * mono[i]; return Math.sqrt(s / L); };
+        let st = Math.min(Math.max(0, Math.floor(ui.src.currentTime * sr)), mono.length - L);
+        if (rms(st) < 0.004) {
+            let best = st, bestV = -1;
+            for (let o = 0; o + L <= mono.length; o += sr) { const v = rms(o); if (v > bestV) { bestV = v; best = o; } }
+            st = best;
+        }
+        const alpha = voiceAlpha();
+        const masked = await maskVoice(mono.subarray(st, st + L), sr, alpha);
+        stopPreview();
+        previewCtx ??= new AudioContext();
+        if (previewCtx.state === 'suspended') await previewCtx.resume();
+        const buf = previewCtx.createBuffer(1, masked.length, sr);
+        buf.copyToChannel(masked, 0);
+        previewNode = previewCtx.createBufferSource();
+        previewNode.buffer = buf;
+        previewNode.connect(previewCtx.destination);
+        previewNode.start();
+        previewUsed = true;
+        window.__voicePreview = { alpha, seconds: masked.length / sr, from_s: st / sr };   // for automated checks
+    } finally {
+        ui.voicePreview.disabled = false;
+    }
+}
+ui.voicePreview.addEventListener('click', () => previewVoice().catch((e) => maskot.say('The preview failed: ' + e.message)));
+ui.voice.addEventListener('change', () => { if (previewUsed) previewVoice().catch(() => { /* preview only */ }); });
+ui.audio.addEventListener('change', () => {
+    ui.voiceRow.hidden = ui.audio.value !== 'mask';
+    if (ui.audio.value === 'mask') {
+        maskot.say('I will disguise the voices by shifting the vocal tract (not a synthetic replacement). ' +
+            'Use the slider to pick a higher or deeper voice and <strong>Preview</strong> to hear it on your own video. ' +
+            'Everything said stays audible — spoken names are not removed — and the sound becomes mono at telephone-like quality.');
+    } else if (ui.audio.value === 'keep') {
+        maskot.say('Careful: keeping the original sound means the voices — and any names spoken — still identify people.');
+    }
+});
 
 // ---------------------------------------------------------------------------
 // Capability check
@@ -461,12 +532,21 @@ function makeRenderer(W, H, s) {
 // ---------------------------------------------------------------------------
 // Encoding
 // ---------------------------------------------------------------------------
-async function makeEncoder(W, H, fps) {
+async function makeEncoder(W, H, fps, audio) {
     const big = W * H > 1920 * 1088;
     const candidates = [
         ['avc', big ? 'avc1.640033' : 'avc1.640028'], ['avc', big ? 'avc1.4d0033' : 'avc1.4d0028'],
         ['avc', 'avc1.42001f'], ['vp9', 'vp09.00.40.08'],
     ];
+    // Sound: AAC where the platform encodes it (Chrome/Edge), Opus otherwise (Firefox).
+    let aCfg = null;
+    if (audio && 'AudioEncoder' in window) {
+        for (const [aMux, aCodec] of [['aac', 'mp4a.40.2'], ['opus', 'opus']]) {
+            const c = { codec: aCodec, sampleRate: audio.sampleRate, numberOfChannels: audio.channels.length,
+                bitrate: 96000 * audio.channels.length };
+            try { if ((await AudioEncoder.isConfigSupported(c)).supported) { aCfg = { mux: aMux, cfg: c }; break; } } catch { /* next */ }
+        }
+    }
     for (const [muxCodec, codec] of candidates) {
         const cfg = { codec, width: W, height: H, bitrate: Math.round(W * H * fps * 0.12), framerate: fps };
         if (muxCodec === 'avc') cfg.avc = { format: 'avc' };
@@ -474,12 +554,41 @@ async function makeEncoder(W, H, fps) {
         try { ok = (await VideoEncoder.isConfigSupported(cfg)).supported; } catch { ok = false; }
         if (!ok) continue;
         const target = new ArrayBufferTarget();
-        const muxer = new Muxer({ target, video: { codec: muxCodec, width: W, height: H }, fastStart: 'in-memory' });
+        const muxer = new Muxer({
+            target, video: { codec: muxCodec, width: W, height: H },
+            audio: aCfg ? { codec: aCfg.mux, sampleRate: audio.sampleRate, numberOfChannels: audio.channels.length } : undefined,
+            fastStart: 'in-memory',
+        });
         let error = null;
         const enc = new VideoEncoder({ output: (chunk, meta) => muxer.addVideoChunk(chunk, meta), error: (e) => { error = e; } });
         enc.configure(cfg);
         return {
             codec,
+            audioCodec: aCfg ? aCfg.cfg.codec : null,
+            // Encode the whole (already processed) sound and hand it to the muxer.
+            async addAudio() {
+                if (!aCfg) return false;
+                const { channels, sampleRate } = audio;
+                let aerr = null;
+                const aenc = new AudioEncoder({ output: (c, m) => muxer.addAudioChunk(c, m), error: (e) => { aerr = e; } });
+                aenc.configure(aCfg.cfg);
+                const total = channels[0].length, chunk = sampleRate;
+                for (let off = 0; off < total; off += chunk) {
+                    if (aerr) throw aerr;
+                    const n = Math.min(chunk, total - off);
+                    const data = new Float32Array(n * channels.length);
+                    channels.forEach((ch, c) => data.set(ch.subarray(off, off + n), c * n));
+                    const ad = new AudioData({ format: 'f32-planar', sampleRate, numberOfChannels: channels.length,
+                        numberOfFrames: n, timestamp: Math.round(off * 1e6 / sampleRate), data });
+                    aenc.encode(ad);
+                    ad.close();
+                    while (aenc.encodeQueueSize > 8) await new Promise((r) => setTimeout(r, 4));
+                }
+                await aenc.flush();
+                if (aerr) throw aerr;
+                aenc.close();
+                return true;
+            },
             async add(canvasEl, i) {
                 if (error) throw error;
                 while (enc.encodeQueueSize > 4) await new Promise((r) => setTimeout(r, 4));
@@ -547,11 +656,37 @@ async function run() {
     const W = Math.round(width * scale / 2) * 2, H = Math.round(height * scale / 2) * 2;
     const N = Math.max(1, Math.floor(duration * fps));
     cancelled = false;
+    stopPreview();
     ui.run.disabled = true; ui.cancel.hidden = false; ui.bar.hidden = false; ui.out.hidden = false; ui.results.hidden = true;
     const bar = ui.bar.firstElementChild;
-    ui.status.textContent = 'Loading the masking models (first time only)…';
     maskot.onStart(s);
 
+    // Sound first: decode it from the file and, if asked, mask the voices.
+    let audio = null;
+    let audioNote = s.audio === 'remove' ? 'removed' : 'removed (no readable sound in this video)';
+    if (s.audio !== 'remove') {
+        if (!('AudioEncoder' in window)) {
+            audioNote = 'removed (this browser cannot write sound)';
+        } else {
+            try {
+                ui.status.textContent = 'Reading the sound…';
+                if (s.audio === 'mask') {
+                    const mono = await decodeAudio(file, 16000, 1);
+                    if (mono) {
+                        const masked = await maskVoice(mono[0], 16000, s.voice,
+                            (f) => { ui.status.textContent = `Masking the voices… ${Math.round(f * 100)}%`; });
+                        audio = { channels: await resampleTo([masked], 16000, 48000), sampleRate: 48000 };
+                        audioNote = `voices masked (McAdams coefficient ${s.voice}, 16 kHz mono)`;
+                    }
+                } else {
+                    const ch = await decodeAudio(file, 48000, 2);
+                    if (ch) { audio = { channels: ch, sampleRate: 48000 }; audioNote = 'original (unchanged)'; }
+                }
+            } catch { audio = null; audioNote = 'removed (reading the sound failed)'; }
+        }
+    }
+
+    ui.status.textContent = 'Loading the masking models (first time only)…';
     let pose, face, hands, seg, enc;
     try {
         pose = await getTask('pose', s);
@@ -559,7 +694,8 @@ async function run() {
         hands = s.hands ? await getTask('hands', s) : null;
         seg = s.segmenter !== 'off' && (s.hide === 'body' || (s.hide === 'face' && s.segmenter === 'multiclass'))
             ? await getTask('seg', s) : null;
-        enc = await makeEncoder(W, H, fps);
+        enc = await makeEncoder(W, H, fps, audio);
+        if (audio && !enc.audioCodec) { audio = null; audioNote = 'removed (no supported sound encoder)'; }
     } catch (e) {
         ui.status.textContent = 'Could not start: ' + e.message;
         maskot.say('Something went wrong while loading the masking models: ' + e.message +
@@ -644,6 +780,10 @@ async function run() {
         bar.style.width = '0';
         return;
     }
+    if (audio) {
+        ui.status.textContent = 'Writing the sound…';
+        try { await enc.addAudio(); } catch (e) { audioNote = 'removed (writing the sound failed: ' + e.message + ')'; }
+    }
     ui.status.textContent = 'Finishing the video file…';
     const videoBlob = await enc.finish();
     const secs = (performance.now() - t0) / 1000;
@@ -658,18 +798,21 @@ async function run() {
         frames: N, frames_analysed: analysed, frames_repeated: framesRepeated,
         frames_with_person: framesWithPerson, frames_with_face: framesWithFace,
         person_rate: +(framesWithPerson / Math.max(1, analysed)).toFixed(3), frames_fully_blurred: framesBlurred,
-        processing_seconds: +secs.toFixed(1),
+        audio: audioNote, processing_seconds: +secs.toFixed(1),
         ms_per_frame: Object.fromEntries(Object.entries(timing).map(([k, v]) => [k, +(v / Math.max(1, analysed)).toFixed(1)])),
     };
     const meta = {
         tool: 'SYNAPSIS Masking Lite', version: VERSION, run_id: stem, strategy,
         started: started.toISOString(), finished: new Date().toISOString(),
         source: { name: file.name, width, height, fps, duration_s: +duration.toFixed(3) },
-        output: { width: W, height: H, fps, codec: enc.codec, audio: 'removed' },
+        output: { width: W, height: H, fps, codec: enc.codec, audio: audioNote, audio_codec: audio ? enc.audioCodec : null },
         settings: s,
         models: { library: '@mediapipe/tasks-vision 1.0.1', pose: 'pose_landmarker_full (float16, v1)',
             segmenter: seg ? (s.segmenter === 'multiclass' ? 'selfie_multiclass_256x256 (float32)' : 'deeplab_v3 (float32)') : null,
             face: face ? 'face_landmarker (float16, v1)' : null, hands: hands ? 'hand_landmarker (float16, v1)' : null,
+            voice_masking: audioNote.startsWith('voices masked')
+                ? 'LPC pole-angle transform (McAdams coefficient; Patino, Tomashenko, Todisco, Nautsch & Evans, 2021, Interspeech, arXiv:2011.01130)'
+                : null,
             delegate: pose._delegate },
         stats,
         method: 'Masked-Piper (Owoyele, Trujillo, de Melo & Pouw, 2022, SoftwareX, doi:10.1016/j.softx.2022.101236)',
