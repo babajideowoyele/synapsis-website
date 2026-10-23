@@ -1,4 +1,10 @@
 /* SYNAPSIS Theme - Light & Dark Mode */
+
+/* The hidden attribute must win over Tailwind display classes (flex, inline-flex, ...)
+   — countdown.js relies on it to gate upcoming/live/past content. */
+[hidden] {
+    display: none !important;
+}
 :root {
     --color-bg: #ffffff;
     --color-bg-hover: #f4f4f4;
