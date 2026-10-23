@@ -163,6 +163,22 @@
 </head>
 <body class="min-h-screen">
     <!-- Header -->
+    <style>
+        /* ?embed mode: the graph alone, for iframing (e.g. the News page box) */
+        html.embed header, html.embed footer,
+        html.embed section:not(.viz-section),
+        html.embed .viz-section .controls-row,
+        html.embed .viz-section .info-panel-col { display: none !important; }
+        html.embed .viz-section { padding: 0 !important; }
+        html.embed .viz-section .viz-col { grid-column: 1 / -1; }
+        html.embed #network { height: 100vh; }
+        html.embed body { overflow: hidden; }
+    </style>
+    <script>
+        if (new URLSearchParams(location.search).has('embed')) {
+            document.documentElement.classList.add('embed');
+        }
+    </script>
     <header class="border-b border-carbon-border sticky top-0 z-50 bg-white">
         <div class="accent-bar"></div>
         <nav class="container mx-auto px-6 py-4">
@@ -217,10 +233,10 @@
         </section>
 
         <!-- Network Visualization -->
-        <section class="px-6 pb-20">
+        <section class="px-6 pb-20 viz-section">
             <div class="container mx-auto max-w-7xl">
                 <!-- Controls & Legend -->
-                <div class="flex flex-wrap gap-4 items-center justify-between mb-6">
+                <div class="controls-row flex flex-wrap gap-4 items-center justify-between mb-6">
                     <div class="flex flex-wrap gap-2">
                         <button class="control-btn" onclick="resetZoom()">
                             <i class="fas fa-magnifying-glass-minus mr-2"></i>Reset View
@@ -258,12 +274,12 @@
 
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                     <!-- Network Canvas -->
-                    <div class="lg:col-span-2">
+                    <div class="lg:col-span-2 viz-col">
                         <svg id="network" width="100%" height="650"></svg>
                     </div>
 
                     <!-- Info Panel -->
-                    <div class="lg:col-span-1">
+                    <div class="lg:col-span-1 info-panel-col">
                         <div class="info-panel" id="infoPanel">
                             <div class="text-center text-carbon-text-secondary py-12">
                                 <i class="fas fa-hand-pointer text-5xl mb-4 opacity-30"></i>
@@ -423,6 +439,10 @@
                 { id: 'hpi', label: 'HPI\nPotsdam', type: 'university', size: 25 },
                 { id: 'rug', label: 'University of\nGroningen', type: 'pilot', size: 28 },
                 { id: 'tilburg', label: 'Tilburg\nUniversity', type: 'pilot', size: 28 },
+                { id: 'eindhoven', label: 'TU\nEindhoven', type: 'pilot', size: 24 },
+                { id: 'delft', label: 'TU Delft', type: 'pilot', size: 24 },
+                { id: 'maastricht', label: 'Maastricht\nUniversity', type: 'pilot', size: 24 },
+                { id: 'leiden', label: 'Leiden\nUniversity', type: 'pilot', size: 24 },
                 { id: 'surf', label: 'SURF', type: 'infrastructure', size: 35 },
                 { id: 'dans', label: 'DANS', type: 'infrastructure', size: 35 },
                 // { id: 'clariah', label: 'CLARIAH', type: 'infrastructure', size: 25 }, // future partner
@@ -441,6 +461,10 @@
                 { source: 'synapsis', target: 'hpi', strength: 'normal' },
                 { source: 'synapsis', target: 'rug', strength: 'normal' },
                 { source: 'synapsis', target: 'tilburg', strength: 'normal' },
+                { source: 'synapsis', target: 'eindhoven', strength: 'normal' },
+                { source: 'synapsis', target: 'delft', strength: 'normal' },
+                { source: 'synapsis', target: 'maastricht', strength: 'normal' },
+                { source: 'synapsis', target: 'leiden', strength: 'normal' },
                 { source: 'synapsis', target: 'surf', strength: 'strong' },
                 { source: 'synapsis', target: 'dans', strength: 'strong' },
                 // { source: 'synapsis', target: 'clariah', strength: 'normal' }, // future partner
@@ -502,13 +526,37 @@
                 title: 'University of Groningen',
                 role: 'Pilot Institution',
                 description: 'MaskAnyone deployed in the RUG Virtual Research Environment (VRE). A dedicated extra-secured VRE is being provisioned for the pilot, with institutional MFA and DCC oversight. Pilot focuses on behavioural and classroom video masking.',
-                details: ['VRE deployment (active)', 'Extra-secured dedicated VRE (provisioning)', 'DCC privacy & data protection', 'Behavioural research pilots']
+                details: ['Pilot demonstration: January 2027', 'VRE deployment (active)', 'Extra-secured dedicated VRE (provisioning)', 'DCC privacy & data protection', 'Behavioural research pilots']
             },
             tilburg: {
                 title: 'Tilburg University',
                 role: 'Pilot Institution',
                 description: 'Pilot testing with educational and classroom observation data.',
-                details: ['Educational research pilots', 'Privacy compliance testing', 'User feedback']
+                details: ['Pilot demonstration: February 2027', 'Educational research pilots', 'Privacy compliance testing', 'User feedback']
+            },
+            eindhoven: {
+                title: 'TU Eindhoven',
+                role: 'Pilot Institution',
+                description: 'Pilot demonstration of the SYNAPSIS platform and hands-on masking session.',
+                details: ['Pilot demonstration: March 2027']
+            },
+            delft: {
+                title: 'TU Delft',
+                role: 'Pilot Institution',
+                description: 'Pilot demonstration of the SYNAPSIS platform and hands-on masking session, building on the MaskingOPS presentation to the Human-Machine Interaction group.',
+                details: ['Pilot demonstration: May 2027', 'HoMI group contact (talk given 2026)']
+            },
+            maastricht: {
+                title: 'Maastricht University',
+                role: 'Pilot Institution',
+                description: 'Pilot demonstration of the SYNAPSIS platform and hands-on masking session.',
+                details: ['Pilot demonstration: Q2 2027']
+            },
+            leiden: {
+                title: 'Leiden University',
+                role: 'Pilot Institution',
+                description: 'Pilot demonstration of the SYNAPSIS platform and hands-on masking session.',
+                details: ['Pilot demonstration: June 2027']
             },
             surf: {
                 title: 'SURF',
@@ -556,7 +604,7 @@
                 title: 'Developers',
                 role: 'Contributors',
                 description: 'Technical contributors to the open-source platform.',
-                details: ['Open-source contributions', 'Algorithm development', 'Tool integration', 'Maskathon']
+                details: ['Open-source contributions', 'Algorithm development', 'Tool integration', 'Maskathon (mid 2027, RSSF fellowship)']
             },
             nwo: {
                 title: 'NWO',
